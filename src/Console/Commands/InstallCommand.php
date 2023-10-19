@@ -2,6 +2,7 @@
 
 namespace SteelAnts\LaravelBoilerplate\Console\Commands;
 
+use Artisan;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
@@ -15,6 +16,11 @@ class InstallCommand extends Command
 
     public function handle(): void
     {
+        $this->components->info('Installing Laravel-Ui Scaffolding');
+        Artisan::call('ui bootstrap');
+        Artisan::call('ui:auth bootstrap --force');
+
+        $this->components->info('Installing Boilerplate Scaffolding');
         self::updatePackagesJson();
 
         self::exportStubs('app'); //Add Stubs for controllers
@@ -23,7 +29,14 @@ class InstallCommand extends Command
         self::exportStubs('resources/sass');
 
         self::updateVite();
-        self::removeNodeModules();
+        //self::removeNodeModules();
+
+        $this->components->warn('Cleaning Cashes');
+        Artisan::call('optimize:clear');
+        Artisan::call('view:clear');
+        Artisan::call('config:clear');
+        Artisan::call('cache:clear');
+
         $this->components->warn('Please run [npm install && npm run build] to compile your fresh scaffolding.');
     }
 
