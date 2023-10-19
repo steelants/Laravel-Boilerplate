@@ -14,11 +14,12 @@ class InstallCommand extends Command
 
     public function handle(): void
     {
+        self::updatePackagesJson();
+
         self::exportStubs('views');
         self::exportStubs('js');
-        self::exportStubs('scss');
-
-        self::updatePackagesJson();
+        self::exportStubs('sass');
+        self::updateVite();
         self::removeNodeModules();
         $this->components->warn('Please run [npm install && npm vite build] to compile your fresh scaffolding.');
     }
@@ -54,9 +55,10 @@ class InstallCommand extends Command
     protected function exportStubs($type = "views")
     {
         $baseDir = __DIR__ . '/../../..';
-        $moduleSubPath = ('/stubs/resources/'.$type);
-        $laravelSubPath = ('/resources/'.$type);
+        $moduleSubPath = ('/stubs/resources/' . $type);
+        $laravelSubPath = ('/resources/' . $type);
         $moduleRootPath = realpath($baseDir . $moduleSubPath);
+dump($moduleSubPath);
 
         foreach (File::allFiles($moduleRootPath) as $file) {
             $laravelViewRoot = str_replace($moduleRootPath, $laravelSubPath, $file->getPath());
@@ -80,5 +82,10 @@ class InstallCommand extends Command
         if (!is_dir($directory)) {
             mkdir($directory, 0755, true);
         }
+    }
+
+    protected function updateVite(){
+        $baseDir = realpath(__DIR__ . '/../../../stubs');
+        copy($baseDir.'/vite.config.js', base_path('vite.config.js'));
     }
 }
