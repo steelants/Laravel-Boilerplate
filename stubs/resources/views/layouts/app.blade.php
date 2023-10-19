@@ -76,7 +76,7 @@
         @include('partials.alerts')
     </div>
 
-    @livewireScriptConfig
+    @livewireScripts
     @livewire('modal-basic', key('modal'))
 </body>
 </html>
