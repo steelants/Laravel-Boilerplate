@@ -65,9 +65,7 @@
         </nav>
 
         <div class="layout">
-            @auth
-                @include('partials.navigation')
-            @endauth
+            @include('partials.navigation')
             <div class="layout-content">
                 <div class="content">
                     @yield('content')
