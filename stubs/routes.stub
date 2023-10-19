@@ -1,0 +1,2 @@
+Route::get('/profile', [App\Http\Controllers\Auth\ProfileController::class, 'index'])->middleware('auth')->name('profile');
+Route::put('/profile.update', [App\Http\Controllers\Auth\ProfileController::class, 'update'])->middleware('auth')->name('profile.update');

@@ -29,7 +29,10 @@ class InstallCommand extends Command
         self::exportStubs('resources/sass');
 
         self::updateVite();
-        //self::removeNodeModules();
+        self::removeNodeModules();
+
+        $this->components->info('Adding Routes');
+        self::appendRoutes();
 
         $this->components->warn('Cleaning Cashes');
         Artisan::call('optimize:clear');
@@ -102,9 +105,16 @@ class InstallCommand extends Command
         }
     }
 
-    protected function updateVite(){
+    protected function updateVite()
+    {
         #TODO: Include rather than override
         $baseDir = realpath(__DIR__ . '/../../../stubs');
-        copy($baseDir.'/vite.config.js', base_path('vite.config.js'));
+        copy($baseDir . '/vite.config.js', base_path('vite.config.js'));
+    }
+
+    protected function appendRoutes()
+    {
+        $baseDir = realpath(__DIR__ . '/../../../stubs');
+        file_put_contents(base_path('routes/web.php'),file_get_contents($baseDir  . '/routes.stub'),FILE_APPEND);
     }
 }

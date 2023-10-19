@@ -5,8 +5,7 @@
     <div class="container">
         <div class="page-header">
             <h1>{{ __('user.ShowUser') }}</h1>
-            <a class="btn btn-primary"
-                href="{{ url()->previous() }}">{{ __('boilerplate::ui.back') }}</a>
+            <a class="btn btn-primary" href="{{ url()->previous() }}">{{ __('boilerplate::ui.back') }}</a>
         </div>
 
         <form action="{{ route('profile.update', ['user' => $user]) }}" method="POST">
@@ -33,8 +32,7 @@
 
             <div class="form-group">
                 <label class="form-label" for="password">{{ __('boilerplate::ui.old.password') }}</label>
-                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                    name="password">
+                <input class="form-control @error('password') is-invalid @enderror" id="password" name="password" type="password">
 
                 @error('password')
                     <span class="invalid-feedback" role="alert">
@@ -45,8 +43,7 @@
 
             <div class="form-group">
                 <label class="form-label" for="newPassword">{{ __('boilerplate::ui.new.password') }}</label>
-                <input id="newPassword" type="password" class="form-control @error('newPassword') is-invalid @enderror"
-                    name="newPassword">
+                <input class="form-control @error('newPassword') is-invalid @enderror" id="newPassword" name="newPassword" type="password">
 
                 @error('newPassword')
                     <span class="invalid-feedback" role="alert">
@@ -57,10 +54,10 @@
 
             <div class="form-group mb-3">
                 <label class="form-label" for="newPassword-confirm">{{ __('boilerplate::ui.confirm.password') }}</label>
-                <input id="newPassword-confirm" type="password" class="form-control" name="newPassword_confirmation"
-                    >
+                <input class="form-control" id="newPassword-confirm" name="newPassword_confirmation" type="password">
             </div>
 
-            <button type="submit" class="btn btn-primary">{{ __('boilerplate::ui.update') }}</button>
+            <button class="btn btn-primary" type="submit">{{ __('boilerplate::ui.update') }}</button>
         </form>
-    @endsection
+    </div>
+@endsection
