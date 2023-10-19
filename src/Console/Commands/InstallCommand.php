@@ -17,10 +17,10 @@ class InstallCommand extends Command
     {
         self::updatePackagesJson();
 
-        self::exportStubs('views');
-        self::exportStubs('js');
-        self::exportStubs('sass');
-        //self::exportStubs('app'); //Add Stubs for controllers
+        self::exportStubs('app'); //Add Stubs for controllers
+        self::exportStubs('resources/views');
+        self::exportStubs('resources/js');
+        self::exportStubs('resources/sass');
 
         self::updateVite();
         self::removeNodeModules();
@@ -61,8 +61,8 @@ class InstallCommand extends Command
     protected function exportStubs($type = "views")
     {
         $baseDir = __DIR__ . '/../../..';
-        $moduleSubPath = ('/stubs/resources/' . $type);
-        $laravelSubPath = ('/resources/' . $type);
+        $moduleSubPath = ('/stubs/' . $type);
+        $laravelSubPath = ('/' . $type);
         $moduleRootPath = realpath($baseDir . $moduleSubPath);
 
         foreach (File::allFiles($moduleRootPath) as $file) {

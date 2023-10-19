@@ -1,60 +1,66 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"  data-bs-theme="{{ Cookie::get('theme') }}">
+<html data-bs-theme="{{ Cookie::get('theme') }}" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta content="{{ csrf_token() }}" name="csrf-token">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <link rel="manifest" href="{{ asset('/manifest.json') }}">
-    <link rel="shortcut icon" href="{{ asset('/favicon.ico') }}" type="image/x-icon">
+    <link href="{{ asset('/manifest.json') }}" rel="manifest">
+    <link href="{{ asset('/favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Scripts -->
     @livewireStyles
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
+
 <body>
     <div id="app">
         <nav class="navbar navbar-main navbar-expand" style="z-index: 100;">
             <div class="container-fluid">
-                <button class="nav-toggler btn btn-light ml-2 d-xl-none" type="button" onclick="$('.layout-nav').toggle();" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button aria-expanded="false" aria-label="{{ __('Toggle navigation') }}" class="nav-toggler btn btn-light ml-2 d-xl-none" onclick="$('.layout-nav').toggle();" type="button">
                     <i class="fas fa-bars"></i>
                 </button>
 
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{ asset('images/logo.png') }}" width="32px" height="32px">
+                    <img height="32px" src="{{ asset('images/logo.png') }}" width="32px">
                 </a>
 
                 @auth
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="navbarDropdown" role="button" v-pre>
                                 {{ Auth::user()->name }}
                             </a>
 
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <div aria-labelledby="navbarDropdown" class="dropdown-menu dropdown-menu-end">
                                 <label class="align-items-center d-flex dropdown-item">
                                     <span class="flex-grow-1">
                                         {{ __('web.dark_mode') }}
                                     </span>
                                     <div class="form-switch ms-4">
-                                        <input {{ Cookie::get('theme') == 'dark' ? 'checked' : '' }} id="datk-theme" class="form-check-input me-0" onchange="toggleDatkTheme()" type="checkbox">
+                                        <input {{ Cookie::get('theme') == 'dark' ? 'checked' : '' }} class="form-check-input me-0" id="datk-theme" onchange="toggleDatkTheme()" type="checkbox">
                                     </div>
                                 </label>
+
+                                <a class="dropdown-item" href="{{ route('profile') }}">
+                                    {{ __('ui.profile') }}
+                                </a>
 
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                                     {{ __('ui.logout') }}
                                 </a>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                <form action="{{ route('logout') }}" class="d-none" id="logout-form" method="POST">
                                     @csrf
                                 </form>
                             </div>
@@ -79,4 +85,5 @@
     @livewireScripts
     @livewire('modal-basic', key('modal'))
 </body>
+
 </html>
