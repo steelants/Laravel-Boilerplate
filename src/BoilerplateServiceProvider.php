@@ -5,14 +5,14 @@ namespace SteelAnts\LaravelBoilerplate;
 use Illuminate\Support\ServiceProvider;
 use SteelAnts\LaravelBoilerplate\Console\Commands\InstallCommand;
 
-class ModalServiceProvider extends ServiceProvider
+class BoilerplateServiceProvider extends ServiceProvider
 {
     public function boot()
     {
         //
 
-        if (!$this->app->runningInConsole()){
-            continue;
+        if (!$this->app->runningInConsole()) {
+            return;
         }
 
         $this->commands([InstallCommand::class]);
@@ -20,6 +20,5 @@ class ModalServiceProvider extends ServiceProvider
 
     public function register()
     {
-
     }
 }

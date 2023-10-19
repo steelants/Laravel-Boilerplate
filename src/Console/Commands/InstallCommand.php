@@ -9,13 +9,14 @@ class InstallCommand extends Command
 {
     protected $signature = 'boilerplate:install';
 
-    protected $description = 'Install';
+    protected $description = 'Install Boilerplate';
 
     public function handle(): void
     {
+        self::overrideViews();
         self::updatePackagesJson();
         self::removeNodeModules();
-        $this->components->warn('Please run [npm install && npm run dev] to compile your fresh scaffolding.');
+        $this->components->warn('Please run [npm install && npm vite build] to compile your fresh scaffolding.');
     }
 
     protected static function updatePackagesJson()
@@ -31,7 +32,7 @@ class InstallCommand extends Command
         $packages["dependencies"]["@fortawesome/fontawesome-free"] = '^5.15.4';
         $packages["dependencies"]["@popperjs/core"] = '^2.11.6';
 
-        file_put_contents(base_path('package.json'),json_encode($packages, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).PHP_EOL);
+        file_put_contents(base_path('package.json'), json_encode($packages, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . PHP_EOL);
     }
 
     protected static function removeNodeModules()
@@ -42,7 +43,27 @@ class InstallCommand extends Command
 
         tap(new Filesystem, function ($files) {
             $files->deleteDirectory(base_path('node_modules'));
-            $files->delete(base_path('yarn.lock'));
+            $files->delete(base_path('package-lock.json'));
         });
+    }
+
+    protected function overrideViews()
+    {
+        $baseDir = __DIR__ . '/../../..';
+        $moduleSubPath = '/stubs/resources/views';
+        $laravelSubPath = '/resources/views';
+
+        $viewsStubs = array_diff(scandir($baseDir .  $moduleSubPath), array('..', '.'));
+
+        foreach ($viewsStubs as $view) {
+            $viewPathLaravelPackage = realpath($baseDir .  $moduleSubPath . "/" . $view);
+            if (file_exists($viewPathLaravelPackage)) {
+                if (!$this->components->confirm("The [" . $laravelSubPath . '/' . $view . "] view already exists. Do you want to replace it?")) {
+                    continue;
+                }
+            }
+
+            copy($viewPathLaravelPackage, base_path($laravelSubPath . '/' . $view));
+        }
     }
 }
