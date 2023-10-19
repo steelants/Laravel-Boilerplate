@@ -1,0 +1,57 @@
+.table thead th{
+    border-top: none;
+    border-bottom: none;
+    padding: 0.5rem 0.75rem;
+    font-weight: 500;
+    color: var(--bs-secondary-color);
+    background: var(--bs-tertiary-bg);
+
+    &:first-child{
+        border-radius: $border-radius 0 0 $border-radius;
+    }
+
+    &:last-child{
+        border-radius: 0 $border-radius $border-radius 0;
+    }
+}
+
+.table thead + tbody tr:first-child td{
+    border-top: none;
+}
+
+.table tbody tr:last-child td{
+    &:first-child{
+        border-radius: 0 0 0 $border-radius;
+    }
+
+    &:last-child{
+        border-radius: 0 0 $border-radius 0;
+    }
+}
+
+.table-selectable th:first-child,
+.table-selectable td:first-child{
+    padding-right: 0;
+    width: 1px;
+}
+
+.table-selectable th:last-child,
+.table-selectable td:last-child{
+    width: 1px;
+    padding-top: 0;
+    padding-bottom: 0;
+    vertical-align: middle;
+}
+
+.table-selectable tbody tr:hover td{
+    cursor: pointer;
+    background: hsl(220, 20%, 99%);
+}
+
+.table-selectable tbody tr.selected td{
+    background: #f6f5ff;
+}
+
+.table-selectable .custom-control{
+    display: inline-block;
+}

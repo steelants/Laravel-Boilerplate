@@ -1,0 +1,16 @@
+@import "@fortawesome/fontawesome-free/css/all.css";
+
+// Variables
+@import './admin/variables';
+
+// Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+// Other
+
+@import "./admin/misc";
+@import "./admin/layout";
+@import "./admin/nav";
+@import "./admin/tables";
+@import "./admin/snackbar";
+@import "./admin/imagemap";

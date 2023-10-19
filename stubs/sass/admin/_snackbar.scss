@@ -1,0 +1,63 @@
+.snackbar-container{
+    position: fixed;
+    top: 65px;
+    right: 2rem;
+    height: auto;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    // flex-direction: column;
+    z-index: 200;
+}
+
+.snackbar{
+    position: relative;
+    background: white;
+    max-width: 360px;
+    font-size: .875rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0/0.1),0 2px 4px -2px rgb(0 0 0/0.1);
+    border: 1px solid #e0e4e8;
+
+    margin-right: -400px;
+    opacity: 0;
+    animation: slideSnackbar 3s forwards;
+    animation-delay: .2s;
+}
+
+@keyframes slideSnackbar {
+    6% {
+        margin-right: 0;
+        opacity: 1;
+    }
+    94% {
+        margin-right: 0;
+        opacity: 1;
+    }
+    99% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+.alert-content{
+    display: flex;
+    align-items: baseline;
+    padding-right: 1rem;
+}
+
+.alert-ico{
+    font-size: 1.1rem;
+    margin-right: .75rem;
+    display: inline-block;
+}
+
+.alert-title{
+    font-weight: 500;
+}
+
+.alert .close{
+    float: right;
+}

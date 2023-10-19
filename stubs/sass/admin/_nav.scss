@@ -1,0 +1,42 @@
+.app-nav .nav-link{
+    border-radius: 8px;
+    color: var(--bs-body-color);
+    padding: 0.6rem 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: baseline;
+    cursor: pointer;
+
+    &:hover{
+        color: var(--bs-body-color);
+        background: var(--bs-secondary-bg);
+    }
+
+}
+
+.app-nav .is-active .nav-link{
+    background: var(--bs-secondary-bg);
+}
+
+.navbar-main .navbar-nav .dropdown-menu {
+    position: absolute;
+}
+
+.nav-link-ico{
+    margin-right: .5rem;
+}
+
+.nav-tabs{
+    .nav-link{
+        border-top: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        color: $nav-tabs-link-color;
+        font-weight: 500;
+    }
+
+    .nav-link.active,
+    .nav-item.show .nav-link {
+        color: $nav-tabs-link-active-color;
+    }
+}
