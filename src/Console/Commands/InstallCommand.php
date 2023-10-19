@@ -14,7 +14,10 @@ class InstallCommand extends Command
 
     public function handle(): void
     {
-        self::overrideViews();
+        self::exportStubs('views');
+        self::exportStubs('js');
+        self::exportStubs('scss');
+
         self::updatePackagesJson();
         self::removeNodeModules();
         $this->components->warn('Please run [npm install && npm vite build] to compile your fresh scaffolding.');
@@ -48,11 +51,11 @@ class InstallCommand extends Command
         });
     }
 
-    protected function overrideViews()
+    protected function exportStubs($type = "views")
     {
         $baseDir = __DIR__ . '/../../..';
-        $moduleSubPath = '/stubs/resources/views';
-        $laravelSubPath = '/resources/views';
+        $moduleSubPath = ('/stubs/resources/'.$type);
+        $laravelSubPath = ('/resources/'.$type);
         $moduleRootPath = realpath($baseDir . $moduleSubPath);
 
         foreach (File::allFiles($moduleRootPath) as $file) {
