@@ -87,7 +87,7 @@ dump($moduleSubPath);
     }
 
     protected function updateVite(){
-        #TODO: Include rather than overide
+        #TODO: Include rather than override
         $baseDir = realpath(__DIR__ . '/../../../stubs');
         copy($baseDir.'/vite.config.js', base_path('vite.config.js'));
     }
