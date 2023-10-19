@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\File;
 
 class InstallCommand extends Command
 {
-    protected $signature = 'boilerplate:install';
+    protected $signature = 'boilerplate:install
+                            {--force : Overwrite existing views by default}';
 
     protected $description = 'Install Boilerplate';
 
@@ -60,7 +61,6 @@ class InstallCommand extends Command
         $moduleSubPath = ('/stubs/resources/' . $type);
         $laravelSubPath = ('/resources/' . $type);
         $moduleRootPath = realpath($baseDir . $moduleSubPath);
-dump($moduleSubPath);
 
         foreach (File::allFiles($moduleRootPath) as $file) {
             $laravelViewRoot = str_replace($moduleRootPath, $laravelSubPath, $file->getPath());
@@ -69,7 +69,7 @@ dump($moduleSubPath);
 
             $this->checkDirectory(dirname($viewFullPath));
 
-            if (file_exists($viewFullPath)) {
+            if (file_exists($viewFullPath) && !$this->option('force')) {
                 if (!$this->components->confirm("The [" . $laravelViewRoot . '/' . $file->getFilename() . "] view already exists. Do you want to replace it?")) {
                     continue;
                 }
