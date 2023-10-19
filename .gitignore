@@ -21,3 +21,8 @@ Homestead.yaml
 Homestead.json
 /.vagrant
 .phpunit.result.cache
+
+# symlink ignores
+stubs/resources/views/welcome.blade.php
+stubs/resources/views/test*.blade.php
+stubs/resources/views/test*/*

@@ -15,7 +15,5 @@ php artisan boilerplate:install
 ### Created symlinks for dev environment
 
 ```bash
-ln -s ./package/boilerplate/stubs/resources/sass/ sass
-ln -s ./package/boilerplate/stubs/resources/js/ js
-ln -s ./package/boilerplate/stubs/resources/view/ view
+ln -s ./package/boilerplate/stubs/resources/ resources
 ```
