@@ -9,9 +9,11 @@ use App\Http\Requests\Auth\UpdateUserRequest;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the specified resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(Request $request)
     {
         return view('auth.profile', [
@@ -19,9 +21,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateUserRequest $request): RedirectResponse
     {
         $validated = $request->validated();
@@ -33,6 +32,6 @@ class ProfileController extends Controller
             unset($validated['password']);
         }
         $request->user()->update($validated);
-        return redirect()->route('profile')->with('success', __('user.Updated'));
+        return redirect()->route('profile')->with('success', __('ui.Updated'));
     }
 }

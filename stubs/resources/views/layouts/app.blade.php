@@ -45,7 +45,7 @@
                             <div aria-labelledby="navbarDropdown" class="dropdown-menu dropdown-menu-end">
                                 <label class="align-items-center d-flex dropdown-item">
                                     <span class="flex-grow-1">
-                                        {{ __('web.dark_mode') }}
+                                        {{ __('boilerplate::ui.dark_mode') }}
                                     </span>
                                     <div class="form-switch ms-4">
                                         <input {{ Cookie::get('theme') == 'dark' ? 'checked' : '' }} class="form-check-input me-0" id="datk-theme" onchange="toggleDatkTheme()" type="checkbox">
@@ -53,11 +53,11 @@
                                 </label>
 
                                 <a class="dropdown-item" href="{{ route('profile') }}">
-                                    {{ __('ui.profile') }}
+                                    {{ __('boilerplate::ui.profile') }}
                                 </a>
 
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                    {{ __('ui.logout') }}
+                                    {{ __('boilerplate::ui.logout') }}
                                 </a>
 
                                 <form action="{{ route('logout') }}" class="d-none" id="logout-form" method="POST">
