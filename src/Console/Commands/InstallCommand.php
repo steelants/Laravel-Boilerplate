@@ -26,9 +26,10 @@ class InstallCommand extends Command
 
         $packages = json_decode(file_get_contents(base_path('package.json')), true);
 
-        $packages["dependencies"]["bootstrap"] = '^5.2.3';
-        $packages["dependencies"]["@popperjs/core"] = '^2.11.6';
         $packages["dependencies"]["sass"] = '^1.56.1';
+        $packages["dependencies"]["bootstrap"] = '^5.2.3';
+        $packages["dependencies"]["@fortawesome/fontawesome-free"] = '^5.15.4';
+        $packages["dependencies"]["@popperjs/core"] = '^2.11.6';
 
         file_put_contents(base_path('package.json'),json_encode($packages, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).PHP_EOL);
     }
