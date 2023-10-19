@@ -7,6 +7,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/steelants/form.svg?style=flat-square)](https://packagist.org/packages/steelants/boilerplate)
 
 ```bash
-composer install steelants/boilerplate
+composer require steelants/laravel-boilerplate
+compoer install
 php artisan boilerplate:install
 ```
