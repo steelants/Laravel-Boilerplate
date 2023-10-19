@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Steelants\\LaravelBoilerplate\\": "src/"
+            "SteelAnts\\LaravelBoilerplate\\": "src/"
         }
     },
     "authors": [
@@ -23,5 +23,12 @@
             "name": "SteelAnts",
             "email": "info@steelants.cz"
         }
-    ]
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SteelAnts\\Modal\\ModalServiceProvider"
+            ]
+        }
+    }
 }
