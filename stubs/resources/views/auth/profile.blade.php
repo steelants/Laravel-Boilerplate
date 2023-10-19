@@ -8,28 +8,33 @@
             <a class="btn btn-primary" href="{{ url()->previous() }}">{{ __('boilerplate::ui.back') }}</a>
         </div>
 
+        <div>
+            <h4>{{ __('user.UserInfo') }}</h4>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label"><b>{{ __('boilerplate::ui.name') }}:</b></label>
+            <p>{{ $user->name ?? '' }}</p>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label"><b>{{ __('boilerplate::ui.email') }}:</b></label>
+            <p>{{ $user->email ?? '' }}</p>
+        </div>
+
+        @if (config('session.driver') == 'database')
+            <div>
+                <h4>{{ __('user.sessions') }}</h4>
+            </div>
+        @endif
+
+        <div>
+            <h4>{{ __('user.PasswordChange') }}</h4>
+        </div>
+
         <form action="{{ route('profile.update', ['user' => $user]) }}" method="POST">
             @csrf
             @method('put')
-
-            <div>
-                <h4>{{ __('user.UserInfo') }}</h4>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label"><b>{{ __('boilerplate::ui.name') }}:</b></label>
-                <p>{{ $user->name ?? '' }}</p>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label"><b>{{ __('boilerplate::ui.email') }}:</b></label>
-                <p>{{ $user->email ?? '' }}</p>
-            </div>
-
-            <div>
-                <h4>{{ __('user.PasswordChange') }}</h4>
-            </div>
-
             <div class="form-group">
                 <label class="form-label" for="password">{{ __('boilerplate::ui.old.password') }}</label>
                 <input class="form-control @error('password') is-invalid @enderror" id="password" name="password" type="password">

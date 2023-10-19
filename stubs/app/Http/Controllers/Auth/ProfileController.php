@@ -18,6 +18,7 @@ class ProfileController extends Controller
     {
         return view('auth.profile', [
             'user' => $request->user(),
+            'sessions' => [],
         ]);
     }
 
