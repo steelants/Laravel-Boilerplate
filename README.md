@@ -27,3 +27,6 @@ ln -s ./package/boilerplate/stubs/resources/ resources
 <a href="https://github.com/steelants/Laravel-Boilerplate/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=steelants/Laravel-Boilerplate" />
 </a>
+
+## Notes
+* [Laravel MFA](https://dev.to/roxie/how-to-add-google-s-two-factor-authentication-to-a-laravel-8-application-4jjp)
