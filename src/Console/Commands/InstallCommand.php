@@ -4,6 +4,7 @@ namespace SteelAnts\LaravelBoilerplate\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\File;
 
 class InstallCommand extends Command
 {
@@ -52,18 +53,29 @@ class InstallCommand extends Command
         $baseDir = __DIR__ . '/../../..';
         $moduleSubPath = '/stubs/resources/views';
         $laravelSubPath = '/resources/views';
+        $moduleRootPath = realpath($baseDir . $moduleSubPath);
 
-        $viewsStubs = array_diff(scandir($baseDir .  $moduleSubPath), array('..', '.'));
+        foreach (File::allFiles($moduleRootPath) as $file) {
+            $laravelViewRoot = str_replace($moduleRootPath, $laravelSubPath, $file->getPath());
+            $stubFullPath = ($file->getPath() . "/" . $file->getFilename());
+            $viewFullPath = (base_path($laravelViewRoot) . "/" . $file->getFilename());
 
-        foreach ($viewsStubs as $view) {
-            $viewPathLaravelPackage = realpath($baseDir .  $moduleSubPath . "/" . $view);
-            if (file_exists($viewPathLaravelPackage)) {
-                if (!$this->components->confirm("The [" . $laravelSubPath . '/' . $view . "] view already exists. Do you want to replace it?")) {
+            $this->checkDirectory(dirname($viewFullPath));
+
+            if (file_exists($viewFullPath)) {
+                if (!$this->components->confirm("The [" . $laravelViewRoot . '/' . $file->getFilename() . "] view already exists. Do you want to replace it?")) {
                     continue;
                 }
             }
 
-            copy($viewPathLaravelPackage, base_path($laravelSubPath . '/' . $view));
+            copy($stubFullPath, $viewFullPath);
+        }
+    }
+
+    protected function checkDirectory($directory)
+    {
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
         }
     }
 }
