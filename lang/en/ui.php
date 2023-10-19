@@ -8,6 +8,7 @@ return [
     'dark_mode' => 'Dark Mode',
     'edit' => 'Edit',
     'email' => 'Email',
+    'home' => 'Home',
     'logout' => 'Logout',
     'name' => 'Name',
     'new.password' => 'New password',
@@ -18,4 +19,6 @@ return [
     'remove' => 'Remove',
     'security' => 'Security',
     'update' => 'Update',
+    'maintenance' => 'Maintenance',
+    'not_found' => 'Not Found',
 ];
