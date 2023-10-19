@@ -79,5 +79,6 @@
     </div>
 
     @livewireScriptConfig
+    @livewire('modal-basic', key('modal'))
 </body>
 </html>
