@@ -2,6 +2,7 @@
     "name": "steelants/laravel-boilerplate",
     "description": "Everything you need to start your Laravel journey.",
     "type": "library",
+    "license": "MIT",
     "require": {
         "laravel/framework": "10.0",
         "laravel/ui": "^4.2",
