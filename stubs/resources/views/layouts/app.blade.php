@@ -66,7 +66,7 @@
 
         <div class="layout">
             @auth
-                @include('parts.navigation')
+                @include('partials.navigation')
             @endauth
             <div class="layout-content">
                 <div class="content">
@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        @include('components.alerts')
+        @include('partials.alerts')
     </div>
 
     @livewireScriptConfig
