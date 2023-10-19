@@ -1,0 +1,51 @@
+.imagemap{
+    display: inline-block;
+    position: relative;
+    width: auto;
+}
+
+.imagemap img{
+    max-width: 100%;
+    max-height: 100vh;
+    user-select: none;
+    pointer-events: none;
+}
+
+.imagemap-area{
+    position: absolute;
+}
+
+.imagemap-area input{
+    visibility: hidden;
+}
+
+.imagemap-area-indicator{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border: 2px solid #f26bdc;
+    border-radius: 8px;
+}
+
+.imagemap-area-grab{
+    color: #f26bdc;
+    cursor: pointer;
+    position: relative;
+    z-index: 100;
+}
+
+
+.imagemap-area-edit{
+    overflow: auto;
+    resize: both;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.imagemap-area-indicator-inactive{
+    border: 2px solid cyan;
+}
