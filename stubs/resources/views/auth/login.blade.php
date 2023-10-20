@@ -65,7 +65,7 @@
 
         @if (Route::has('register'))
             <div class="text-center mt-4">
-                {{ __('boilerplate::ui.dont_have_account_yet')}}
+                {{ __('boilerplate::ui.dont_have_account_yet')}} ?
                 <a href="{{ route('register') }}">{{ __('boilerplate::ui.register') }}</a>
             </div>
         @endif

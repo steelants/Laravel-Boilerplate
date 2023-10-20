@@ -56,6 +56,10 @@
                                     {{ __('boilerplate::ui.profile') }}
                                 </a>
 
+                                <a class="dropdown-item" href="{{ route('profile.api') }}">
+                                    {{ __('boilerplate::ui.api') }}
+                                </a>
+
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                                     {{ __('boilerplate::ui.logout') }}
                                 </a>
