@@ -6,4 +6,5 @@ Route::delete('/profile/api/remove', [App\Http\Controllers\Auth\ProfileControlle
 Route::prefix('system')->name('system.')->middleware(['auth'])->group(function () {
     Route::get('/log', [App\Http\Controllers\System\LogController::class, 'index'])->name('log.index');
     Route::get('/log/detail/{file}', [App\Http\Controllers\System\LogController::class, 'detail'])->name('log.detail');
+    Route::get('/audit', [App\Http\Controllers\System\AuditController::class, 'index'])->name('audit.index');
 });

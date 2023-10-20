@@ -45,4 +45,10 @@ return [
     "log" => "Log",
     "file" => "File",
     "system" => "System",
+    "deleted" => "Deleted",
+    "model" => "Model",
+    "ip_address" => "IP Address",
+    "note" => "Note",
+    "author" => "Author",
+    "audit" => "Audit",
 ];

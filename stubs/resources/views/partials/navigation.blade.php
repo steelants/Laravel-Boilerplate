@@ -19,5 +19,11 @@
                 {{ __('boilerplate::ui.log') }}
             </a>
         </li>
+         <li class="nav-item {{ request()->routeIs('system.audit.index') ? 'is-active' : '' }}">
+            <a class="nav-link" href="{{ route('system.audit.index') }}">
+                <i class="nav-link-ico fas fa-eye"></i>
+                {{ __('boilerplate::ui.audit') }}
+            </a>
+        </li>
     </ul>
 </div>
