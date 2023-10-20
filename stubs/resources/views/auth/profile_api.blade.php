@@ -12,7 +12,7 @@
             @if (session()->has('secret'))
                 <code>{{ session()->get('secret') }}</code>
             @else
-                <form action="{{ route('profile.api.create') }}" class="row row-cols-lg-auto g-3 align-items-center" method="post">
+                <form action="{{ route('profile.api.create') }}" class="row row-cols-lg-auto g-3 align-items-center mb-3" method="post">
                     @csrf
                     <div class="col-12">
                         <label class="visually-hidden" for="token-name">{{ __('boilerplate::ui.name') }}</label>
