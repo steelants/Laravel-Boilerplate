@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use App\Models\Activity;
-use App\Models\User;
 
 trait Auditable
 {
@@ -11,28 +10,21 @@ trait Auditable
     {
         static::created(function ($model) {
             $activity = new Activity();
-            if ($model instanceof User) {
-                $activity->lang_text = __('boilerplate::ui.created', ["model" => "Uživatel " . $model->name]);
-                $activity->user_id = $model->id;
-            }
+            $activity->lang_text = __('boilerplate::ui.created', ["model" => class_basename($model) . " " . $model->name]);
+            $activity->affected()->associate($model);
             $activity->save();
         });
 
         static::updating(function ($model) {
             $activity = new Activity();
-            if ($model instanceof User) {
-                $activity->lang_text = __('boilerplate::ui.updated', ["model" => "Uživatel " . $model->name]);
-                $activity->user_id = $model->id;
-            }
+            $activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->name]);
+            $activity->affected()->associate($model);
             $activity->save();
         });
 
         static::deleting(function ($model) {
             $activity = new Activity();
-            if ($model instanceof User) {
-                $activity->lang_text = __('boilerplate::ui.deleted', ["model" => "Uživatel " . $model->name]);
-                $activity->user_id = null;
-            }
+            $activity->lang_text = __('boilerplate::ui.deleted', ["model" => class_basename($model) . " " . $model->name]);
             $activity->save();
         });
     }

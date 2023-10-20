@@ -23,16 +23,12 @@ class Activity extends Model
     protected $fillable = [
         'ip',
         'user_id',
-        'performed_id',
+        'affected_type',
+        'affected_id',
         'lang_text',
         'data',
     ];
 
-     /**
-    * The "booted" method of the model.
-    *
-    * @return void
-    */
     protected static function booted()
     {
         Activity::observe(ActivityObserver::class);
@@ -43,8 +39,8 @@ class Activity extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function performed()
+    public function affected()
     {
-        return $this->belongsTo(User::class, 'performed_id');
+        return $this->morphTo('affected');
     }
 }

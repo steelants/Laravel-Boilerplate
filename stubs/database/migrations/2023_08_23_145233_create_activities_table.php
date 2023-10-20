@@ -18,9 +18,7 @@ return new class extends Migration
             $table->integer('quiz_id')->nullable();
             $table->foreignId("user_id")->nullable();
             $table->foreign("user_id")->references("id")->on("users")->constrained();
-            $table->foreignId("performed_id")->nullable();
-            //TODO: TO MPRFABLE
-            $table->foreign("performed_id")->references("id")->on("users")->constrained();
+            $table->nullableMorphs('affected');
             $table->string('lang_text')->nullable();
             $table->json('data')->nullable();
             $table->timestamp("created_at");
