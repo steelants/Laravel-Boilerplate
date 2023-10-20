@@ -1,2 +1,5 @@
 Route::get('/profile', [App\Http\Controllers\Auth\ProfileController::class, 'index'])->middleware('auth')->name('profile');
-Route::put('/profile.update', [App\Http\Controllers\Auth\ProfileController::class, 'update'])->middleware('auth')->name('profile.update');
+Route::put('/profile/update', [App\Http\Controllers\Auth\ProfileController::class, 'update'])->middleware('auth')->name('profile.update');
+Route::get('/profile/api', [App\Http\Controllers\Auth\ProfileController::class, 'api'])->middleware('auth')->name('profile.api');
+Route::post('/profile/api/create', [App\Http\Controllers\Auth\ProfileController::class, 'createApiToken'])->middleware('auth')->name('profile.api.create');
+Route::delete('/profile/api/remove', [App\Http\Controllers\Auth\ProfileController::class, 'removeApiToken'])->middleware('auth')->name('profile.api.remove');
