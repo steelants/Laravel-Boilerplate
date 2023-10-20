@@ -40,5 +40,9 @@ return [
     "removed" => "Removed",
     "updated" => "Updated",
     "created" => "Created",
-
+    "api_tokens" => "Api Tokens",
+    "size" => "Size",
+    "log" => "Log",
+    "file" => "File",
+    "system" => "System",
 ];

@@ -57,7 +57,7 @@
                                 </a>
 
                                 <a class="dropdown-item" href="{{ route('profile.api') }}">
-                                    {{ __('boilerplate::ui.api') }}
+                                    {{ __('boilerplate::ui.api_tokens') }}
                                 </a>
 
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">

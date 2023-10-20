@@ -12,5 +12,12 @@
                 Link
             </a>
         </li>
+        <li class="mt-4 text-muted"><small>{{ __('boilerplate::ui.system') }}</small></li>
+        <li class="nav-item {{ request()->routeIs('system.log.index') ? 'is-active' : '' }}">
+            <a class="nav-link" href="{{ route('system.log.index') }}">
+                <i class="nav-link-ico fas fa-bug"></i>
+                {{ __('boilerplate::ui.log') }}
+            </a>
+        </li>
     </ul>
 </div>

@@ -3,3 +3,7 @@ Route::put('/profile/update', [App\Http\Controllers\Auth\ProfileController::clas
 Route::get('/profile/api', [App\Http\Controllers\Auth\ProfileController::class, 'api'])->middleware('auth')->name('profile.api');
 Route::post('/profile/api/create', [App\Http\Controllers\Auth\ProfileController::class, 'createApiToken'])->middleware('auth')->name('profile.api.create');
 Route::delete('/profile/api/remove', [App\Http\Controllers\Auth\ProfileController::class, 'removeApiToken'])->middleware('auth')->name('profile.api.remove');
+Route::prefix('system')->name('system.')->middleware(['auth'])->group(function () {
+    Route::get('/log', [App\Http\Controllers\System\LogController::class, 'index'])->name('log.index');
+    Route::get('/log/detail/{file}', [App\Http\Controllers\System\LogController::class, 'detail'])->name('log.detail');
+});
