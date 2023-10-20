@@ -3,12 +3,11 @@
 @section('content')
     <div class="container">
         <div class="page-header">
-            <h1>{{ __('user.ShowUser') }}</h1>
-            <a class="btn btn-primary" href="{{ url()->previous() }}">{{ __('boilerplate::ui.back') }}</a>
+            <h1>{{ __('boilerplate::ui.api_tokens') }}</h1>
         </div>
 
         <div class="d-flex justify-content-between">
-            <h3>{{ __('user.api') }}</h3>
+            <h3>{{ __('boilerplate::user.api') }}</h3>
             @if (session()->has('secret'))
                 <code>{{ session()->get('secret') }}</code>
             @else

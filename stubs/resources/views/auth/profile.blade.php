@@ -4,12 +4,7 @@
 @section('content')
     <div class="container">
         <div class="page-header">
-            <h1>{{ __('user.ShowUser') }}</h1>
-            <a class="btn btn-primary" href="{{ url()->previous() }}">{{ __('boilerplate::ui.back') }}</a>
-        </div>
-
-        <div>
-            <h4>{{ __('user.UserInfo') }}</h4>
+            <h1>{{ __('boilerplate::ui.profile') }}</h1>
         </div>
 
         <div class="form-group">
@@ -24,12 +19,12 @@
 
         @if (config('session.driver') == 'database')
             <div>
-                <h4>{{ __('user.sessions') }}</h4>
+                <h4>{{ __('boilerplate::user.sessions') }}</h4>
             </div>
         @endif
 
         <div>
-            <h4>{{ __('user.PasswordChange') }}</h4>
+            <h4>{{ __('boilerplate::user.change_password') }}</h4>
         </div>
 
         <form action="{{ route('profile.update', ['user' => $user]) }}" method="POST">

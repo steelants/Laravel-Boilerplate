@@ -1,17 +1,24 @@
 <div class="layout-nav">
-    <ul class="app-nav nav flex-column">
-        <li class="nav-item is-active">
+    <ul class="app-nav nav">
+        <li class="nav-item is-active nav-item-mobile">
             <a class="nav-link" href="#">
                 <i class="nav-link-ico fas fa-home"></i>
-                Link
+                <apan class="nav-link-content">Home</apan>
             </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item nav-item-mobile">
             <a class="nav-link" href="#">
                 <i class="nav-link-ico fas fa-users"></i>
-                Link
+                <span class="nav-link-content">Link</span>
             </a>
         </li>
+        <li class="nav-item nav-item-mobile">
+            <a class="nav-link" href="#">
+                <i class="nav-link-ico fas fa-cog"></i>
+                <span class="nav-link-content">Test</span>
+            </a>
+        </li>
+
         <li class="mt-4 text-muted"><small>{{ __('boilerplate::ui.system') }}</small></li>
         <li class="nav-item {{ request()->routeIs('system.log.index') ? 'is-active' : '' }}">
             <a class="nav-link" href="{{ route('system.log.index') }}">

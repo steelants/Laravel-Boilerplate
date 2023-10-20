@@ -7,13 +7,13 @@
             <h1>{{ __('boilerplate::ui.log')}}</h1>
         </div>
 
-        <div class="row mb-4">
+        <div class="row g-3 mb-4">
             @foreach ($todayStats as $stat => $value)
-                <div class="col-4">
-                    <div class="card {{$stat == "ERROR" ? "bg-danger" : "" }}{{$stat == "WARNING" ? "bg-warning" : "" }}">
+                <div class="col-md-4">
+                    <div class="card">
                         <div class="card-body ">
                             <div class="h5 fw-medium">{{ $stat }}</div>
-                            <div class="h1 mb-0">{{ $value }}</div>
+                            <div class="h1 mb-0 {{$stat == "ERROR" ? "text-danger" : "" }}{{$stat == "WARNING" ? "text-warning" : "" }}">{{ $value }}</div>
                             <small class="text-body-tertiary">today</small>
                         </div>
                     </div>
