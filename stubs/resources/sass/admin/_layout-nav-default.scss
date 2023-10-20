@@ -1,0 +1,23 @@
+.layout-nav{
+    width: 260px;
+    flex-basis: 260px;
+    flex-shrink: 0;
+    background: var(--bs-tertiary-bg);
+    padding: 1rem;
+    font-size: 14px;
+    border-right: 1px solid var(--bs-secondary-bg);
+
+    @include media-breakpoint-down(lg) {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 99;
+        height: 100%;
+        max-height: calc(100vh - 50px);
+    }
+}
+
+.app-nav{
+    flex-direction: row;
+}
