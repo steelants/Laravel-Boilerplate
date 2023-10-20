@@ -31,30 +31,31 @@
                 </form>
             @endif
         </div>
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">{{ __('boilerplate::ui.name') }}</th>
-                    <th scope="col">{{ __('boilerplate::ui.last_used_at') }}</th>
-                    <th scope="col">{{ __('boilerplate::ui.actions') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($tokens as $token)
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
                     <tr>
-                        <th scope="row">{{ $token->name }}</th>
-                        <td >{{ $token->last_used_at }}</td>
-                        <td>
-                            <form action="{{ route('profile.api.remove', ['token_id' => $token->id]) }}" method="post">
-                                 @method('DELETE')
-                                @csrf
-                                <input class="btn btn-danger" type="submit" value="{{ __('boilerplate::ui.remove') }}" />
-                            </form>
-                        </td>
+                        <th scope="col">{{ __('boilerplate::ui.name') }}</th>
+                        <th scope="col">{{ __('boilerplate::ui.last_used_at') }}</th>
+                        <th scope="col">{{ __('boilerplate::ui.actions') }}</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($tokens as $token)
+                        <tr>
+                            <th scope="row">{{ $token->name }}</th>
+                            <td>{{ $token->last_used_at }}</td>
+                            <td>
+                                <form action="{{ route('profile.api.remove', ['token_id' => $token->id]) }}" method="post">
+                                    @method('DELETE')
+                                    @csrf
+                                    <input class="btn btn-danger" type="submit" value="{{ __('boilerplate::ui.remove') }}" />
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 @endsection
