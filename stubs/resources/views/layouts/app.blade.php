@@ -44,7 +44,8 @@
         <div class="layout">
             
             @include('partials.navigation')
-
+            @include('partials.navigation-mobile')
+            
             <div class="layout-content">
                 <div class="content">
                     @yield('content')
