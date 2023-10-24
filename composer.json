@@ -4,7 +4,7 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "laravel/framework": "10.0",
+        "laravel/framework": "^10.0",
         "laravel/ui": "^4.2",
         "livewire/livewire": "2.0",
         "steelants/form": "^0.0.8",
