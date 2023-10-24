@@ -24,9 +24,7 @@ class InstallCommand extends Command
         self::updatePackagesJson();
 
         self::exportStubs('app'); //Add Stubs for controllers
-        self::exportStubs('resources/views');
-        self::exportStubs('resources/js');
-        self::exportStubs('resources/sass');
+        self::exportStubs('database/migrations');
 
         self::updateVite();
         self::removeNodeModules();
