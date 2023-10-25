@@ -7,7 +7,7 @@
         </div>
 
         <div class="d-flex justify-content-between">
-            <h3>{{ __('boilerplate::user.api') }}</h3>
+            <h3>{{ __('boilerplate::ui.api') }}</h3>
             @if (session()->has('secret'))
                 <code>{{ session()->get('secret') }}</code>
             @else
