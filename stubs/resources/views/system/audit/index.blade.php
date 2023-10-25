@@ -24,16 +24,23 @@
                                 <th scope="row">{{ $activity->created_at }}</th>
                                 <td>{{ $activity->ip }}</td>
                                 <td>{{ $activity->lang_text }}</td>
-                                <td>{{ !empty($activity->affected) ? $activity->affected->name : (isset($activity->affected_id) && $activity->affected_id === 0 ? __('user.Console') : __('user.UserDeleted')) }}</td>
+                                <td>{{ !empty($activity->user) ? $activity->user->name : (isset($activity->user_id) && $activity->user_id === 0 ? __('user.Console') : __('user.UserDeleted')) }}</td>
                                 <td>
-                                    @if (isset($urls[$activity->id]))
-                                        @if ($urls[$activity->id] != '')
-                                            <a href="{{ $urls[$activity->id] }}">{{ __('boilerplate::ui.show') }}</a>
+                                     @if (isset($activity->affected))
+                                        {{ json_encode([
+                                            'id'=>$activity->affected->id,
+                                            'name'=>$activity->affected->name,
+                                        ], JSON_UNESCAPED_UNICODE) }}
+                                    @else
+                                        @if (isset($urls[$activity->id]))
+                                            @if ($urls[$activity->id] != '')
+                                                <a href="{{ $urls[$activity->id] }}">{{ __('boilerplate::ui.show') }}</a>
+                                            @else
+                                                {{ __('boilerplate::ui.deleted') }}
+                                            @endif
                                         @else
                                             {{ __('boilerplate::ui.deleted') }}
                                         @endif
-                                    @else
-                                        {{ __('boilerplate::ui.deleted') }}
                                     @endif
                                 </td>
                             </tr>
