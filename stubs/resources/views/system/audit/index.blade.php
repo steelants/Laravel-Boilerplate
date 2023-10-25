@@ -24,7 +24,7 @@
                                 <th scope="row">{{ $activity->created_at }}</th>
                                 <td>{{ $activity->ip }}</td>
                                 <td>{{ $activity->lang_text }}</td>
-                                <td>{{ !empty($activity->performed) ? $activity->performed->name : (isset($activity->performed_id) && $activity->performed_id === 0 ? __('user.Console') : __('user.UserDeleted')) }}</td>
+                                <td>{{ !empty($activity->affected) ? $activity->affected->name : (isset($activity->affected_id) && $activity->affected_id === 0 ? __('user.Console') : __('user.UserDeleted')) }}</td>
                                 <td>
                                     @if (isset($urls[$activity->id]))
                                         @if ($urls[$activity->id] != '')

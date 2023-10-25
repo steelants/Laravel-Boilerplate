@@ -12,7 +12,7 @@ class AuditController extends Controller
     public function index()
     {
         //TODO: Clean Up and pagination
-        $activities = Activity::with(["performed", "user"])->get();
+        $activities = Activity::with(["affected", "user"])->get();
         $urls = [];
 
         foreach ($activities as $activity) {
