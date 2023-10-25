@@ -28,5 +28,11 @@ ln -s ./package/boilerplate/stubs/resources/ resources
   <img src="https://contrib.rocks/image?repo=steelants/Laravel-Boilerplate" />
 </a>
 
+## Other Packages
+[steelants/datatable](https://github.com/steelants/Livewire-DataTable)
+[steelants/form](https://github.com/steelants/Laravel-Form)
+[steelants/modal](https://github.com/steelants/Livewire-Modal)
+
+
 ## Notes
 * [Laravel MFA](https://dev.to/roxie/how-to-add-google-s-two-factor-authentication-to-a-laravel-8-application-4jjp)
