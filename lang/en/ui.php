@@ -9,6 +9,7 @@ return [
     'dont_have_account_yet' => "Don't have an account yet",
     'already_have_account' => "Already have account",
     'reset_password' => "Reset password",
+    'change_password' => "Change Password",
     'back_to' => 'Back to',
     'edit' => 'Edit',
     'email' => 'Email',
@@ -16,7 +17,6 @@ return [
     'login' => 'Login',
     'logout' => 'Logout',
     'create' => 'Create',
-
     'maintenance' => 'Maintenance',
     'name' => 'Name',
     'new.password' => 'New password',
