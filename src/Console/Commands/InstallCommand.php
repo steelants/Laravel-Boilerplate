@@ -51,7 +51,7 @@ class InstallCommand extends Command
 
         $packages["dependencies"]["jquery"] = '^3.6.1';
         $packages["dependencies"]["sass"] = '^1.56.1';
-        $packages["dependencies"]["bootstrap"] = '^5.2.3';
+        $packages["dependencies"]["bootstrap"] = '^5.3';
         $packages["dependencies"]["@fortawesome/fontawesome-free"] = '^5.15.4';
         $packages["dependencies"]["@popperjs/core"] = '^2.11.6';
         $packages["dependencies"]["vite"] = '^4.0.0';
