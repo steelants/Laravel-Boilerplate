@@ -30,7 +30,9 @@ ln -s ./package/boilerplate/stubs/resources/ resources
 
 ## Other Packages
 [steelants/datatable](https://github.com/steelants/Livewire-DataTable)
+
 [steelants/form](https://github.com/steelants/Laravel-Form)
+
 [steelants/modal](https://github.com/steelants/Livewire-Modal)
 
 
