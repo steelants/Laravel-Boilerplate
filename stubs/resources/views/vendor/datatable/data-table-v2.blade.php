@@ -6,14 +6,17 @@
                     <tr>
                         @foreach ($headers as $header)
                             {{-- Nespoléhat se na proměnou headers může být uplně jiná než property sortovat přes funkci --}}
-                            <th @if ($header != $sortBy) wire:click="$set('sortBy','{{ $header }}')" @else wire:click="$set('sortDesc','{{ !$sortDesc }}')" @endif scope="col">
-                                @if ($header != $sortBy)
-                                    ↕
-                                @else
-                                    @if ($sortDesc)
-                                        ↑
+                            <th @if ($sortable) @if ($header != $sortBy) wire:click="$set('sortBy','{{ $header }}')" @else wire:click="$set('sortDesc','{{ !$sortDesc }}')" @endif
+                                @endif scope="col">
+                                @if ($sortable)
+                                    @if ($header != $sortBy)
+                                        ↕
                                     @else
-                                        ↓
+                                        @if ($sortDesc)
+                                            ↑
+                                        @else
+                                            ↓
+                                        @endif
                                     @endif
                                 @endif
                                 {{ ucwords($header) }}
@@ -36,11 +39,12 @@
                                 <td>
                                     @foreach ($this->actions($row) as $action)
                                         @if ($action['type'] == 'route')
-                                            <a href="{{ route($action['name'], $action['parameters']) }}"> {{ __($action['name']) }}</a>
+                                            <a href="{{ route($action['name'], $action['parameters']) }}">
+                                                {{ __($action['name']) }}</a>
                                         @elseif ($action['type'] == 'livewire')
-
-                                        <button type="submit" class="btn btn-danger" wire:click='{{ $action['action'] }}({{ $action['parameters'] }})' onclick="return confirm('{{ __('form:ui.configmation') }}')">{{ __($action['name']) }}</button>
-                                       
+                                            <button type="submit" class="btn btn-danger"
+                                                wire:click='{{ $action['action'] }}({{ $action['parameters'] }})'
+                                                onclick="return confirm('{{ __('form:ui.configmation') }}')">{{ __($action['name']) }}</button>
                                         @else
                                             {{ __('datatable::ui.actions.not_implemented') }}
                                         @endif
@@ -68,13 +72,19 @@
                             @php($startPage = max(0, $pagesIndex - intval(7 / 2)))
                             @php($endPage = min($pagesTotal, $startPage + 7 - 1))
                             @if ($pagesIndex > 0)
-                                <li class="page-item"><a class="page-link" wire:click.prevent="$set('pagesIndex', {{ $pagesIndex - 1 }})">Previous</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        wire:click.prevent="$set('pagesIndex', {{ $pagesIndex - 1 }})">Previous</a>
+                                </li>
                             @endif
                             @for ($i = $startPage; $i <= $endPage; $i++)
-                                <li class="page-item"><a @if ($i != $pagesIndex) wire:click.prevent="$set('pagesIndex', {{ $i }})" @endif class="page-link @if ($i == $pagesIndex) active @endif">{{ $i }}</a></li>
+                                <li class="page-item"><a
+                                        @if ($i != $pagesIndex) wire:click.prevent="$set('pagesIndex', {{ $i }})" @endif
+                                        class="page-link @if ($i == $pagesIndex) active @endif">{{ $i }}</a>
+                                </li>
                             @endfor
                             @if ($pagesIndex < $pagesTotal)
-                                <li class="page-item"><a class="page-link" wire:click.prevent="$set('pagesIndex', {{ $pagesIndex + 1 }})">Next</a></li>
+                                <li class="page-item"><a class="page-link"
+                                        wire:click.prevent="$set('pagesIndex', {{ $pagesIndex + 1 }})">Next</a></li>
                             @endif
                         </ul>
                     @endif
@@ -82,7 +92,8 @@
                 <div>
                     <select class="form-select" wire:model="itemsPerPage">
                         @foreach ([10, 20, 50, 100, 1000] as $itemsPerPage)
-                            <option value="{{ $itemsPerPage }}">{{ $itemsPerPage != 0 ? $itemsPerPage : 'custom' }}</option>
+                            <option value="{{ $itemsPerPage }}">{{ $itemsPerPage != 0 ? $itemsPerPage : 'custom' }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
