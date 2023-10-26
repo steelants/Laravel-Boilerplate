@@ -13,5 +13,4 @@ Route::prefix('system')->name('system.')->middleware(['auth'])->group(function (
     Route::get('/audit', [App\Http\Controllers\System\AuditController::class, 'index'])->name('audit.index');
 
     Route::get('/user', [App\Http\Controllers\System\UserController::class, 'index'])->name('user.index');    
-    Route::delete('/user/remove', [App\Http\Controllers\System\UserController::class, 'remove'])->name('user.index');
 });
