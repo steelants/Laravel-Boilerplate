@@ -8,10 +8,10 @@ use App\Models\User;
 
 class Form extends Component
 {
-    public string $name;
-    public string $email;
-    public string $password;
-    public string $password_confirmation;
+    public string $name ='';
+    public string $email ='';
+    public string $password ='';
+    public string $password_confirmation ='';
 
     protected function rules()
     {
@@ -34,5 +34,13 @@ class Form extends Component
 
         $this->dispatchBrowserEvent('snackbar', ['message' => __('boilerplate::ui.create'), 'type' => 'success', 'icon' => 'fas fa-check']);
         $this->dispatchBrowserEvent('close-modal');
+
+        $this->reset('name');
+        $this->reset('email');
+        $this->reset('password');
+        $this->reset('password_confirmation');
+
     }
 }
+
+
