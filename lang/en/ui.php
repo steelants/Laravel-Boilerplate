@@ -52,4 +52,5 @@ return [
     "author" => "Author",
     "audit" => "Audit",
     "user" => "User",
+    "users" => "User",
 ];
