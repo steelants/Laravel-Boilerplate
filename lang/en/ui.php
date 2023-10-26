@@ -51,4 +51,5 @@ return [
     "note" => "Note",
     "author" => "Author",
     "audit" => "Audit",
+    "user" => "User",
 ];

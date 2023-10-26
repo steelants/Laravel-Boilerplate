@@ -1,24 +1,17 @@
 <div class="layout-nav">
-    <ul class="app-nav nav">
-        <li class="nav-item is-active nav-item-mobile">
+    <ul class="app-nav nav flex-column">
+        <li class="nav-item is-active">
             <a class="nav-link" href="#">
                 <i class="nav-link-ico fas fa-home"></i>
-                <apan class="nav-link-content">Home</apan>
+                Link
             </a>
         </li>
-        <li class="nav-item nav-item-mobile">
+        <li class="nav-item">
             <a class="nav-link" href="#">
                 <i class="nav-link-ico fas fa-users"></i>
-                <span class="nav-link-content">Link</span>
+                Link
             </a>
         </li>
-        <li class="nav-item nav-item-mobile">
-            <a class="nav-link" href="#">
-                <i class="nav-link-ico fas fa-cog"></i>
-                <span class="nav-link-content">Test</span>
-            </a>
-        </li>
-
         <li class="mt-4 text-muted"><small>{{ __('boilerplate::ui.system') }}</small></li>
         <li class="nav-item {{ request()->routeIs('system.log.index') ? 'is-active' : '' }}">
             <a class="nav-link" href="{{ route('system.log.index') }}">
@@ -30,6 +23,12 @@
             <a class="nav-link" href="{{ route('system.audit.index') }}">
                 <i class="nav-link-ico fas fa-eye"></i>
                 {{ __('boilerplate::ui.audit') }}
+            </a>
+        </li>
+         <li class="nav-item {{ request()->routeIs('system.user.index') ? 'is-active' : '' }}">
+            <a class="nav-link" href="{{ route('system.user.index') }}">
+                <i class="nav-link-ico fas fa-users"></i>
+                {{ __('boilerplate::ui.user') }}
             </a>
         </li>
     </ul>

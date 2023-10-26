@@ -32,7 +32,7 @@ class InstallCommand extends Command
         $this->components->info('Adding Routes');
         self::appendRoutes();
 
-        $this->components->warn('Cleaning Cashes');
+        Artisan::call('livewire:discover');
         Artisan::call('optimize:clear');
         Artisan::call('view:clear');
         Artisan::call('config:clear');
