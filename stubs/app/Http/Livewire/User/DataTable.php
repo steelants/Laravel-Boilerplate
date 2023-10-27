@@ -32,6 +32,10 @@ class DataTable extends DataTableV2
 
     public function actions($item)
     {
+        if ($item['id'] == auth()->user()->id){
+            return [];
+        }
+
         return [
             [
                 'type' => "livewire",
