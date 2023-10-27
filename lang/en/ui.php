@@ -53,4 +53,5 @@ return [
     "audit" => "Audit",
     "user" => "User",
     "users" => "User",
+    "jobs" => "Jobs",
 ];
