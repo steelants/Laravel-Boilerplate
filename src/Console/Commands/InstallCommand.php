@@ -25,6 +25,9 @@ class InstallCommand extends Command
 
         self::exportStubs('app'); //Add Stubs for controllers
         self::exportStubs('database/migrations');
+        self::exportStubs('resources/views');
+        self::exportStubs('resources/js');
+        self::exportStubs('resources/sass');
 
         self::updateVite();
         self::removeNodeModules();
@@ -32,6 +35,7 @@ class InstallCommand extends Command
         $this->components->info('Adding Routes');
         self::appendRoutes();
 
+        $this->components->warn('Cleaning Cashes');
         Artisan::call('livewire:discover');
         Artisan::call('optimize:clear');
         Artisan::call('view:clear');
