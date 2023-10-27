@@ -10,7 +10,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <link href="{{ asset('/manifest.json') }}" rel="manifest">
+    {{-- <link href="{{ asset('/manifest.json') }}" rel="manifest"> --}}
     <link href="{{ asset('/favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
 
     <!-- Fonts -->
@@ -21,6 +21,15 @@
     <!-- Scripts -->
     @livewireStyles
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    {{-- <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('{{ asset('/service-worker.js') }}');
+            });
+        }
+    </script> --}}
+
 </head>
 
 <body>
@@ -42,10 +51,10 @@
         </nav>
 
         <div class="layout">
-            
+
             @include('partials.navigation')
             @include('partials.navigation-mobile')
-            
+
             <div class="layout-content">
                 <div class="content">
                     @yield('content')

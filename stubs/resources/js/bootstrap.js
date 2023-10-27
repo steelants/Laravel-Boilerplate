@@ -5,9 +5,8 @@
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-import $ from 'jquery';
-window.$ = $;
-
+// import $ from 'jquery';
+// window.$ = $;
 
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
