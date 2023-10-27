@@ -1,9 +1,11 @@
-body{
-    height: 100vh;
-
+html{
     @include media-breakpoint-up(lg) {
         font-size: 0.875rem;
     }
+}
+
+body{
+    height: 100vh;
 }
 
 #app{
