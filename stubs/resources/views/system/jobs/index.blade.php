@@ -2,8 +2,9 @@
 
 @section('content')
     <div class="container">
-        <div class="layout-header">
-            <h3 class="page-title">{{ __('boilerplate::ui.jobs')}}</h3>
+        <div class="page-header">
+            <h1>{{ __('boilerplate::ui.jobs') }}</h1>
+            <button onclick="confirm('{{ __('boilerplate::ui.jobs-clear-confirm') }}') ? window.location.href = '{{ route('system.jobs.clear') }}' : false" class="btn btn-danger">{{ __('boilerplate::ui.jobs-clear') }}</button>
         </div>
 
         <div class="table-responsive">
@@ -27,10 +28,10 @@
                                 {{ $item->queue }}
                             </td>
                             <td>
-                                <div class="text-break">{{ Str::substr($item->payload, 0, 150)}}</div>
+                                <div class="text-break">{{ Str::substr($item->payload, 0, 150) }}</div>
                             </td>
                             <td>
-                                <div class="text-break">{{ Str::substr($item->exception, 0, 300)}}</div>
+                                <div class="text-break">{{ Str::substr($item->exception, 0, 300) }}</div>
                             </td>
                             <td>
                                 {{ $item->failed_at }}

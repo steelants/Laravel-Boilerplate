@@ -54,4 +54,7 @@ return [
     "user" => "User",
     "users" => "User",
     "jobs" => "Jobs",
+    'jobs-clear' => "Clear jobs",
+    'jobs-cleared' => "Jobs cleared!",
+    'jobs-clear-confirm' => "Are you sure you want to delete jobs?",
 ];

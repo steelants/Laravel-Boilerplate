@@ -15,4 +15,10 @@ class JobsController extends Controller
             'items' => $jobs,
         ]);
     }
+
+    public function clear(){
+        DB::table('failed_jobs')->delete();
+
+        redirect()->route('system.jobs.index')->with('success',  __('boilerplate::ui.jobs-cleared'));
+    }
 }

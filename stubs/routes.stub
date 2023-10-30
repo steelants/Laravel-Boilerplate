@@ -15,4 +15,5 @@ Route::prefix('system')->name('system.')->middleware(['auth'])->group(function (
     Route::get('/user', [App\Http\Controllers\System\UserController::class, 'index'])->name('user.index');
 
     Route::get('/jobs', [App\Http\Controllers\System\JobsController::class, 'index'])->name('jobs.index');
+    Route::get('/jobs/clear', [App\Http\Controllers\System\JobsController::class, 'clear'])->name('jobs.clear');
 });
