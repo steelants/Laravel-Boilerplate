@@ -32,3 +32,34 @@ window.toggleDatkTheme = function(){
         setCookie('theme', 'light');
     }
 }
+
+window.snackbar = function (message, details = false, type = false, icon = false){
+
+    var template = `
+        <div class="snackbar alert border-0">
+            <button type="button" class="btn-close btn-close-white close ${details ? '' : 'mt-2'}" data-bs-dismiss="alert"></button>
+
+            <div class="alert-content">`;
+
+    if(icon){
+        template += `<i class="alert-ico ${icon} text-${type}"></i>`;
+    }
+
+    template += `
+                <div>
+                    <div class="alert-title ${details ? '' : 'mt-2'}">${message}</div>`
+    if(details){
+        template += `<div class="alert-text">${details}</div>`
+    }
+
+    template += `
+                </div>
+            </div>
+        </div>`;
+
+    document.querySelector('.snackbar-container').insertAdjacentHTML('beforeend', template);
+}
+
+window.addEventListener('snackbar', function(e){
+    snackbar(e.detail.message, e.detail.details || false, e.detail.type || false, e.detail.icon || false);
+});

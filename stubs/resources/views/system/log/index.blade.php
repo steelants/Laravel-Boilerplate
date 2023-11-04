@@ -22,7 +22,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table mt-2">
+            <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">{{ __('boilerplate::ui.name')}}</th>
