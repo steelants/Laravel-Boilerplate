@@ -16,4 +16,7 @@ Route::prefix('system')->name('system.')->middleware(['auth'])->group(function (
 
     Route::get('/jobs', [App\Http\Controllers\System\JobsController::class, 'index'])->name('jobs.index');
     Route::get('/jobs/clear', [App\Http\Controllers\System\JobsController::class, 'clear'])->name('jobs.clear');
+
+    Route::get('/subscription', [App\Http\Controllers\System\SubscriptionController::class, 'index'])->name('subscription.index');
+
 });

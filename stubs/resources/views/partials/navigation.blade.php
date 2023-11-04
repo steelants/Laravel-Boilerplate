@@ -25,6 +25,12 @@
                 {{ __('boilerplate::ui.user') }}
             </a>
         </li>
+         <li class="nav-item {{ request()->routeIs('system.subscription.index') ? 'is-active' : '' }}">
+            <a class="nav-link" href="{{ route('system.subscription.index') }}">
+                <i class="nav-link-ico fas fa-dollar-sign"></i>
+                {{ __('boilerplate::subscriptions.title') }}
+            </a>
+        </li>
         <li class="nav-item {{ request()->routeIs('system.log.index') ? 'is-active' : '' }}">
             <a class="nav-link" href="{{ route('system.log.index') }}">
                 <i class="nav-link-ico fas fa-bug"></i>
