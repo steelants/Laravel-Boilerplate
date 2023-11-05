@@ -48,6 +48,8 @@ ln -s ./package/boilerplate/stubs/resources/ resources
 
 ### Install
 
+Add `'url_base' => env('APP_URL', 'http://localhost'),` into `config/app.php`
+
 To use globaly tenant manager as `tenant()` add `app/helpers.php` into `autoload.files` config in `composer.json`
 ```json
 {
