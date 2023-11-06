@@ -16,9 +16,7 @@ class BoilerplateServiceProvider extends ServiceProvider
     {
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'boilerplate');
 
-        $this->publishes([
-            __DIR__ . '/../lang' => $this->app->langPath('vendor/boilerplate'),
-        ]);
+
 
 
         if (!function_exists('tenantManager')) {
@@ -40,6 +38,11 @@ class BoilerplateServiceProvider extends ServiceProvider
         if (!$this->app->runningInConsole()) {
             return;
         }
+
+        $this->publishes([
+            __DIR__ . '/../lang' => $this->app->langPath('vendor/boilerplate'),
+            __DIR__ . '/../database/migrations' => $this->app->databasePath('migrations'),
+        ]);
 
         $this->commands([InstallCommand::class]);
         $this->commands([MakeBasicTestsCommand::class]);
