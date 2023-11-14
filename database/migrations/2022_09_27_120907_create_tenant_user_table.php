@@ -2,7 +2,6 @@
 
 use App\Models\Tenant;
 use App\Models\User;
-use App\Types\PermissionType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,8 +20,8 @@ class CreateTenantUserTable extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(Tenant::class)->constrained();
-            $table->smallInteger('permission')->default(PermissionType::GUEST);
-            $table->unique(['user_id', 'organization_id']);
+            $table->smallInteger('permission')->default(0);
+            $table->unique(['user_id', 'tenant_id']);
         });
     }
 
@@ -33,6 +32,6 @@ class CreateTenantUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('organization_user');
+        Schema::dropIfExists('tenant_user');
     }
 }
