@@ -8,7 +8,7 @@
         "laravel/ui": "^4.2",
         "livewire/livewire": "^2.0",
         "steelants/form": "^0.0.13",
-        "steelants/modal": "^0.0.12",
+        "steelants/modal": "dev-main",
         "steelants/datatable": "^1.0.17"
     },
     "require-dev": {
