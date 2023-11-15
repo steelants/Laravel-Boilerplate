@@ -12,20 +12,21 @@
                 Link
             </a>
         </li>
+        {{-- MAIN NAVIGATION ALL --}}
         <li class="mt-4 text-muted"><small>{{ __('boilerplate::ui.system') }}</small></li>
-         <li class="nav-item {{ request()->routeIs('system.audit.index') ? 'is-active' : '' }}">
+        <li class="nav-item {{ request()->routeIs('system.audit.index') ? 'is-active' : '' }}">
             <a class="nav-link" href="{{ route('system.audit.index') }}">
                 <i class="nav-link-ico fas fa-eye"></i>
                 {{ __('boilerplate::ui.audit') }}
             </a>
         </li>
-         <li class="nav-item {{ request()->routeIs('system.user.index') ? 'is-active' : '' }}">
+        <li class="nav-item {{ request()->routeIs('system.user.index') ? 'is-active' : '' }}">
             <a class="nav-link" href="{{ route('system.user.index') }}">
                 <i class="nav-link-ico fas fa-users"></i>
                 {{ __('boilerplate::ui.user') }}
             </a>
         </li>
-         <li class="nav-item {{ request()->routeIs('system.subscription.index') ? 'is-active' : '' }}">
+        <li class="nav-item {{ request()->routeIs('system.subscription.index') ? 'is-active' : '' }}">
             <a class="nav-link" href="{{ route('system.subscription.index') }}">
                 <i class="nav-link-ico fas fa-dollar-sign"></i>
                 {{ __('boilerplate::subscriptions.title') }}
@@ -43,5 +44,6 @@
                 {{ __('boilerplate::ui.jobs') }}
             </a>
         </li>
+        {{-- MAIN NAVIGATION SYSTEM --}}
     </ul>
 </div>
