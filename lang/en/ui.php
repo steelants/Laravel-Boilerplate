@@ -57,5 +57,5 @@ return [
     'jobs-clear' => "Clear jobs",
     'jobs-cleared' => "Jobs cleared!",
     'jobs-clear-confirm' => "Are you sure you want to delete jobs?",
-    'item-created'=> 'Item succesfully created',
+    'item-created'=> 'Item successfully created',
 ];
