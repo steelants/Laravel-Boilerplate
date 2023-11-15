@@ -14,7 +14,7 @@
                 </div>
             </label>
 
-            <a class="dropdown-item" href="{{ route('profile') }}">
+            <a class="dropdown-item" href="{{ route('profile.index') }}">
                 {{ __('boilerplate::ui.profile') }}
             </a>
 
