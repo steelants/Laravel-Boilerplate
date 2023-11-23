@@ -33,12 +33,12 @@
         border-top: none !important;
         border-left: none !important;
         border-right: none !important;
-        color: $nav-tabs-link-color;
+        color: var(--bs-body-color);
         font-weight: 500;
     }
 
     .nav-link.active,
     .nav-item.show .nav-link {
-        color: $nav-tabs-link-active-color;
+        color: var(--bs-body-color);
     }
 }
