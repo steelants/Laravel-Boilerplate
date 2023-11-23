@@ -9,7 +9,7 @@
         "livewire/livewire": "^2.0",
         "steelants/form": "^0.0.13",
         "steelants/modal": "dev-main",
-        "steelants/datatable": "^1.0.17"
+        "steelants/datatable": "dev-main"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.9"
