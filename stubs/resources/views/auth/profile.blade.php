@@ -19,12 +19,12 @@
 
         @if (config('session.driver') == 'database')
             <div>
-                <h4>{{ __('boilerplate::user.sessions') }}</h4>
+                <h4>{{ __('boilerplate::ui.sessions') }}</h4>
             </div>
         @endif
 
         <div>
-            <h4>{{ __('boilerplate::user.change_password') }}</h4>
+            <h4>{{ __('boilerplate::ui.change_password') }}</h4>
         </div>
 
         <form action="{{ route('profile.update', ['user' => $user]) }}" method="POST">
