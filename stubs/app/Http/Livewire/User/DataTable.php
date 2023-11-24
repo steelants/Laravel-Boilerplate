@@ -22,12 +22,13 @@ class DataTable extends DataTableV2
         return [
             'id' => $row->id,
             'name' => $row->name,
+            'email' => $row->email,
         ];
     }
 
     public function headers(): array
     {
-        return ["id", "name"];
+        return ["id", "name", "email"];
     }
 
     public function actions($item)
