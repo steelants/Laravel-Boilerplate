@@ -15,7 +15,7 @@
 
 ```bash
 composer require steelants/laravel-boilerplate
-compoer install
+composer install
 php artisan boilerplate:install
 ```
 
