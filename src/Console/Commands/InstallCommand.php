@@ -35,6 +35,20 @@ class InstallCommand extends Command
         $this->components->info('Adding Routes');
         self::appendRoutes();
 
+        $function = "\n";
+        $function .= "    protected function context(): array\n";
+        $function .= "    {\n";
+        $function .= "        return array_merge(parent::context(), [\n";
+        $function .= "            'current_url' => request()->url(),\n";
+        $function .= "        ]);\n";
+        $function .= "    }\n";
+
+        if ($this->addClassFunction(base_path('/app/Exceptions/Handler.php'), $function, 'context()')) {
+            $this->components->info('Modifying App\Exceptions\Handler');
+        } else {
+            $this->components->error('Unable to modify App\Exceptions\Handler');
+        }
+
         $this->components->warn('Cleaning Cashes');
         Artisan::call('livewire:discover');
         Artisan::call('optimize:clear');
@@ -117,6 +131,24 @@ class InstallCommand extends Command
     protected function appendRoutes()
     {
         $baseDir = realpath(__DIR__ . '/../../../stubs');
-        file_put_contents(base_path('routes/web.php'),file_get_contents($baseDir  . '/routes.stub'),FILE_APPEND);
+        file_put_contents(base_path('routes/web.php'), file_get_contents($baseDir  . '/routes.stub'), FILE_APPEND);
+    }
+
+    protected function addClassFunction(string $filePath, string  $functionCode, string $functionName)
+    {
+        $ClassFileContent = file_get_contents($filePath);
+        if (str_contains($ClassFileContent, $functionName)) {
+            return false;
+        }
+
+        preg_match_all('/\}/', $ClassFileContent, $matches, PREG_OFFSET_CAPTURE);
+
+        if (empty($matches[0])) {
+            return false;
+        }
+
+        $pos = end($matches[0])[1];
+        $ModifiedContent = substr_replace($ClassFileContent, $functionCode, $pos, 0);
+        return file_put_contents($filePath, $ModifiedContent);
     }
 }
