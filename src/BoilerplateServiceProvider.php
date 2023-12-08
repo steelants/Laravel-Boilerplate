@@ -9,6 +9,7 @@ use SteelAnts\LaravelBoilerplate\Console\Commands\MakeBasicTestsCommand;
 
 use App\Models\Tenant;
 use App\Services\TenantManager;
+use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,8 @@ class BoilerplateServiceProvider extends ServiceProvider
         ]);
 
         $this->commands([InstallCommand::class]);
+        $this->commands([MakeCrudCommand::class]);
+
         $this->commands([MakeBasicTestsCommand::class]);
 
         # schedule tasks from db https://stackoverflow.com/a/38664283
