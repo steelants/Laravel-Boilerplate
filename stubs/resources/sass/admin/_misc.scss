@@ -178,3 +178,13 @@ a{
 .collapsed .collapse-indicator{
     transform: rotate(180deg);
 }
+
+.dropdown-item-icon{
+    width: 1rem;
+    text-align: center;
+    margin-right: .5rem;
+}
+
+.page-link{
+    font-variant: tabular-nums;
+}

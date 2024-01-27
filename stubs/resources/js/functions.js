@@ -24,12 +24,12 @@ window.eraseCookie = function(name) {
 }
 
 window.toggleDatkTheme = function(){
-    if($('#datk-theme').is(':checked')){
-        $('html').attr('data-bs-theme', 'dark', 360);
-        setCookie('theme', 'dark');
+    if(document.getElementById('datk-theme').checked){
+        document.documentElement.setAttribute('data-bs-theme', 'dark');
+        setCookie('theme', 'dark', 360);
     }else{
-        $('html').attr('data-bs-theme', 'light', 360);
-        setCookie('theme', 'light');
+        document.documentElement.setAttribute('data-bs-theme', 'light');
+        setCookie('theme', 'light', 360);
     }
 }
 

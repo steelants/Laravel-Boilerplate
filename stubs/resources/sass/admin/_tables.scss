@@ -55,3 +55,14 @@
 .table-selectable .custom-control{
     display: inline-block;
 }
+
+.datatable-head-sort{
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 4px 6px;
+    margin: -4px -6px;
+
+    &:hover{
+        background: var(--bs-secondary-bg);
+    }
+}

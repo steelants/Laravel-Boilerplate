@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class DataTable extends DataTableV2
 {
-    public $paginated = true;
+    public bool $paginated = true;
     public int $itemsPerPage = 100;
 
     public function query(): Builder

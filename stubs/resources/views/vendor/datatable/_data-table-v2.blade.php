@@ -6,13 +6,13 @@
                     <tr>
                         @foreach ($headers as $header)
                             {{-- Nespoléhat se na proměnou headers může být uplně jiná než property sortovat přes funkci --}}
-                            <th @if ($sortable) @if ($header != $sortBy) wire:click="$set('sortBy','{{ $header }}')" @else wire:click="$set('sortDesc','{{ !$sortDesc }}')" @endif
+                            <th @if ($sortable) @if ($header != $sortBy) wire:click="$set('sortBy','{{ $header }}')" @else wire:click="$set('sortDirection','{{ !$sortDirection }}')" @endif
                                 @endif scope="col">
                                 @if ($sortable)
                                     @if ($header != $sortBy)
                                         ↕
                                     @else
-                                        @if ($sortDesc)
+                                        @if ($sortDirection)
                                             ↑
                                         @else
                                             ↓
