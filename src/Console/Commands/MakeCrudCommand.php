@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use App\Models;
+//
 
 class MakeCrudCommand extends Command
 {
