@@ -19,8 +19,8 @@ class DataTable extends DataTableV2
     public function row($row): array
     {
         $affectedJson = json_encode([
-            'id'=>$row->affected->id ?? '',
-            'name'=>$row->affected->name ?? '',
+            'id'=> $row->affected->id ?? '',
+            'name'=> ($row->affected->title ??($row->affected->name ?? ($row->affected->description ?? ''))),
         ], JSON_UNESCAPED_UNICODE);
 
         return [
