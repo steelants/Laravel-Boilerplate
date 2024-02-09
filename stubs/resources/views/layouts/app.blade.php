@@ -43,7 +43,7 @@
                 </button>
 
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img height="32px" src="{{ asset('images/logo.png') }}" width="32px">
+                    <img height="32px" src="{{ asset('storage/images/logo.png') }}" width="32px">
                 </a>
 
                 @auth

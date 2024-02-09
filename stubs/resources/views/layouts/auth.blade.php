@@ -38,7 +38,7 @@
          <div class="col-md-6 d-flex flex-column grid justify-content-center align-content-center">
                <div class="container py-4 px-4">
                   <div class="d-md-none text-center mb-4">
-                     <img class="mb-4" height="64px" src="{{ asset('images/logo.png') }}" width="64px">
+                     <img class="mb-4" height="64px" src="{{ asset('storage/images/logo.png') }}" width="64px">
                   </div>
                   @if (session()->has('message'))
                      <div class="alert alert-info alert-dismissible">{{ session('message') }}<button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button></div>
