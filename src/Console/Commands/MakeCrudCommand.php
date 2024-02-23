@@ -126,7 +126,7 @@ class Form extends Component
 
     public function store()
     {
-        $this->validate();
+        //$this->validate();
         $this->' . strtolower($arguments['model']) . '->save();
         $this->emit(\'closeModal\');
     }
