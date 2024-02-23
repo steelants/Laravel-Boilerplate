@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
 use SteelAnts\LaravelBoilerplate\Console\Commands\InstallCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeBasicTestsCommand;
+use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;
 
 use App\Models\Tenant;
 use App\Services\TenantManager;
@@ -30,6 +31,8 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->commands([MakeCrudCommand::class]);
 
         $this->commands([MakeBasicTestsCommand::class]);
+        $this->commands([DispatchJob::class]);
+
 
         # schedule tasks from db https://stackoverflow.com/a/38664283
         // $this->app->booted(function () {
