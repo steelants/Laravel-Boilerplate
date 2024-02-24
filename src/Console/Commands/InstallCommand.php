@@ -16,10 +16,6 @@ class InstallCommand extends Command
 
     public function handle(): void
     {
-        $this->components->info('Installing Laravel-Ui Scaffolding');
-        Artisan::call('ui bootstrap');
-        Artisan::call('ui:auth bootstrap --force');
-
         $this->components->info('Installing Boilerplate Scaffolding');
         self::updatePackagesJson();
 
@@ -28,6 +24,7 @@ class InstallCommand extends Command
         self::exportStubs('resources/views');
         self::exportStubs('resources/js');
         self::exportStubs('resources/sass');
+        self::exportStubs('storage/app/public');
 
         self::updateVite();
         self::removeNodeModules();
@@ -50,6 +47,7 @@ class InstallCommand extends Command
         }
 
         $this->components->warn('Cleaning Cashes');
+        Artisan::call('storage:link');
         Artisan::call('livewire:discover');
         Artisan::call('optimize:clear');
         Artisan::call('view:clear');

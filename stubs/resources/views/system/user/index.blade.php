@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-layout-app>
     <div class="container">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.users') }}</h1>
@@ -10,4 +8,4 @@
         </div>
         @livewire('user.data-table', [], key('data-table'))
     </div>
-@endsection
+</x-layout-app>

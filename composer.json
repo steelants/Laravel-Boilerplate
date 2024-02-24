@@ -5,11 +5,11 @@
     "license": "MIT",
     "require": {
         "laravel/framework": "^10.0",
-        "laravel/ui": "^4.2",
         "livewire/livewire": "^2.0",
         "steelants/form": "0.0.13",
-        "steelants/modal": "0.0.23",
-        "steelants/datatable": "dev-master"
+        "steelants/modal": "1.0.23",
+        "steelants/datatable": "dev-master",
+        "steelants/aravel-auth": "dev-main"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.9"

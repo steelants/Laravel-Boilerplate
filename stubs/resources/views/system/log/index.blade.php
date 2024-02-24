@@ -1,7 +1,4 @@
-@extends('layouts.app')
-
-
-@section('content')
+<x-layout-app>
     <div class="container">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.log')}}</h1>
@@ -44,4 +41,4 @@
             </table>
         </div>
     </div>
-@endsection
+</x-layout-app>

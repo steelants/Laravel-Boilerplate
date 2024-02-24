@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-layout-auth>
     <div class="container">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.api_tokens') }}</h1>
@@ -57,4 +55,4 @@
             </table>
         </div>
     </div>
-@endsection
+</x-layout-auth>

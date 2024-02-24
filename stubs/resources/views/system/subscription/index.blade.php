@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-layout-app>
     <div class="container">
         <div class="page-header">
             <h1>{{ __('boilerplate::subscriptions.title') }}</h1>
@@ -12,4 +10,4 @@
 
         @livewire('subscription.data-table', [], key('data-table'))
     </div>
-@endsection
+</x-layout-app>
