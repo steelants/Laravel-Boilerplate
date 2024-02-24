@@ -45,6 +45,12 @@
                     {{ __('boilerplate::ui.jobs') }}
                 </a>
             </li>
+            <li class="nav-item {{ request()->routeIs('system.cache.index') ? 'is-active' : '' }}">
+                <a class="nav-link" href="{{ route('system.cache.index') }}">
+                    <i class="nav-link-ico fas fa-box"></i>
+                    {{ __('boilerplate::ui.cache') }}
+                </a>
+            </li>
             {{-- MAIN NAVIGATION SYSTEM --}}
         @endauth
     </ul>

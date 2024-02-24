@@ -1,4 +1,4 @@
-<x-layout-auth>
+<x-layout-app>
     <div class="container">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.profile') }}</h1>
@@ -57,4 +57,4 @@
             <button class="btn btn-primary" type="submit">{{ __('boilerplate::ui.update') }}</button>
         </form>
     </div>
-</x-layout-auth>
+</x-layout-app>

@@ -1,4 +1,4 @@
-<x-layout-auth>
+<x-layout-app>
     <div class="container">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.api_tokens') }}</h1>
@@ -55,4 +55,4 @@
             </table>
         </div>
     </div>
-</x-layout-auth>
+</x-layout-app>
