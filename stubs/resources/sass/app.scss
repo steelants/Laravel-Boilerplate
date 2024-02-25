@@ -6,6 +6,8 @@
 // Bootstrap
 @import "bootstrap/scss/bootstrap";
 
+@import "./quill";
+
 // Other
 @import "./admin/misc";
 @import "./admin/nav";
@@ -15,4 +17,3 @@
 @import "./admin/tables";
 @import "./admin/snackbar";
 @import "./admin/imagemap";
-@import "./admin/quill";

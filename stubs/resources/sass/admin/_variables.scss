@@ -25,9 +25,11 @@ $alert-bg-level: -9;
 
 // Typography
 $font-family-sans-serif: 'Inter', sans-serif;
-// $font-size-base: 0.875rem;
-// $line-height-base: 1.6;
-$h1-font-size: 2rem;
+$h1-font-size: 2.25rem;;
+$h2-font-size: 1.875rem;;
+$h3-font-size: 1.5rem;
+$h4-font-size: 1.25rem;
+$h5-font-size: 1.125rem;;
 
 $card-cap-bg: #f9fbfc;
 
@@ -60,3 +62,5 @@ $nav-tabs-border-radius: 0;
 $label-margin-bottom: .25rem;
 
 $alert-padding-x: 1rem;
+
+$paragraph-margin-bottom: .5rem;
