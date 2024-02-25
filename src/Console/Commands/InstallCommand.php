@@ -17,15 +17,17 @@ class InstallCommand extends Command
     public function handle(): void
     {
         $this->components->info('Installing Boilerplate Scaffolding');
-        self::updatePackagesJson();
-
+        
         self::exportStubs('app'); //Add Stubs for controllers
         self::exportStubs('database/migrations');
         self::exportStubs('resources/views');
         self::exportStubs('resources/js');
         self::exportStubs('resources/sass');
         self::exportStubs('storage/app/public');
-
+        self::exportStubs('config');
+        
+        
+        self::updatePackagesJson();
         self::updateVite();
         self::removeNodeModules();
 

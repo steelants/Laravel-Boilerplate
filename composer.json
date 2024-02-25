@@ -6,10 +6,10 @@
     "require": {
         "laravel/framework": "^10.0",
         "livewire/livewire": "^2.0",
-        "steelants/form": "0.0.13",
+        "steelants/form": "dev-main",
         "steelants/modal": "1.0.23",
         "steelants/datatable": "dev-master",
-        "steelants/aravel-auth": "dev-main"
+        "steelants/laravel-auth": "dev-main"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.9"

@@ -1,9 +1,9 @@
 <div>
-    <x-form livewireAction="store" method="post">
-        <x-form-input groupClass="mb-3" id="name" livewireModel="name" name="name" value="{{ old('name') }}" label="{{ __('boilerplate::ui.name') }}" />
-        <x-form-input groupClass="mb-3" id="email" livewireModel="email" name="email" type="email" value="{{ old('email') }}" label="{{ __('boilerplate::ui.email') }}" />
-        <x-form-input groupClass="mb-3" id="password" livewireModel="password" name="password" type="password" value="{{ old('password') }}" label="{{ __('boilerplate::ui.password') }}" />
-        <x-form-input groupClass="mb-3" id="password_confirmation" livewireModel="password_confirmation" name="password_confirmation" type="password"  value="{{ old('password') }}" label="{{ __('boilerplate::ui.confirm.password') }}" />
-        <x-form-submit>{{ __('boilerplate::ui.create') }}</x-form-submit>
-    </x-form>
+    <x-form::form wire:submit.prevent="store">
+        <x-form::input group-class="mb-3" type="text" wire:model="name" id="name" label="{{ __('boilerplate::ui.name') }}"/>
+        <x-form::input group-class="mb-3" type="email" wire:model="email" id="email" label="{{ __('boilerplate::ui.email') }}"/>
+        <x-form::input group-class="mb-3" type="password" wire:model="password" id="password" label="{{ __('boilerplate::ui.password') }}"/>
+        <x-form::input group-class="mb-3" type="password" wire:model="password_confirmation" id="password_confirmation" label="{{ __('boilerplate::ui.confirm.password') }}"/>
+        <x-form::button class="btn-primary" type="submit">{{ __('boilerplate::ui.create') }}</x-form::button>
+    </x-form::form>
 </div>
