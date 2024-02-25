@@ -1,22 +1,14 @@
 <div>
-    <form wire:submit.prevent="{{$action}}" method="post">
-        
-        <div class="mb-3">
-            <label class="form-label">{{ __('boilerplate::subscriptions.tier') }}</label>
-            <select class="form-select" wire:model="tier" required>
-                <option value="" hidden>{{ __('boilerplate::ui.select-value') }}</option>
-                @foreach ($tiers as $value => $name)
-                    <option value="{{$value}}">{{$name}}</option>
-                @endforeach
-            </select>
-        </div>
+    <x-form::form wire:submit.prevent="{{ $action }}">
+        <x-form::select wire:model="tier" group-class="mb-3" label="{{ __('boilerplate::subscriptions.tier') }}" :options="$tiers"/>
 
-        <x-form-input type="date" id="subscription-valid_to" name="valid_to" livewireModel="valid_to" label="{{ __('boilerplate::ui.valid_to') }}" required="true"/>
+        <x-form::input group-class="mb-3" type="date" wire:model="valid_to" id="valid_to"
+            label="{{ __('boilerplate::ui.confirm.password') }}" />
 
         @if ($action == 'update')
-            <x-form-submit text="{{ __('boilerplate::ui.update') }}" />
+            <x-form::button class="btn-primary" type="submit">{{ __('boilerplate::ui.add') }}</x-form::button>
         @else
-            <x-form-submit text="{{ __('boilerplate::ui.add') }}" />
+            <x-form::button class="btn-primary" type="submit">{{ __('boilerplate::ui.add') }}</x-form::button>
         @endif
-    </form>
+    </x-form::form>
 </div>
