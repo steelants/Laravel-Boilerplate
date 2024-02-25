@@ -105,6 +105,7 @@ $MAX_INDENT: 9 !default;
   table {
     @extend .table;
     @extend .table-bordered;
+    @extend .table-sm;
   }
 
 
