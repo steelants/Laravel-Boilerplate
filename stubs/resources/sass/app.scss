@@ -1,10 +1,10 @@
 @import "@fortawesome/fontawesome-free/css/all.css";
 
 // Variables
-@import './admin/variables';
+@import "./admin/variables";
 
 // Bootstrap
-@import 'bootstrap/scss/bootstrap';
+@import "bootstrap/scss/bootstrap";
 
 // Other
 @import "./admin/misc";
@@ -15,4 +15,4 @@
 @import "./admin/tables";
 @import "./admin/snackbar";
 @import "./admin/imagemap";
-@import "./admin/summernote";
+@import "./admin/quill";
