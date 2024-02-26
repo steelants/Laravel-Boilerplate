@@ -15,7 +15,7 @@ class MakeCrudCommand extends Command
 
     protected $description = 'Creates CRUD for specified Command';
 
-    protected function getBasePath(){
+    protected function getPackageBasePath(){
         return  __DIR__ . '/../../..';
     }
     public function handle(): void
@@ -78,7 +78,7 @@ class MakeCrudCommand extends Command
         $arguments['headers'] =  implode('","', $arguments['headers']);
 
         $stubFilePath = ('/stubs/DataTable.stub');
-        $moduleRootPath = realpath($this->getBasePath() . $stubFilePath);
+        $moduleRootPath = realpath($this->getPackageBasePath() . $stubFilePath);
 
         $fileContent = file_get_contents($moduleRootPath, true);
         foreach ($arguments as $ArgumentName => $ArgumentValue) {
@@ -92,7 +92,7 @@ class MakeCrudCommand extends Command
         $arguments['model_lower_case'] = strtolower($arguments['model']);
 
         $stubFilePath = ('/stubs/Form.stub');
-        $moduleRootPath = realpath($this->getBasePath() . $stubFilePath);
+        $moduleRootPath = realpath($this->getPackageBasePath() . $stubFilePath);
 
         $fileContent = file_get_contents($moduleRootPath, true);
         foreach ($arguments as $ArgumentName => $ArgumentValue) {
@@ -118,7 +118,7 @@ class MakeCrudCommand extends Command
         $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">" . __('Create') . "</x-form::button>\n";
         $content .= "\t</x-form::form>\n";
         $content .= "</div>";
-        
+
         return $content;
     }
 }
