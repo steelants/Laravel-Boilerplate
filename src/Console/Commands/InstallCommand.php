@@ -145,7 +145,7 @@ class InstallCommand extends Command
     {
         $ClassFileContent = file_get_contents($filePath);
         if (str_contains($ClassFileContent, $functionName)) {
-            return false;
+            return true;
         }
 
         preg_match_all('/\}/', $ClassFileContent, $matches, PREG_OFFSET_CAPTURE);
