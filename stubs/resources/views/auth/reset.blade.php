@@ -1,45 +1,14 @@
 <x-layout-auth>
-    <form method="POST"action="{{ isset($token) ? route('password.update') : route('password.email') }}">
-        @csrf
-
+    <x-form::form method="POST" action="{{ isset($token) ? route('password.update') : route('password.email') }}">
         @if (isset($token))
-            <input type="hidden" name="token" value="{{ $token }}">
-
-            <label for="email">{{ __('Email') }}:</label><br>
-            <input type="email" id="email" name="email" placeholder="email@post.xx" value="{{ $email }}"><br>
-            @error('email')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong><br>
-                </span>
-            @enderror
-
-            <label for="password">{{ __('Password') }}:</label><br>
-            <input type="password" id="password" name="password" value="{{ $password ?? old('password') }}"><br>
-            @error('password')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong><br>
-                </span>
-            @enderror
-
-            <label for="password_confirmation">{{ __('Confirm Password') }}:</label><br>
-            <input type="password" id="password_confirmation" name="password_confirmation"
-                value="{{ $password_confirmation ?? old('password_confirmation') }}"><br>
-            @error('password_confirmation')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong><br>
-                </span>
-            @enderror
+            <x-form::input type="hidden" id="token" name="token" value="{{ $token }}" />
+            <x-form::input group-class="mb-3" type="email" id="email" name="email" label="{{ __('Email') }}" value="{{ $email }}" />
+            <x-form::input group-class="mb-3" type="password"  id="password" name="password" label="{{ __('Password') }}" />
+            <x-form::input group-class="mb-3" type="password"  id="password_confirmation" name="password_confirmation" label="{{ __('Confirm Password') }}" />
         @else
-            <label for="email">{{ __('Email') }}:</label><br>
-            <input type="email" id="email" name="email" placeholder="email@post.xx"
-                value="{{ old('email') }}"><br>
-            @error('email')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong><br>
-                </span>
-            @enderror
+            <x-form::input group-class="mb-3" type="email" id="email" name="email" label="{{ __('Email') }}" placeholder="email@post.xx"/>
         @endif
-
-        <input type="submit" value="{{ __('Send Password Reset Link') }}">
-    </form>
+        
+        <x-form::button class="btn-primary" type="submit">{{ __('Send Password Reset Link') }}</x-form::button>
+    </x-form::form>
 </x-layout-auth>

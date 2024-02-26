@@ -1,39 +1,9 @@
 <x-layout-auth>
-    <form method="POST"action="{{ route('register.submit') }}">
-        @csrf
-
-        <label for="name">{{ __('Name') }}:</label><br>
-        <input type="text" id="name" name="name" placeholder="JohnDoe"><br>
-        @error('name')
-            <spasn class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong><br>
-            </span>
-        @enderror
-
-        <label for="email">{{ __('Email') }}:</label><br>
-        <input type="email" id="email" name="email" placeholder="email@post.xx"><br>
-        @error('email')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong><br>
-            </span>
-        @enderror
-
-        <label for="password">{{ __('Password') }}:</label><br>
-        <input type="password" id="password" name="password"><br>
-        @error('password')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong><br>
-            </span>
-        @enderror
-
-        <label for="password_confirmation">{{ __('Confirm Password') }}:</label><br>
-        <input type="password" id="password_confirmation" name="password_confirmation"><br>
-        @error('password_confirmation')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong><br>
-            </span>
-        @enderror
-
-        <input type="submit" value="{{ __('Register') }}">
-    </form>
+    <x-form::form method="POST" action="{{ route('register.submit') }}">
+        <x-form::input group-class="mb-3" type="text" name="name" id="name" label="{{ __('Name') }}:" placeholder="JohnDoe" />
+        <x-form::input group-class="mb-3" type="email" name="email" id="email" label="{{ __('Email') }}:" placeholder="email@post.xx" />
+        <x-form::input group-class="mb-3" type="password" name="password" id="password" label="{{ __('Password') }}:" />
+        <x-form::input group-class="mb-3" type="password" name="password_confirmation" id="password_confirmation" label="{{ __('Confirm Password') }}:" />
+        <x-form::button class="btn-primary" type="submit">{{ __('Register') }}</x-form::button>
+    </x-form::form>
 </x-layout-auth>
