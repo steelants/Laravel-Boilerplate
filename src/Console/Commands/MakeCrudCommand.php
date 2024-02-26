@@ -1,4 +1,4 @@
-<?php
+<?phpdaša simkova
 
 namespace SteelAnts\LaravelBoilerplate\Console\Commands;
 
@@ -15,6 +15,9 @@ class MakeCrudCommand extends Command
 
     protected $description = 'Creates CRUD for specified Command';
 
+    protected function getBasePath(){
+        return  __DIR__ . '/../../..';
+    }
     public function handle(): void
     {
         $model = $this->argument('model');
@@ -45,7 +48,9 @@ class MakeCrudCommand extends Command
 
         $this->components->info("creting File" . $testFilePath);
         if ($fileName == "Form.php") {
+
             Artisan::call('make:livewire Components.' . $model . '.Form --force');
+
             $content = $this->GetFormClassSkeleton([
                 'model' => $model,
                 'headers' => (new ('App\\Models\\' . $model))->getFillable(),
@@ -72,9 +77,8 @@ class MakeCrudCommand extends Command
         $arguments['model_lower_case'] = strtolower($arguments['model']);
         $arguments['headers'] =  implode('","', $arguments['headers']);
 
-        $baseDir = __DIR__ . '/../../..';
         $stubFilePath = ('/stubs/DataTable.stub');
-        $moduleRootPath = realpath($baseDir . $stubFilePath);
+        $moduleRootPath = realpath($this->getBasePath() . $stubFilePath);
 
         $fileContent = file_get_contents($moduleRootPath, true);
         foreach ($arguments as $ArgumentName => $ArgumentValue) {
@@ -87,9 +91,8 @@ class MakeCrudCommand extends Command
     {
         $arguments['model_lower_case'] = strtolower($arguments['model']);
 
-        $baseDir = __DIR__ . '/../../..';
         $stubFilePath = ('/stubs/Form.stub');
-        $moduleRootPath = realpath($baseDir . $stubFilePath);
+        $moduleRootPath = realpath($this->getBasePath() . $stubFilePath);
 
         $fileContent = file_get_contents($moduleRootPath, true);
         foreach ($arguments as $ArgumentName => $ArgumentValue) {
@@ -103,6 +106,7 @@ class MakeCrudCommand extends Command
         $modelName = $arguments['model'];
         $className = 'App\\Models\\' . $modelName;
         $model = new $className();
+
         $content = "<div>\n";
         $content .= "\t<x-form::form wire:submit.prevent=\"store\">\n";
 
@@ -114,6 +118,7 @@ class MakeCrudCommand extends Command
         $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">" . __('Create') . "</x-form::button>\n";
         $content .= "\t</x-form::form>\n";
         $content .= "</div>";
+        
         return $content;
     }
 }
