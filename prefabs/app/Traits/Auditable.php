@@ -8,6 +8,10 @@ trait Auditable
 {
     public static function bootAuditable()
     {
+        if (app()->runningInConsole()) {
+            return;
+        }
+
         static::created(function ($model) {
             $activity = new Activity();
             $activity->lang_text = __('boilerplate::ui.created', ["model" => class_basename($model) . " " . $model->name]);
