@@ -1,0 +1,31 @@
+<?php
+namespace App\\Http\\Livewire\\Components\\{{model}};
+
+use Livewire\\Component;
+use App\\Models\\{{model}};
+
+class Form extends Component
+{
+    public {{model}} ${{model_lower_case}};
+
+    protected function rules()
+    {
+        return [];
+    }
+
+    public function mount ({{model}} ${{model_lower_case}}){
+        $this->{{model_lower_case}} = ${{model_lower_case}};
+    }
+
+    public function store()
+    {
+        //$this->validate();
+        $this->{{model_lower_case}}->save();
+        $this->emit('closeModal');
+    }
+
+    public function render()
+    {
+        return view('livewire.components.{{model_lower_case}}.form');
+    }
+}

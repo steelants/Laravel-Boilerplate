@@ -46,7 +46,7 @@ class MakeCrudCommand extends Command
         $this->components->info("creting File" . $testFilePath);
         if ($fileName == "Form.php") {
             Artisan::call('make:livewire Components.' . $model . '.Form --force');
-            $content = $this->GetModalClassSkeleton([
+            $content = $this->GetFormClassSkeleton([
                 'model' => $model,
                 'headers' => (new ('App\\Models\\' . $model))->getFillable(),
             ]);
@@ -69,74 +69,33 @@ class MakeCrudCommand extends Command
 
     private function GetDataTableClassSkeleton(array $arguments)
     {
-        return '<?php
-namespace App\\Http\\Livewire\\Components\\' . $arguments['model'] . ';
+        $arguments['model_lower_case'] = strtolower($arguments['model']);
+        $arguments['headers'] =  implode('","', $arguments['headers']);
 
-use App\\Models\\' . $arguments['model'] . ';
-use SteelAnts\\DataTable\Http\\Livewire\DataTableV2;
-use Illuminate\\Database\Eloquent\\Builder;
+        $baseDir = __DIR__ . '/../../..';
+        $stubFilePath = ('/stubs/DataTable.stub');
+        $moduleRootPath = realpath($baseDir . $stubFilePath);
 
-class DataTable extends DataTableV2
-{
-    public $listeners = [
-        \'' . strtolower($arguments['model']) . 'Added\' => \'$refresh\'
-        \'closeModal\' => \'$refresh\'
-    ];
+        $fileContent = file_get_contents($moduleRootPath, true);
+        foreach ($arguments as $ArgumentName => $ArgumentValue) {
+            $fileContent = str_replace("{{" . $ArgumentName . "}}", $ArgumentValue, $fileContent);
+        }
+        return $fileContent;
+    }
 
-    public function query(): Builder
+    private function GetFormClassSkeleton(array $arguments)
     {
-        return ' . $arguments['model'] . '::query();
-    }
+        $arguments['model_lower_case'] = strtolower($arguments['model']);
 
-    public function headers(): array
-    {
-        return ["id", "' . implode('","', $arguments['headers']) . '", "actions"];
-    }
+        $baseDir = __DIR__ . '/../../..';
+        $stubFilePath = ('/stubs/Form.stub');
+        $moduleRootPath = realpath($baseDir . $stubFilePath);
 
-    public function remove($' . strtolower($arguments['model']) . '_id){
-        ' . $arguments['model'] . '::find($' . strtolower($arguments['model']) . '_id)->delete();
-    }
-}';
-    }
-
-    private function GetModalClassSkeleton(array $arguments)
-    {
-        $modelName = $arguments['model'];
-        $className = 'App\\Models\\' . $modelName;
-        $model = new $className();
-
-        return '<?php
-namespace App\\Http\\Livewire\\Components\\' . $arguments['model'] . ';
-
-use Livewire\\Component;
-use App\\Models\\' . $arguments['model'] . ';
-
-class Form extends Component
-{
-    public ' . $arguments['model'] . ' $' . strtolower($arguments['model']) . ';
-
-    protected function rules()
-    {
-        return [];
-    }
-
-    public function mount (' . $arguments['model'] . ' $' . strtolower($arguments['model']) . '){
-        $this->' . strtolower($arguments['model']) . ' = $' . strtolower($arguments['model']) . ';
-    }
-
-    public function store()
-    {
-        //$this->validate();
-        $this->' . strtolower($arguments['model']) . '->save();
-        $this->emit(\'closeModal\');
-    }
-
-    public function render()
-    {
-        return view(\'livewire.components.' . strtolower($arguments['model']) . '.form\');
-    }
-
-}';
+        $fileContent = file_get_contents($moduleRootPath, true);
+        foreach ($arguments as $ArgumentName => $ArgumentValue) {
+            $fileContent = str_replace("{{" . $ArgumentName . "}}", $ArgumentValue, $fileContent);
+        }
+        return $fileContent;
     }
 
     private function GetFormBladeSkeleton($arguments)
@@ -145,16 +104,16 @@ class Form extends Component
         $className = 'App\\Models\\' . $modelName;
         $model = new $className();
         $content = "<div>\n";
-        $content .= "\t<x-form livewireAction=\"store\" method=\"post\" enctype=\"multipart/form-data\">\n";
+        $content .= "\t<x-form::form wire:submit.prevent=\"store\">\n";
 
         foreach ($model->getFillable() as $name) {
             $LVModelName = strtolower($modelName . "." . $name);
-            $content .= "\t\t" . '\<x-form-input livewireModel="' . $LVModelName . '" type="text" id="' . $LVModelName . '" name="' . $LVModelName . '" label="' . $LVModelName . '" />\n';
+            $content .= "\t\t" . "\<x-form::input group-class=\"mb-3\" type=\"text\" wire:model=\"" . $LVModelName . "\" id=\"" . $LVModelName . "\" label=\"" . $LVModelName . "\"/>\n";
         }
 
-        $content .= "\t\t<input type=\"submit\" value=\"submit\" />\n";
-        $content .= "\t</x-form>\n";
-        $content .= "</div>\n";
+        $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">" . __('Create') . "</x-form::button>\n";
+        $content .= "\t</x-form::form>\n";
+        $content .= "</div>";
         return $content;
     }
 }

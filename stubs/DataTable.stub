@@ -1,0 +1,28 @@
+<?php
+namespace App\\Http\\Livewire\\Components\\{{model}};
+
+use App\\Models\\{{model}};
+use SteelAnts\\DataTable\Http\\Livewire\DataTableV2;
+use Illuminate\\Database\Eloquent\\Builder;
+
+class DataTable extends DataTableV2
+{
+    public $listeners = [
+        '{{model_lower_case}}Added' => '$refresh'
+        'closeModal' => '$refresh'
+    ];
+
+    public function query(): Builder
+    {
+        return {{model}}::query();
+    }
+
+    public function headers(): array
+    {
+        return ["id", "{{headers}}", "actions"];
+    }
+
+    public function remove(${{model_lower_case}}_id){
+        {{model}}::find(${{model_lower_case}}_id)->delete();
+    }
+}

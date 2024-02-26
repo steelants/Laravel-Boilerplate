@@ -18,13 +18,13 @@ class InstallCommand extends Command
     {
         $this->components->info('Installing Boilerplate Scaffolding');
         
-        self::exportStubs('app'); //Add Stubs for controllers
-        self::exportStubs('database/migrations');
-        self::exportStubs('resources/views');
-        self::exportStubs('resources/js');
-        self::exportStubs('resources/sass');
-        self::exportStubs('storage/app/public');
-        self::exportStubs('config');
+        self::exportPrefabs('app'); //Add prefabs for controllers
+        self::exportPrefabs('database/migrations');
+        self::exportPrefabs('resources/views');
+        self::exportPrefabs('resources/js');
+        self::exportPrefabs('resources/sass');
+        self::exportPrefabs('storage/app/public');
+        self::exportPrefabs('config');
         
         
         self::updatePackagesJson();
@@ -92,10 +92,10 @@ class InstallCommand extends Command
         });
     }
 
-    protected function exportStubs($type = "views")
+    protected function exportPrefabs($type = "views")
     {
         $baseDir = __DIR__ . '/../../..';
-        $moduleSubPath = ('/stubs/' . $type);
+        $moduleSubPath = ('/prefabs/' . $type);
         $laravelSubPath = ('/' . $type);
         $moduleRootPath = realpath($baseDir . $moduleSubPath);
 
@@ -126,13 +126,13 @@ class InstallCommand extends Command
     protected function updateVite()
     {
         #TODO: Include rather than override
-        $baseDir = realpath(__DIR__ . '/../../../stubs');
+        $baseDir = realpath(__DIR__ . '/../../../prefabs');
         copy($baseDir . '/vite.config.js', base_path('vite.config.js'));
     }
 
     protected function appendRoutes()
     {
-        $baseDir = realpath(__DIR__ . '/../../../stubs');
+        $baseDir = realpath(__DIR__ . '/../../../prefabs');
         file_put_contents(base_path('routes/web.php'), file_get_contents($baseDir  . '/routes.stub'), FILE_APPEND);
     }
 
