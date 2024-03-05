@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Subscription;
+namespace App\Livewire\Subscription;
 
 use App\Models\Subscription;
 use Livewire\Component;

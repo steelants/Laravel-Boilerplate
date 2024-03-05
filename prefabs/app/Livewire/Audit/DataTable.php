@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Audit;
+namespace App\Livewire\Audit;
 
 use App\Models\Activity;
 use SteelAnts\DataTable\Http\Livewire\DataTableV2;
