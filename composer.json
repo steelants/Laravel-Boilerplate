@@ -6,8 +6,8 @@
     "require": {
         "laravel/framework": "^10.0",
         "livewire/livewire": "^2.0",
-        "steelants/form": "dev-main",
-        "steelants/modal": "1.0.23",
+        "steelants/form": "^1.2.0",
+        "steelants/modal": "^1.0.23",
         "steelants/datatable": "dev-master",
         "steelants/laravel-auth": "^0.5.0"
     },
