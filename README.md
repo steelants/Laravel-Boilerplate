@@ -41,5 +41,6 @@ ln -s ./package/boilerplate/stubs/resources/ resources
 
 [steelants/auth](https://github.com/steelants/laravel-auth)
 
+
 ## Notes
 * [Laravel MFA](https://dev.to/roxie/how-to-add-google-s-two-factor-authentication-to-a-laravel-8-application-4jjp)
