@@ -7,7 +7,9 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/steelants/form.svg?style=flat-square)](https://packagist.org/packages/steelants/laravel-boilerplate)
 
 ## Content
-- User Managment
+- User Management
+- Job Management
+- Cache Management
 - Log Viewer
 - Audit
 
