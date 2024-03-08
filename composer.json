@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "laravel/framework": "^10.0",
-        "livewire/livewire": "^2.0",
+        "livewire/livewire": "^3.0",
         "steelants/form": "^1.2.0",
         "steelants/modal": "^1.0.23",
         "steelants/datatable": "dev-master",
