@@ -1,4 +1,4 @@
-<?phpdaša simkova
+<?php
 
 namespace SteelAnts\LaravelBoilerplate\Console\Commands;
 
