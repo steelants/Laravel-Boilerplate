@@ -81,6 +81,13 @@ class Backup implements ShouldQueue
         exec($command, $output);
         Log::info('Zipping Files');
 
+        $command = "cd " . storage_path('backups') . "/tmp/ && md5sum ../" . date("Y-m-d", time()) . ".zip ";
+        exec($command, $output);
+        Log::info('Zipping hash');
+        Log::debug($output);
+
+        
+
         if (!empty(env('APP_ADMIN'))) {
             Mail::raw(__('Backup Run successfully'), function ($message) {
                 $message->to('vasek@steelants.cz')->subject(_('Backup Run successfully ') . env('APP_NAME'));
