@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\System;
 
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 
-class LogController extends Controller
+use Illuminate\Support\Facades\File;
+
+class LogController extends BaseController
 {
     public function index()
     {

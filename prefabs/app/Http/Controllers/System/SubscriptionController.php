@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\System;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 
-class SubscriptionController extends Controller
+class SubscriptionController extends BaseController
 {
     public function index()
     {

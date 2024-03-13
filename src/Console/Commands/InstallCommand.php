@@ -132,9 +132,13 @@ class InstallCommand extends Command
 
     protected function appendRoutes()
     {
-        $baseDir = realpath(__DIR__ . '/../../../prefabs');
+        $baseDir = realpath(__DIR__ . '/../../../stubs');
 
-        if( strpos(file_get_contents($baseDir  . '/routes.stub'),'Route::Auth();') !== false) {
+        if( strpos(file_get_contents($baseDir  . '/routes.stub'), 'Route::Auth();') !== false) {
+            return;
+        }
+
+        if( strpos(file_get_contents($baseDir  . '/routes.stub'), 'Route::auth();') !== false) {
             return;
         }
 
