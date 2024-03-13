@@ -153,7 +153,6 @@ class InstallCommand extends Command
         }
 
         preg_match_all('/\}/', $ClassFileContent, $matches, PREG_OFFSET_CAPTURE);
-
         if (empty($matches[0])) {
             return false;
         }
