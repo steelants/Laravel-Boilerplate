@@ -25,5 +25,8 @@ Route::prefix('system')->name('system.')->middleware(['auth'])->group(function (
     Route::get('/subscription', [App\Http\Controllers\System\SubscriptionController::class, 'index'])->name('subscription.index');
 
     Route::get('/cache', [App\Http\Controllers\System\CacheController::class, 'index'])->name('cache.index');
-    Route::get('/cache/clear', [App\Http\Controllers\System\CacheController::class, 'clear'])->name('cache.clear');
+    Route::get('/cahe/clear', [App\Http\Controllers\System\CacheController::class, 'clear'])->name('cache.clear');
+
+    Route::get('/backup', [App\Http\Controllers\System\BackupController::class, 'index'])->name('backup.index');
+
 });
