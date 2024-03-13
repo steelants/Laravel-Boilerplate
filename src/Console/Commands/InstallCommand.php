@@ -17,7 +17,7 @@ class InstallCommand extends Command
     public function handle(): void
     {
         $this->components->info('Installing Boilerplate Scaffolding');
-        
+
         self::exportPrefabs('app'); //Add prefabs for controllers
         self::exportPrefabs('database/migrations');
         self::exportPrefabs('resources/views');
@@ -25,8 +25,8 @@ class InstallCommand extends Command
         self::exportPrefabs('resources/sass');
         self::exportPrefabs('storage/app/public');
         self::exportPrefabs('config');
-        
-        
+
+
         self::updatePackagesJson();
         self::updateVite();
         self::removeNodeModules();
@@ -49,6 +49,7 @@ class InstallCommand extends Command
         }
 
         $this->components->warn('Cleaning Cashes');
+        
         Artisan::call('storage:link');
         Artisan::call('livewire:discover');
         Artisan::call('optimize:clear');
@@ -130,19 +131,19 @@ class InstallCommand extends Command
         copy($baseDir . '/vite.config.js', base_path('vite.config.js'));
     }
 
-    protected function appendRoutes()
+    protected function appendRoutes(string $RouteType = "web")
     {
         $baseDir = realpath(__DIR__ . '/../../../stubs');
 
-        if( strpos(file_get_contents($baseDir  . '/routes.stub'), 'Route::Auth();') !== false) {
+        if (strpos(file_get_contents($baseDir  . '/routes.stub'), 'Route::Auth();') !== false) {
             return;
         }
 
-        if( strpos(file_get_contents($baseDir  . '/routes.stub'), 'Route::auth();') !== false) {
+        if (strpos(file_get_contents($baseDir  . '/routes.stub'), 'Route::auth();') !== false) {
             return;
         }
 
-        file_put_contents(base_path('routes/web.php'), file_get_contents($baseDir  . '/routes.stub'), FILE_APPEND);
+        file_put_contents(base_path('routes/' . $RouteType . '.php'), file_get_contents($baseDir  . '/routes.stub'), FILE_APPEND);
     }
 
     protected function addClassFunction(string $filePath, string  $functionCode, string $functionName)
