@@ -2,32 +2,31 @@
     <div class="container">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.api_tokens') }}</h1>
-        </div>
-
-        <div class="d-flex justify-content-between">
-            <h3>{{ __('boilerplate::ui.api') }}</h3>
-            @if (session()->has('secret'))
-                <code>{{ session()->get('secret') }}</code>
-            @else
-                <form action="{{ route('profile.api.create') }}" class="row row-cols-lg-auto g-3 align-items-center mb-3" method="post">
-                    @csrf
-                    <div class="col-12">
-                        <label class="visually-hidden" for="token-name">{{ __('boilerplate::ui.name') }}</label>
-                        <div class="input-group">
-                            <input class="form-control" id="token-name" name="token_name" placeholder="{{ __('boilerplate::ui.name') }}" type="text">
+            <div>
+                @if (session()->has('secret'))
+                    <code>{{ session()->get('secret') }}</code>
+                @else
+                    <form action="{{ route('profile.api.create') }}" class="row row-cols-lg-auto g-3 align-items-center mb-3" method="post">
+                        @csrf
+                        <div class="col-12">
+                            <label class="visually-hidden" for="token-name">{{ __('boilerplate::ui.name') }}</label>
+                            <div class="input-group">
+                                <input class="form-control" id="token-name" name="token_name" placeholder="{{ __('boilerplate::ui.name') }}" type="text">
+                            </div>
                         </div>
-                    </div>
-                    @error('token_name')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                    <div class="col-12">
-                        <button class="btn btn-primary" type="submit">{{ __('boilerplate::ui.create') }}</button>
-                    </div>
-                </form>
-            @endif
+                        @error('token_name')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                        <div class="col-12">
+                            <button class="btn btn-primary" type="submit">{{ __('boilerplate::ui.create') }}</button>
+                        </div>
+                    </form>
+                @endif
+            </div>
         </div>
+        
         <div class="table-responsive">
             <table class="table">
                 <thead>
