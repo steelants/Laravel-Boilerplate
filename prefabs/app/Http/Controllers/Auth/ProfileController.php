@@ -2,21 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\Auth\UpdateUserRequest;
 use App\Http\Requests\Auth\CreateApiTokenRequest;
 use App\Http\Requests\Auth\RemoveApiTokenRequest;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
-class ProfileController extends Controller
+class ProfileController extends BaseController
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index(Request $request)
     {
         return view('auth.profile', [

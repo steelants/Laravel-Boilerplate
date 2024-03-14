@@ -51,6 +51,12 @@
                     {{ __('boilerplate::ui.cache') }}
                 </a>
             </li>
+            <li class="nav-item {{ request()->routeIs('system.backup.index') ? 'is-active' : '' }}">
+                <a class="nav-link" href="{{ route('system.backup.index') }}">
+                    <i class="nav-link-ico fas fa-file-archive"></i>
+                    {{ __('boilerplate::ui.backup') }}
+                </a>
+            </li>
             {{-- MAIN NAVIGATION SYSTEM --}}
         @endauth
     </ul>

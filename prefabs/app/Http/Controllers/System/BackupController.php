@@ -4,10 +4,10 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
 
-class UserController extends BaseController
+class BackupController extends BaseController
 {
     public function index()
     {
-        return view('system.user.index');
+        return view('system.backup.index', []);
     }
 }

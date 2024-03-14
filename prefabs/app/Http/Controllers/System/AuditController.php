@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\System;
 
-use Illuminate\Http\Request;
-use App\Models\Activity;
-use Illuminate\Support\Str;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 
-class AuditController extends Controller
+class AuditController extends BaseController
 {
     public function index()
     {

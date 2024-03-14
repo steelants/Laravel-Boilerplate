@@ -15,15 +15,17 @@ Route::prefix('system')->name('system.')->middleware(['auth'])->group(function (
     Route::get('/log/detail/{file}', [App\Http\Controllers\System\LogController::class, 'detail'])->name('log.detail');
     Route::get('/log/clear', [App\Http\Controllers\System\LogController::class, 'clear'])->name('log.clear');
 
+    Route::get('/jobs', [App\Http\Controllers\System\JobsController::class, 'index'])->name('jobs.index');
+    Route::get('/jobs/clear', [App\Http\Controllers\System\JobsController::class, 'clear'])->name('jobs.clear');
+    
+    Route::get('/cache', [App\Http\Controllers\System\CacheController::class, 'index'])->name('cache.index');
+    Route::get('/cache/clear', [App\Http\Controllers\System\CacheController::class, 'clear'])->name('cache.clear');
+
     Route::get('/audit', [App\Http\Controllers\System\AuditController::class, 'index'])->name('audit.index');
 
     Route::get('/user', [App\Http\Controllers\System\UserController::class, 'index'])->name('user.index');
 
-    Route::get('/jobs', [App\Http\Controllers\System\JobsController::class, 'index'])->name('jobs.index');
-    Route::get('/jobs/clear', [App\Http\Controllers\System\JobsController::class, 'clear'])->name('jobs.clear');
-
     Route::get('/subscription', [App\Http\Controllers\System\SubscriptionController::class, 'index'])->name('subscription.index');
 
-    Route::get('/cache', [App\Http\Controllers\System\CacheController::class, 'index'])->name('cache.index');
-    Route::get('/cache/clear', [App\Http\Controllers\System\CacheController::class, 'clear'])->name('cache.clear');
+    Route::get('/backup', [App\Http\Controllers\System\BackupController::class, 'index'])->name('backup.index');
 });
