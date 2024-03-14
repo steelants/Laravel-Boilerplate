@@ -136,11 +136,11 @@ class InstallCommand extends Command
         $baseDir = realpath(__DIR__ . '/../../../stubs');
 
         if (strpos(file_get_contents($baseDir  . '/routes.stub'), 'Route::Auth();') !== false) {
-            return;
+            //return;
         }
 
         if (strpos(file_get_contents($baseDir  . '/routes.stub'), 'Route::auth();') !== false) {
-            return;
+           // return;
         }
 
         file_put_contents(base_path('routes/' . $RouteType . '.php'), file_get_contents($baseDir  . '/routes.stub'), FILE_APPEND);
