@@ -3,8 +3,8 @@
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.backup') }}</h1>
             <div>
-                <a class="btn btn-primary" href="{{ route('backup.run') }}"><i class="fas fa-robot me-2"></i><span>{{ __('boilerplate::backup.start_export') }}</span></a>
-                <a class="btn btn-outline-primary" href="{{ route('backup.download.latest') }}" target="_blank"><i class="fas fa-download me-2"></i><span>{{ __('backup.download_last_backup') }}</span></a>
+                <a class="btn btn-primary" href="{{ route('system.backup.run') }}"><i class="fas fa-robot me-2"></i><span>{{ __('boilerplate::backup.start_export') }}</span></a>
+                <a class="btn btn-outline-primary" href="{{ route('system.backup.download.latest') }}" target="_blank"><i class="fas fa-download me-2"></i><span>{{ __('backup.download_last_backup') }}</span></a>
             </div>
         </div>
         {{-- @livewire('backup.data-table', [], key('data-table')) --}}
@@ -22,14 +22,14 @@
                         <tr>
                             <th scope="row">
                                 @foreach ($backup['fileName'] as $key => $fileName)
-                                    {{ ($key != 0 ? ", " : "") }}<a href="{{ route('backup.download', ['file_name' => $fileName]) }}">{{ $fileName }}</a>
+                                    {{ ($key != 0 ? ", " : "") }}<a href="{{ route('system.backup.download', ['file_name' => $fileName]) }}">{{ $fileName }}</a>
                                 @endforeach
                             </th>
                             <td>
                                 {{ $backup['fileSize'] }}
                             </td>
                             <td>
-                                <a class="btn btn-sm btn-danger" title="{{ __('web.delete') }}" href="{{ route('backup.delete', ['file_name' => $backup['fileNameTotal']]) }}" onclick="return confirm('{{ __('backup.delete_confirmation', ['backupFileName' => $backup['fileName']]) }}')">
+                                <a class="btn btn-sm btn-danger" title="{{ __('web.delete') }}" href="{{ route('system.backup.delete', ['file_name' => $backup['fileNameTotal']]) }}" onclick="return confirm('{{ __('backup.delete_confirmation') }}')">
                                     <div class="d-none d-md-none">
                                         {{ __('web.delete') }}
                                     </div>
