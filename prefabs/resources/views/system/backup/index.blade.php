@@ -2,6 +2,10 @@
     <div class="container">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.backup') }}</h1>
+            <div>
+                <a class="btn btn-primary" href="{{ route('system.backups.run') }}"><i class="fas fa-robot me-2"></i><span>{{ __('boilerplate::backup.start_export') }}</span></a>
+                <a class="btn btn-outline-primary" href="{{ route('system.backups.download.latest') }}" target="_blank"><i class="fas fa-download me-2"></i><span>{{ __('backup.download_last_backup') }}</span></a>
+            </div>
         </div>
         {{-- @livewire('backup.data-table', [], key('data-table')) --}}
         <table class="table">
