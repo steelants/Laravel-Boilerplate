@@ -22,7 +22,7 @@ class BackupController extends BaseController
             if (!Str::endsWith($file->getFilename(), ".zip")){
                 continue;
             }
-            $date = explode("_", str_replace(".zip", "", $file->getFilename()))[1];
+            $date = explode("_", str_replace(".zip", "", $file->getFilename()))[0];
             if (empty($backups[$date]['fileSize'])) {
                 $backups[$date]['fileSize'] = $file->getSize();
             } else {
