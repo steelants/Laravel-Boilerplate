@@ -23,7 +23,16 @@ class BackupController extends BaseController
                 continue;
             }
             $date = explode("_", str_replace(".zip", "", $file->getFilename()))[1];
-            $backups[$date]['fileSize'] = $backups[$date]['fileSize'] + $file->getSize();
+            if (empty($backups[$date]['fileSize'])) {
+                $backups[$date]['fileSize'] = $file->getSize();
+            } else {
+                $backups[$date]['fileSize'] += $file->getSize();
+            }
+            if (empty($backups[$date]['fileNameTotal'])) {
+                $backups[$date]['fileNameTotal'] = $file->getFilename();
+            } else {
+                $backups[$date]['fileNameTotal'] = "," . $file->getFilename();
+            }
             $backups[$date]['fileName'][] = $file->getFilename();
         }
 
@@ -35,6 +44,17 @@ class BackupController extends BaseController
     }
     public function download($file_name = null)
     {
+        //$path[] = storage_path('backups/db_' . date("Y-m-d", time()) . ".zip");
+        //$path[] = storage_path('backups/storage_' . date("Y-m-d", time()) . ".zip");
+        if (!empty($file_name)) {
+            $path = storage_path('backups/' . $file_name);
+            if (!\File::exists($path)) {
+                abort(404);
+            }
+    
+            return response()->download($path);
+        }
+        
         abort(404);
     }
 

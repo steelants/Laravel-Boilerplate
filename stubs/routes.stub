@@ -27,5 +27,11 @@ Route::prefix('system')->name('system.')->middleware(['auth'])->group(function (
 
     Route::get('/subscription', [App\Http\Controllers\System\SubscriptionController::class, 'index'])->name('subscription.index');
 
-    Route::get('/backup', [App\Http\Controllers\System\BackupController::class, 'index'])->name('backup.index');
+    Route::prefix('backup')->group(function () {
+        Route::get('/', [App\Http\Controllers\System\BackupController::class, 'run'])->name('backup.run');
+        Route::get('/view', [App\Http\Controllers\System\BackupController::class, 'index'])->name('backup.index');
+        Route::get('/{file_name}/delete', [App\Http\Controllers\System\BackupController::class, 'delete'])->name('backup.delete');
+        Route::get('/{file_name}/download', [App\Http\Controllers\System\BackupController::class, 'download'])->name('backup.download');
+        Route::get('/download', [App\Http\Controllers\System\BackupController::class, 'download'])->name('backup.download.latest');
+    });
 });
