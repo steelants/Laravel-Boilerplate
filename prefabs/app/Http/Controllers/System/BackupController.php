@@ -13,7 +13,7 @@ class BackupController extends BaseController
     public function run()
     {
         Backup::dispatchSync();
-        return redirect()->back();
+        return redirect()->back()->with('success', __('boilerplate::ui.backup-running'));
     }
 
     public function index()
@@ -62,7 +62,7 @@ class BackupController extends BaseController
             }
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('success',  __('boilerplate::ui.deleted'));
     }
 
     private function humanFileSize($bytes, $decimals = 2)

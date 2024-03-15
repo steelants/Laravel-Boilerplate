@@ -25,12 +25,12 @@
 <body>
     <div id="app">
         <div class="row g-0 h-100">
-            <div
-                class="align-content-center col-md-6 d-none d-md-flex flex-column justify-content-center bg-body-tertiary">
+            <div class="align-content-center col-md-6 d-none d-md-flex flex-column justify-content-center bg-body-tertiary">
                 <div class="container py-4 text-center">
-                    @guest
-                        <h1>{{ config('app.name', 'Laravel') }}</h1>
-                    @endguest
+                    <a href="{{ url('/') }}">
+                        <img class="mb-4" src="{{ asset('storage/images/logo.png') }}">
+                    </a>
+                    <h1>{{ config('app.name', 'Laravel') }}</h1>
                     <p class="text-black-50">
                         {{ __('general.MetaDescription') }}
                     </p>
@@ -39,14 +39,17 @@
             <div class="col-md-6 d-flex flex-column grid justify-content-center align-content-center">
                 <div class="container py-4 px-4">
                     <div class="d-md-none text-center mb-4">
-                        <img class="mb-4" height="64px" src="{{ asset('storage/images/logo.png') }}" width="64px">
+                            <img src="{{ asset('storage/images/logo.png') }}" class="mb-4" width="64px" height="64px">
                     </div>
                     @if (session()->has('message'))
-                        <div class="alert alert-info alert-dismissible">{{ session('message') }}<button
-                                aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+                        <div class="alert alert-info alert-dismissible">{{ session('message') }}<button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
                         </div>
                     @endif
-                    {{ $slot }}
+                    <div class="row justify-content-center">
+                        <div class="col-md-10 col-xl-6">
+                            {{ $slot }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
