@@ -75,7 +75,7 @@ class LogController extends BaseController
         }
     }
 
-    protected function getHumanReadableSize($bytes)
+    private function getHumanReadableSize($bytes)
     {
         if ($bytes > 0) {
             $base = floor(log($bytes) / log(1024));
