@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
-
+use App\Jobs\Backup;
+use Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -11,6 +12,7 @@ class BackupController extends BaseController
 {
     public function run()
     {
+        Backup::dispatchSync();
         return redirect()->back();
     }
 
@@ -28,11 +30,6 @@ class BackupController extends BaseController
             } else {
                 $backups[$date]['fileSize'] += $file->getSize();
             }
-            if (empty($backups[$date]['fileNameTotal'])) {
-                $backups[$date]['fileNameTotal'] = $file->getFilename();
-            } else {
-                $backups[$date]['fileNameTotal'] = "," . $file->getFilename();
-            }
             $backups[$date]['fileName'][] = $file->getFilename();
         }
 
@@ -44,8 +41,6 @@ class BackupController extends BaseController
     }
     public function download($file_name = null)
     {
-        //$path[] = storage_path('backups/db_' . date("Y-m-d", time()) . ".zip");
-        //$path[] = storage_path('backups/storage_' . date("Y-m-d", time()) . ".zip");
         if (!empty($file_name)) {
             $path = storage_path('backups/' . $file_name);
             if (!\File::exists($path)) {
@@ -58,15 +53,15 @@ class BackupController extends BaseController
         abort(404);
     }
 
-    public function delete($file_name)
+    public function delete($backup_date)
     {
-        $files = explode(",", str_replace(" ", "", $file_name));
-        foreach ($files as $file) {
+        foreach ([$backup_date . '_database.zip',$backup_date . '_storage.zip'] as $file) {
             $path = storage_path('backups/' . $file);
             if (!empty($path)) {
                 File::delete($path);
             }
         }
+
         return redirect()->back();
     }
 

@@ -134,16 +134,17 @@ class InstallCommand extends Command
     protected function appendRoutes(string $RouteType = "web")
     {
         $baseDir = realpath(__DIR__ . '/../../../stubs');
+        $RouteFilePath = base_path('routes/' . $RouteType . '.php');
 
-        if (strpos(file_get_contents($baseDir  . '/routes.stub'), 'Route::Auth();') !== false) {
-            //return;
+        if (strpos(file_get_contents($RouteFilePath), 'Route::Auth();') !== false) {
+            return;
+        }
+        
+        if (strpos(file_get_contents($RouteFilePath), 'Route::auth();') !== false) {
+            return;
         }
 
-        if (strpos(file_get_contents($baseDir  . '/routes.stub'), 'Route::auth();') !== false) {
-           // return;
-        }
-
-        file_put_contents(base_path('routes/' . $RouteType . '.php'), file_get_contents($baseDir  . '/routes.stub'), FILE_APPEND);
+        file_put_contents($RouteFilePath, file_get_contents($baseDir  . '/routes.stub'), FILE_APPEND);
     }
 
     protected function addClassFunction(string $filePath, string  $functionCode, string $functionName)

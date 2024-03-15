@@ -86,12 +86,20 @@ class Backup implements ShouldQueue
         Log::info('Clean previous backup');
 
         foreach (['database' => $db_backup_path, 'storage' => $fs_backup_path] as $filename => $backupPath) {
-            $zipedFilePath = storage_path('backups/' . date("Y-m-d", time()) . '_' . $filename . ".zip ");
-            $command = "cd " . $backupPath . " && zip -p mypassword -rm " . $zipedFilePath . "./*";
-            exec($command, $output);
-            Log::info($backupPath . '=>' . $zipedFilePath);
+            $zippedFilePath = storage_path('backups/' . date("Y-m-d", time()) . '_' . $filename . ".zip");
 
-            $command = "md5sum ".  $zipedFilePath;
+            if (File::exists($zippedFilePath)) {
+                $command = "rm -r -f " . $zippedFilePath;
+                exec($command, $output);
+                Log::Info('Clean Old Backup File' . $zippedFilePath);
+                Log::Debug($output);
+            }
+
+            $command = "cd ".$backupPath."; zip -rm ".$zippedFilePath." ./*" ;
+            exec($command, $output);
+            Log::info($backupPath . '=>' . $zippedFilePath);
+
+            $command = "md5sum ".  $zippedFilePath;
             exec($command, $output);
             Log::info('Zipping hash');
 
@@ -100,9 +108,10 @@ class Backup implements ShouldQueue
 
             $fileMD5Hash = explode(" ", $charSet)[0];
             Log::debug($fileMD5Hash);
-            echo($backupPath . '=>' .$fileMD5Hash. "\n");
+            echo($backupPath . '=>'.$zippedFilePath.'=>' .$fileMD5Hash. "\n");
+            
         }
-
+        
         if (!empty(env('APP_ADMIN'))) {
             Mail::raw(__('Backup Run successfully'), function ($message) {
                 $message->to('vasek@steelants.cz')->subject(_('Backup Run successfully ') . env('APP_NAME'));

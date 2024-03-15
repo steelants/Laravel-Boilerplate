@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Activity;
 
 class AuditController extends BaseController
 {

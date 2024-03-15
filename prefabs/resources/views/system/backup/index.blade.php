@@ -3,11 +3,9 @@
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.backup') }}</h1>
             <div>
-                <a class="btn btn-primary" href="{{ route('system.backup.run') }}"><i class="fas fa-robot me-2"></i><span>{{ __('boilerplate::backup.start_export') }}</span></a>
-                <a class="btn btn-outline-primary" href="{{ route('system.backup.download.latest') }}" target="_blank"><i class="fas fa-download me-2"></i><span>{{ __('backup.download_last_backup') }}</span></a>
+                <a class="btn btn-primary" href="{{ route('system.backup.run') }}"><i class="fas fa-robot me-2"></i><span>{{ __('boilerplate::ui.start_backup') }}</span></a>
             </div>
         </div>
-        {{-- @livewire('backup.data-table', [], key('data-table')) --}}
         <table class="table">
             <thead>
                 <tr>
@@ -29,7 +27,8 @@
                                 {{ $backup['fileSize'] }}
                             </td>
                             <td>
-                                <a class="btn btn-sm btn-danger" title="{{ __('web.delete') }}" href="{{ route('system.backup.delete', ['file_name' => $backup['fileNameTotal']]) }}" onclick="return confirm('{{ __('backup.delete_confirmation') }}')">
+                            @php($backups_slug = explode('_', $backup['fileName'][0])[0])
+                                <a class="btn btn-sm btn-danger" title="{{ __('web.delete') }}" href="{{ route('system.backup.delete', ['backup_date' => $backups_slug]) }}" onclick="return confirm('{{ __('backup.delete_confirmation') }}')">
                                     <div class="d-none d-md-none">
                                         {{ __('web.delete') }}
                                     </div>

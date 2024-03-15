@@ -86,7 +86,9 @@ class LogController extends BaseController
 
     public function clear()
     {
-        $files = glob('storage/logs/laravel*.log');
+        $path = storage_path('logs');
+        $files = glob($path.'/lar*.log');
+
         foreach($files as $file){
             if(file_exists($file)){
                 unlink($file);
