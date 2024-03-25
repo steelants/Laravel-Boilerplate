@@ -51,8 +51,8 @@ class Form extends Component
 
         Subscription::create($validatedData);
 
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('snackbar', ['message' => __('boilerplate::ui.item-created'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        $this->dispatch('close-modal');
+        $this->dispatch('snackbar', ['message' => __('boilerplate::ui.item-created'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
         $this->emit('subscriptionRefresh');
 
@@ -69,8 +69,8 @@ class Form extends Component
             $sub->update($validatedData);
         }
 
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('snackbar', ['message' => __('boilerplate::ui.item-updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        $this->dispatch('close-modal');
+        $this->dispatch('snackbar', ['message' => __('boilerplate::ui.item-updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
         $this->emit('subscriptionRefresh');
 

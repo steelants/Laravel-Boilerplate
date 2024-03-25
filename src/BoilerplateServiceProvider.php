@@ -26,7 +26,7 @@ class BoilerplateServiceProvider extends ServiceProvider
 
         $this->app->booted(function () {
             $schedule = app(Schedule::class);
-            $schedule->job(new Backup)->dailyAT('00:00')->withoutOverlapping();;
+            $schedule->job(new Backup)->dailyAT('00:00')->withoutOverlapping();
         });
 
         $this->publishes([

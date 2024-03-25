@@ -3,10 +3,10 @@
 namespace App\Livewire\Audit;
 
 use App\Models\Activity;
-use SteelAnts\DataTable\Http\Livewire\DataTableV2;
+use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
 
-class DataTable extends DataTableV2
+class DataTable extends DataTableComponent
 {
     public bool $paginated = true;
     public int $itemsPerPage = 100;

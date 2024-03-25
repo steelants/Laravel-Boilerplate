@@ -5,10 +5,10 @@ namespace App\Livewire\Subscription;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Types\SubscriptionTier;
-use SteelAnts\DataTable\Http\Livewire\DataTableV2;
+use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
 
-class DataTable extends DataTableV2
+class DataTable extends DataTableComponent
 {
     public $listeners = [
         'subscriptionRefresh' => '$refresh'

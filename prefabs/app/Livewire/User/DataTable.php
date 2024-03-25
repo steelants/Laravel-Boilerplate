@@ -3,10 +3,10 @@
 namespace App\Livewire\User;
 
 use App\Models\User;
-use SteelAnts\DataTable\Http\Livewire\DataTableV2;
+use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
 
-class DataTable extends DataTableV2
+class DataTable extends DataTableComponent
 {
     public $listeners = [
         'userAdded' => '$refresh'
@@ -42,6 +42,7 @@ class DataTable extends DataTableV2
                 'type' => "livewire",
                 'action' => "remove",
                 'name' => "remove",
+                'text' => "remove",
                 'parameters' => $item['id']
             ]
         ];
