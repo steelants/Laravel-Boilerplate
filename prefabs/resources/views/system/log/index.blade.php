@@ -2,7 +2,7 @@
     <div class="container">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.log')}}</h1>
-             <button onclick="confirm('{{ __('boilerplate::ui.log-clear-confirm') }}') ? window.location.href = '{{ route('system.log.clear') }}' : false" class="btn btn-danger">{{ __('boilerplate::ui.log-clear') }}</button>
+             <button onclick="confirm('{{ __('boilerplate::ui.log-clear-confirm') }}') ? window.location.href = '{{ route('system.log.clear') }}' : false" class="btn btn-danger">{{ __('boilerplate::ui.logs-clear') }}</button>
         </div>
 
         <div class="row g-3 mb-4">

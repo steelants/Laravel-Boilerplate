@@ -2,12 +2,14 @@
 
 namespace SteelAnts\LaravelBoilerplate;
 
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Console\Scheduling\Schedule;
+
 use SteelAnts\LaravelBoilerplate\Console\Commands\InstallCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeBasicTestsCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;
 
+use App\Jobs\Backup;
 use App\Models\Tenant;
 use App\Services\TenantManager;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
@@ -21,6 +23,11 @@ class BoilerplateServiceProvider extends ServiceProvider
         if (!$this->app->runningInConsole()) {
             return;
         }
+
+        $this->app->booted(function () {
+            $schedule = app(Schedule::class);
+            $schedule->job(new Backup)->dailyAT('00:00')->withoutOverlapping();
+        });
 
         $this->publishes([
             __DIR__ . '/../lang' => $this->app->langPath('vendor/boilerplate'),

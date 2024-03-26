@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Subscription;
+namespace App\Livewire\Subscription;
 
 use App\Models\Subscription;
 use Livewire\Component;
@@ -51,10 +51,10 @@ class Form extends Component
 
         Subscription::create($validatedData);
 
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('snackbar', ['message' => __('boilerplate::ui.item-created'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        $this->dispatch('close-modal');
+        $this->dispatch('snackbar', ['message' => __('boilerplate::ui.item-created'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
-        $this->emit('subscriptionRefresh');
+        $this->dispatch('subscriptionRefresh');
 
         $this->reset('tier');
         $this->reset('valid_to');
@@ -69,10 +69,10 @@ class Form extends Component
             $sub->update($validatedData);
         }
 
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('snackbar', ['message' => __('boilerplate::ui.item-updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        $this->dispatch('close-modal');
+        $this->dispatch('snackbar', ['message' => __('boilerplate::ui.item-updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
-        $this->emit('subscriptionRefresh');
+        $this->dispatch('subscriptionRefresh');
 
         $this->reset('tier');
         $this->reset('valid_to');

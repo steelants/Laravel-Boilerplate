@@ -7,7 +7,9 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/steelants/form.svg?style=flat-square)](https://packagist.org/packages/steelants/laravel-boilerplate)
 
 ## Content
-- User Managment
+- User Management
+- Job Management
+- Cache Management
 - Log Viewer
 - Audit
 
@@ -38,6 +40,8 @@ ln -s ./package/boilerplate/stubs/resources/ resources
 [steelants/form](https://github.com/steelants/Laravel-Form)
 
 [steelants/modal](https://github.com/steelants/Livewire-Modal)
+
+[steelants/auth](https://github.com/steelants/laravel-auth)
 
 
 ## Notes

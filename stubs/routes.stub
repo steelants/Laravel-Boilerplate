@@ -1,0 +1,40 @@
+Route::auth();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::prefix('profile')->name('profile.')->middleware(['auth'])->group(function () {
+    Route::get('/', [App\Http\Controllers\Auth\ProfileController::class, 'index'])->middleware('auth')->name('index');
+    Route::put('/update', [App\Http\Controllers\Auth\ProfileController::class, 'update'])->middleware('auth')->name('update');
+    Route::get('/api', [App\Http\Controllers\Auth\ProfileController::class, 'api'])->middleware('auth')->name('api');
+    Route::post('/api/create', [App\Http\Controllers\Auth\ProfileController::class, 'createApiToken'])->middleware('auth')->name('api.create');
+    Route::delete('/api/remove', [App\Http\Controllers\Auth\ProfileController::class, 'removeApiToken'])->middleware('auth')->name('api.remove');
+});
+
+Route::prefix('system')->name('system.')->middleware(['auth'])->group(function () {
+ 
+    Route::get('/jobs', [App\Http\Controllers\System\JobsController::class, 'index'])->name('jobs.index');
+    Route::get('/jobs/clear', [App\Http\Controllers\System\JobsController::class, 'clear'])->name('jobs.clear');
+    
+    Route::get('/cache', [App\Http\Controllers\System\CacheController::class, 'index'])->name('cache.index');
+    Route::get('/cache/clear', [App\Http\Controllers\System\CacheController::class, 'clear'])->name('cache.clear');
+
+    Route::get('/audit', [App\Http\Controllers\System\AuditController::class, 'index'])->name('audit.index');
+
+    Route::get('/user', [App\Http\Controllers\System\UserController::class, 'index'])->name('user.index');
+
+    Route::get('/subscription', [App\Http\Controllers\System\SubscriptionController::class, 'index'])->name('subscription.index');
+
+    Route::prefix('log')->name('log.')->group(function () {
+        Route::get('/', [App\Http\Controllers\System\LogController::class, 'index'])->name('index');
+        Route::get('/detail/{file}', [App\Http\Controllers\System\LogController::class, 'detail'])->name('detail');
+        Route::get('/clear', [App\Http\Controllers\System\LogController::class, 'clear'])->name('clear');
+    });
+
+    Route::prefix('backup')->name('backup.')->group(function () {
+        Route::get('/', [App\Http\Controllers\System\BackupController::class, 'index'])->name('index');
+        Route::get('/run', [App\Http\Controllers\System\BackupController::class, 'run'])->name('run');
+        Route::get('/delete/{backup_date}', [App\Http\Controllers\System\BackupController::class, 'delete'])->name('delete');
+        Route::get('/download/{file_name}', [App\Http\Controllers\System\BackupController::class, 'download'])->name('download');
+        Route::get('/download', [App\Http\Controllers\System\BackupController::class, 'download'])->name('download.latest');
+    });
+});

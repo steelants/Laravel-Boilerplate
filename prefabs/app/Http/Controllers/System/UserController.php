@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers\System;
 
-use App\Models\User;
-use App\Http\Requests\System\RemoveUserRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     public function index()
     {

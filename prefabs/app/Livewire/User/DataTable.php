@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\User;
+namespace App\Livewire\User;
 
 use App\Models\User;
-use SteelAnts\DataTable\Http\Livewire\DataTableV2;
+use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
 
-class DataTable extends DataTableV2
+class DataTable extends DataTableComponent
 {
     public $listeners = [
         'userAdded' => '$refresh'
@@ -17,18 +17,13 @@ class DataTable extends DataTableV2
         return User::query();
     }
 
-    public function row($row): array
-    {
-        return [
-            'id' => $row->id,
-            'name' => $row->name,
-            'email' => $row->email,
-        ];
-    }
-
     public function headers(): array
     {
-        return ["id", "name", "email"];
+        return [    
+            'id' => 'ID',
+            'name' => 'Name',
+            'email' => 'E-mail',
+        ];
     }
 
     public function actions($item)
@@ -41,8 +36,10 @@ class DataTable extends DataTableV2
             [
                 'type' => "livewire",
                 'action' => "remove",
-                'name' => "remove",
-                'parameters' => $item['id']
+                'parameters' => $item['id'],
+                'text' => "Remove",
+                'actionClass' => 'text-danger',
+                'iconClass' => 'fas fa-trash',
             ]
         ];
     }

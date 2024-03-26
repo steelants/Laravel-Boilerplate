@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Livewire\Subscription;
+namespace App\Livewire\Subscription;
 
 use App\Models\Subscription;
 use App\Models\User;
 use App\Types\SubscriptionTier;
-use SteelAnts\DataTable\Http\Livewire\DataTableV2;
+use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
 
-class DataTable extends DataTableV2
+class DataTable extends DataTableComponent
 {
     public $listeners = [
         'subscriptionRefresh' => '$refresh'
@@ -39,13 +39,13 @@ class DataTable extends DataTableV2
             [
                 'type' => "livewire",
                 'action' => "edit",
-                'name' => "edit",
+                'text' => "edit",
                 'parameters' => $item['id']
             ]
         ];
     }
 
     public function edit($id){
-        $this->emit('openModal', 'subscription.form', __('boilerplate::subscriptions.edit'), $id);
+        $this->dispatch('openModal', 'subscription.form', __('boilerplate::subscriptions.edit'), $id);
     }
 }

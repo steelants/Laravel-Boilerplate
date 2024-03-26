@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\System;
 
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 
-class JobsController extends Controller
+use Illuminate\Support\Facades\DB;
+
+class JobsController extends BaseController
 {
     public function index()
     {

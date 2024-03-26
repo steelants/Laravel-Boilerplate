@@ -21,7 +21,7 @@ class Form extends Component
     {
         //$this->validate();
         $this->{{model_lower_case}}->save();
-        $this->emit('closeModal');
+        $this->dispatch('closeModal');
     }
 
     public function render()

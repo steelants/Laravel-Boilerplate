@@ -1,4 +1,4 @@
-<?phpdaša simkova
+<?php
 
 namespace SteelAnts\LaravelBoilerplate\Console\Commands;
 
@@ -26,8 +26,8 @@ class MakeCrudCommand extends Command
             return;
         }
 
-        $this->makeClassFile('app/Http/Livewire/Components/' . $model, "Form.php", $model);
-        $this->makeClassFile('app/Http/Livewire/Components/' . $model, "DataTable.php", $model);
+        $this->makeClassFile('app/Livewire/Components/' . $model, "Form.php", $model);
+        $this->makeClassFile('app/Livewire/Components/' . $model, "DataTable.php", $model);
 
         Artisan::call('livewire:discover');
     }

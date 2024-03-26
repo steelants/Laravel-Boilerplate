@@ -27,3 +27,4 @@ stubs/resources/views/welcome.blade.php
 stubs/resources/views/test*.blade.php
 stubs/resources/views/test*/*
 stubs/resources/views/livewire/test-*.blade.php
+.vscode/sftp.json

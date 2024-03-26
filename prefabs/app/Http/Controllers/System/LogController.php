@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\System;
 
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 
-class LogController extends Controller
+use Illuminate\Support\Facades\File;
+
+class LogController extends BaseController
 {
     public function index()
     {
@@ -74,7 +75,7 @@ class LogController extends Controller
         }
     }
 
-    protected function getHumanReadableSize($bytes)
+    private function getHumanReadableSize($bytes)
     {
         if ($bytes > 0) {
             $base = floor(log($bytes) / log(1024));
@@ -85,13 +86,15 @@ class LogController extends Controller
 
     public function clear()
     {
-        $files = glob('storage/logs/laravel*.log');
+        $path = storage_path('logs');
+        $files = glob($path.'/lar*.log');
+
         foreach($files as $file){
             if(file_exists($file)){
                 unlink($file);
             }
         }
 
-        return redirect()->route('system.jobs.index')->with('success',  __('boilerplate::ui.jobs-cleared'));
+        return redirect()->route('system.log.index')->with('success',  __('boilerplate::ui.jobs-cleared'));
     }
 }

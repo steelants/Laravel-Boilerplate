@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Audit;
+namespace App\Livewire\Audit;
 
 use App\Models\Activity;
-use SteelAnts\DataTable\Http\Livewire\DataTableV2;
+use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
 
-class DataTable extends DataTableV2
+class DataTable extends DataTableComponent
 {
     public bool $paginated = true;
     public int $itemsPerPage = 100;
@@ -34,6 +34,12 @@ class DataTable extends DataTableV2
 
     public function headers(): array
     {
-        return ["Created", "IP Address", "Note", "Author", "Model"];
+        return [
+            'created_at' => "Created", 
+            'ip_address' => "IP Address", 
+            'note' => "Note", 
+            'user_id' => "Author", 
+            'affected_id' => "Model"
+        ];
     }
 }

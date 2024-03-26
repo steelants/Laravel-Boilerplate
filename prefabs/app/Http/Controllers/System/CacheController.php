@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\System;
 
-use Illuminate\Http\Request;
-use App\Models\Activity;
-use Illuminate\Support\Str;
-use App\Http\Controllers\Controller;
-use Illuminate\Filesystem\Filesystem;
+use App\Http\Controllers\BaseController;
+
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
-class CacheController extends Controller
+class CacheController extends BaseController
 {
     public function index()
     {

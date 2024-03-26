@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\User;
+namespace App\Http\User;
 
 use App\Http\Requests\System\CreateUserRequest;
 use Livewire\Component;
@@ -32,10 +32,10 @@ class Form extends Component
         $validatedData = $this->validate();
         User::create($validatedData);
         
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('snackbar', ['message' => __('boilerplate::ui.create'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        $this->dispatch('close-modal');
+        $this->dispatch('snackbar', ['message' => __('boilerplate::ui.create'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
-        $this->emit('userAdded');
+        $this->dispatch('userAdded');
         
         $this->reset('name');
         $this->reset('email');
