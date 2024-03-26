@@ -5,6 +5,7 @@ return [
     'tier' => 'Tier',
     'create' => 'Add subscription',
     'edit' => 'Edit subscription',
+    'valid_to' => 'Valid to',
     'tier_1' => [
         'title' => 'Tier 1',
     ],

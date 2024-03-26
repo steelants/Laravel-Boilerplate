@@ -2,7 +2,7 @@
     <div class="container">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.users') }}</h1>
-            <button class="btn btn-primary" onclick="Livewire.emit('openModal', 'user.form', '{{ __('user.create') }}')">
+            <button class="btn btn-primary" onclick="Livewire.dispatch('openModal', {livewireComponents: 'user.form'})">
                 <i class="me-2 fas fa-plus"></i><span>{{ __('boilerplate::ui.add') }}</span>
             </button>
         </div>

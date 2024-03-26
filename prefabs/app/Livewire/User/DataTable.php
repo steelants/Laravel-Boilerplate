@@ -17,18 +17,13 @@ class DataTable extends DataTableComponent
         return User::query();
     }
 
-    public function row($row): array
-    {
-        return [
-            'id' => $row->id,
-            'name' => $row->name,
-            'email' => $row->email,
-        ];
-    }
-
     public function headers(): array
     {
-        return ["id", "name", "email"];
+        return [    
+            'id' => 'ID',
+            'name' => 'Name',
+            'email' => 'E-mail',
+        ];
     }
 
     public function actions($item)
@@ -41,9 +36,10 @@ class DataTable extends DataTableComponent
             [
                 'type' => "livewire",
                 'action' => "remove",
-                'name' => "remove",
-                'text' => "remove",
-                'parameters' => $item['id']
+                'parameters' => $item['id'],
+                'text' => "Remove",
+                'actionClass' => 'text-danger',
+                'iconClass' => 'fas fa-trash',
             ]
         ];
     }

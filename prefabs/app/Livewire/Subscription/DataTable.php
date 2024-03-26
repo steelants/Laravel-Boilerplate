@@ -39,13 +39,13 @@ class DataTable extends DataTableComponent
             [
                 'type' => "livewire",
                 'action' => "edit",
-                'name' => "edit",
+                'text' => "edit",
                 'parameters' => $item['id']
             ]
         ];
     }
 
     public function edit($id){
-        $this->emit('openModal', 'subscription.form', __('boilerplate::subscriptions.edit'), $id);
+        $this->dispatch('openModal', 'subscription.form', __('boilerplate::subscriptions.edit'), $id);
     }
 }

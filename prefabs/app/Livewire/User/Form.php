@@ -35,7 +35,7 @@ class Form extends Component
         $this->dispatch('close-modal');
         $this->dispatch('snackbar', ['message' => __('boilerplate::ui.create'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
-        $this->emit('userAdded');
+        $this->dispatch('userAdded');
         
         $this->reset('name');
         $this->reset('email');

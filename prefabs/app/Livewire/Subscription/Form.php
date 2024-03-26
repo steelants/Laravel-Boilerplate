@@ -54,7 +54,7 @@ class Form extends Component
         $this->dispatch('close-modal');
         $this->dispatch('snackbar', ['message' => __('boilerplate::ui.item-created'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
-        $this->emit('subscriptionRefresh');
+        $this->dispatch('subscriptionRefresh');
 
         $this->reset('tier');
         $this->reset('valid_to');
@@ -72,7 +72,7 @@ class Form extends Component
         $this->dispatch('close-modal');
         $this->dispatch('snackbar', ['message' => __('boilerplate::ui.item-updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
-        $this->emit('subscriptionRefresh');
+        $this->dispatch('subscriptionRefresh');
 
         $this->reset('tier');
         $this->reset('valid_to');

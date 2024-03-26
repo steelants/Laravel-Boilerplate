@@ -11,7 +11,7 @@
                 <tr>
                     <th scope="col">{{ __('boilerplate::ui.name') }}</th>
                     <th scope="col">{{ __('boilerplate::ui.size') }}</th>
-                    <th scope="col">{{ __('boilerplate::ui.actions') }}</th>
+                    <th scope="col" class="text-end">{{ __('boilerplate::ui.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,7 +26,7 @@
                             <td>
                                 {{ $backup['fileSize'] }}
                             </td>
-                            <td>
+                            <td class="text-end">
                             @php($backups_slug = explode('_', $backup['fileName'][0])[0])
                                 <a class="btn btn-sm btn-danger" title="{{ __('web.delete') }}" href="{{ route('system.backup.delete', ['backup_date' => $backups_slug]) }}" onclick="return confirm('{{ __('backup.delete_confirmation') }}')">
                                     <div class="d-none d-md-none">
