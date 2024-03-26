@@ -16,19 +16,18 @@ class InstallCommand extends Command
 
     public function handle(): void
     {
-        $this->components->info('Installing Laravel-Ui Scaffolding');
-        Artisan::call('ui bootstrap');
-        Artisan::call('ui:auth bootstrap --force');
-
         $this->components->info('Installing Boilerplate Scaffolding');
+
+        self::exportPrefabs('app'); //Add prefabs for controllers
+        self::exportPrefabs('database/migrations');
+        self::exportPrefabs('resources/views');
+        self::exportPrefabs('resources/js');
+        self::exportPrefabs('resources/sass');
+        self::exportPrefabs('storage/app/public');
+        self::exportPrefabs('config');
+
+
         self::updatePackagesJson();
-
-        self::exportStubs('app'); //Add Stubs for controllers
-        self::exportStubs('database/migrations');
-        self::exportStubs('resources/views');
-        self::exportStubs('resources/js');
-        self::exportStubs('resources/sass');
-
         self::updateVite();
         self::removeNodeModules();
 
@@ -50,6 +49,8 @@ class InstallCommand extends Command
         }
 
         $this->components->warn('Cleaning Cashes');
+        
+        Artisan::call('storage:link');
         Artisan::call('livewire:discover');
         Artisan::call('optimize:clear');
         Artisan::call('view:clear');
@@ -74,6 +75,8 @@ class InstallCommand extends Command
         $packages["dependencies"]["@popperjs/core"] = '^2.11.6';
         $packages["dependencies"]["vite"] = '^4.0.0';
         $packages["dependencies"]["laravel-vite-plugin"] = '^0.8.0';
+        $packages["dependencies"]["quill"] = "2.0.0-rc.2";
+        $packages["dependencies"]["quill-table-ui"] = "^1.0.7";
 
         file_put_contents(base_path('package.json'), json_encode($packages, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . PHP_EOL);
     }
@@ -90,10 +93,10 @@ class InstallCommand extends Command
         });
     }
 
-    protected function exportStubs($type = "views")
+    protected function exportPrefabs($type = "views")
     {
         $baseDir = __DIR__ . '/../../..';
-        $moduleSubPath = ('/stubs/' . $type);
+        $moduleSubPath = ('/prefabs/' . $type);
         $laravelSubPath = ('/' . $type);
         $moduleRootPath = realpath($baseDir . $moduleSubPath);
 
@@ -124,25 +127,34 @@ class InstallCommand extends Command
     protected function updateVite()
     {
         #TODO: Include rather than override
-        $baseDir = realpath(__DIR__ . '/../../../stubs');
+        $baseDir = realpath(__DIR__ . '/../../../prefabs');
         copy($baseDir . '/vite.config.js', base_path('vite.config.js'));
     }
 
-    protected function appendRoutes()
+    protected function appendRoutes(string $RouteType = "web")
     {
         $baseDir = realpath(__DIR__ . '/../../../stubs');
-        file_put_contents(base_path('routes/web.php'), file_get_contents($baseDir  . '/routes.stub'), FILE_APPEND);
+        $RouteFilePath = base_path('routes/' . $RouteType . '.php');
+
+        if (strpos(file_get_contents($RouteFilePath), 'Route::Auth();') !== false) {
+            return;
+        }
+        
+        if (strpos(file_get_contents($RouteFilePath), 'Route::auth();') !== false) {
+            return;
+        }
+
+        file_put_contents($RouteFilePath, file_get_contents($baseDir  . '/routes.stub'), FILE_APPEND);
     }
 
     protected function addClassFunction(string $filePath, string  $functionCode, string $functionName)
     {
         $ClassFileContent = file_get_contents($filePath);
         if (str_contains($ClassFileContent, $functionName)) {
-            return false;
+            return true;
         }
 
         preg_match_all('/\}/', $ClassFileContent, $matches, PREG_OFFSET_CAPTURE);
-
         if (empty($matches[0])) {
             return false;
         }

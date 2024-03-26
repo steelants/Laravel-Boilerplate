@@ -57,5 +57,14 @@ return [
     'jobs-clear' => "Clear jobs",
     'jobs-cleared' => "Jobs cleared!",
     'jobs-clear-confirm' => "Are you sure you want to delete jobs?",
-    'item-created'=> 'Item successfully created',
+    'item-created' => 'Item successfully created',
+    'item-created' => 'Item successfully created',
+    'backup-running' => 'Backup is running',
+    'logs-clear' => 'Clear logs',
+    'cache-clear' => 'Cache logs',
+
+
+    'cache' => 'Cache',
+    'backup' => 'Backup',
+    'start_backup' => "Start Backup"
 ];

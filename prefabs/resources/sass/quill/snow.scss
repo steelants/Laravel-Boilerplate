@@ -1,0 +1,27 @@
+$themeName: 'snow';
+$tooltipMargin: 8px;
+
+:root {
+  --ql-active-color: var(--bs-body-color);
+  --ql-border-color: var(--bs-border-color);
+  --ql-background-color: var(--bs-body-bg);
+  --ql-inactive-color: var(--bs-secondary);
+  --ql-shadow-color: #ddd;
+  --ql-text-color: var(--bs-body-color);
+  --ql-tooltip-background: var(--bs-body-bg);
+}
+
+@import 'core.scss';
+@import 'base';
+@import 'snow/toolbar';
+@import 'snow/tooltip';
+
+// .ql-snow {
+//   a {
+//     color: var(--ql-active-color);
+//   }
+// }
+
+.ql-container.ql-snow {
+  border: 1px solid var(--ql-border-color);
+}
