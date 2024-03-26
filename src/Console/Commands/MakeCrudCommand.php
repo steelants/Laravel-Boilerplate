@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace SteelAnts\LaravelBoilerplate\Console\Commands;
 
 use Artisan;
 use Illuminate\Console\Command;
