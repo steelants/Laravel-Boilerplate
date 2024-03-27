@@ -1,5 +1,7 @@
 Route::auth();
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+   
 Route::prefix('profile')->name('profile.')->middleware(['auth'])->group(function () {
     Route::get('/', [App\Http\Controllers\Auth\ProfileController::class, 'index'])->middleware('auth')->name('index');
     Route::put('/update', [App\Http\Controllers\Auth\ProfileController::class, 'update'])->middleware('auth')->name('update');
