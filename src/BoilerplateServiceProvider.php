@@ -21,10 +21,10 @@ class BoilerplateServiceProvider extends ServiceProvider
             return;
         }
 
-        if (class_exists('App\Jobs\Backup')) {
+        if (class_exists('\App\Jobs\Backup')) {
             $this->app->booted(function () {
                 $schedule = app(Schedule::class);
-                $schedule->job(new App\Jobs\Backup)->dailyAT('00:00')->withoutOverlapping();
+                $schedule->job(new \App\Jobs\Backup)->dailyAT('00:00')->withoutOverlapping();
             });
         }
 
