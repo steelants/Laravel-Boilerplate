@@ -9,9 +9,6 @@ use SteelAnts\LaravelBoilerplate\Console\Commands\InstallCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeBasicTestsCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;
 
-use App\Jobs\Backup;
-use App\Models\Tenant;
-use App\Services\TenantManager;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
 
 class BoilerplateServiceProvider extends ServiceProvider
@@ -24,10 +21,12 @@ class BoilerplateServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->app->booted(function () {
-            $schedule = app(Schedule::class);
-            $schedule->job(new Backup)->dailyAT('00:00')->withoutOverlapping();
-        });
+        if (class_exists('App\Jobs\Backup')) {
+            $this->app->booted(function () {
+                $schedule = app(Schedule::class);
+                $schedule->job(new App\Jobs\Backup)->dailyAT('00:00')->withoutOverlapping();
+            });
+        }
 
         $this->publishes([
             __DIR__ . '/../lang' => $this->app->langPath('vendor/boilerplate'),
