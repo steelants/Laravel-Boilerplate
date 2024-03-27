@@ -26,6 +26,7 @@ class InstallCommand extends Command
         self::exportPrefabs('storage/app/public');
         self::exportPrefabs('config');
 
+        $this->components->info('Installing Boilerplate Scaffolding');
 
         self::updatePackagesJson();
         self::updateVite();

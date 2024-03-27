@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\User;
+namespace App\Livewire\User;
 
 use App\Http\Requests\System\CreateUserRequest;
 use Livewire\Component;
