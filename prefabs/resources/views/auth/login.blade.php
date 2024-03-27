@@ -10,9 +10,9 @@
 
         <x-form::button class="btn-primary" type="submit">{{ __('Login') }}</x-form::button>
         
-        @if (Route::has('registration'))
-            <a href="{{ route('registration') }}">
-                {{ __('Password Registration') }} ?
+        @if (Route::has('register'))
+            <a href="{{ route('register') }}">
+                {{ __('Registration') }} ?
             </a>
         @endif
     </x-form::form>
