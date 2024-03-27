@@ -9,7 +9,7 @@
         "steelants/form": "^1.3.1",
         "steelants/modal": "^2.0.1",
         "steelants/datatable": "^2.0.2",
-        "steelants/laravel-auth": "^1.0.2"
+        "steelants/laravel-auth": "^1.0.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.9"
