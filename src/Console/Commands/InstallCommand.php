@@ -52,7 +52,6 @@ class InstallCommand extends Command
         $this->components->warn('Cleaning Cashes');
         
         Artisan::call('storage:link');
-        Artisan::call('livewire:discover');
         Artisan::call('optimize:clear');
         Artisan::call('view:clear');
         Artisan::call('config:clear');
