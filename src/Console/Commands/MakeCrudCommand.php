@@ -8,7 +8,6 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use App\Models;
 
-
 class MakeCrudCommand extends Command
 {
     protected $signature = 'make:crud {model}';

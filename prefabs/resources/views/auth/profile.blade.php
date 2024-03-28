@@ -17,6 +17,7 @@
         @if (config('session.driver') == 'database')
             <div>
                 <h4>{{ __('boilerplate::ui.sessions') }}</h4>
+                @livewire('session.data-table', [], key('data-table'))
             </div>
         @endif
 

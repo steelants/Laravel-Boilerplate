@@ -65,5 +65,6 @@ return [
     'cache-cleared' => 'Cache logs',
     'cache' => 'Cache',
     'backup' => 'Backup',
-    'start_backup' => "Start Backup"
+    'start_backup' => "Start Backup",
+    'sessions' => "Sessions"
 ];
