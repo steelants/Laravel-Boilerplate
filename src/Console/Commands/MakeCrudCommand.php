@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use App\Models;
-//
+
 
 class MakeCrudCommand extends Command
 {
@@ -15,7 +15,8 @@ class MakeCrudCommand extends Command
 
     protected $description = 'Creates CRUD for specified Command';
 
-    protected function getPackageBasePath(){
+    protected function getPackageBasePath()
+    {
         return  __DIR__ . '/../../..';
     }
     public function handle(): void
@@ -48,10 +49,9 @@ class MakeCrudCommand extends Command
 
         $this->components->info("creting File" . $testFilePath);
         if ($fileName == "Form.php") {
-
             Artisan::call('make:livewire Components.' . $model . '.Form --force');
 
-            $content = $this->GetFormClassSkeleton([
+            $content = $this->getFormClassSkeleton([
                 'model' => $model,
                 'headers' => (new ('App\\Models\\' . $model))->getFillable(),
             ]);
@@ -59,12 +59,12 @@ class MakeCrudCommand extends Command
 
             $bladePathFile = explode("/app", (str_replace('/' . $fileName, "", $testFilePath)))[0];
             $bladePathFile = $bladePathFile . "/resources/views/livewire/components/source/form.blade.php";
-            $modaltcontent = $this->GetFormBladeSkeleton([
+            $modaltcontent = $this->getFormBladeSkeleton([
                 'model' => $model,
             ]);
             file_put_contents($bladePathFile, $modaltcontent);
         } elseif ($fileName == "DataTable.php") {
-            $content = $this->GetDataTableClassSkeleton([
+            $content = $this->getDataTableClassSkeleton([
                 'model' => $model,
                 'headers' => (new ('App\\Models\\' . $model))->getFillable(),
             ]);
@@ -72,7 +72,7 @@ class MakeCrudCommand extends Command
         }
     }
 
-    private function GetDataTableClassSkeleton(array $arguments)
+    private function getDataTableClassSkeleton(array $arguments)
     {
         $arguments['model_lower_case'] = strtolower($arguments['model']);
         $arguments['headers'] =  implode('","', $arguments['headers']);
@@ -87,7 +87,7 @@ class MakeCrudCommand extends Command
         return $fileContent;
     }
 
-    private function GetFormClassSkeleton(array $arguments)
+    private function getFormClassSkeleton(array $arguments)
     {
         $arguments['model_lower_case'] = strtolower($arguments['model']);
 
@@ -101,7 +101,7 @@ class MakeCrudCommand extends Command
         return $fileContent;
     }
 
-    private function GetFormBladeSkeleton($arguments)
+    private function getFormBladeSkeleton($arguments)
     {
         $modelName = $arguments['model'];
         $className = 'App\\Models\\' . $modelName;
@@ -121,5 +121,4 @@ class MakeCrudCommand extends Command
 
         return $content;
     }
-
 }

@@ -108,12 +108,14 @@ class MakeBasicTestsCommand extends Command
 
     private function saveTest($name, $content)
     {
-        if (empty($content)) return;
+        if (empty($content)) {
+            return;
+        }
 
         $testFilePath = base_path() . '/tests/Feature/' . $name . '.php';
 
         $fp = fopen($testFilePath, 'w');
-        fwrite($fp,  $this->getHead($name) . $content . $this->getFoot());
+        fwrite($fp, $this->getHead($name) . $content . $this->getFoot());
         fclose($fp);
 
         $this->info("Generated test file " . $name . '.php');

@@ -109,9 +109,8 @@ class Backup implements ShouldQueue
             $fileMD5Hash = explode(" ", $charSet)[0];
             Log::debug($fileMD5Hash);
             echo($backupPath . '=>'.$zippedFilePath.'=>' .$fileMD5Hash. "\n");
-            
         }
-        
+
         if (!empty(env('APP_ADMIN'))) {
             Mail::raw(__('Backup Run successfully'), function ($message) {
                 $message->to('vasek@steelants.cz')->subject(_('Backup Run successfully ') . env('APP_NAME'));
@@ -120,7 +119,7 @@ class Backup implements ShouldQueue
         }
     }
 
-    private function ExectuteShellCommand($command, &$output)
+    private function execShellCommand($command, &$output)
     {
         $output = $null;
         exec($command, $output);

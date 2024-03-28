@@ -8,7 +8,6 @@ use Illuminate\Support\ServiceProvider;
 
 class TenantServiceProvider extends ServiceProvider
 {
-
     /**
      * Register services.
      *

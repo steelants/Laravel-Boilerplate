@@ -4,7 +4,6 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Support\Facades\File;
 
 class LogController extends BaseController
@@ -81,7 +80,9 @@ class LogController extends BaseController
             $base = floor(log($bytes) / log(1024));
             $units = array("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"); //units of measurement
             return number_format(($bytes / pow(1024, floor($base))), 3) . " $units[$base]";
-        } else return "0 bytes";
+        } else {
+            return "0 bytes";
+        }
     }
 
     public function clear()
@@ -89,12 +90,12 @@ class LogController extends BaseController
         $path = storage_path('logs');
         $files = glob($path.'/lar*.log');
 
-        foreach($files as $file){
-            if(file_exists($file)){
+        foreach ($files as $file) {
+            if (file_exists($file)) {
                 unlink($file);
             }
         }
 
-        return redirect()->route('system.log.index')->with('success',  __('boilerplate::ui.jobs-cleared'));
+        return redirect()->route('system.log.index')->with('success', __('boilerplate::ui.jobs-cleared'));
     }
 }

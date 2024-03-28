@@ -93,7 +93,7 @@ class InstallCommand extends Command
             return;
         }
 
-        tap(new Filesystem, function ($files) {
+        tap(new Filesystem(), function ($files) {
             $files->deleteDirectory(base_path('node_modules'));
             $files->delete(base_path('package-lock.json'));
         });
@@ -159,7 +159,7 @@ class InstallCommand extends Command
         file_put_contents($RouteFilePath, file_get_contents($baseDir  . '/routes.stub'), FILE_APPEND);
     }
 
-    protected function addClassFunction(string $filePath, string  $functionCode, string $functionName)
+    protected function addClassFunction(string $filePath, string $functionCode, string $functionName)
     {
         $ClassFileContent = file_get_contents($filePath);
         if (str_contains($ClassFileContent, $functionName)) {

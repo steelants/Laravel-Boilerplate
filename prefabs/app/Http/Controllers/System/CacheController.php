@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
-
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 
@@ -24,14 +23,14 @@ class CacheController extends BaseController
             foreach ($redisConnection->command('keys', ['*']) as $full_key) {
                 $cache_items[] = str_replace($storage->getPrefix(), "", $full_key);
             }
-        } elseif ($cache_driver == 'file')  {
+        } elseif ($cache_driver == 'file') {
             $cachePath = $storage->getDirectory();
             $items = File::allFiles($cachePath);
             foreach ($items as $file2) {
                 $cache_items[] = $file2->getFilename();
             }
         }
-        
+
         //TODO: ADD SUPPORT FOR MEM CASH AND DB
 
         return view('system.cache.index', [
@@ -41,10 +40,11 @@ class CacheController extends BaseController
         ]);
     }
 
-    
-    public function clear(){
+
+    public function clear()
+    {
         Cache::flush();
 
-        return redirect()->route('system.cache.index')->with('success',  __('boilerplate::ui.cache-cleared'));
+        return redirect()->route('system.cache.index')->with('success', __('boilerplate::ui.cache-cleared'));
     }
 }

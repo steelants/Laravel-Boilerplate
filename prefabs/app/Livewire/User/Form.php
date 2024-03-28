@@ -31,17 +31,15 @@ class Form extends Component
     {
         $validatedData = $this->validate();
         User::create($validatedData);
-        
+
         $this->dispatch('close-modal');
         $this->dispatch('snackbar', ['message' => __('boilerplate::ui.create'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
         $this->dispatch('userAdded');
-        
+
         $this->reset('name');
         $this->reset('email');
         $this->reset('password');
         $this->reset('password_confirmation');
     }
 }
-
-

@@ -2,14 +2,15 @@
 
 namespace App\Types;
 
-class SubscriptionTier{
-
+class SubscriptionTier
+{
     const TIER_1 = 1;
     const TIER_2 = 2;
     const TIER_3 = 3;
     // Add more tiers if needed
 
-    public function getLimits(){
+    public function getLimits()
+    {
         return [
             self::TIER_1 => [
                 'limit_name' => 100,
@@ -23,8 +24,9 @@ class SubscriptionTier{
             ],
         ];
     }
-    
-    public static function getNames(){
+
+    public static function getNames()
+    {
         return [
             self::TIER_1 => __('boilerplate::subscriptions.tier_1.title'),
             self::TIER_2 => __('boilerplate::subscriptions.tier_2.title'),
@@ -32,7 +34,8 @@ class SubscriptionTier{
         ];
     }
 
-    public static function getName($type){
+    public static function getName($type)
+    {
         return self::getNames()[$type] ?? 'undefined';
     }
 }

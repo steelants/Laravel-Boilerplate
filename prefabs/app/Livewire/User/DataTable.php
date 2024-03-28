@@ -19,7 +19,7 @@ class DataTable extends DataTableComponent
 
     public function headers(): array
     {
-        return [    
+        return [
             'id' => 'ID',
             'name' => 'Name',
             'email' => 'E-mail',
@@ -28,7 +28,7 @@ class DataTable extends DataTableComponent
 
     public function actions($item)
     {
-        if ($item['id'] == auth()->user()->id){
+        if ($item['id'] == auth()->user()->id) {
             return [];
         }
 
@@ -44,7 +44,8 @@ class DataTable extends DataTableComponent
         ];
     }
 
-    public function remove($user_id){
+    public function remove($user_id)
+    {
         User::find($user_id)->delete();
     }
 }

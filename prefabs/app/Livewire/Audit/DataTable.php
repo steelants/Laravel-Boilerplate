@@ -35,10 +35,10 @@ class DataTable extends DataTableComponent
     public function headers(): array
     {
         return [
-            'created_at' => "Created", 
-            'ip_address' => "IP Address", 
-            'note' => "Note", 
-            'user_id' => "Author", 
+            'created_at' => "Created",
+            'ip_address' => "IP Address",
+            'note' => "Note",
+            'user_id' => "Author",
             'affected_id' => "Model"
         ];
     }

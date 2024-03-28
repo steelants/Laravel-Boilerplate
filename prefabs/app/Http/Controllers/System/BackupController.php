@@ -21,9 +21,9 @@ class BackupController extends BaseController
         $backups = [];
         $path = storage_path('backups');
 
-        if (file_exists($path)){
+        if (file_exists($path)) {
             foreach (File::allFiles($path. "/") as $file) {
-                if (!Str::endsWith($file->getFilename(), ".zip")){
+                if (!Str::endsWith($file->getFilename(), ".zip")) {
                     continue;
                 }
                 $date = explode("_", str_replace(".zip", "", $file->getFilename()))[0];
@@ -34,12 +34,12 @@ class BackupController extends BaseController
                 }
                 $backups[$date]['fileName'][] = $file->getFilename();
             }
-            
+
             foreach ($backups as $key => $backup) {
                 $backups[$key]['fileSize'] = $this->humanFileSize($backup['fileSize']);
             }
         }
-            
+
         return view('system.backup.index', ['backups' => $backups]);
     }
     public function download($file_name = null)
@@ -49,10 +49,10 @@ class BackupController extends BaseController
             if (!\File::exists($path)) {
                 abort(404);
             }
-    
+
             return response()->download($path);
         }
-        
+
         abort(404);
     }
 
@@ -65,7 +65,7 @@ class BackupController extends BaseController
             }
         }
 
-        return redirect()->back()->with('success',  __('boilerplate::ui.deleted'));
+        return redirect()->back()->with('success', __('boilerplate::ui.deleted'));
     }
 
     private function humanFileSize($bytes, $decimals = 2)

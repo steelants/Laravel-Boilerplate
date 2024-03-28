@@ -6,7 +6,6 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\Auth\UpdateUserRequest;
 use App\Http\Requests\Auth\CreateApiTokenRequest;
 use App\Http\Requests\Auth\RemoveApiTokenRequest;
-
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
@@ -31,11 +30,12 @@ class ProfileController extends BaseController
             unset($validated['password']);
         }
         $request->user()->update($validated);
-        return redirect()->route('profile')->with('success',  __('boilerplate::ui.updated'));
+        return redirect()->route('profile')->with('success', __('boilerplate::ui.updated'));
     }
 
 
-    public function api(Request $request){
+    public function api(Request $request)
+    {
         return view('auth.profile_api', [
             'user' => $request->user(),
             'tokens' => $request->user()->tokens->all(),
@@ -55,7 +55,7 @@ class ProfileController extends BaseController
     public function removeApiToken(RemoveApiTokenRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $request->user()->tokens()->where('id',  $validated['token_id'])->first()->delete();
-        return redirect()->route('profile.api')->with('success',  __('boilerplate::ui.removed'));
+        $request->user()->tokens()->where('id', $validated['token_id'])->first()->delete();
+        return redirect()->route('profile.api')->with('success', __('boilerplate::ui.removed'));
     }
 }

@@ -4,11 +4,9 @@ namespace SteelAnts\LaravelBoilerplate;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
-
 use SteelAnts\LaravelBoilerplate\Console\Commands\InstallCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeBasicTestsCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;
-
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
 
 class BoilerplateServiceProvider extends ServiceProvider
@@ -24,7 +22,7 @@ class BoilerplateServiceProvider extends ServiceProvider
         if (class_exists('\App\Jobs\Backup')) {
             $this->app->booted(function () {
                 $schedule = app(Schedule::class);
-                $schedule->job(new \App\Jobs\Backup)->dailyAT('00:00')->withoutOverlapping();
+                $schedule->job(new \App\Jobs\Backup())->dailyAT('00:00')->withoutOverlapping();
             });
         }
 

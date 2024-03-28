@@ -45,7 +45,8 @@ class DataTable extends DataTableComponent
         ];
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $this->dispatch('openModal', 'subscription.form', __('boilerplate::subscriptions.edit'), $id);
     }
 }
