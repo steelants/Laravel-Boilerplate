@@ -20,23 +20,26 @@ class BackupController extends BaseController
     {
         $backups = [];
         $path = storage_path('backups');
-        foreach (File::allFiles($path. "/") as $file) {
-            if (!Str::endsWith($file->getFilename(), ".zip")){
-                continue;
-            }
-            $date = explode("_", str_replace(".zip", "", $file->getFilename()))[0];
-            if (empty($backups[$date]['fileSize'])) {
-                $backups[$date]['fileSize'] = $file->getSize();
-            } else {
-                $backups[$date]['fileSize'] += $file->getSize();
-            }
-            $backups[$date]['fileName'][] = $file->getFilename();
-        }
 
-        foreach ($backups as $key => $backup) {
-            $backups[$key]['fileSize'] = $this->humanFileSize($backup['fileSize']);
+        if (file_exists($path)){
+            foreach (File::allFiles($path. "/") as $file) {
+                if (!Str::endsWith($file->getFilename(), ".zip")){
+                    continue;
+                }
+                $date = explode("_", str_replace(".zip", "", $file->getFilename()))[0];
+                if (empty($backups[$date]['fileSize'])) {
+                    $backups[$date]['fileSize'] = $file->getSize();
+                } else {
+                    $backups[$date]['fileSize'] += $file->getSize();
+                }
+                $backups[$date]['fileName'][] = $file->getFilename();
+            }
+            
+            foreach ($backups as $key => $backup) {
+                $backups[$key]['fileSize'] = $this->humanFileSize($backup['fileSize']);
+            }
         }
-
+            
         return view('system.backup.index', ['backups' => $backups]);
     }
     public function download($file_name = null)
