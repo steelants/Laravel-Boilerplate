@@ -8,9 +8,14 @@
         @else
             <x-form::input group-class="mb-3" type="email" id="email" name="email" label="{{ __('Email') }}" placeholder="email@post.xx" />
         @endif
-        <x-form::button class="btn-primary" type="submit">{{ __('Send Password Reset Link') }}</x-form::button>
-        <a href="{{ route('login') }}">
-            {{ __('Login') }} ?
-        </a>
+
+        <div class="d-flex">
+            <x-form::button class="btn-primary" type="submit">{{ __('Send Password Reset Link') }}</x-form::button>
+            @if (Route::has('register'))
+                <a class="ms-auto text-nowrap" href="{{ route('login') }}">
+                    {{ __('Login') }} ?
+                </a>
+            @endif
+        </div>
     </x-form::form>
 </x-layout-auth>
