@@ -23,7 +23,7 @@ class InstallCommand extends Command
         self::exportPrefabs('resources/views');
         self::exportPrefabs('resources/js');
         self::exportPrefabs('resources/sass');
-        self::exportPrefabs('storage/app/public');
+        self::exportPrefabs('storage');
         self::exportPrefabs('config');
 
         $this->components->info('Installing Boilerplate Scaffolding');
@@ -50,7 +50,13 @@ class InstallCommand extends Command
         }
 
         $this->components->warn('Cleaning Cashes');
-        
+
+        $moduleRoot = __DIR__ . '/../../..';
+        $moduleMigrationsPath = realpath($moduleRoot . '/prefabs/database/migrations/');
+        foreach (File::allFiles($moduleMigrationsPath) as $migrationFile) {
+            Artisan::call('migrate --path=database/migrations/' . $migrationFile->getFileName());
+        }
+
         Artisan::call('storage:link');
         Artisan::call('optimize:clear');
         Artisan::call('view:clear');
@@ -101,19 +107,25 @@ class InstallCommand extends Command
         $moduleRootPath = realpath($baseDir . $moduleSubPath);
 
         foreach (File::allFiles($moduleRootPath) as $file) {
-            $laravelViewRoot = str_replace($moduleRootPath, $laravelSubPath, $file->getPath());
-            $stubFullPath = ($file->getPath() . "/" . $file->getFilename());
-            $viewFullPath = (base_path($laravelViewRoot) . "/" . $file->getFilename());
+            try {
+                $laravelViewRoot = str_replace($moduleRootPath, $laravelSubPath, $file->getPath());
+                $stubFullPath = ($file->getPath() . "/" . $file->getFilename());
+                $viewFullPath = (base_path($laravelViewRoot) . "/" . $file->getFilename());
 
-            $this->checkDirectory(dirname($viewFullPath));
+                $this->checkDirectory(dirname($viewFullPath));
 
-            if (file_exists($viewFullPath) && !$this->option('force')) {
-                if (!$this->components->confirm("The [" . $laravelViewRoot . '/' . $file->getFilename() . "] view already exists. Do you want to replace it?")) {
-                    continue;
+                if (file_exists($viewFullPath) && !$this->option('force')) {
+                    if (!$this->components->confirm("The [" . $laravelViewRoot . '/' . $file->getFilename() . "] view already exists. Do you want to replace it?")) {
+                        continue;
+                    }
                 }
-            }
 
-            copy($stubFullPath, $viewFullPath);
+                copy($stubFullPath, $viewFullPath);
+                $this->components->info($stubFullPath . '>>' . $viewFullPath);
+                //code...
+            } catch (\Throwable $th) {
+                $this->components->error($type);
+            }
         }
     }
 
@@ -139,7 +151,7 @@ class InstallCommand extends Command
         if (strpos(file_get_contents($RouteFilePath), 'Route::Auth();') !== false) {
             return;
         }
-        
+
         if (strpos(file_get_contents($RouteFilePath), 'Route::auth();') !== false) {
             return;
         }

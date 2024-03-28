@@ -24,7 +24,7 @@ class CacheController extends BaseController
             foreach ($redisConnection->command('keys', ['*']) as $full_key) {
                 $cache_items[] = str_replace($storage->getPrefix(), "", $full_key);
             }
-        } else {
+        } elseif ($cache_driver == 'file')  {
             $cachePath = $storage->getDirectory();
             $items = File::allFiles($cachePath);
             foreach ($items as $file2) {
