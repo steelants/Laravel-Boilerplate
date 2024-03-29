@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->string('ip')->nullable();
-            $table->integer('quiz_id')->nullable();
             $table->foreignId("user_id")->nullable();
             $table->foreign("user_id")->references("id")->on("users")->constrained();
             $table->nullableMorphs('affected');
