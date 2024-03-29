@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 class DataTable extends DataTableComponent
 {
     public bool $paginated = false;
+    public bool $sortable = false;
 
     public function query(): Builder
     {
