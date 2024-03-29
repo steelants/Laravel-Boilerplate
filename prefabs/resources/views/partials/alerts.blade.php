@@ -65,3 +65,16 @@
             </div>
         </div>
     @endif
+
+    @if ($message = Session::get('message'))
+     <div class="snackbar alert">
+            <button type="button" class="btn-close close" data-bs-dismiss="alert"></button>
+
+            <div class="alert-content">
+                <i class="alert-ico fas fa-info-circle text-info"></i>
+                <div>
+                    <div class="alert-title">{{ $message }}</div>
+                </div>
+            </div>
+        </div>
+    @endif
