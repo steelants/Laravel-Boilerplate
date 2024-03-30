@@ -135,7 +135,7 @@
             </div>
         </div>
 
-        @include('partials.alerts')
+        <x-alerts/>
     </div>
 
     @livewireScripts
