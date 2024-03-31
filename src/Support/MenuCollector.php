@@ -6,13 +6,13 @@ use Illuminate\Support\Collection;
 
 class MenuCollector
 {
-    protected $menus;
+    protected Collection $menus;
 
     public function __construct() {
         $this->menus = new Collection;
     }
 
-    public function make($menuKey, $callback){
+    public function make(string $menuKey, callable $callback){
         if(is_callable($callback))
 		{
 			$menu = new MenuBuilder($menuKey);
@@ -22,7 +22,7 @@ class MenuCollector
 		}
     }
 
-    public function get($menuKey)
+    public function get(string $menuKey)
     {
         return $this->menus->get($menuKey);
     }
