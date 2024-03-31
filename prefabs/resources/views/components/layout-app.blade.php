@@ -124,8 +124,7 @@
         </nav>
 
         <div class="layout">
-
-            @include('partials.navigation')
+            <x-navigation />
             @include('partials.navigation-mobile')
 
             <div class="layout-content">
@@ -135,7 +134,7 @@
             </div>
         </div>
 
-        <x-alerts/>
+        <x-alerts />
     </div>
 
     @livewireScripts
