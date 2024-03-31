@@ -6,19 +6,15 @@ use App\Menus\MainMenu;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use SteelAnts\LaravelBoilerplate\Facades\Menu;
 
 class Navigation extends Component
 {
-    protected MainMenu $mainMenu;
-
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        dump((new MainMenu));
-        die();
-        $this->mainMenu = (new MainMenu)->toHtml();
     }
 
     /**
@@ -26,6 +22,8 @@ class Navigation extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.navigation');
+        return view('components.navigation', [
+            'menuItems' => Menu::get('system-menu')
+        ]);
     }
 }

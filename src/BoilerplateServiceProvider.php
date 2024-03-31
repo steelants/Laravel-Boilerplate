@@ -8,12 +8,20 @@ use SteelAnts\LaravelBoilerplate\Console\Commands\InstallCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeBasicTestsCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
+use SteelAnts\LaravelBoilerplate\Facades\Menu;
+use SteelAnts\LaravelBoilerplate\Support\MenuBuilder;
+use SteelAnts\LaravelBoilerplate\Support\MenuCollector;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {
     public function boot()
     {
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'boilerplate');
+
+        if (class_exists('App\Http\Middleware\GenerateMenus')) {
+            $router = $this->app['router'];
+            $router->pushMiddlewareToGroup('web', \App\Http\Middleware\GenerateMenus::class);
+        }
 
         if (!$this->app->runningInConsole()) {
             return;
@@ -47,5 +55,7 @@ class BoilerplateServiceProvider extends ServiceProvider
 
     public function register()
     {
+        $this->app->bind('menu', MenuCollector::class);
+        $this->app->alias('Menu', Menu::class);
     }
 }

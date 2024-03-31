@@ -1,6 +1,6 @@
 <div class="layout-nav">
+@dump($menuItems)
     <ul class="app-nav nav flex-column">
-        @dump($mainMenu);
         <li class="nav-item is-active">
             <a class="nav-link" href="#">
                 <i class="nav-link-ico fas fa-home"></i>
