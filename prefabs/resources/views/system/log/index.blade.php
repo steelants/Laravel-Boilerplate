@@ -1,5 +1,5 @@
 <x-layout-app>
-    <div class="container">
+    <div class="container-xl">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.log')}}</h1>
              <button onclick="confirm('{{ __('boilerplate::ui.log-clear-confirm') }}') ? window.location.href = '{{ route('system.log.clear') }}' : false" class="btn btn-danger">{{ __('boilerplate::ui.logs-clear') }}</button>

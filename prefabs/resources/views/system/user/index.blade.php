@@ -1,5 +1,5 @@
 <x-layout-app>
-    <div class="container">
+    <div class="container-xl">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.users') }}</h1>
             <button class="btn btn-primary" onclick="Livewire.dispatch('openModal', {livewireComponents: 'user.form', title:  'Create user'})">

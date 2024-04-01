@@ -1,0 +1,10 @@
+.container{
+  @include make-container();
+}
+
+@each $breakpoint, $container-max-width in $container-max-widths {
+    .container-#{$breakpoint} {
+      @extend .container;
+      max-width: $container-max-width;
+    }
+}

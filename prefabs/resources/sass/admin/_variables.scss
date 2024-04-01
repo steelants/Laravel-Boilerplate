@@ -1,66 +1,103 @@
-$gray-100: hsl(240, 8%, 98%);
-$gray-200: hsl(240, 8%, 93%);
-$gray-300: hsl(240, 8%, 89%);
-$gray-400: hsl(240, 8%, 83%);
-$gray-500: hsl(240, 8%, 71%);
-$gray-600: hsl(240, 8%, 46%);
-$gray-700: hsl(240, 8%, 31%);
-$gray-800: hsl(240, 8%, 23%);
-$gray-900: hsl(240, 8%, 15%);
+$enable-container-classes: false;
+$container-max-widths: (
+  xs: 360px,
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px
+);
+
+$gray-100: $tw-neutral-100;
+$gray-200: $tw-neutral-200;
+$gray-300: $tw-neutral-300;
+$gray-400: $tw-neutral-400;
+$gray-500: $tw-neutral-500;
+$gray-600: $tw-neutral-600;
+$gray-700: $tw-neutral-700;
+$gray-800: $tw-neutral-800;
+$gray-900: $tw-neutral-900;
+
+$blue:    $tw-blue-500 !default;
+$indigo:  $tw-indigo-500 !default;
+$purple:  $tw-purple-500 !default;
+$pink:    $tw-pink-500 !default;
+$red:     $tw-red-500 !default;
+$orange:  $tw-amber-500 !default;
+$yellow:  $tw-yellow-500 !default;
+$green:   $tw-green-500 !default;
+$teal:    $tw-teal-500 !default;
+$cyan:    $tw-cyan-500 !default;
 
 // Body
+$body-color: $gray-900;
 $body-bg: #fff;
 
-// $red: #e34d4d;
-$green: #18c063;
-$orange:  #ff9f43;
-$cyan: #0ea5e9;
-
-$primary: #5343e1;
-$light: #f6f7f9;
-
-$warning: $orange;
-
-$alert-bg-level: -9;
+$primary: $tw-indigo-600;
+// $body-secondary-bg: #ededed;
+$body-secondary-bg: #f0f0f0;
+$body-tertiary-bg: $tw-neutral-050;
 
 // Typography
 $font-family-sans-serif: 'Inter', sans-serif;
-$h1-font-size: 2.25rem;;
-$h2-font-size: 1.875rem;;
+$h1-font-size: 2.25rem;
+$h2-font-size: 1.875rem;
 $h3-font-size: 1.5rem;
 $h4-font-size: 1.25rem;
-$h5-font-size: 1.125rem;;
+$h5-font-size: 1.125rem;
 
 $card-cap-bg: #f9fbfc;
 
-$border-radius: .375rem;
+$border-radius: 6px;
 $card-spacer-y: 1rem;
 
 $headings-font-weight: 700;
 
 $text-muted: #a7abc3;
 
+$border-color-translucent: rgba($gray-900, .075);
+
+$box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+$box-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$box-shadow-lg: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
 // $btn-font-size: 0.875rem;
 $btn-font-weight: 500;
-$input-btn-padding-y: .5rem;
+$input-btn-padding-x: .75rem;
+$input-btn-padding-y: .375rem;
 
-$container-max-widths: (
-  sm: 1140px,
-  md: 1140px,
-  lg: 1140px,
-  xl: 1140px
-);
+$navbar-brand-font-size: 1rem;
 
-
-$nav-tabs-link-color: #575a5d;
+$nav-link-font-weight: 500;
 $nav-tabs-link-active-color: $primary;
 $nav-tabs-link-active-border-color: $primary;
-$nav-tabs-link-hover-border-color: #b9bdc2;
+$nav-tabs-link-hover-border-color: var(--bs-border-color);
 $nav-tabs-border-width: 2px;
 $nav-tabs-border-radius: 0;
+$nav-tabs-link-active-bg: transparent;
+$nav-tabs-border-color: var(--bs-secondary-bg);
+$nav-pills-link-active-color: var(--bs-body-color);
+$nav-pills-link-active-bg: var(--bs-body-bg);
 
 $label-margin-bottom: .25rem;
 
 $alert-padding-x: 1rem;
 
 $paragraph-margin-bottom: .5rem;
+
+$badge-font-weight: 500;
+
+$breadcrumb-divider: '›';
+
+$dropdown-padding-x: .5rem;
+$dropdown-padding-y: .5rem;
+$dropdown-item-padding-y: .4rem;
+$dropdown-item-padding-x: .4rem;
+$dropdown-border-radius: calc(4px + .5rem);
+:root{
+    --bs-dropdown-item-border-radius: 4px;
+}
+$dropdown-link-active-bg: var(--bs-secondary-bg);
+$dropdown-link-active-color: var(--bs-body-color);
+$dropdown-border-color: rgba($gray-500, .075);
+$dropdown-divider-bg: rgba($gray-500, .1);

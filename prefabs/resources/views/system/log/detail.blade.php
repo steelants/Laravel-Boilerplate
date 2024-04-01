@@ -1,5 +1,5 @@
 <x-layout-app>
-    <div class="container">
+    <div class="container-xl">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.file')}} - {{ $filename }}</h1>
         </div>

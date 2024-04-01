@@ -41,7 +41,7 @@
                     <div class="d-md-none text-center mb-4">
                             <img src="{{ asset('storage/images/logo.png') }}" class="mb-4" width="64px" height="64px">
                     </div>
-                    
+
                     <x-alerts/>
 
                     <div class="row justify-content-center">

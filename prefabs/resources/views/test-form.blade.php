@@ -1,9 +1,9 @@
 <x-layout-app>
-    <div class="container">
+    <div class="container-xl">
         <div class="page-header">
             <h1>Test Form package</h1>
         </div>
-        
+
         <h3>Livewire</h3>
         <livewire:test-form />
 
@@ -67,7 +67,7 @@
                 </x-form::form>
             </div>
 
-            
+
         </div>
 
     </div>

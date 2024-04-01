@@ -105,26 +105,14 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-main navbar-expand" style="z-index: 100;">
-            <div class="container-fluid">
-                <button aria-expanded="false" aria-label="{{ __('Toggle navigation') }}"
-                    class="nav-toggler btn btn-light ml-2 d-xl-none" onclick="$('.layout-nav').toggle();"
-                    type="button">
-                    <i class="fas fa-bars"></i>
-                </button>
-
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    <img height="32px" src="{{ asset('storage/images/logo.png') }}" width="32px">
-                </a>
-
-                @auth
-                    @include('partials.navbar-nav')
-                @endauth
-            </div>
-        </nav>
+        @auth
+            @include('partials.navbar')
+        @endauth
 
         <div class="layout">
+
             <x-navigation />
+            
             @include('partials.navigation-mobile')
 
             <div class="layout-content">
@@ -133,9 +121,9 @@
                 </div>
             </div>
         </div>
-
-        <x-alerts />
     </div>
+
+    <x-alerts/>
 
     @livewireScripts
     @livewire('modal-basic', key('modal'))
