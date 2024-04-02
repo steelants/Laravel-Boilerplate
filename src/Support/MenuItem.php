@@ -16,6 +16,6 @@ class MenuItem
 
     public function isActive(): bool
     {
-        request()->routeIs($this->route);
+        return request()->routeIs($this->route);
     }
 }
