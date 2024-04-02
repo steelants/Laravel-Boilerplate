@@ -21,10 +21,13 @@ class GenerateMenus
                 'boilerplate::ui.home' => [' fas fa-home', 'home'],
             ];
             foreach ($systemRoutes as $title => $route_data) {
+                $icon = $route_data[0];
+                $route = $route_data[1];
+
                 $menu = $menu->add($title, [
                     'id' => strtolower($title),
-                    'icon' => $route_data[0],
-                    'route' => $route_data[1],
+                    'icon' => $icon,
+                    'route' => $route,
                 ]);
             }
         });
@@ -41,10 +44,13 @@ class GenerateMenus
                 'boilerplate::ui.backup' => ['fas fa-file-archive', 'system.backup.index']
             ];
             foreach ($systemRoutes as $title => $route_data) {
+                $icon = $route_data[0];
+                $route = $route_data[1];
+
                 $menu = $menu->add($title, [
                     'id' => strtolower($title),
-                    'icon' => $route_data[0],
-                    'route' => $route_data[1]
+                    'icon' => $icon,
+                    'route' => $route,
                 ]);
             }
         });
