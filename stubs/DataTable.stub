@@ -1,8 +1,8 @@
 <?php
-namespace App\Http\Livewire\Components\{{model}};
+namespace App\Livewire\Components\{{model}};
 
 use App\Models\{{model}};
-use SteelAnts\DataTable\Http\Livewire\DataTableComponent;
+use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
 
 class DataTable extends DataTableComponent
