@@ -24,6 +24,6 @@ class MenuCollector
 
     public function get(string $menuKey)
     {
-        return $this->menus->get($menuKey);
+        return $this->menus->get($menuKey)->items();
     }
 }

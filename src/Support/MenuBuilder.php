@@ -19,4 +19,9 @@ class MenuBuilder
 
 		return $this;
 	}
+
+    public function items()
+	{
+		return $this->menuItems;
+	}
 }
