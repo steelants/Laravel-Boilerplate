@@ -16,12 +16,15 @@ class GenerateMenus
      */
     public function handle(Request $request, Closure $next): Response
     {
-        Menu::make('menu', function ($menu) {
-            $systemRoutes = [];
-            foreach ($systemRoutes as $title => $route) {
-                $menu = $menu->add( $title, [
+        Menu::make('main-menu', function ($menu) {
+            $systemRoutes = [
+                'boilerplate::ui.home' => [' fas fa-home', 'home'],
+            ];
+            foreach ($systemRoutes as $title => $route_data) {
+                $menu = $menu->add($title, [
                     'id' => strtolower($title),
-                    'route' => $route
+                    'icon' => $route_data[0],
+                    'route' => $route_data[1],
                 ]);
             }
         });
@@ -29,18 +32,19 @@ class GenerateMenus
         //CHECK IF USER IS SYSTEM ADMIN
         Menu::make('system-menu', function ($menu) {
             $systemRoutes = [
-                'boilerplate::ui.audit' => 'system.audit.index',
-                'boilerplate::ui.user' => 'system.user.index',
-                'boilerplate::subscriptions.title' => 'system.subscription.index',
-                'boilerplate::ui.log' => 'system.log.index',
-                'boilerplate::ui.jobs' => 'system.jobs.index',
-                'boilerplate::ui.cache' => 'system.cache.index',
-                'boilerplate::ui.backup' => 'system.backup.index'
+                'boilerplate::ui.audit' => ['fas fa-eye', 'system.audit.index'],
+                'boilerplate::ui.user' => ['fas fa-users', 'system.user.index'],
+                'boilerplate::subscriptions.title' => ['fas fa-dollar-sign', 'system.subscription.index'],
+                'boilerplate::ui.log' => ['fas fa-bug', 'system.log.index'],
+                'boilerplate::ui.jobs' => ['fas fa-business-time', 'system.jobs.index'],
+                'boilerplate::ui.cache' => ['fas fa-box', 'system.cache.index'],
+                'boilerplate::ui.backup' => ['fas fa-file-archive', 'system.backup.index']
             ];
-            foreach ($systemRoutes as $title => $route) {
-                $menu = $menu->add( $title, [
+            foreach ($systemRoutes as $title => $route_data) {
+                $menu = $menu->add($title, [
                     'id' => strtolower($title),
-                    'route' => $route
+                    'icon' => $route_data[0],
+                    'route' => $route_data[1]
                 ]);
             }
         });
