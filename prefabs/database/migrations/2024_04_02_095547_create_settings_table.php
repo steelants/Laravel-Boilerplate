@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->nullableMorphs('settable');
             $table->string('index')->indexed();
-            $table->string('type', 50)->default('string');
+            $table->string('type', 50)->default('string'); //TODO: Maybe use Set
             $table->text('value');
             $table->timestamps();
             $table->unique(['settable_type', 'settable_id', 'index']);
