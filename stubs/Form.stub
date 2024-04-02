@@ -1,8 +1,8 @@
 <?php
-namespace App\\Http\\Livewire\\Components\\{{model}};
+namespace App\Http\Livewire\Components\{{model}};
 
-use Livewire\\Component;
-use App\\Models\\{{model}};
+use Livewire\Component;
+use App\Models\{{model}};
 
 class Form extends Component
 {

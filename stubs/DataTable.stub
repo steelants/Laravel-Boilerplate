@@ -1,15 +1,15 @@
 <?php
-namespace App\\Http\\Livewire\\Components\\{{model}};
+namespace App\Http\Livewire\Components\{{model}};
 
-use App\\Models\\{{model}};
-use SteelAnts\\DataTable\Http\\Livewire\DataTableComponent;
-use Illuminate\\Database\Eloquent\\Builder;
+use App\Models\{{model}};
+use SteelAnts\DataTable\Http\Livewire\DataTableComponent;
+use Illuminate\Database\Eloquent\Builder;
 
 class DataTable extends DataTableComponent
 {
     public $listeners = [
-        '{{model_lower_case}}Added' => '$refresh'
-        'closeModal' => '$refresh'
+        '{{model_lower_case}}Added' => '$refresh',
+        'closeModal' => '$refresh',
     ];
 
     public function query(): Builder
@@ -19,7 +19,7 @@ class DataTable extends DataTableComponent
 
     public function headers(): array
     {
-        return ["id", "{{headers}}", "actions"];
+        return {{headers}};
     }
 
     public function remove(${{model_lower_case}}_id){

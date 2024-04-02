@@ -2,11 +2,11 @@
 
 namespace SteelAnts\LaravelBoilerplate\Console\Commands;
 
-use Artisan;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use App\Models;
+use Illuminate\Support\Facades\Artisan;
 
 class MakeCrudCommand extends Command
 {
@@ -28,13 +28,11 @@ class MakeCrudCommand extends Command
 
         $this->makeClassFile('app/Livewire/Components/' . $model, "Form.php", $model);
         $this->makeClassFile('app/Livewire/Components/' . $model, "DataTable.php", $model);
-
-        Artisan::call('livewire:discover');
     }
 
     private function makeClassFile(string $path, string $fileName, string $model)
     {
-        $testFilePath = base_path() . '/' . $path . '/components/' . $fileName;
+        $testFilePath = base_path() . '/' . $path . '/' . $fileName;
         if (file_exists($testFilePath)) {
             if (!$this->components->confirm("The [" . $testFilePath . "] test already exists. Do you want to replace it?")) {
                 return;
@@ -46,7 +44,7 @@ class MakeCrudCommand extends Command
             mkdir($folderpath, 0777, true);
         }
 
-        $this->components->info("creting File" . $testFilePath);
+        $this->components->info("creting File: " . $testFilePath);
         if ($fileName == "Form.php") {
             Artisan::call('make:livewire Components.' . $model . '.Form --force');
 
@@ -57,10 +55,11 @@ class MakeCrudCommand extends Command
             file_put_contents($testFilePath, $content);
 
             $bladePathFile = explode("/app", (str_replace('/' . $fileName, "", $testFilePath)))[0];
-            $bladePathFile = $bladePathFile . "/resources/views/livewire/components/source/form.blade.php";
+            $bladePathFile = $bladePathFile . "/resources/views/livewire/components/" . strtolower($model) . "/form.blade.php";
             $modaltcontent = $this->getFormBladeSkeleton([
                 'model' => $model,
             ]);
+
             file_put_contents($bladePathFile, $modaltcontent);
         } elseif ($fileName == "DataTable.php") {
             $content = $this->getDataTableClassSkeleton([
@@ -74,13 +73,24 @@ class MakeCrudCommand extends Command
     private function getDataTableClassSkeleton(array $arguments)
     {
         $arguments['model_lower_case'] = strtolower($arguments['model']);
-        $arguments['headers'] =  implode('","', $arguments['headers']);
+
+        $headerString = "[\n";
+        foreach ($arguments['headers'] as $key => $header) {
+            $headerString .= "\t'" . $header . "' => '" . $header . "',\n";
+        }
+        $headerString .= "]";
+
+        $arguments['headers'] =  $headerString;
 
         $stubFilePath = ('/stubs/DataTable.stub');
         $moduleRootPath = realpath($this->getPackageBasePath() . $stubFilePath);
 
         $fileContent = file_get_contents($moduleRootPath, true);
         foreach ($arguments as $ArgumentName => $ArgumentValue) {
+            if (gettype($ArgumentValue) != 'string') {
+                continue;
+            }
+
             $fileContent = str_replace("{{" . $ArgumentName . "}}", $ArgumentValue, $fileContent);
         }
         return $fileContent;
@@ -95,6 +105,10 @@ class MakeCrudCommand extends Command
 
         $fileContent = file_get_contents($moduleRootPath, true);
         foreach ($arguments as $ArgumentName => $ArgumentValue) {
+            if (gettype($ArgumentValue) != 'string') {
+                continue;
+            }
+
             $fileContent = str_replace("{{" . $ArgumentName . "}}", $ArgumentValue, $fileContent);
         }
         return $fileContent;
@@ -111,7 +125,7 @@ class MakeCrudCommand extends Command
 
         foreach ($model->getFillable() as $name) {
             $LVModelName = strtolower($modelName . "." . $name);
-            $content .= "\t\t" . "\<x-form::input group-class=\"mb-3\" type=\"text\" wire:model=\"" . $LVModelName . "\" id=\"" . $LVModelName . "\" label=\"" . $LVModelName . "\"/>\n";
+            $content .= "\t\t" . "<x-form::input group-class=\"mb-3\" type=\"text\" wire:model=\"" . $LVModelName . "\" id=\"" . $LVModelName . "\" label=\"" . $LVModelName . "\"/>\n";
         }
 
         $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">" . __('Create') . "</x-form::button>\n";
