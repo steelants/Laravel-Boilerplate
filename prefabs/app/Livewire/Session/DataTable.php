@@ -46,7 +46,7 @@ class DataTable extends DataTableComponent
             [
                 'type' => "livewire",
                 'action' => "logout",
-                'parameters' => '"' . $item['id'] . '"', //TODO: NEED FIX IN DATATABLE PKG
+                'parameters' => $item['id'],
                 'text' => "Logout",
                 'actionClass' => 'text-danger',
                 'iconClass' => 'fas fa-trash',
