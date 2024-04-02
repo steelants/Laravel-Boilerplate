@@ -23,7 +23,8 @@ class Navigation extends Component
     public function render(): View|Closure|string
     {
         return view('components.navigation', [
-            'menuItems' => Menu::get('system-menu')
+            'menuItems' => Menu::get('menu')->items(),
+            'systemMenuItems' => Menu::get('system-menu')->items(),
         ]);
     }
 }

@@ -16,6 +16,17 @@ class GenerateMenus
      */
     public function handle(Request $request, Closure $next): Response
     {
+        Menu::make('menu', function ($menu) {
+            $systemRoutes = [];
+            foreach ($systemRoutes as $title => $route) {
+                $menu = $menu->add( $title, [
+                    'id' => strtolower($title),
+                    'route' => $route
+                ]);
+            }
+        });
+
+        //CHECK IF USER IS SYSTEM ADMIN
         Menu::make('system-menu', function ($menu) {
             $systemRoutes = [
                 'boilerplate::ui.audit' => 'system.audit.index',
