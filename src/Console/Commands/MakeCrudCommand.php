@@ -20,7 +20,7 @@ class MakeCrudCommand extends Command
     }
     public function handle(): void
     {
-        $model = $this->argument('model');
+        $model = ucfirst($this->argument('model'));
         if (!class_exists('App\\Models\\' . $model)) {
             $this->components->error('Model not Found!');
             return;
