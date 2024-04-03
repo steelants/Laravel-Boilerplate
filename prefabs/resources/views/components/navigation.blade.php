@@ -13,8 +13,8 @@
                 {{-- <small class="text-body-secondary">steelants.cz</small> --}}
             </div>
             <div class="ms-auto">
-                <svg class="bi bi-chevron-expand"  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708m0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708"/>
+                <svg class="bi bi-chevron-expand" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708m0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708" />
                 </svg>
             </div>
         </a>
@@ -48,63 +48,25 @@
     </div>
 
     <ul class="app-nav nav flex-column">
-        <li class="nav-item is-active">
-            <a class="nav-link" href="#">
-                <i class="nav-link-ico fas fa-home"></i>
-                Link
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="nav-link-ico fas fa-users"></i>
-                Link
-            </a>
-        </li>
+        @foreach ($mainMenuItems as $item)
+            <li class="nav-item {{ $item->isActive() ? 'is-active' : '' }}">
+                <a class="nav-link" href="{{ route($item->route) }}">
+                    <i class="nav-link-ico {{ $item->icon }}"></i>
+                    {{ __($item->title) }}
+                </a>
+            </li>
+        @endforeach
         {{-- MAIN NAVIGATION ALL --}}
         @auth
             <li class="mt-4 text-body-secondary"><small>{{ __('boilerplate::ui.system') }}</small></li>
-            <li class="nav-item {{ request()->routeIs('system.audit.index') ? 'is-active' : '' }}">
-                <a class="nav-link" href="{{ route('system.audit.index') }}">
-                    <i class="nav-link-ico fas fa-eye"></i>
-                    {{ __('boilerplate::ui.audit') }}
-                </a>
-            </li>
-            <li class="nav-item {{ request()->routeIs('system.user.index') ? 'is-active' : '' }}">
-                <a class="nav-link" href="{{ route('system.user.index') }}">
-                    <i class="nav-link-ico fas fa-users"></i>
-                    {{ __('boilerplate::ui.user') }}
-                </a>
-            </li>
-            <li class="nav-item {{ request()->routeIs('system.subscription.index') ? 'is-active' : '' }}">
-                <a class="nav-link" href="{{ route('system.subscription.index') }}">
-                    <i class="nav-link-ico fas fa-dollar-sign"></i>
-                    {{ __('boilerplate::subscriptions.title') }}
-                </a>
-            </li>
-            <li class="nav-item {{ request()->routeIs('system.log.index') ? 'is-active' : '' }}">
-                <a class="nav-link" href="{{ route('system.log.index') }}">
-                    <i class="nav-link-ico fas fa-bug"></i>
-                    {{ __('boilerplate::ui.log') }}
-                </a>
-            </li>
-            <li class="nav-item {{ request()->routeIs('system.jobs.index') ? 'is-active' : '' }}">
-                <a class="nav-link" href="{{ route('system.jobs.index') }}">
-                    <i class="nav-link-ico fas fa-business-time"></i>
-                    {{ __('boilerplate::ui.jobs') }}
-                </a>
-            </li>
-            <li class="nav-item {{ request()->routeIs('system.cache.index') ? 'is-active' : '' }}">
-                <a class="nav-link" href="{{ route('system.cache.index') }}">
-                    <i class="nav-link-ico fas fa-box"></i>
-                    {{ __('boilerplate::ui.cache') }}
-                </a>
-            </li>
-            <li class="nav-item {{ request()->routeIs('system.backup.index') ? 'is-active' : '' }}">
-                <a class="nav-link" href="{{ route('system.backup.index') }}">
-                    <i class="nav-link-ico fas fa-file-archive"></i>
-                    {{ __('boilerplate::ui.backup') }}
-                </a>
-            </li>
+            @foreach ($systemMenuItems as $item)
+                <li class="nav-item {{ $item->isActive() ? 'is-active' : '' }}">
+                    <a class="nav-link" href="{{ route($item->route) }}">
+                        <i class="nav-link-ico {{ $item->icon }}"></i>
+                        {{ __($item->title) }}
+                    </a>
+                </li>
+            @endforeach
             {{-- MAIN NAVIGATION SYSTEM --}}
         @endauth
     </ul>
@@ -121,7 +83,7 @@
                 </div>
                 <div class="ms-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
                     </svg>
                 </div>
             </a>

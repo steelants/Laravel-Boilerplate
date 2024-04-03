@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\File;
 class InstallCommand extends Command
 {
     protected $signature = 'boilerplate:install
-                            {--force : Overwrite existing views by default}';
+                            {--force : Overwrite existing views by default}
+                            {--no-migration : Install boilerplate without running migrations}';
 
     protected $description = 'Install Boilerplate';
 
@@ -51,10 +52,12 @@ class InstallCommand extends Command
 
         $this->components->warn('Cleaning Cashes');
 
-        $moduleRoot = __DIR__ . '/../../..';
-        $moduleMigrationsPath = realpath($moduleRoot . '/prefabs/database/migrations/');
-        foreach (File::allFiles($moduleMigrationsPath) as $migrationFile) {
-            Artisan::call('migrate --path=database/migrations/' . $migrationFile->getFileName());
+        if (!$this->option('no-migration')){
+            $moduleRoot = __DIR__ . '/../../..';
+            $moduleMigrationsPath = realpath($moduleRoot . '/prefabs/database/migrations/');
+            foreach (File::allFiles($moduleMigrationsPath) as $migrationFile) {
+                Artisan::call('migrate --path=database/migrations/' . $migrationFile->getFileName());
+            }
         }
 
         Artisan::call('storage:link');
