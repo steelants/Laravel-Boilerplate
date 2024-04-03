@@ -36,7 +36,6 @@ class Form extends Component
         {{model}}::create([
             $validatedData
         ]);
-        $this->{{model_lower_case}}->save();
         $this->dispatch('closeModal');
     }
 
