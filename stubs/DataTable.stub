@@ -19,7 +19,9 @@ class DataTable extends DataTableComponent
 
     public function headers(): array
     {
-        return {{headers}};
+        return [
+            {{headerProperties}}
+        ];
     }
 
     public function remove(${{model_lower_case}}_id){
