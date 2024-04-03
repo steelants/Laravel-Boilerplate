@@ -117,7 +117,7 @@ class Backup implements ShouldQueue
 
             $fileMD5Hash = explode(" ", $charSet)[0];
             Log::debug($fileMD5Hash);
-            echo($backupPath . '=>'.$zippedFilePath.'=>' .$fileMD5Hash. "\n");
+            Log::info($backupPath . '=>'.$zippedFilePath.'=>' .$fileMD5Hash);
         }
 
         if (!empty(env('APP_ADMIN'))) {
