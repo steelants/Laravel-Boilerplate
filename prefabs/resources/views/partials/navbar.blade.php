@@ -5,11 +5,11 @@
             <span class="fw-semibold">{{ config('app.name', 'Laravel') }}</span>
         </a>
 
-        <div>
+        {{-- <div>
             <div class="app-nav-profile random-bg-1">
-                PS
+                U
             </div>
-        </div>
+        </div> --}}
 
         <button aria-expanded="false" aria-label="{{ __('Toggle navigation') }}"
             class="nav-toggler btn btn-light ml-2 d-xl-none" onclick="$('.layout-nav').toggleClass('layout-nav-open');"

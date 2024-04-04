@@ -6,21 +6,46 @@ use App\Models\{{model}};
 
 class Form extends Component
 {
-    public {{model}} ${{model_lower_case}};
+    public $model;
+    {{properties}}
+
+    public $action = 'store';
 
     protected function rules()
     {
-        return [];
+        return [
+            {{validationRules}}
+        ];
     }
 
-    public function mount ({{model}} ${{model_lower_case}}){
-        $this->{{model_lower_case}} = ${{model_lower_case}};
+    public function mount ($model = null){
+        if (!empty($model)) {
+            ${{model_lower_case}} = {{model}}::find($model);
+
+            $this->model = $model;
+
+            {{loadProperties}}
+
+            $this->action = 'update';
+        }
     }
 
     public function store()
     {
-        //$this->validate();
-        $this->{{model_lower_case}}->save();
+        $validatedData = $this->validate();
+        {{model}}::create([
+            $validatedData
+        ]);
+        $this->dispatch('closeModal');
+    }
+
+    public function update()
+    {
+        $validatedData = $this->validate();
+        ${{model_lower_case}} = {{model}}::find($this->model);
+        if (!empty(${{model_lower_case}})) {
+            ${{model_lower_case}}->update($validatedData);
+        }
         $this->dispatch('closeModal');
     }
 

@@ -52,18 +52,27 @@ class Backup implements ShouldQueue
         exec($command, $output);
         Log::info('Clean Old backups ' . $days . ' old');
 
-        //DATABASE
-        foreach (['data', 'scheme'] as $type) {
-            $parameters = "--no-data";
-            if ($type == "data") {
-                $parameters = "--no-create-info";
-            }
-
-            $backupFile = $db_backup_path . '/' . $dbName  . '_' . $type . '_' . date("Y-m-d", time()) . '.sql';
-            $command = "mysqldump --skip-comments " . $parameters . " -h localhost -u " . $dbUserName . " -p" . $dbPassword  . " " . $dbName  . " -r $backupFile 2>&1";
+        ///DATABASE
+        if (config('database.default') == 'sqlite') {
+            $dbFile = database_path('database.sqlite');
+            $backupFile = $db_backup_path . '/' . $dbName  . '_' . date("Y-m-d", time()) . '.sqlite';
+            $command = "cp $dbFile $backupFile 2>&1";
             exec($command, $output);
-            Log::info('Backup ' . $dbName . ' db ' . $type);
+            Log::info('Backup ' . $dbName . ' db ');
             Log::Debug($output);
+        } else {
+            foreach (['data', 'scheme'] as $type) {
+                $parameters = "--no-data";
+                if ($type == "data") {
+                    $parameters = "--no-create-info";
+                }
+
+                $backupFile = $db_backup_path . '/' . $dbName  . '_' . $type . '_' . date("Y-m-d", time()) . '.sql';
+                $command = "mysqldump --skip-comments " . $parameters . " -h localhost -u " . $dbUserName . " -p" . $dbPassword  . " " . $dbName  . " -r $backupFile 2>&1";
+                exec($command, $output);
+                Log::info('Backup ' . $dbName . ' db ' . $type);
+                Log::Debug($output);
+            }
         }
 
         //STORAGE
@@ -108,7 +117,7 @@ class Backup implements ShouldQueue
 
             $fileMD5Hash = explode(" ", $charSet)[0];
             Log::debug($fileMD5Hash);
-            echo($backupPath . '=>'.$zippedFilePath.'=>' .$fileMD5Hash. "\n");
+            Log::info($backupPath . '=>'.$zippedFilePath.'=>' .$fileMD5Hash);
         }
 
         if (!empty(env('APP_ADMIN'))) {

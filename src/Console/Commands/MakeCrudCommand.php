@@ -20,7 +20,7 @@ class MakeCrudCommand extends Command
     }
     public function handle(): void
     {
-        $model = $this->argument('model');
+        $model = ucfirst($this->argument('model'));
         if (!class_exists('App\\Models\\' . $model)) {
             $this->components->error('Model not Found!');
             return;
@@ -74,13 +74,12 @@ class MakeCrudCommand extends Command
     {
         $arguments['model_lower_case'] = strtolower($arguments['model']);
 
-        $headerString = "[\n";
+        $headerProperties = "";
         foreach ($arguments['headers'] as $key => $header) {
-            $headerString .= "\t'" . $header . "' => '" . $header . "',\n";
+            $headerProperties .= "\t\t\t'" . $header . "' => '" . $header . "',\n";
         }
-        $headerString .= "]";
-
-        $arguments['headers'] =  $headerString;
+        $arguments['headerProperties'] =   rtrim(ltrim($headerProperties, "\t"),"\n");;
+        unset($arguments['headers']);
 
         $stubFilePath = ('/stubs/DataTable.stub');
         $moduleRootPath = realpath($this->getPackageBasePath() . $stubFilePath);
@@ -99,6 +98,22 @@ class MakeCrudCommand extends Command
     private function getFormClassSkeleton(array $arguments)
     {
         $arguments['model_lower_case'] = strtolower($arguments['model']);
+
+        $propertiesString = "";
+        $validationRules = "";
+        $loadProperties = "";
+
+        foreach ($arguments['headers'] as $key => $header) {
+            $propertiesString .= "\tpublic string $" . $header . ";\n";
+            $validationRules .= "\t\t\t'" . $header . "' => 'required',\n";
+            $loadProperties .= "\t\t\t\$this->" . $header . " = $" . $arguments['model_lower_case'] . "->".$header.";\n";
+        }
+
+        $arguments['properties'] = rtrim(ltrim($propertiesString, "\t"),"\n");
+        $arguments['validationRules'] = rtrim(ltrim($validationRules, "\t"),"\n");
+        $arguments['loadProperties'] = rtrim(ltrim($loadProperties, "\t"),"\n");
+
+        unset($arguments['headers']);
 
         $stubFilePath = ('/stubs/Form.stub');
         $moduleRootPath = realpath($this->getPackageBasePath() . $stubFilePath);
@@ -121,7 +136,7 @@ class MakeCrudCommand extends Command
         $model = new $className();
 
         $content = "<div>\n";
-        $content .= "\t<x-form::form wire:submit.prevent=\"store\">\n";
+        $content .= "\t<x-form::form wire:submit.prevent=\"{{\$action}}\">\n";
 
         foreach ($model->getFillable() as $name) {
             $LVModelName = strtolower($name);
