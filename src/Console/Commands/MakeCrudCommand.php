@@ -124,7 +124,7 @@ class MakeCrudCommand extends Command
         $content .= "\t<x-form::form wire:submit.prevent=\"store\">\n";
 
         foreach ($model->getFillable() as $name) {
-            $LVModelName = strtolower($modelName . "." . $name);
+            $LVModelName = strtolower($name);
             $content .= "\t\t" . "<x-form::input group-class=\"mb-3\" type=\"text\" wire:model=\"" . $LVModelName . "\" id=\"" . $LVModelName . "\" label=\"" . $LVModelName . "\"/>\n";
         }
 
