@@ -23,7 +23,7 @@ class DataTable extends DataTableComponent
             'id' => $row->id,
             'ip_address' => $row->ip_address,
             'last_activity' => $row->last_activity->format('d. m. Y H:m'),
-            'browser_os_name' => $row->browser_os_name,
+            'browser_os_name' => $row->browser_o_s_name,
             'browser_name' => $row->browser_name,
             'last_activity' => $row->last_activity->format('d. m. Y H:m'),
 

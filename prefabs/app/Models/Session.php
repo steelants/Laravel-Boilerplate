@@ -15,6 +15,10 @@ class Session extends Model
     protected $casts = [
         'last_activity' => 'datetime',
     ];
+    protected $appends = [
+        'browser_name',
+        'browser_os_name',
+    ];
 
     public function user()
     {
@@ -25,7 +29,7 @@ class Session extends Model
     {
         return Attribute::make(
             get: function () {
-                $pattern = '/\b(Safari|Chrome|Firefox|Opera)\b/i'; // Regular expression pattern to match common browser names
+                $pattern = '/\b(Edge|Safari|Chrome|Firefox|Opera)\b/i'; // Regular expression pattern to match common browser names
                 $matches = [];
                 preg_match($pattern, $this->user_agent, $matches);
 
