@@ -1,5 +1,5 @@
 <nav class="navbar navbar-main navbar-expand" style="z-index: 100;">
-    <div class="container">
+    <div class="container-xl">
         <a class="navbar-brand me-auto" href="{{ url('/') }}">
             <img class="me-2" src="{{ asset('storage/images/logo.png') }}" width="32px" height="32px">
             <span class="fw-semibold">{{ config('app.name', 'Laravel') }}</span>

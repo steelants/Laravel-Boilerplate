@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,37 +15,49 @@ class Session extends Model
     protected $casts = [
         'last_activity' => 'datetime',
     ];
+    protected $appends = [
+        'browser_name',
+        'browser_os_name',
+    ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    function getBrowserNameAttribute()
+    protected function browserName(): Attribute
     {
-        $pattern = '/\b(Safari|Chrome|Firefox|Opera)\b/i'; // Regular expression pattern to match common browser names
-        $matches = [];
-        preg_match($pattern, $this->user_agent, $matches);
+        return Attribute::make(
+            get: function () {
+                $pattern = '/\b(Edge|Safari|Chrome|Firefox|Opera)\b/i'; // Regular expression pattern to match common browser names
+                $matches = [];
+                preg_match($pattern, $this->user_agent, $matches);
 
-        if (isset($matches[1])) {
-            $browserName = $matches[1];
-            return $browserName;
-        }
+                if (isset($matches[1])) {
+                    $browserName = $matches[1];
+                    return $browserName;
+                }
 
-        return 'Unknown';
+                return 'Unknown';
+            },
+        );
     }
 
-    function getBrowserOSNameAttribute()
+    protected function browserOSName(): Attribute
     {
-        $pattern = '/\b(Android|Linux|Windows|iOS|MacOS)\b/i'; // Regular expression pattern to match common browser names
-        $matches = [];
-        preg_match($pattern, $this->user_agent, $matches);
+        return Attribute::make(
+            get: function () {
+                $pattern = '/\b(Android|Linux|Windows|iOS|MacOS)\b/i'; // Regular expression pattern to match common browser names
+                $matches = [];
+                preg_match($pattern, $this->user_agent, $matches);
 
-        if (isset($matches[1])) {
-            $browserName = $matches[1];
-            return $browserName;
-        }
+                if (isset($matches[1])) {
+                    $browserName = $matches[1];
+                    return $browserName;
+                }
 
-        return 'Unknown';
+                return 'Unknown';
+            },
+        );
     }
 }
