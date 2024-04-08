@@ -10,7 +10,7 @@ class Setting extends Model
 {
     use HasFactory;
 
-    public function settable(): MorphTo
+    public function settingable(): MorphTo
     {
         return $this->morphTo();
     }
