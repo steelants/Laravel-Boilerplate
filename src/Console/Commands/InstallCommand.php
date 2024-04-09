@@ -82,8 +82,8 @@ class InstallCommand extends Command
         $packages["dependencies"]["bootstrap"] = '^5.3';
         $packages["dependencies"]["@fortawesome/fontawesome-free"] = '^5.15.4';
         $packages["dependencies"]["@popperjs/core"] = '^2.11.6';
-        $packages["dependencies"]["vite"] = '^4.0.0';
-        $packages["dependencies"]["laravel-vite-plugin"] = '^0.8.0';
+        $packages["dependencies"]["vite"] = '^5.0.0';
+        $packages["dependencies"]["laravel-vite-plugin"] = '^1.0.0';
         $packages["dependencies"]["quill"] = "2.0.0-rc.2";
         $packages["dependencies"]["quill-table-ui"] = "^1.0.7";
 
