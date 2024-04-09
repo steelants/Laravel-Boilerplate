@@ -33,9 +33,7 @@ class Form extends Component
     public function store()
     {
         $validatedData = $this->validate();
-        {{model}}::create([
-            $validatedData
-        ]);
+        {{model}}::create($validatedData);
         $this->dispatch('closeModal');
     }
 
