@@ -4,6 +4,7 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
 use App\Models\Activity;
+use Illuminate\Support\Str;
 
 class AuditController extends BaseController
 {
