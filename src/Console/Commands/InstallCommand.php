@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\File;
 class InstallCommand extends Command
 {
     protected $signature = 'boilerplate:install
-                            {--force : Overwrite existing views by default}
+                            {--force : Overwrite existing files by default}
+                            {--views-only : Overwrite existy views only}
                             {--no-migration : Install boilerplate without running migrations}';
 
     protected $description = 'Install Boilerplate';
@@ -19,47 +20,54 @@ class InstallCommand extends Command
     {
         $this->components->info('Installing Boilerplate Scaffolding');
 
-        self::exportPrefabs('app'); //Add prefabs for controllers
-        self::exportPrefabs('database/migrations');
+        if (!$this->option('views-only')) {
+            self::exportPrefabs('app'); //Add prefabs for controllers
+            self::exportPrefabs('database/migrations');
+        }
+
         self::exportPrefabs('resources/views');
         self::exportPrefabs('resources/js');
         self::exportPrefabs('resources/sass');
         self::exportPrefabs('storage');
-        self::exportPrefabs('config');
 
-        $this->components->info('Installing Boilerplate Scaffolding');
+        if (!$this->option('views-only')) {
+            self::exportPrefabs('config');
 
-        self::updatePackagesJson();
-        self::updateVite();
-        self::removeNodeModules();
+            $this->components->info('Installing Boilerplate Scaffolding');
 
-        $this->components->info('Adding Routes');
-        self::appendRoutes();
+            self::updatePackagesJson();
+            self::updateVite();
+            self::removeNodeModules();
 
-        $function = "\n";
-        $function .= "    protected function context(): array\n";
-        $function .= "    {\n";
-        $function .= "        return array_merge(parent::context(), [\n";
-        $function .= "            'current_url' => request()->url(),\n";
-        $function .= "        ]);\n";
-        $function .= "    }\n";
+            $this->components->info('Adding Routes');
+            self::appendRoutes();
 
-        if ($this->addClassFunction(base_path('/app/Exceptions/Handler.php'), $function, 'context()')) {
-            $this->components->info('Modifying App\Exceptions\Handler');
-        } else {
-            $this->components->error('Unable to modify App\Exceptions\Handler');
-        }
+            $function = "\n";
+            $function .= "    protected function context(): array\n";
+            $function .= "    {\n";
+            $function .= "        return array_merge(parent::context(), [\n";
+            $function .= "            'current_url' => request()->url(),\n";
+            $function .= "        ]);\n";
+            $function .= "    }\n";
 
-        $this->components->warn('Cleaning Cashes');
+            if ($this->addClassFunction(base_path('/app/Exceptions/Handler.php'), $function, 'context()')) {
+                $this->components->info('Modifying App\Exceptions\Handler');
+            } else {
+                $this->components->error('Unable to modify App\Exceptions\Handler');
+            }
 
-        if (!$this->option('no-migration')){
-            $moduleRoot = __DIR__ . '/../../..';
-            $moduleMigrationsPath = realpath($moduleRoot . '/prefabs/database/migrations/');
-            foreach (File::allFiles($moduleMigrationsPath) as $migrationFile) {
-                Artisan::call('migrate --path=database/migrations/' . $migrationFile->getFileName());
+
+            if (!$this->option('no-migration')) {
+                $this->components->warn('Running Migrations');
+                $moduleRoot = __DIR__ . '/../../..';
+                $moduleMigrationsPath = realpath($moduleRoot . '/prefabs/database/migrations/');
+                foreach (File::allFiles($moduleMigrationsPath) as $migrationFile) {
+                    Artisan::call('migrate --path=database/migrations/' . $migrationFile->getFileName());
+                }
             }
         }
 
+        $this->components->warn('Cleaning Cashes');
         Artisan::call('storage:link');
         Artisan::call('optimize:clear');
         Artisan::call('view:clear');
