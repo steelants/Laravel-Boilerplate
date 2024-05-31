@@ -16,6 +16,10 @@ class GenerateMenus
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if ($request->route()->getName() === 'livewire.message') {
+        	return $next($request);
+        }
+        
         Menu::make('main-menu', function ($menu) {
             $systemRoutes = [
                 'boilerplate::ui.home' => [' fas fa-home', 'home'],
