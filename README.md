@@ -4,7 +4,7 @@
 
 ### Created by: [SteelAnts s.r.o.](https://www.steelants.cz/)
 
-[![Total Downloads](https://img.shields.io/packagist/dt/steelants/boilerplate.svg?style=flat-square)](https://packagist.org/packages/steelants/laravel-boilerplate)
+[![Total Downloads](https://img.shields.io/packagist/dt/steelants/laravel-boilerplate.svg?style=flat-square)](https://packagist.org/packages/steelants/laravel-boilerplate)
 
 ## Content
 - User Management
