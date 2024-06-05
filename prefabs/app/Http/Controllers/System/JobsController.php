@@ -10,10 +10,13 @@ class JobsController extends BaseController
 {
     public function index()
     {
-        $jobs = DB::table('failed_jobs')->select()->get();
+        $failed_jobs = DB::table('failed_jobs')->select()->get();
+        $jobs = DB::table('jobs')->select()->get();
+
 
         return view('system.jobs.index', [
-            'items' => $jobs,
+            'failed_jobs' => $failed_jobs,
+            'jobs' => $jobs,
         ]);
     }
 
