@@ -14,7 +14,7 @@ class DataTable extends DataTableComponent
 
     public function query(): Builder
     {
-        return request()->user()->sessions()->orderByDesc("created_at")->getQuery();
+        return request()->user()->sessions()->orderByDesc("last_activity")->getQuery();
     }
 
     public function row($row): array
