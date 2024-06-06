@@ -30,7 +30,7 @@ class ProfileController extends BaseController
             unset($validated['password']);
         }
         $request->user()->update($validated);
-        return redirect()->route('profile')->with('success', __('boilerplate::ui.updated'));
+        return redirect()->route('profile.index')->with('success', __('boilerplate::ui.updated'));
     }
 
 
