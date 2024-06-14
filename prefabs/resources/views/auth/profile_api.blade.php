@@ -14,25 +14,36 @@
                                 <input class="form-control" id="token-name" name="token_name" placeholder="{{ __('boilerplate::ui.name') }}" type="text">
                             </div>
                         </div>
-                        @error('token_name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <x-form::input class="form-control" type="date" name="expire_at" id="expire_at" min="{{ now()->toDateString('Y-m-d') }}" placeholder="{{ __('boilerplate::ui.expire_at') }}" />
                         <div class="col-12">
                             <button class="btn btn-primary" type="submit">{{ __('boilerplate::ui.create') }}</button>
+                        </div>
+                        <div class="col-12">
+                            @error('token_name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-12">
+                            @error('expire_at')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                     </form>
                 @endif
             </div>
         </div>
-        
+
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">{{ __('boilerplate::ui.name') }}</th>
                         <th scope="col">{{ __('boilerplate::ui.last_used_at') }}</th>
+                        <th scope="col">{{ __('boilerplate::ui.expire_at') }}</th>
                         <th scope="col">{{ __('boilerplate::ui.actions') }}</th>
                     </tr>
                 </thead>
@@ -40,7 +51,8 @@
                     @foreach ($tokens as $token)
                         <tr>
                             <th scope="row">{{ $token->name }}</th>
-                            <td>{{ $token->last_used_at }}</td>
+                            <td>{{ $token->last_used_at ??  __('boilerplate::ui.never')  }}</td>
+                            <td>{{ $token->expires_at ??  __('boilerplate::ui.never') }}</td>
                             <td>
                                 <form action="{{ route('profile.api.remove', ['token_id' => $token->id]) }}" method="post">
                                     @method('DELETE')

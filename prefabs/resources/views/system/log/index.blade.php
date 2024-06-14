@@ -25,6 +25,7 @@
                     <tr>
                         <th scope="col">{{ __('boilerplate::ui.name')}}</th>
                         <th scope="col">{{ __('boilerplate::ui.size')}}</th>
+                        <th scope="col">{{ __('boilerplate::ui.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,6 +36,9 @@
                             </th>
                             <td>
                                 {{ $item['humanReadableSize'] }}
+                            </td>
+                            <td>
+                                <a href='{{ route('system.log.download', ['file' => $item['fileName']]) }}' class="btn btn-secondary">{{ __('boilerplate::ui.logs-download') }}</a>
                             </td>
                         </tr>
                     @endforeach

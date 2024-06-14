@@ -12,8 +12,11 @@ Route::prefix('profile')->name('profile.')->middleware(['auth'])->group(function
 
 Route::prefix('system')->name('system.')->middleware(['auth'])->group(function () {
  
-    Route::get('/jobs', [App\Http\Controllers\System\JobsController::class, 'index'])->name('jobs.index');
-    Route::get('/jobs/clear', [App\Http\Controllers\System\JobsController::class, 'clear'])->name('jobs.clear');
+    Route::prefix('jobs')->name('jobs.')->group(function () {
+        Route::get('/', [App\Http\Controllers\System\JobsController::class, 'index'])->name('index');
+        Route::get('/clear', [App\Http\Controllers\System\JobsController::class, 'clear'])->name('clear');
+        Route::get('/call/{job}', [App\Http\Controllers\System\JobsController::class, 'call'])->name('call');
+    });
     
     Route::get('/cache', [App\Http\Controllers\System\CacheController::class, 'index'])->name('cache.index');
     Route::get('/cache/clear', [App\Http\Controllers\System\CacheController::class, 'clear'])->name('cache.clear');
@@ -27,6 +30,7 @@ Route::prefix('system')->name('system.')->middleware(['auth'])->group(function (
     Route::prefix('log')->name('log.')->group(function () {
         Route::get('/', [App\Http\Controllers\System\LogController::class, 'index'])->name('index');
         Route::get('/detail/{file}', [App\Http\Controllers\System\LogController::class, 'detail'])->name('detail');
+        Route::get('/download/{file}', [App\Http\Controllers\System\LogController::class, 'download'])->name('download');
         Route::get('/clear', [App\Http\Controllers\System\LogController::class, 'clear'])->name('clear');
     });
 

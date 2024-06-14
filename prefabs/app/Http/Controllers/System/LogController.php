@@ -74,6 +74,16 @@ class LogController extends BaseController
         }
     }
 
+    public function download($filename){
+        $path = storage_path('logs/' . $filename);
+
+        if (File::exists($path)) {
+            return response()->download($path);
+        } else {
+            abort(404);
+        }
+    }
+
     private function getHumanReadableSize($bytes)
     {
         if ($bytes > 0) {
