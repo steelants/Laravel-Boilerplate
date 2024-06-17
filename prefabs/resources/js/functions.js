@@ -64,3 +64,23 @@ window.addEventListener('snackbar', function(e){
     snackbar(e.detail.message, e.detail.details || false, e.detail.type || false, e.detail.icon || false);
 });
 
+window.copyToClipboard = function (text, el = false) {
+    if (navigator.clipboard && window.isSecureContext) {
+       navigator.clipboard.writeText(text).then(() => {})
+            .catch(() => {snackbar('something went wrong');});
+    } else {
+        let textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        new Promise((res, rej) => {
+            document.execCommand('copy') ? res() : rej();
+            textArea.remove();
+        });
+    }
+    snackbar('Copied to clipboard');
+}
