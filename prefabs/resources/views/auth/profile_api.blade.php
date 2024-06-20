@@ -14,13 +14,23 @@
                                 <input class="form-control" id="token-name" name="token_name" placeholder="{{ __('boilerplate::ui.name') }}" type="text">
                             </div>
                         </div>
-                        @error('token_name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <x-form::input class="form-control" type="date" name="expire_at" id="expire_at" min="{{ now()->toDateString('Y-m-d') }}" placeholder="{{ __('boilerplate::ui.expire_at') }}" />
                         <div class="col-12">
                             <button class="btn btn-primary" type="submit">{{ __('boilerplate::ui.create') }}</button>
+                        </div>
+                        <div class="col-12">
+                            @error('token_name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-12">
+                            @error('expire_at')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                     </form>
                 @endif
@@ -33,7 +43,7 @@
                     <tr>
                         <th scope="col">{{ __('boilerplate::ui.name') }}</th>
                         <th scope="col">{{ __('boilerplate::ui.last_used_at') }}</th>
-                           <th scope="col">{{ __('boilerplate::ui.expire_at') }}</th>
+                        <th scope="col">{{ __('boilerplate::ui.expire_at') }}</th>
                         <th scope="col">{{ __('boilerplate::ui.actions') }}</th>
                     </tr>
                 </thead>

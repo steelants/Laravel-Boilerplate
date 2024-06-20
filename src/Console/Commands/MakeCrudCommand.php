@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use App\Models;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Artisan;
 
 class MakeCrudCommand extends Command
@@ -26,8 +27,8 @@ class MakeCrudCommand extends Command
             return;
         }
 
-        $this->makeClassFile('app/Livewire/Components/' . $model, "Form.php", $model);
-        $this->makeClassFile('app/Livewire/Components/' . $model, "DataTable.php", $model);
+        $this->makeClassFile('app/Livewire/' . $model, "Form.php", $model);
+        $this->makeClassFile('app/Livewire/' . $model, "DataTable.php", $model);
     }
 
     private function makeClassFile(string $path, string $fileName, string $model)
@@ -55,7 +56,8 @@ class MakeCrudCommand extends Command
             file_put_contents($testFilePath, $content);
 
             $bladePathFile = explode("/app", (str_replace('/' . $fileName, "", $testFilePath)))[0];
-            $bladePathFile = $bladePathFile . "/resources/views/livewire/components/" . strtolower($model) . "/form.blade.php";
+
+            $bladePathFile = $bladePathFile . "/resources/views/livewire/" . Str::snake($model, "-") . "/form.blade.php";
             $modaltcontent = $this->getFormBladeSkeleton([
                 'model' => $model,
             ]);
@@ -97,7 +99,7 @@ class MakeCrudCommand extends Command
 
     private function getFormClassSkeleton(array $arguments)
     {
-        $arguments['model_lower_case'] = strtolower($arguments['model']);
+        $arguments['model_lower_case'] = Str::snake($arguments['model'], "-");
 
         $propertiesString = "";
         $validationRules = "";

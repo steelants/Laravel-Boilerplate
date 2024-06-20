@@ -6,8 +6,10 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\Auth\UpdateUserRequest;
 use App\Http\Requests\Auth\CreateApiTokenRequest;
 use App\Http\Requests\Auth\RemoveApiTokenRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends BaseController
 {
@@ -22,6 +24,11 @@ class ProfileController extends BaseController
     public function update(UpdateUserRequest $request): RedirectResponse
     {
         $validated = $request->validated();
+        if (!Hash::check($validated['password'], auth()->user()->password))
+        {
+            return redirect()->route('profile.index')->with('error', __('boilerplate::ui.incorect.old.password'));
+        }
+
         if (!empty($validated['newPassword']) && !empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['newPassword']);
             unset($validated['newPassword']);
@@ -30,7 +37,7 @@ class ProfileController extends BaseController
             unset($validated['password']);
         }
         $request->user()->update($validated);
-        return redirect()->route('profile')->with('success', __('boilerplate::ui.updated'));
+        return redirect()->route('profile.index')->with('success', __('boilerplate::ui.updated'));
     }
 
 
@@ -45,7 +52,10 @@ class ProfileController extends BaseController
     public function createApiToken(CreateApiTokenRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $newToken = $request->user()->createToken($validated['token_name'])->plainTextToken;
+        if (empty($validated['expire_at'])) {
+            $validated['expire_at'] = null;
+        }
+        $newToken = $request->user()->createToken($validated['token_name'], ['*'], Carbon::parse($validated['expire_at']))->plainTextToken;
         return redirect()->route('profile.api')->with([
             'success'=>  __('boilerplate::ui.created'),
             'secret'=> $newToken,
