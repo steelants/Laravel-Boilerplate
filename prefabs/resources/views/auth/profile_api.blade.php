@@ -52,7 +52,7 @@
                         <tr>
                             <th scope="row">{{ $token->name }}</th>
                             <td>{{ $token->last_used_at ??  __('boilerplate::ui.never')  }}</td>
-                            <td>{{ $token->expires_at ??  __('boilerplate::ui.never') }}</td>
+                            <td>{{ $token->expire_at ??  __('boilerplate::ui.never') }}</td>
                             <td>
                                 <form action="{{ route('profile.api.remove', ['token_id' => $token->id]) }}" method="post">
                                     @method('DELETE')
