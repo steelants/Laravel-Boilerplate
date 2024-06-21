@@ -47,7 +47,7 @@ class MakeCrudCommand extends Command
 
         $this->components->info("creting File: " . $testFilePath);
         if ($fileName == "Form.php") {
-            Artisan::call('make:livewire Components.' . $model . '.Form --force');
+            Artisan::call('make:livewire ' . $model . '.Form --force');
 
             $content = $this->getFormClassSkeleton([
                 'model' => $model,
