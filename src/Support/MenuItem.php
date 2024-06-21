@@ -14,6 +14,11 @@ class MenuItem
         }
     }
 
+    public function isUse(): bool
+    {
+        return Request::is(trim(route($this->route, [], false), '/').'*');
+    }
+    
     public function isActive(): bool
     {
         return request()->routeIs($this->route);
