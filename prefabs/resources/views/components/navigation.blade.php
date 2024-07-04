@@ -49,7 +49,7 @@
 
     <ul class="app-nav nav flex-column">
         @foreach ($mainMenuItems as $item)
-            <li class="nav-item {{ $item->isActive() ? 'is-active' : '' }}">
+            <li class="nav-item {{ ($item->isActive() || $item->isUse()) ? 'is-active' : '' }}">
                 <a class="nav-link" href="{{ route($item->route) }}">
                     <i class="nav-link-ico {{ $item->icon }}"></i>
                     {{ __($item->title) }}
@@ -60,7 +60,7 @@
         @auth
             <li class="mt-4 text-body-secondary"><small>{{ __('boilerplate::ui.system') }}</small></li>
             @foreach ($systemMenuItems as $item)
-                <li class="nav-item {{ $item->isActive() ? 'is-active' : '' }}">
+                <li class="nav-item {{ ($item->isActive() || $item->isUse()) ? 'is-active' : '' }}">
                     <a class="nav-link" href="{{ route($item->route) }}">
                         <i class="nav-link-ico {{ $item->icon }}"></i>
                         {{ __($item->title) }}
