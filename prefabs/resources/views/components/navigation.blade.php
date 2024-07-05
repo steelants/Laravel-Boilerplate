@@ -50,7 +50,7 @@
     <ul class="app-nav nav flex-column">
         @foreach ($mainMenuItems as $item)
             <li class="nav-item {{ ($item->isActive() || $item->isUse()) ? 'is-active' : '' }}">
-                <a class="nav-link" href="{{ route($item->route) }}">
+                <a class="nav-link" href="{{ route($item->route, $item->parameters) }}">
                     <i class="nav-link-ico {{ $item->icon }}"></i>
                     {{ __($item->title) }}
                 </a>
