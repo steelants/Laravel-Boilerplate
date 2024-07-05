@@ -18,6 +18,17 @@ class InstallCommand extends Command
 
     public function handle(): void
     {
+        $this->components->info('Installing Auth Scaffolding');
+        
+        $baseDir = realpath(__DIR__ . '/../../../stubs');
+        $RouteFilePath = base_path('routes/web.php');
+
+        if (strpos(file_get_contents($RouteFilePath), 'Route::auth();') === false) {
+            //If authentication not installed install
+            Artisan::call('auth:link');
+            file_put_contents($RouteFilePath, str_replace('Route::auth();' ,'', file_get_contents($RouteFilePath)));  
+        }
+
         $this->components->info('Installing Boilerplate Scaffolding');
 
         if (!$this->option('views-only')) {

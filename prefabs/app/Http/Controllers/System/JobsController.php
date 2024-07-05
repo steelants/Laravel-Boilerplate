@@ -14,8 +14,8 @@ class JobsController extends BaseController
         $rules = AbstractHelper::getClassNames(app_path() . "/Jobs");
 
         $job_actions = $rules;
-        $failed_jobs = DB::table('failed_jobs')->select()->get();
-        $jobs = DB::table('jobs')->select()->get();
+        $failed_jobs = DB::table('failed_jobs')->select(['id', 'uuid', 'queue', 'exception', 'failed_at'])->selectRaw('SUBSTRING(payload, 1, 150) AS payload')->get();
+        $jobs = DB::table('jobs')->select(['id', 'queue', 'available_at'])->selectRaw('SUBSTRING(payload, 1, 150) AS payload')->get();
 
         return view('system.jobs.index', [
             'failed_jobs' => $failed_jobs,

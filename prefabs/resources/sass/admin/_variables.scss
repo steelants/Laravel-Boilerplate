@@ -101,3 +101,13 @@ $dropdown-link-active-bg: var(--bs-secondary-bg);
 $dropdown-link-active-color: var(--bs-body-color);
 $dropdown-border-color: rgba($gray-500, .075);
 $dropdown-divider-bg: rgba($gray-500, .1);
+
+$pagination-color: var(--bs-body-color);
+$pagination-border-width: 0;
+$pagination-bg: transparent;
+$pagination-active-bg: var(--bs-secondary-bg);
+$pagination-active-color: var(--bs-body-color);
+$pagination-hover-color: var(--bs-body-color);
+$pagination-focus-color: var(--bs-body-color);
+$pagination-disabled-color: var(--bs-tertiary-color);
+$pagination-disabled-bg: transparent;
