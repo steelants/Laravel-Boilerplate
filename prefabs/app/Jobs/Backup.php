@@ -28,6 +28,7 @@ class Backup implements ShouldQueue
         //PREPARATION
         ini_set('date.timezone', 'Europe/Prague');
         $days = 3;
+        $dbHost = config('database.connections.mysql.host');
         $dbName = config('database.connections.mysql.database');
         $dbUserName = config('database.connections.mysql.username');
         $dbPassword = config('database.connections.mysql.password');
@@ -68,7 +69,7 @@ class Backup implements ShouldQueue
                 }
 
                 $backupFile = $db_backup_path . '/' . $dbName  . '_' . $type . '_' . date("Y-m-d", time()) . '.sql';
-                $command = "mysqldump --skip-comments " . $parameters . " -h localhost -u " . $dbUserName . " -p" . $dbPassword  . " " . $dbName  . " -r $backupFile 2>&1";
+                $command = "mysqldump --skip-comments " . $parameters . " -h " . $dbHost . " -u " . $dbUserName . " -p" . $dbPassword  . " " . $dbName  . " -r $backupFile 2>&1";
                 exec($command, $output);
                 Log::info('Backup ' . $dbName . ' db ' . $type);
                 Log::Debug($output);
