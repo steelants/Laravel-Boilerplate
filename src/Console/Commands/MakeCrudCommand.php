@@ -145,7 +145,7 @@ class MakeCrudCommand extends Command
             $content .= "\t\t" . "<x-form::input group-class=\"mb-3\" type=\"text\" wire:model=\"" . $LVModelName . "\" id=\"" . $LVModelName . "\" label=\"" . $LVModelName . "\"/>\n";
         }
 
-        $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">" . __('Create') . "</x-form::button>\n";
+        $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">@if($action = 'update') {{__('Create')}} @else {{__('Create')}} @endif</x-form::button>\n";
         $content .= "\t</x-form::form>\n";
         $content .= "</div>";
 
