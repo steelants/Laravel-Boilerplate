@@ -23,7 +23,7 @@ class CreateApiTokenRequest extends FormRequest
     {
         return [
             'token_name' => ['required', 'string'],
-            'expire_at' => ['nullable', 'date', 'after_or_equal:' . date('Y-m-d')],
+            'expires_at' => ['nullable', 'date', 'after_or_equal:' . date('Y-m-d')],
         ];
     }
 }
