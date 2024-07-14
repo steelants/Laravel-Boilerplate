@@ -43,7 +43,7 @@
                     <tr>
                         <th scope="col">{{ __('boilerplate::ui.name') }}</th>
                         <th scope="col">{{ __('boilerplate::ui.last_used_at') }}</th>
-                        <th scope="col">{{ __('boilerplate::ui.expire_at') }}</th>
+                        <th scope="col">{{ __('boilerplate::ui.expires_at') }}</th>
                         <th scope="col">{{ __('boilerplate::ui.actions') }}</th>
                     </tr>
                 </thead>
@@ -52,7 +52,7 @@
                         <tr>
                             <th scope="row">{{ $token->name }}</th>
                             <td>{{ $token->last_used_at ??  __('boilerplate::ui.never')  }}</td>
-                            <td>{{ $token->expire_at ??  __('boilerplate::ui.never') }}</td>
+                            <td>{{ $token->expires_at ??  __('boilerplate::ui.never') }}</td>
                             <td>
                                 <form action="{{ route('profile.api.remove', ['token_id' => $token->id]) }}" method="post">
                                     @method('DELETE')
