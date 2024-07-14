@@ -14,7 +14,7 @@
                                 <input class="form-control" id="token-name" name="token_name" placeholder="{{ __('boilerplate::ui.name') }}" type="text">
                             </div>
                         </div>
-                        <x-form::input class="form-control" type="date" name="expire_at" id="expire_at" min="{{ now()->toDateString('Y-m-d') }}" placeholder="{{ __('boilerplate::ui.expire_at') }}" />
+                        <x-form::input class="form-control" type="date" name="expires_at" id="expires_at" min="{{ now()->toDateString('Y-m-d') }}" placeholder="{{ __('boilerplate::ui.expires_at') }}" />
                         <div class="col-12">
                             <button class="btn btn-primary" type="submit">{{ __('boilerplate::ui.create') }}</button>
                         </div>
