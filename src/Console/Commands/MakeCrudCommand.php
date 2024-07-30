@@ -106,7 +106,7 @@ class MakeCrudCommand extends Command
         $loadProperties = "";
 
         foreach ($arguments['headers'] as $key => $header) {
-            $propertiesString .= "\tpublic string $" . $header . ";\n";
+            $propertiesString .= "\tpublic string $" . $header . " = '';\n";
             $validationRules .= "\t\t\t'" . $header . "' => 'required',\n";
             $loadProperties .= "\t\t\t\$this->" . $header . " = $" . $arguments['model_lower_case'] . "->".$header.";\n";
         }
