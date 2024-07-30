@@ -16,6 +16,10 @@ class GenerateMenus
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (Auth::guest()) {
+            return $next($request);
+        }
+        
         if ($request->route()->getName() === 'livewire.message') {
         	return $next($request);
         }
@@ -40,6 +44,7 @@ class GenerateMenus
         Menu::make('system-menu', function ($menu) {
             $systemRoutes = [
                 'boilerplate::ui.audit' => ['fas fa-eye', 'system.audit.index'],
+                'boilerplate::ui.api' => ['fas fa-file-archive', 'system.api.index'],
                 'boilerplate::ui.user' => ['fas fa-users', 'system.user.index'],
                 'boilerplate::subscriptions.title' => ['fas fa-dollar-sign', 'system.subscription.index'],
                 'boilerplate::ui.log' => ['fas fa-bug', 'system.log.index'],
