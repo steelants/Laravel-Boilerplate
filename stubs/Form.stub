@@ -49,6 +49,6 @@ class Form extends Component
 
     public function render()
     {
-        return view('livewire.components.{{model_lower_case}}.form');
+        return view('livewire.{{model_lower_case}}.form');
     }
 }
