@@ -27,6 +27,9 @@ class ApiController extends Controller
             if (!str_starts_with($route->uri(), "api"))
                 continue;
 
+            if (!str_starts_with($route->getActionName(), "@"))
+                continue;
+
             [$class, $method] = explode("@", $route->getActionName());
             $reflectionClass = new ReflectionClass($class);
             $reflectionMethod = $reflectionClass->getMethod($method);
