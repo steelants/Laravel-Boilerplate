@@ -25,7 +25,7 @@ class InstallCommand extends Command
 
         if (strpos(file_get_contents($RouteFilePath), 'Route::auth();') === false) {
             //If authentication not installed install
-            Artisan::call('auth:link');
+            Artisan::call('auth:install');
             file_put_contents($RouteFilePath, str_replace('Route::auth();' ,'', file_get_contents($RouteFilePath)));  
         }
 
