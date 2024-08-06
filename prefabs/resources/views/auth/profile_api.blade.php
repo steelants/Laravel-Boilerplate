@@ -4,7 +4,9 @@
             <h1>{{ __('boilerplate::ui.api_tokens') }}</h1>
             <div>
                 @if (session()->has('secret'))
-                    <code>{{ session()->get('secret') }}</code>
+                    <code onclick="copyToClipboard('{{ session()->get('secret') }}');" title="{{ __('boilerplate:ui.copy_to_clipboard') }}">
+                        {{ session()->get('secret') }}
+                    </code>
                 @else
                     <form action="{{ route('profile.api.create') }}" class="row row-cols-lg-auto g-3 align-items-center mb-3" method="post">
                         @csrf

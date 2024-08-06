@@ -24,14 +24,9 @@
                 @endphp
 
                 <div class="mb-3">
-                    <div
-                        class="btn-toggle btn py-3 bg-{{$color}} w-100 text-start"
-                        style="--bs-bg-opacity: .2;"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapse{{ $id }}"
-                    >
-                        <b class="badge text-bg-{{$color}} me-2" style="--bs-bg-opacity: 1;">{{ $route['Method'] }}</b>
-                        <b>{{ $route['Uri'] }}</b>
+                    <div class="btn-toggle btn py-3 bg-{{ $color }} w-100 text-start" data-bs-target="#collapse{{ $id }}" data-bs-toggle="collapse" style="--bs-bg-opacity: .2;">
+                        <b class="badge text-bg-{{ $color }} me-2" style="--bs-bg-opacity: 1;">{{ $route['Method'] }}</b>
+                        <b onclick="copyToClipboard('{{ config('app.url') . $route['Uri'] }}');" title="{{ __('boilerplate:ui.copy_to_clipboard') }}">{{ $route['Uri'] }}</b>
                     </div>
                     <div class="collapse" id="collapse{{ $id }}">
                         <div class="card card-body mt-2">
