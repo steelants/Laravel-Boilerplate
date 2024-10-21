@@ -45,7 +45,6 @@ class GenerateMenus
         Menu::make('system-menu', function ($menu) {
             $systemRoutes = [
                 'boilerplate::ui.audit' => ['fas fa-eye', 'system.audit.index'],
-                'boilerplate::ui.api' => ['fas fa-file-archive', 'system.api.index'],
                 'boilerplate::ui.user' => ['fas fa-users', 'system.user.index'],
                 'boilerplate::subscriptions.title' => ['fas fa-dollar-sign', 'system.subscription.index'],
                 'boilerplate::ui.log' => ['fas fa-bug', 'system.log.index'],
@@ -53,6 +52,11 @@ class GenerateMenus
                 'boilerplate::ui.cache' => ['fas fa-box', 'system.cache.index'],
                 'boilerplate::ui.backup' => ['fas fa-file-archive', 'system.backup.index']
             ];
+
+            if (file_exists(base_path() . '/routes/api.php')){
+                $systemRoutes['boilerplate::ui.api'] = ['fas fa-file-archive', 'system.api.index'];
+            }
+            
             foreach ($systemRoutes as $title => $route_data) {
                 $icon = $route_data[0];
                 $route = $route_data[1];
