@@ -27,19 +27,19 @@ class ApiController extends Controller
             if (!str_starts_with($route->uri(), "api"))
                 continue;
 
-            if (!str_starts_with($route->getActionName(), "@"))
-                continue;
-
-            [$class, $method] = explode("@", $route->getActionName());
-            $reflectionClass = new ReflectionClass($class);
-            $reflectionMethod = $reflectionClass->getMethod($method);
+            $reflectionMethod = null;
+            if (str_contains($route->getActionName(), "@")){
+                [$class, $method] = explode("@", $route->getActionName());
+                $reflectionClass = new ReflectionClass($class);
+                $reflectionMethod = $reflectionClass->getMethod($method);
+            }
 
             $routes[] = [
                 "Method" => $route->methods()[0],
                 "Uri" => $route->uri(),
-                "Description" => $this->phpDocsDescription($reflectionMethod),
-                "Parameters" => $this->phpDocsParameters($reflectionMethod),
-                "Returns" => $reflectionMethod->getReturnType() ? $reflectionMethod->getReturnType()->getName() : "NULL",
+                "Description" => ($reflectionMethod != null ? $this->phpDocsDescription($reflectionMethod) : ""),
+                "Parameters" => ($reflectionMethod != null ? $this->phpDocsParameters($reflectionMethod) : []),
+                "Returns" => ($reflectionMethod != null ? ($reflectionMethod->getReturnType() ? $reflectionMethod->getReturnType()->getName() : "NULL") : "NULL" )
             ];
         }
 
