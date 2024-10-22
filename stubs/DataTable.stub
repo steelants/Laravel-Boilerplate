@@ -4,11 +4,14 @@ namespace App\Livewire\{{model}};
 use App\Models\{{model}};
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
+use SteelAnts\DataTable\Traits\UseDatabase;
 
 class DataTable extends DataTableComponent
 {
+    use UseDatabase;
+
     public $listeners = [
-        '{{model_lower_case}}Added' => '$refresh',
+        '{{model_camel_case}}Added' => '$refresh',
         'closeModal' => '$refresh',
     ];
 
@@ -24,7 +27,33 @@ class DataTable extends DataTableComponent
         ];
     }
 
-    public function remove(${{model_lower_case}}_id){
-        {{model}}::find(${{model_lower_case}}_id)->delete();
+    public function actions($item)
+    {
+        return [
+            [
+                'type' => "livewire",
+                'action' => "edit",
+                'text' => "edit",
+                'parameters' => $item['id'],
+                'iconClass' => 'fas fa-pen',
+            ],
+            [
+                'type' => "livewire",
+                'action' => "remove",
+                'parameters' => $item['id'],
+                'text' => "Remove",
+                'actionClass' => 'text-danger',
+                'iconClass' => 'fas fa-trash',
+            ]
+        ];
+    }
+
+    public function remove(${{model_snake_case}}_id){
+        {{model}}::find(${{model_snake_case}}_id)->delete();
+    }
+
+    public function edit(${{model_snake_case}}_id)
+    {
+        $this->dispatch('openModal', '{{model_snake_case_dash}}.form', __('boilerplate::{{model_snake_case}}.edit'), ['model' => ${{model_snake_case}}_id]);
     }
 }

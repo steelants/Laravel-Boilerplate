@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Artisan;
 
 class MakeCrudCommand extends Command
 {
-    protected $signature = 'make:crud {model}';
+    protected $signature = 'make:crud {model} 
+                            {--force : Overwrite existing files by default}'; // {--view : Generate controller and blade files}
 
     protected $description = 'Creates CRUD for specified Command';
 
@@ -27,14 +28,19 @@ class MakeCrudCommand extends Command
             return;
         }
 
-        $this->makeClassFile('app/Livewire/' . $model, "Form.php", $model);
-        $this->makeClassFile('app/Livewire/' . $model, "DataTable.php", $model);
+        $fillable = (new ('App\\Models\\' . $model))->getFillable();
+        if ($fillable == []) {
+            $this->components->warn('Please make shure that $fillable variable of model ' . $model . ' is defined correctly.');
+        }
+
+        $this->makeClassFile('app/Livewire/' . $model, "Form.php", $model, $fillable);
+        $this->makeClassFile('app/Livewire/' . $model, "DataTable.php", $model, $fillable);
     }
 
-    private function makeClassFile(string $path, string $fileName, string $model)
+    private function makeClassFile(string $path, string $fileName, string $model, array $fillable)
     {
         $testFilePath = base_path() . '/' . $path . '/' . $fileName;
-        if (file_exists($testFilePath)) {
+        if (file_exists($testFilePath) && !$this->option('force')) {
             if (!$this->components->confirm("The [" . $testFilePath . "] test already exists. Do you want to replace it?")) {
                 return;
             }
@@ -51,7 +57,7 @@ class MakeCrudCommand extends Command
 
             $content = $this->getFormClassSkeleton([
                 'model' => $model,
-                'headers' => (new ('App\\Models\\' . $model))->getFillable(),
+                'headers' => $fillable,
             ]);
             file_put_contents($testFilePath, $content);
 
@@ -66,7 +72,7 @@ class MakeCrudCommand extends Command
         } elseif ($fileName == "DataTable.php") {
             $content = $this->getDataTableClassSkeleton([
                 'model' => $model,
-                'headers' => (new ('App\\Models\\' . $model))->getFillable(),
+                'headers' => $fillable,
             ]);
             file_put_contents($testFilePath, $content);
         }
@@ -74,7 +80,9 @@ class MakeCrudCommand extends Command
 
     private function getDataTableClassSkeleton(array $arguments)
     {
-        $arguments['model_lower_case'] = strtolower($arguments['model']);
+        $arguments['model_camel_case'] = Str::camel($arguments['model']);
+        $arguments['model_snake_case'] = Str::snake($arguments['model_camel_case']);
+        $arguments['model_snake_case_dash'] = Str::snake($arguments['model_camel_case'], "-");
 
         $headerProperties = "";
         foreach ($arguments['headers'] as $key => $header) {
@@ -99,7 +107,8 @@ class MakeCrudCommand extends Command
 
     private function getFormClassSkeleton(array $arguments)
     {
-        $arguments['model_lower_case'] = Str::snake($arguments['model'], "-");
+        $arguments['model_camel_case'] = Str::camel($arguments['model']);
+        $arguments['model_snake_case'] = Str::snake($arguments['model_camel_case'], '-');
 
         $propertiesString = "";
         $validationRules = "";
@@ -108,7 +117,7 @@ class MakeCrudCommand extends Command
         foreach ($arguments['headers'] as $key => $header) {
             $propertiesString .= "\tpublic string $" . $header . " = '';\n";
             $validationRules .= "\t\t\t'" . $header . "' => 'required',\n";
-            $loadProperties .= "\t\t\t\$this->" . $header . " = $" . $arguments['model_lower_case'] . "->".$header.";\n";
+            $loadProperties .= "\t\t\t\$this->" . $header . " = $" . $arguments['model_camel_case'] . "->".$header.";\n";
         }
 
         $arguments['properties'] = rtrim(ltrim($propertiesString, "\t"),"\n");
@@ -145,7 +154,7 @@ class MakeCrudCommand extends Command
             $content .= "\t\t" . "<x-form::input group-class=\"mb-3\" type=\"text\" wire:model=\"" . $LVModelName . "\" id=\"" . $LVModelName . "\" label=\"" . $LVModelName . "\"/>\n";
         }
 
-        $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">@if($action == 'update') {{__('boulerplate::ui.save')}} @else {{__('boulerplate::ui.create')}} @endif</x-form::button>\n";
+        $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">@if(\$action == 'update') {{__('boulerplate::ui.save')}} @else {{__('boulerplate::ui.create')}} @endif</x-form::button>\n";
         $content .= "\t</x-form::form>\n";
         $content .= "</div>";
 

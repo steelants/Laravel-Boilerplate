@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\File;
 
 class InstallCommand extends Command
 {
-    protected $signature = 'boilerplate:install
+    protected $signature = 'install:boilerplate
                             {--force : Overwrite existing files by default}
                             {--views-only : Overwrite existy views only}
                             {--no-migration : Install boilerplate without running migrations}';
@@ -25,7 +25,7 @@ class InstallCommand extends Command
 
         if (strpos(file_get_contents($RouteFilePath), 'Route::auth();') === false) {
             //If authentication not installed install
-            Artisan::call('auth:install');
+            Artisan::call('install:auth');
             file_put_contents($RouteFilePath, str_replace('Route::auth();' ,'', file_get_contents($RouteFilePath)));  
         }
 

@@ -20,7 +20,7 @@ class Form extends Component
 
     public function mount ($model = null){
         if (!empty($model)) {
-            ${{model_lower_case}} = {{model}}::find($model);
+            ${{model_camel_case}} = {{model}}::find($model);
 
             $this->model = $model;
 
@@ -34,21 +34,22 @@ class Form extends Component
     {
         $validatedData = $this->validate();
         {{model}}::create($validatedData);
+        $this->dispatch('{{model_camel_case}}Added');
         $this->dispatch('closeModal');
     }
 
     public function update()
     {
         $validatedData = $this->validate();
-        ${{model_lower_case}} = {{model}}::find($this->model);
-        if (!empty(${{model_lower_case}})) {
-            ${{model_lower_case}}->update($validatedData);
+        ${{model_camel_case}} = {{model}}::find($this->model);
+        if (!empty(${{model_camel_case}})) {
+            ${{model_camel_case}}->update($validatedData);
         }
         $this->dispatch('closeModal');
     }
 
     public function render()
     {
-        return view('livewire.{{model_lower_case}}.form');
+        return view('livewire.{{model_snake_case}}.form');
     }
 }
