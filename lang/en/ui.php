@@ -73,4 +73,5 @@ return [
     'start_backup' => "Start Backup",
     'sessions' => "Sessions",
     'never' => "Never",
+    'copy_to_clipboard' => "Coppy to clipboard"
 ];

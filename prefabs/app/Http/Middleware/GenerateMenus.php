@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use SteelAnts\LaravelBoilerplate\Facades\Menu;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,6 +17,10 @@ class GenerateMenus
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (Auth::guest()) {
+            return $next($request);
+        }
+        
         if ($request->route()->getName() === 'livewire.message') {
         	return $next($request);
         }
@@ -47,6 +52,11 @@ class GenerateMenus
                 'boilerplate::ui.cache' => ['fas fa-box', 'system.cache.index'],
                 'boilerplate::ui.backup' => ['fas fa-file-archive', 'system.backup.index']
             ];
+
+            if (file_exists(base_path() . '/routes/api.php')){
+                $systemRoutes['boilerplate::ui.api'] = ['fas fa-file-archive', 'system.api.index'];
+            }
+            
             foreach ($systemRoutes as $title => $route_data) {
                 $icon = $route_data[0];
                 $route = $route_data[1];

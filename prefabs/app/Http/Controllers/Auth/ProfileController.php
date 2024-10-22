@@ -49,13 +49,19 @@ class ProfileController extends BaseController
         ]);
     }
 
-    public function createApiToken(CreateApiTokenRequest $request): RedirectResponse
+     public function createApiToken(CreateApiTokenRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        if (empty($validated['expire_at'])) {
-            $validated['expire_at'] = null;
+        $tokenCreationParameters = [
+            "name" => $validated['token_name'],
+            "abilities" => ['*'],
+        ];
+
+        if (!empty($validated['expire_at'])) {
+            $tokenCreationParameters["expires_at"] = Carbon::parse($validated['expire_at']);
         }
-        $newToken = $request->user()->createToken($validated['token_name'], ['*'], Carbon::parse($validated['expire_at']))->plainTextToken;
+
+        $newToken = $request->user()->createToken(...$tokenCreationParameters)->plainTextToken;
         return redirect()->route('profile.api')->with([
             'success'=>  __('boilerplate::ui.created'),
             'secret'=> $newToken,

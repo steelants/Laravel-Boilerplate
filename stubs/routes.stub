@@ -11,22 +11,25 @@ Route::prefix('profile')->name('profile.')->middleware(['auth'])->group(function
 });
 
 Route::prefix('system')->name('system.')->middleware(['auth'])->group(function () {
- 
-    Route::prefix('jobs')->name('jobs.')->group(function () {
-        Route::get('/', [App\Http\Controllers\System\JobsController::class, 'index'])->name('index');
-        Route::get('/clear', [App\Http\Controllers\System\JobsController::class, 'clear'])->name('clear');
-        Route::get('/call/{job}', [App\Http\Controllers\System\JobsController::class, 'call'])->name('call');
-    });
-    
-    Route::get('/cache', [App\Http\Controllers\System\CacheController::class, 'index'])->name('cache.index');
-    Route::get('/cache/clear', [App\Http\Controllers\System\CacheController::class, 'clear'])->name('cache.clear');
-
     Route::get('/audit', [App\Http\Controllers\System\AuditController::class, 'index'])->name('audit.index');
 
     Route::get('/user', [App\Http\Controllers\System\UserController::class, 'index'])->name('user.index');
 
     Route::get('/subscription', [App\Http\Controllers\System\SubscriptionController::class, 'index'])->name('subscription.index');
 
+    Route::get('/api', [App\Http\Controllers\System\ApiController::class, 'index'])->name('api.index');
+
+    Route::prefix('jobs')->name('jobs.')->group(function () {
+        Route::get('/', [App\Http\Controllers\System\JobsController::class, 'index'])->name('index');
+        Route::get('/clear', [App\Http\Controllers\System\JobsController::class, 'clear'])->name('clear');
+        Route::get('/call/{job}', [App\Http\Controllers\System\JobsController::class, 'call'])->name('call');
+    });
+    
+   Route::prefix('cache')->name('cache.')->group(function () {
+        Route::get('/', [App\Http\Controllers\System\CacheController::class, 'index'])->name('index');
+        Route::get('/clear', [App\Http\Controllers\System\CacheController::class, 'clear'])->name('clear');
+    });
+   
     Route::prefix('log')->name('log.')->group(function () {
         Route::get('/', [App\Http\Controllers\System\LogController::class, 'index'])->name('index');
         Route::get('/detail/{file}', [App\Http\Controllers\System\LogController::class, 'detail'])->name('detail');

@@ -25,7 +25,7 @@
             <h4>{{ __('boilerplate::ui.change_password') }}</h4>
         </div>
 
-        <form action="{{ route('profile.update', ['user' => $user]) }}" method="POST">
+        <form action="{{ route('profile.update') }}" method="POST">
             @csrf
             @method('put')
             <div class="form-group">
