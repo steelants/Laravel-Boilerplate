@@ -61,7 +61,7 @@ window.snackbar = function (message, details = false, type = false, icon = false
 }
 
 window.addEventListener('snackbar', function(e){
-    snackbar(e.detail.message, e.detail.details || false, e.detail.type || false, e.detail.icon || false);
+    snackbar(e.detail[0].message, e.detail[0].details || false, e.detail[0].type || false, e.detail[0].icon || false);
 });
 
 window.copyToClipboard = function (text, el = false) {
