@@ -27,7 +27,7 @@ class DataTable extends DataTableComponent
             'created_at' => $row->created_at,
             'ip_address' => $row->ip,
             'note' => $row->lang_text ,
-            'actor_id' => ($row->actor->name ?? ($row->actor->username ?? __('System'))),
+            'actor_id' => ($row->actor->username ?? ($row->actor->name ?? __('System'))),
             'affected_id' => $affectedJson,
         ];
     }
