@@ -6,6 +6,7 @@ use App\Models\Session;
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use SteelAnts\DataTable\Traits\UseDatabase;
 
 class DataTable extends DataTableComponent
 {

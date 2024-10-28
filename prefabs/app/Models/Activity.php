@@ -22,7 +22,8 @@ class Activity extends Model
      */
     protected $fillable = [
         'ip',
-        'user_id',
+        'actor_type',
+        'actor_id',
         'affected_type',
         'affected_id',
         'lang_text',
@@ -34,9 +35,9 @@ class Activity extends Model
         Activity::observe(ActivityObserver::class);
     }
 
-    public function user()
+    public function actor()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->morphTo('actor');
     }
 
     public function affected()

@@ -13,10 +13,11 @@ class ActivityObserver
     {
         if (!app()->runningInConsole()) {
             $activity->ip = $this->getIp();
-            $activity->user_id = auth()->id();
+            if (empty($activity->actor_id)) {
+                $activity->actor()->associate(auth()->user());
+            }
         } else {
             $activity->ip = "localhost";
-            $activity->user_id = 0;
         }
     }
 
