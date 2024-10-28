@@ -3,9 +3,15 @@
 namespace App\Traits;
 
 use App\Models\Activity;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait Auditable
 {
+    public function activities() : MorphMany
+    {
+        return $this->morphMany(Activity::class, 'actor');
+    }
+
     public static function bootAuditable()
     {
         if (app()->runningInConsole()) {
