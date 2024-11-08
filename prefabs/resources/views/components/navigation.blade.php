@@ -91,7 +91,14 @@
             <div class="dropdown-menu">
                 <div class="dropdown-header d-flex align-items-center">
                     <div class="fw-semibold me-auto">{{ Auth::user()->name }}</div>
-                    <small class="text-body-tertiary">v1.23</small>
+                    <a href="{{ route('changelog') }}" class="text-body-tertiary text-decoration-none small">
+                        @php($public_version = public_path('version.txt'))
+                        @if (file_exists($public_version))
+                            ({{ trim(file_get_contents($public_version, true)) }})
+                        @else
+                            ({{ 'vDEV' }})
+                        @endif
+                    </a>
                 </div>
 
                 <a class="dropdown-item" href="{{ route('profile.index') }}">
