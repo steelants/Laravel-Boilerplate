@@ -1,6 +1,8 @@
 Route::auth();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/files/{path}/{file_name}', [App\Http\Controllers\FileController::class, 'serv'])->where('path', '.*')->middleware(['auth'])->name('file.serv');
 Route::get('/changelog', [App\Http\Controllers\ChangelogController::class, 'index'])->middleware(['auth'])->name('changelog');
 
 Route::prefix('profile')->name('profile.')->middleware(['auth'])->group(function () {
