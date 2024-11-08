@@ -5,9 +5,12 @@ namespace App\Livewire\User;
 use App\Models\User;
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
+use SteelAnts\DataTable\Traits\UseDatabase;
 
 class DataTable extends DataTableComponent
 {
+    use UseDatabase;
+    
     public $listeners = [
         'userAdded' => '$refresh'
     ];

@@ -10,15 +10,18 @@
                 <thead>
                     <tr>
                         <th scope="col">key</th>
-
+                        <th>expire_at</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($cache_items as $item)
                         <tr>
-                            <th scope="row">
-                                {{ var_dump($item) }}
-                            </th>
+                            <td scope="row">
+                                {{ $item['key'] }}
+                            </td>
+                            <td>
+                                {{ $item['expire_at'] }}
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
