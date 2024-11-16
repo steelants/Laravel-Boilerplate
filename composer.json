@@ -15,6 +15,9 @@
         "barryvdh/laravel-debugbar": "^3.9"
     },
     "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
         "psr-4": {
             "SteelAnts\\LaravelBoilerplate\\": "src/"
         }
