@@ -5,15 +5,18 @@ namespace App\Livewire\Audit;
 use App\Models\Activity;
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
+use SteelAnts\DataTable\Traits\UseDatabase;
 
 class DataTable extends DataTableComponent
 {
+    use UseDatabase;
+    
     public bool $paginated = true;
     public int $itemsPerPage = 100;
 
     public function query(): Builder
     {
-        return Activity::with(["affected", "user"])->orderByDesc("created_at");
+        return Activity::with(["affected", "actor"])->orderByDesc("created_at");
     }
 
     public function row($row): array
@@ -27,7 +30,7 @@ class DataTable extends DataTableComponent
             'created_at' => $row->created_at,
             'ip_address' => $row->ip,
             'note' => $row->lang_text ,
-            'user_id' => ($row->user->name ?? 'Unknown'),
+            'actor_id' => ($row->actor->username ?? ($row->actor->name ?? __('System'))),
             'affected_id' => $affectedJson,
         ];
     }
@@ -38,7 +41,7 @@ class DataTable extends DataTableComponent
             'created_at' => "Created",
             'ip_address' => "IP Address",
             'note' => "Note",
-            'user_id' => "Author",
+            'actor_id' => "Author",
             'affected_id' => "Model"
         ];
     }
