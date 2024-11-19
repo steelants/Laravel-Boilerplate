@@ -32,17 +32,26 @@ ln -s ./package/boilerplate/stubs/resources/ resources
 ### Windows steps to develop:
 
 1. clone repository to laravel folder /packages/ if not exist just create it
-2. edit composer.json file add this in autoload -> psr-4
+2. use command
 ```bash
-"SteelAnts\\LaravelBoilerplate\\": "packages/Laravel-Boilerplate/src/",
+composer require steelants/laravel-boilerplate
 ```
-3. activate some commands to aplicate changes
+3. edit composer.json file
+```bash
+"autoload": {
+        "psr-4": {
+          "SteelAnts\\LaravelBoilerplate\\": "packages/Laravel-Boilerplate/src/"
+        }
+}
+```
+4. remove require for laravel boilerplate
+5. use commands to aplicate changes
 ```bash
 composer install
 npm install
 npm run build
 ```
-4. aplicate packages changes
+6. aplicate packages changes - before this you need have auth package
 ```bash
 php artisan install:boilerplate
 ```
