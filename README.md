@@ -29,6 +29,34 @@ php artisan install:boilerplate
 ln -s ./package/boilerplate/stubs/resources/ resources
 ```
 
+### Windows steps to develop:
+
+1. clone repository to laravel folder /packages/ if not exist just create it
+2. use command
+```bash
+composer require steelants/laravel-boilerplate
+```
+3. edit composer.json file
+```bash
+"autoload": {
+        "psr-4": {
+          "SteelAnts\\LaravelBoilerplate\\": "packages/Laravel-Boilerplate/src/"
+        }
+}
+```
+4. remove require for laravel boilerplate
+5. use commands to aplicate changes
+```bash
+composer install
+npm install
+npm run build
+```
+6. aplicate packages changes - before this you need have auth package
+```bash
+php artisan install:boilerplate
+```
+
+
 ## Contributors
 <a href="https://github.com/steelants/Laravel-Boilerplate/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=steelants/Laravel-Boilerplate" />
