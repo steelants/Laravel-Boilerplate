@@ -6,6 +6,7 @@ use Artisan;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class InstallCommand extends Command
 {
@@ -53,21 +54,8 @@ class InstallCommand extends Command
 
             $this->components->info('Adding Routes');
             self::appendRoutes();
-
-            $function = "\n";
-            $function .= "    protected function context(): array\n";
-            $function .= "    {\n";
-            $function .= "        return array_merge(parent::context(), [\n";
-            $function .= "            'current_url' => request()->url(),\n";
-            $function .= "        ]);\n";
-            $function .= "    }\n";
-
-            if ($this->addClassFunction(base_path('/app/Exceptions/Handler.php'), $function, 'context()')) {
-                $this->components->info('Modifying App\Exceptions\Handler');
-            } else {
-                $this->components->error('Unable to modify App\Exceptions\Handler');
-            }
-
+            $this->components->info('Adding Exceptions');
+            self::appendExceptions();
 
             if (!$this->option('no-migration')) {
                 $this->components->warn('Running Migrations');
@@ -197,5 +185,48 @@ class InstallCommand extends Command
         $pos = end($matches[0])[1];
         $ModifiedContent = substr_replace($ClassFileContent, $functionCode, $pos, 0);
         return file_put_contents($filePath, $ModifiedContent);
+    }
+
+    protected function boilerplateString(string $text, string $name){
+        return sprintf("/* BOILERPLATE $name */
+// Remove surrounding coments if customization code below is needed !!!
+        %s
+/* BOILERPLATE $name */",
+            $text);
+    }
+
+    protected function appendFile(string $filepath, string $stub, string $searchWord)
+    {
+        $baseDir = realpath(__DIR__ . '/../../../stubs');
+        $content = file_get_contents($filepath);
+        $name = str_replace('.stub', '', $stub);
+        $newContent = self::boilerplateString(file_get_contents($baseDir . DIRECTORY_SEPARATOR . $stub), $name);
+
+        $pattern = '/\/\* BOILERPLATE ' . $name . ' \*\/\s*\/\/ Remove surrounding coments if customization code below is needed !!!\s*(.*?)\s*\/\* BOILERPLATE ' . $name . ' \*\//s';
+
+        if (strpos($content, $newContent) !== false) {
+            return;
+        }
+
+        if (strpos($content, $searchWord) === false) {
+            return;
+        }
+
+        if (preg_match($pattern, $content, $matches)) {
+            $content = str_replace($matches[0], $newContent, $content);
+        } else {
+            $content = str_replace($searchWord, $searchWord . PHP_EOL . $newContent, $content);
+        }
+
+        file_put_contents($filepath, $content);
+    }
+
+    protected function appendExceptions()
+    {
+        self::appendFile("bootstrap/app.php", 'exceptions.stub', '->withExceptions(function (Exceptions $exceptions) {');
+        self::appendFile("bootstrap/app.php", 'exceptionUses.stub', 'use Illuminate\Foundation\Application;');
+
+        //remove old version exceptions
+        File::deleteDirectory("../app/Exceptions");
     }
 }
