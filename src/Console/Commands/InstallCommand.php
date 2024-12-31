@@ -154,22 +154,6 @@ class InstallCommand extends Command
         copy($baseDir . '/vite.config.js', base_path('vite.config.js'));
     }
 
-    protected function appendRoutes(string $RouteType = "web")
-    {
-        $baseDir = realpath(__DIR__ . '/../../../stubs');
-        $RouteFilePath = base_path('routes/' . $RouteType . '.php');
-
-        if (strpos(file_get_contents($RouteFilePath), 'Route::Auth();') !== false) {
-            return;
-        }
-
-        if (strpos(file_get_contents($RouteFilePath), 'Route::auth();') !== false) {
-            return;
-        }
-
-        file_put_contents($RouteFilePath, file_get_contents($baseDir  . '/routes.stub'), FILE_APPEND);
-    }
-
     protected function addClassFunction(string $filePath, string $functionCode, string $functionName)
     {
         $ClassFileContent = file_get_contents($filePath);
@@ -187,15 +171,11 @@ class InstallCommand extends Command
         return file_put_contents($filePath, $ModifiedContent);
     }
 
-    protected function boilerplateString(string $text, string $name){
-        return sprintf("/* BOILERPLATE $name */
-// Remove surrounding coments if customization code below is needed !!!
-        %s
-/* BOILERPLATE $name */",
-            $text);
+    protected static function boilerplateString(string $text, string $name){
+        return sprintf("/* BOILERPLATE $name */\n// Remove surrounding coments if customization code below is needed !!!\n%s\n/* BOILERPLATE $name */",$text);
     }
 
-    protected function appendFile(string $filepath, string $stub, string $searchWord)
+    protected static function appendFile(string $filepath, string $stub, string $searchWord)
     {
         $baseDir = realpath(__DIR__ . '/../../../stubs');
         $content = file_get_contents($filepath);
@@ -221,7 +201,12 @@ class InstallCommand extends Command
         file_put_contents($filepath, $content);
     }
 
-    protected function appendExceptions()
+    protected static function appendRoutes(string $RouteType = "web")
+    {
+        self::appendFile("routes/" . $RouteType . '.php', 'routes.stub', 'use Illuminate\Support\Facades\Route;');
+    }
+
+    protected static function appendExceptions()
     {
         self::appendFile("bootstrap/app.php", 'exceptions.stub', '->withExceptions(function (Exceptions $exceptions) {');
         self::appendFile("bootstrap/app.php", 'exceptionUses.stub', 'use Illuminate\Foundation\Application;');

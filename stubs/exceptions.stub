@@ -1,16 +1,11 @@
-$exceptions->render(function (NotFoundHttpException $e, Request $request) {
+        $exceptions->context(fn () => [
+            'current_url' => request()->url(),
+        ]);
+
+        $exceptions->render(function (NotFoundHttpException $e, Request $request) {
             if ($request->is('api/*') || $request->is('local/*')) {
                 return response()->json([
                     'message' => 'Record not found.'
                 ], 404);
             }
-        })->shouldRenderJsonWhen(function (Request $request, Throwable $e) {
-            if ($request->is('api/*')) {
-                return true;
-            }
-
-            return $request->expectsJson();
         });
-        $exceptions->context(fn () => [
-            'current_url' => request()->url(),
-        ]);
