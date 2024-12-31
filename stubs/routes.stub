@@ -27,12 +27,12 @@ Route::prefix('system')->name('system.')->middleware(['auth'])->group(function (
         Route::get('/clear', [App\Http\Controllers\System\JobsController::class, 'clear'])->name('clear');
         Route::get('/call/{job}', [App\Http\Controllers\System\JobsController::class, 'call'])->name('call');
     });
-    
-   Route::prefix('cache')->name('cache.')->group(function () {
+
+    Route::prefix('cache')->name('cache.')->group(function () {
         Route::get('/', [App\Http\Controllers\System\CacheController::class, 'index'])->name('index');
         Route::get('/clear', [App\Http\Controllers\System\CacheController::class, 'clear'])->name('clear');
     });
-   
+
     Route::prefix('log')->name('log.')->group(function () {
         Route::get('/', [App\Http\Controllers\System\LogController::class, 'index'])->name('index');
         Route::get('/detail/{file}', [App\Http\Controllers\System\LogController::class, 'detail'])->name('detail');

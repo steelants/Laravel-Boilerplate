@@ -26,10 +26,13 @@ class InstallCommand extends Command
 
         if (strpos(file_get_contents($RouteFilePath), 'Route::auth();') === false) {
             //If authentication not installed install
+            $this->call('install:api' . ($this->option('force') ? ' --force' : ''));
             $this->call('install:auth' . ($this->option('force') ? ' --force' : ''));
             //Artisan::call('install:auth --force');
             file_put_contents($RouteFilePath, str_replace('Route::auth();' ,'', file_get_contents($RouteFilePath)));
         }
+
+
 
         $this->components->info('Installing Boilerplate Scaffolding');
 
