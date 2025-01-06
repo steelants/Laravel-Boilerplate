@@ -23,6 +23,8 @@ class InstallCommand extends Command
         $baseDir = realpath(__DIR__ . '/../../../stubs');
         $RouteFilePath = base_path('routes/web.php');
 
+        $this->call('install:api');
+
         if (strpos(file_get_contents($RouteFilePath), 'Route::auth();') === false) {
             //If authentication not installed install
             $this->call('install:auth', ['--force' => $this->option('force')]);
