@@ -17,6 +17,7 @@ class BoilerplateServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'boilerplate');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'boilerplate');
 
         if (class_exists('App\Http\Middleware\GenerateMenus')) {
             $router = $this->app['router'];
@@ -37,6 +38,7 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../lang' => $this->app->langPath('vendor/boilerplate'),
             __DIR__ . '/../database/migrations' => $this->app->databasePath('migrations'),
+            __DIR__ . '/../resources/views/views' => resource_path('views/vendor/boilerplate'),
         ]);
 
         $this->commands([InstallCommand::class]);

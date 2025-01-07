@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\System;
 
-use App\Http\Controllers\BaseController;
+use App\Models\User;
+use SteelAnts\LaravelBoilerplate\Http\Controllers\CrudController;
 
-class UserController extends BaseController
+class UserController extends CrudController
 {
-    public function index()
-    {
-        return view('system.user.index');
-    }
+    public Model $model = User::class;
 }
