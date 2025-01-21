@@ -56,6 +56,43 @@ npm run build
 php artisan install:boilerplate
 ```
 
+## Menu Builder
+### Single Level
+```php
+Menu::make('main-menu', function ($menu) {
+    $systemRoutes = [
+        'general' => ['fas fa-eye', 'general.index'],
+    ];
+
+    foreach ($systemRoutes as $title => $route_data) {
+        $icon = $route_data[0];
+        $route = $route_data[1];
+
+        $menu->add($title, [
+            'id' => strtolower($title),
+            'icon' => $icon,
+            'route' => $route,
+        ]);
+    }
+});
+```
+### with sub Menu  Builder
+### Multi Level
+```php
+Menu::make('main-menu', function ($menu) {
+    $mainItem = $menu->add('Home', [
+        'id' => strtolower('Home'),
+        'icon' => 'fas fa-eye',
+        'route' => 'general.index',
+    ]);
+
+    $mainItem->add('Dashboard', [
+        'id' => strtolower('Home-Dashboard'),
+        'icon' => 'fas fa-eye',
+        'route' => 'general.sub-index',
+    ]);
+});
+```
 
 ## Contributors
 <a href="https://github.com/steelants/Laravel-Boilerplate/graphs/contributors">
