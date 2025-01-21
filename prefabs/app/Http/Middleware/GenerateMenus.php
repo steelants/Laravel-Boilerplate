@@ -33,7 +33,7 @@ class GenerateMenus
                 $icon = $route_data[0];
                 $route = $route_data[1];
 
-                $menu = $menu->add($title, [
+                $menu->add($title, [
                     'id' => strtolower($title),
                     'icon' => $icon,
                     'route' => $route,
@@ -61,7 +61,7 @@ class GenerateMenus
                 $icon = $route_data[0];
                 $route = $route_data[1];
 
-                $menu = $menu->add($title, [
+                $menu->add($title, [
                     'id' => strtolower($title),
                     'icon' => $icon,
                     'route' => $route,
