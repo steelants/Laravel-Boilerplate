@@ -19,7 +19,7 @@ class MenuItem
 		$this->builder = $builder;
 	}
 
-	public function add(string $title, array $options = [])
+	public function add(string $title, array $options = []): Collection
 	{
 		if (!isset($this->items)) {
 			$this->items = new Collection;
@@ -32,7 +32,7 @@ class MenuItem
 		return $item;
 	}
 
-	public function items(): Collection|null
+	public function items(): Collection|bool
 	{
 		return isset($this->items) ? $this->items : false;
 	}
