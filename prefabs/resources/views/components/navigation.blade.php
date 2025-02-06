@@ -64,6 +64,9 @@
 					</button>
 				@endif
 			</li>
+			@if (!$item->items())
+				@continue
+			@endif
 			@foreach ($item->items() as $subItem)
 				<li class="nav-item ps-3">
 					@if (is_a($subItem, "SteelAnts\LaravelBoilerplate\Support\MenuItemLink"))
@@ -82,34 +85,36 @@
 		{{-- MAIN NAVIGATION ALL --}}
 		@auth
 			<li class="mt-4 text-body-secondary"><small>{{ __("boilerplate::ui.system") }}</small></li>
-			<li class="nav-item {{ $item->isActive() ? "is-active" : "" }}">
-				@if (is_a($item, "SteelAnts\LaravelBoilerplate\Support\MenuItemLink"))
-					<a class="nav-link" href="{{ route($item->route, $item->parameters) }}">
-						<i class="nav-link-ico {{ $item->icon }}"></i>
-						{{ __($item->title) }}
-					</a>
-				@elseif (is_a($item, "SteelAnts\LaravelBoilerplate\Support\MenuItemAction"))
-					<button class="nav-link" onclick="{{ $item->actions }}">
-						<i class="nav-link-ico {{ $item->icon }}"></i>{{ __($item->title) }}
-					</button>
-				@endif
-			</li>
-			@if (!$item->items())
-				@continue
-			@endif
-			@foreach ($item->items() as $subItem)
-				<li class="nav-item ps-3">
-					@if (is_a($subItem, "SteelAnts\LaravelBoilerplate\Support\MenuItemLink"))
-						<a class="nav-link" href="{{ route($subItem->route, $subItem->parameters) }}">
-							<i class="nav-link-ico {{ $subItem->icon }}"></i>
-							{{ __($subItem->title) }}
+			@foreach ($systemMenuItems as $item)
+				<li class="nav-item {{ $item->isActive() ? "is-active" : "" }}">
+					@if (is_a($item, "SteelAnts\LaravelBoilerplate\Support\MenuItemLink"))
+						<a class="nav-link" href="{{ route($item->route, $item->parameters) }}">
+							<i class="nav-link-ico {{ $item->icon }}"></i>
+							{{ __($item->title) }}
 						</a>
-					@elseif (is_a($subItem, "SteelAnts\LaravelBoilerplate\Support\MenuItemAction"))
-						<button class="nav-link" onclick="{{ $subItem->action }}">
-							<i class="nav-link-ico {{ $subItem->icon }}"></i>{{ __($subItem->title) }}
+					@elseif (is_a($item, "SteelAnts\LaravelBoilerplate\Support\MenuItemAction"))
+						<button class="nav-link" onclick="{{ $item->actions }}">
+							<i class="nav-link-ico {{ $item->icon }}"></i>{{ __($item->title) }}
 						</button>
 					@endif
 				</li>
+				@if (!$item->items())
+					@continue
+				@endif
+				@foreach ($item->items() as $subItem)
+					<li class="nav-item ps-3">
+						@if (is_a($subItem, "SteelAnts\LaravelBoilerplate\Support\MenuItemLink"))
+							<a class="nav-link" href="{{ route($subItem->route, $subItem->parameters) }}">
+								<i class="nav-link-ico {{ $subItem->icon }}"></i>
+								{{ __($subItem->title) }}
+							</a>
+						@elseif (is_a($subItem, "SteelAnts\LaravelBoilerplate\Support\MenuItemAction"))
+							<button class="nav-link" onclick="{{ $subItem->action }}">
+								<i class="nav-link-ico {{ $subItem->icon }}"></i>{{ __($subItem->title) }}
+							</button>
+						@endif
+					</li>
+				@endforeach
 			@endforeach
 			{{-- MAIN NAVIGATION SYSTEM --}}
 		@endauth
