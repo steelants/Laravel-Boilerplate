@@ -30,11 +30,4 @@ class JobsController extends BaseController
 
         return redirect()->route('system.jobs.index')->with('success', __('boilerplate::ui.jobs-cleared'));
     }
-
-    public function call($job)
-    {
-        $class = '\\App\\Jobs\\' . $job;
-        dispatch(new $class());
-        return redirect()->route('system.jobs.index')->with('success', __('Job přidán do fronty'));
-    }
 }
