@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\System;
 
 use App\Models\User;
-use SteelAnts\LaravelBoilerplate\Http\Controllers\CrudController;
+use SteelAnts\LaravelBoilerplate\Controllers\Http\CrudController;
 
 class UserController extends CrudController
 {
-    public Model $model = User::class;
+    public string $model = "user";
 }
