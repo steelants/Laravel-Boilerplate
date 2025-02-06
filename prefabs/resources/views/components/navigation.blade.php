@@ -94,6 +94,9 @@
 					</button>
 				@endif
 			</li>
+			@if (!$item->items())
+				@continue
+			@endif
 			@foreach ($item->items() as $subItem)
 				<li class="nav-item ps-3">
 					@if (is_a($subItem, "SteelAnts\LaravelBoilerplate\Support\MenuItemLink"))
