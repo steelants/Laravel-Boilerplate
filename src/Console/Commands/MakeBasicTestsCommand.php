@@ -3,6 +3,7 @@
 namespace SteelAnts\LaravelBoilerplate\Console\Commands;
 
 use Illuminate\Console\Command;
+use \Illuminate\Support\Facades\Route;
 
 class MakeBasicTestsCommand extends Command
 {
@@ -34,7 +35,7 @@ class MakeBasicTestsCommand extends Command
             }
         }
 
-        $routeCollection = \Illuminate\Support\Facades\Route::getRoutes();
+        $routeCollection = Route::getRoutes();
         $pages = [];
 
         foreach ($routeCollection as $value) {
