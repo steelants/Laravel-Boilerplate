@@ -58,7 +58,6 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->commands([MakeBasicTestsCommand::class]);
         $this->commands([DispatchJob::class]);
 
-
         # schedule tasks from db https://stackoverflow.com/a/38664283
         // $this->app->booted(function () {
         //     $schedule = $this->app->make(Schedule::class);
