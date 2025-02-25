@@ -6,6 +6,7 @@ use App\Models\File;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use SplFileInfo;
+use Throwable;
 
 class Gallery extends Component
 {
@@ -42,7 +43,7 @@ class Gallery extends Component
                 $this->refreshFiles();
                 $this->dispatch('filesAdded');
             }
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->refreshFiles();
             $this->addError('files', $th->getMessage());
         }

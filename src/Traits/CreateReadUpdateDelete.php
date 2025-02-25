@@ -4,12 +4,13 @@ namespace SteelAnts\LaravelBoilerplate\Traits;
 
 use Illuminate\Support\Str;
 use ErrorException;
+use Illuminate\Http\Request;
 
 trait CreateReadUpdateDelete
 {
     public string $viewName = 'boilerplate::crud';
 
-    public function index()
+    public function index(Request $request)
     {
         if (property_exists($this, 'model')) {
             $model = $this->model;

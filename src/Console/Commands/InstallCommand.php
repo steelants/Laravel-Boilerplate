@@ -6,6 +6,7 @@ use Artisan;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
+use Throwable;
 
 class InstallCommand extends Command
 {
@@ -138,7 +139,7 @@ class InstallCommand extends Command
                 copy($stubFullPath, $viewFullPath);
                 $this->components->info($stubFullPath . '>>' . $viewFullPath);
                 //code...
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 $this->components->error($type);
             }
         }

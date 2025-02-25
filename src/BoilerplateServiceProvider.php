@@ -11,6 +11,7 @@ use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
 use SteelAnts\LaravelBoilerplate\Facades\Menu;
 use SteelAnts\LaravelBoilerplate\Support\MenuCollector;
+use App\Http\Middleware\GenerateMenus;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {
@@ -22,7 +23,7 @@ class BoilerplateServiceProvider extends ServiceProvider
 
         if (class_exists('App\Http\Middleware\GenerateMenus')) {
             $router = $this->app['router'];
-            $router->pushMiddlewareToGroup('web', \App\Http\Middleware\GenerateMenus::class);
+            $router->pushMiddlewareToGroup('web', GenerateMenus::class);
         }
 
         if (!$this->app->runningInConsole()) {
