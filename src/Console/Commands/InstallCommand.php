@@ -81,12 +81,13 @@ class InstallCommand extends Command
 
         $packages = json_decode(file_get_contents(base_path('package.json')), true);
 
+		unset($packages["devDependencies"]);
         $packages["dependencies"]["jquery"] = '^3.6.1';
-        $packages["dependencies"]["sass"] = '^1.56.1';
+        $packages["dependencies"]["sass"] = '1.77.6';
         $packages["dependencies"]["bootstrap"] = '^5.3';
         $packages["dependencies"]["@fortawesome/fontawesome-free"] = '^5.15.4';
         $packages["dependencies"]["@popperjs/core"] = '^2.11.6';
-        $packages["dependencies"]["vite"] = '^5.0.0';
+        $packages["dependencies"]["vite"] = '^6.2.0';
         $packages["dependencies"]["laravel-vite-plugin"] = '^1.0.0';
         $packages["dependencies"]["quill"] = "2.0.0-rc.2";
         $packages["dependencies"]["quill-table-ui"] = "^1.0.7";
