@@ -28,43 +28,6 @@ php artisan migrate
 php artisan install:boilerplate
 ```
 
-## Development
-
-1. Create subfolder `/packages` at root of your laravel project
-
-2. clone repository to sub folder `/packages` (you need to be positioned at root of your laravel project in your terminal)
-```bash
-git clone https://github.com/steelants/Laravel-Boilerplate.git ./packages/Laravel-Boilerplate
-```
-
-3. edit composer.json file
-```json
-"autoload": {
-	"psr-4": {
-		"SteelAnts\\LaravelBoilerplate\\": "packages/Laravel-Boilerplate/src/"
-	}
-}
-```
-
-4. Add provider to `bootstrap/providers.php`
-```php
-return [
-	...
-	SteelAnts\LaravelBoilerplate\BoilerplateServiceProvider::class,
-	...
-];
-```
-
-5. use commands to aplicate changes
-```bash
-composer dump-autoload
-```
-
-6. aplicate packages changes - before this you need have auth package
-```bash
-php artisan install:boilerplate --force
-```
-
 ## Menu Builder
 ### Single Level
 ```php
@@ -101,6 +64,43 @@ Menu::make('main-menu', function ($menu) {
         'route' => 'general.sub-index',
     ]);
 });
+```
+
+## Development
+
+1. Create subfolder `/packages` at root of your laravel project
+
+2. clone repository to sub folder `/packages` (you need to be positioned at root of your laravel project in your terminal)
+```bash
+git clone https://github.com/steelants/Laravel-Boilerplate.git ./packages/Laravel-Boilerplate
+```
+
+3. edit composer.json file
+```json
+"autoload": {
+	"psr-4": {
+		"SteelAnts\\LaravelBoilerplate\\": "packages/Laravel-Boilerplate/src/"
+	}
+}
+```
+
+4. Add provider to `bootstrap/providers.php`
+```php
+return [
+	...
+	SteelAnts\LaravelBoilerplate\BoilerplateServiceProvider::class,
+	...
+];
+```
+
+5. use commands to aplicate changes
+```bash
+composer dump-autoload
+```
+
+6. aplicate packages changes - before this you need have auth package
+```bash
+php artisan install:boilerplate --force
 ```
 
 ## Contributors
