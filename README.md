@@ -18,6 +18,12 @@
 ```bash
 composer require steelants/laravel-boilerplate
 composer install
+
+#you can publish Migration for cutomization inside your project
+php artisan vendor:publish --tag=boilerplate-migrations
+php artisan migrate
+
+#add Basic Controllers Routes and Features to APP namespace for customization
 php artisan install:boilerplate
 ```
 
