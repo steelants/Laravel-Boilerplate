@@ -13,7 +13,8 @@
 - Backup Manager
 - Log Viewer
 - Audit
-
+- API Routes view page
+  
 ## Install
 
 ```bash
@@ -48,6 +49,7 @@ Menu::make('main-menu', function ($menu) {
     }
 });
 ```
+
 ### with sub Menu  Builder
 ### Multi Level
 ```php
