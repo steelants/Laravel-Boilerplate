@@ -2,7 +2,7 @@
     <div class="container-xl">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.log')}}</h1>
-             <button onclick="confirm('{{ __('boilerplate::ui.log-clear-confirm') }}') ? window.location.href = '{{ route('system.log.clear') }}' : false" class="btn btn-danger">{{ __('boilerplate::ui.logs-clear') }}</button>
+            <button onclick="confirm('{{ __('boilerplate::ui.log-clear-confirm') }}') ? window.location.href = '{{ route('system.log.clear') }}' : false" class="btn btn-danger">{{ __('boilerplate::ui.logs-clear') }}</button>
         </div>
 
         <div class="row g-3 mb-4">
@@ -25,7 +25,7 @@
                     <tr>
                         <th scope="col">{{ __('boilerplate::ui.name')}}</th>
                         <th scope="col">{{ __('boilerplate::ui.size')}}</th>
-                        <th scope="col">{{ __('boilerplate::ui.actions') }}</th>
+                        <th scope="col" class="text-end">{{ __('boilerplate::ui.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,8 +37,13 @@
                             <td>
                                 {{ $item['humanReadableSize'] }}
                             </td>
-                            <td>
-                                <a href='{{ route('system.log.download', ['file' => $item['fileName']]) }}' class="btn btn-secondary">{{ __('boilerplate::ui.logs-download') }}</a>
+                            <td class="text-end">
+                                <a href='{{ route('system.log.download', ['file' => $item['fileName']]) }}' class="btn btn-secondary">
+                                    <i class="fa fa-download"></i>
+                                </a>
+                                <a href='{{ route('system.log.delete', ['file' => $item['fileName']]) }}' onclick="return confirm('{{ __('log.delete_confirmation') }}')" class="btn btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                </a>
                             </td>
                         </tr>
                     @endforeach
