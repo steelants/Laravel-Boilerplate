@@ -12,6 +12,10 @@
     // .btn-secondary {
     //   --bs-btn-bg: #{$dark};
     // }
+
+    .dark-invert{
+        filter: invert(100%);
+    }
 }
 
 
