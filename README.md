@@ -40,26 +40,31 @@ ln -s ./package/boilerplate/stubs/resources/ resources
 1. clone repository to laravel folder /packages/ if not exist just create it
 2. use command
 ```bash
-composer require steelants/laravel-boilerplate
+git clone https://github.com/steelants/Laravel-Boilerplate.git /packages/Laravel-Boilerplate
 ```
 3. edit composer.json file
-```bash
+```json
 "autoload": {
-        "psr-4": {
-          "SteelAnts\\LaravelBoilerplate\\": "packages/Laravel-Boilerplate/src/"
-        }
+	"psr-4": {
+		"SteelAnts\\LaravelBoilerplate\\": "packages/Laravel-Boilerplate/src/"
+	}
 }
 ```
-4. remove require for laravel boilerplate
+4. Add providwe to `bootstrap/providers.php`
+```php
+return [
+    ...
+    SteelAnts\LaravelBoilerplate\BoilerplateServiceProvider::class,
+	...
+];
+```
 5. use commands to aplicate changes
 ```bash
-composer install
-npm install
-npm run build
+composer dump-autoload
 ```
 6. aplicate packages changes - before this you need have auth package
 ```bash
-php artisan install:boilerplate
+php artisan install:boilerplate --force
 ```
 
 ## Menu Builder
