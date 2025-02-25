@@ -1,17 +1,18 @@
 .app-nav{
     flex-direction: column;
+    max-width: 100%;
 }
 
 .app-nav-header,
 .app-nav-user{
     display: flex;
     align-items: center;
+    gap: .5rem;
     cursor: pointer;
     color: var(--bs-body-color);
     text-decoration: none;
-    padding-right: .5rem;
-    padding-left: .5rem;
-    border-radius: 6px;
+    padding: .25rem;
+    border-radius: $border-radius;
 
     &:hover,
     &.show{
@@ -22,11 +23,15 @@
         width: 100%;
         max-width: 100%;
     }
+
+    .nav-collapsed &{
+        padding: .125rem;
+        background-color: transparent;
+    }
 }
 
 .app-nav-header-content{
     line-height: 1;
-    padding: .5rem .25rem;
     overflow: hidden;
     text-overflow: ellipsis;
 
@@ -38,15 +43,13 @@
 
 .app-nav-logo,
 .app-nav-profile{
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
+    width: 2rem;
+    height: 2rem;
+    border-radius: $border-radius;
     overflow: hidden;
     font-weight: 600;
     text-align: center;
-    line-height: 32px;
-    margin: 0.5rem;
-    margin-left: 0;
+    line-height: 2rem;
 
     img{
         display: block;
@@ -61,12 +64,13 @@
 }
 
 .app-nav .nav-link{
-    border-radius: 6px;
+    border-radius: $border-radius;
     color: var(--bs-body-color);
-    padding: 0.5rem .75rem;
+    // padding: 0.5rem .75rem;
     display: flex;
     align-items: center;
     cursor: pointer;
+    gap: .5rem;
 
     &:hover{
         color: var(--bs-body-color);
@@ -74,13 +78,42 @@
     }
 }
 
-.nav-link-ico{
-    margin-right: .75rem;
-    width: 1.25rem;
-    height: 1.25rem;
-    text-align: center;
+.nav-item{
+    max-width: 100%;
+}
+
+.nav-item a{
+    color: inherit;
+    text-decoration: inherit;
+    min-width: 0;
+}
+
+.nav-link{
     line-height: 1.25rem;
+}
+
+.nav-link-title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nav-link-ico{
     color: var(--bs-tertiary-color);
+    flex-shrink: 0;
+}
+
+.nav-item-with-addons .nav-link{
+    padding: 0;
+}
+
+.nav-item-with-addons .nav-link-ico{
+    margin-left: $nav-link-padding-x;
+}
+
+.nav-item-with-addons .nav-link-title{
+    padding: $nav-link-padding-y 0;
+    padding-right: $nav-link-padding-y;
 }
 
 .app-nav .is-active{
@@ -93,6 +126,8 @@
 }
 
 .nav-tabs{
+    gap: .5rem;
+
     .nav-link{
         border-top: none !important;
         border-left: none !important;
@@ -114,6 +149,17 @@
 }
 
 .nav-pills{
+    .nav-link{
+        color: var(--bs-body-color);
+
+        &:hover{
+            color: var(--bs-body-color);
+            background-color: var(--bs-secondary-bg);
+        }
+    }
+}
+
+.nav-switch{
     border-radius: calc($nav-pills-border-radius + 3px);
     background-color: var(--bs-tertiary-bg);
     padding: 3px;
@@ -121,8 +167,9 @@
     align-items: center;
 
     .nav-link{
-        padding: calc(var(--#{$prefix}nav-link-padding-y) - 2px) calc(var(--#{$prefix}nav-link-padding-x) - 1px);
+        padding: calc(var(--#{$prefix}nav-link-padding-y) - 3px) calc(var(--#{$prefix}nav-link-padding-x) * 1.25);
         color: var(--bs-tertiary-color);
+        border-radius: $border-radius;
 
         &:hover{
             color: var(--bs-body-color);
@@ -141,4 +188,40 @@
         box-shadow: 0 0 1px 1px var(--bs-secondary-bg), inset 0 0 1px $gray-500;
         background-color: var(--bs-body-bg);
     }
+}
+
+.nav-collapsed-show{
+    display: none;
+}
+
+@include desktop(){
+    .nav-collapsed{
+        .nav-link{
+            width: 2.25rem;
+            position: relative;
+        }
+
+        .nav-item .nav{
+            display: none;
+        }
+
+        .nav-collapsed-hide,
+        .nav-link-title{
+            display: none !important;
+        }
+
+        .nav-collapsed-show{
+            display: block !important;
+        }
+
+        .nav-link .badge{
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 9px;
+        }
+    }
+}
+.nav-title-toggle{
+    cursor: pointer;
 }

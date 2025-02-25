@@ -1,0 +1,35 @@
+.hover-group{
+    .hover-hidden{
+        visibility: visible;
+
+        @include mobile(){
+            visibility: hidden;
+        }
+    }
+}
+
+.hover-group:hover{
+    .hover-hidden{
+        visibility: hidden;
+    }
+}
+
+@include desktop(){
+    .hover-group{
+        .hover-visible{
+            visibility: hidden;
+        }
+        .hover-block{
+            display: none;
+        }
+    }
+
+    .hover-group:hover{
+        .hover-visible{
+            visibility: visible;
+        }
+        .hover-block{
+            display: block;
+        }
+    }
+}

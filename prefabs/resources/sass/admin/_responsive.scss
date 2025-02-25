@@ -1,0 +1,37 @@
+@include mobile(){
+    .hide-mobile{
+        display: none !important;
+    }
+
+    .form-control{
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    .nav-link{
+        line-height: 1.5rem;
+    }
+
+    .dropdown-item{
+        line-height: 1.5rem;
+        padding: .5rem;
+    }
+
+    .btn{
+        --bs-btn-padding-y: .5rem;
+
+        &.btn-sm{
+            --bs-btn-padding-y: 0.25rem;
+        }
+    }
+
+    .btn-sq{
+        width: 2.5rem;
+    }
+}
+
+@include desktop(){
+    .hide-dektop{
+        display: none !important;
+    }
+}

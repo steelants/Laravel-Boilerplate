@@ -1,0 +1,29 @@
+.layout-sidebar{
+    min-width: 260px;
+    max-width: 360px;
+    width: 35%;
+    flex-basis: 35%;
+    background: var(--bs-tertiary-bg);
+    padding: .75rem;
+    border-left: 1px solid var(--bs-secondary-bg);
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    @include mobile(){
+        display: none;
+        z-index: 99;
+        height: 100%;
+        max-height: calc(100vh - 60px);
+        border: none;
+
+        position: fixed;
+        top: calc(60px + 3rem);
+        width: 100%;
+        max-width: 100%;
+
+        &.open{
+            display: flex;
+        }
+    }
+}

@@ -26,12 +26,17 @@
         }
     }
 }">
-@dump($options);
-    <button class="btn border" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" wire:ignore.self>
-        <span>{{ $label }}</span>
-        <span class="badge text-bg-light" x-text="selectedOption"></span>
-        <i class="fa fa-chevron-down ms-2"></i>
-    </button>
+    <div data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="{{ $autoclose }}" wire:ignore.self>
+        @if(isset($trigger) && !$trigger->isEmpty())
+            {{ $trigger }}
+        @else
+            <button class="btn border" type="button">
+                <span>{{ $label }}</span>
+                <span class="badge text-bg-light" x-text="selectedOption"></span>
+                <i class="fa fa-chevron-down ms-2"></i>
+            </button>
+        @endif
+    </div>
     <div class="dropdown-menu" wire:ignore.self>
         <input class="dropdown-input" type="text" placeholder="Search..." x-model="search">
         <template x-for="option in filteredOptions" :key="option.id">

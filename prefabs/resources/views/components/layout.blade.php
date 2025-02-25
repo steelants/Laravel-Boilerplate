@@ -35,39 +35,7 @@
 
 <body>
     <div id="app">
-        @auth
-            @include('partials.navbar')
-        @endauth
-
-        <div class="layout">
-            <x-navigation />
-
-            @if (isset($subNavigation) && $subNavigation->isNotEmpty())
-                <div class="layout-subnav" id="layout-subnav">
-                    <div class="sidebar">
-                        <div class="sidebar-content">{{ $subNavigation }}</div>
-                    </div>
-                </div>
-            @endif
-
-            @include('partials.navigation-mobile')
-
-            @if($withoutWrapper ?? false)
-                {{ $slot }}
-            @else
-                <div class="layout-content">
-                    <div class="content">
-                        {{ $slot }}
-                    </div>
-                </div>
-            @endif
-
-            @if (isset($sidebar) && $sidebar->isNotEmpty())
-                <div class="layout-sidebar" id="layout-sidebar">
-                    {{ $sidebar }}
-                </div>
-            @endif
-        </div>
+		{{ $slot }}
     </div>
 
     <x-alerts />

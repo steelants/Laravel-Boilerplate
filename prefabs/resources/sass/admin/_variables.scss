@@ -1,13 +1,30 @@
+@use "sass:map";
+
+@mixin desktop(){
+    @include media-breakpoint-up(lg) {
+        @content;
+    }
+}
+
+@mixin mobile(){
+    @include media-breakpoint-down(md) {
+        @content;
+    }
+}
+
 $enable-container-classes: false;
 $container-max-widths: (
   xs: 360px,
-  sm: 540px,
+  sm: 640px,
   md: 720px,
   lg: 960px,
   xl: 1140px,
   xxl: 1320px
 );
 
+$grid-gutter-width: 30px;
+
+$gray-050: $tw-neutral-050;
 $gray-100: $tw-neutral-100;
 $gray-200: $tw-neutral-200;
 $gray-300: $tw-neutral-300;
@@ -29,17 +46,36 @@ $green:   $tw-green-500 !default;
 $teal:    $tw-teal-500 !default;
 $cyan:    $tw-cyan-500 !default;
 
+$primary:       $blue;
+$secondary:     $gray-600;
+$success:       $green;
+$info:          $cyan;
+$warning:       $yellow;
+$danger:        $red;
+$light:         $gray-100;
+$dark:          $gray-900;
+
+$primary-text-emphasis:   shade-color($primary, 40%);
+$secondary-text-emphasis: shade-color($secondary, 40%);
+$success-text-emphasis:   shade-color($success, 40%);
+$info-text-emphasis:      shade-color($info, 40%);
+$warning-text-emphasis:   shade-color($warning, 40%);
+$danger-text-emphasis:    shade-color($danger, 40%);
+$light-text-emphasis:     $gray-700;
+$dark-text-emphasis:      $gray-700;
+
 // Body
 $body-color: $gray-900;
 $body-bg: #fff;
 
 $primary: $tw-indigo-600;
 // $body-secondary-bg: #ededed;
-$body-secondary-bg: #f0f0f0;
-$body-tertiary-bg: $tw-neutral-050;
+$body-secondary-bg: $tw-neutral-150;
+$body-tertiary-bg: $gray-050;
 
 // Typography
 $font-family-sans-serif: 'Inter', sans-serif;
+$font-size-base: .875rem;
 $h1-font-size: 2.25rem;
 $h2-font-size: 1.875rem;
 $h3-font-size: 1.5rem;
@@ -47,28 +83,51 @@ $h4-font-size: 1.25rem;
 $h5-font-size: 1.125rem;
 
 $card-cap-bg: #f9fbfc;
-
-$border-radius: 6px;
 $card-spacer-y: 1rem;
 
-$headings-font-weight: 700;
+$headings-font-weight: 600;
 
 $text-muted: #a7abc3;
 
+// $border-color: $gray-200;
 $border-color-translucent: rgba($gray-900, .075);
+$border-radius-sm: 4px;
+$border-radius: 6px;
+$border-radius-lg: 10px;
+$border-radius-xl: 12px;
+$border-radius-xxl: 16px;
 
 $box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 $box-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 $box-shadow-lg: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 
-// $btn-font-size: 0.875rem;
-$btn-font-weight: 500;
 $input-btn-padding-x: .75rem;
 $input-btn-padding-y: .375rem;
+
+// $btn-font-size: 0.875rem;
+$btn-line-height: calc(1.5rem - 2px);
+$btn-font-weight: 500;
+$btn-border-radius: 10px;
+$btn-border-radius-sm: 10px;
+
+$input-btn-padding-y-sm:      .25rem !default;
+$input-btn-padding-x-sm:      .625rem !default;
+$input-btn-font-size-sm:      .875rem;
+
+$input-btn-padding-y-lg:      .5rem !default;
+$input-btn-padding-x-lg:      1rem !default;
+$input-btn-font-size-lg:      1rem;
+
+:root{
+    --bs-btn-active-border-color: transparent;
+    --bs-btn-hover-bg: #{rgba($gray-300, .2)};
+    --bs-btn-active-bg: #{rgba($gray-300, .3)};
+}
 
 $navbar-brand-font-size: 1rem;
 
 $nav-link-font-weight: 500;
+$nav-tabs-link-color: var(--bs-body-color);
 $nav-tabs-link-active-color: $primary;
 $nav-tabs-link-active-border-color: $primary;
 $nav-tabs-link-hover-border-color: var(--bs-border-color);
@@ -76,8 +135,12 @@ $nav-tabs-border-width: 2px;
 $nav-tabs-border-radius: 0;
 $nav-tabs-link-active-bg: transparent;
 $nav-tabs-border-color: var(--bs-secondary-bg);
+$nav-pills-border-radius: $border-radius;
+$nav-pills-link-color: var(--bs-body-color);
 $nav-pills-link-active-color: var(--bs-body-color);
-$nav-pills-link-active-bg: var(--bs-body-bg);
+$nav-pills-link-active-bg: var(--bs-secondary-bg);
+$nav-link-padding-y: .5rem;
+$nav-link-padding-x: .5rem;
 
 $label-margin-bottom: .25rem;
 
@@ -86,9 +149,12 @@ $alert-padding-x: 1rem;
 $paragraph-margin-bottom: .5rem;
 
 $badge-font-weight: 500;
+$badge-border-radius: 6px;
 
 $breadcrumb-divider: '›';
+$breadcrumb-margin-bottom: 0;
 
+$dropdown-min-width: 12rem;
 $dropdown-padding-x: .5rem;
 $dropdown-padding-y: .5rem;
 $dropdown-item-padding-y: .4rem;
@@ -102,6 +168,9 @@ $dropdown-link-active-color: var(--bs-body-color);
 $dropdown-border-color: rgba($gray-500, .075);
 $dropdown-divider-bg: rgba($gray-500, .1);
 
+$form-label-font-weight: 500;
+$form-label-margin-bottom: .25rem;
+
 $pagination-color: var(--bs-body-color);
 $pagination-border-width: 0;
 $pagination-bg: transparent;
@@ -111,3 +180,20 @@ $pagination-hover-color: var(--bs-body-color);
 $pagination-focus-color: var(--bs-body-color);
 $pagination-disabled-color: var(--bs-tertiary-color);
 $pagination-disabled-bg: transparent;
+
+$list-group-item-padding-y: .5rem;
+$list-group-item-padding-x: .5rem;
+$list-group-border-color: var(--bs-secondary-bg);
+$list-group-bg: transparent;
+
+$enable-negative-margins: true;
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+);
+
+@for $i from 1 through 20 {
+    $spacers : map.merge($spacers, (
+        $i : 0.25rem * $i
+    ));
+}

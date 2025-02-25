@@ -6,23 +6,19 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Searchbox extends Component
+class Badge extends Component
 {
     /**
      * Create a new component instance.
      */
     public function __construct(
-        public $options,
-        public $property,
-        public $label = '',
-        public $autoclose = 'outside',
+        public $size = 'md',
+        public $color = '',
+        public $variant = '',
+        public $icon = '',
+        public $border = false,
     ) {
-        foreach ($options as $id => $value) {
-            $this->options[] = [
-                'id'   => $id,
-                'name' => $value,
-            ];
-        }
+        //
     }
 
     /**
@@ -30,6 +26,6 @@ class Searchbox extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.searchbox');
+        return view('components.badge');
     }
 }

@@ -1,0 +1,9 @@
+@each $i, $value in $spacers{
+	.w-#{$i}{
+		width: $value;
+	}
+
+	.h-#{$i}{
+		height: $value;
+	}
+}
