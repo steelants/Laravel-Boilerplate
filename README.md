@@ -10,6 +10,7 @@
 - User Management
 - Job Management
 - Cache Management
+- Backup Manager
 - Log Viewer
 - Audit
 
@@ -28,14 +29,6 @@ php artisan install:boilerplate
 ```
 
 ## Development
-
-### Creation of symlinks for dev environment:
-
-```bash
-ln -s ./package/boilerplate/stubs/resources/ resources
-```
-
-### Windows steps to develop:
 
 1. clone repository to laravel folder /packages/ if not exist just create it
 2. use command
