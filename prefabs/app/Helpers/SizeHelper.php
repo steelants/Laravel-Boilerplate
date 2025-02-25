@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 class SizeHelper
 {
-  public function returnBytes($size_str)
+    public function returnBytes($size_str)
     {
         switch (substr($size_str, -1)) {
             case 'M':
@@ -20,4 +20,4 @@ class SizeHelper
                 return $size_str;
         }
     }
-  }
+}

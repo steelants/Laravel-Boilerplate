@@ -6,7 +6,6 @@ use Artisan;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 class InstallCommand extends Command
 {
@@ -176,8 +175,9 @@ class InstallCommand extends Command
         return file_put_contents($filePath, $ModifiedContent);
     }
 
-    protected static function boilerplateString(string $text, string $name){
-        return sprintf("/* BOILERPLATE $name */\n// Remove surrounding coments if customization code below is needed !!!\n%s\n/* BOILERPLATE $name */",$text);
+    protected static function boilerplateString(string $text, string $name)
+    {
+        return sprintf("/* BOILERPLATE $name */\n// Remove surrounding coments if customization code below is needed !!!\n%s\n/* BOILERPLATE $name */", $text);
     }
 
     protected static function appendFile(string $filepath, string $stub, string $searchWord)
