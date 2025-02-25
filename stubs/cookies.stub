@@ -1,0 +1,5 @@
+		$middleware->encryptCookies(except: [
+			'theme',
+			'layout-nav',
+			'system-nav',
+		]);

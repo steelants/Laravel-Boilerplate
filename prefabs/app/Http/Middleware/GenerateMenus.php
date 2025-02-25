@@ -79,7 +79,7 @@ class GenerateMenus
 
             if (file_exists(base_path() . '/routes/api.php')) {
                 $systemRoutes['boilerplate::ui.api'] = [
-                    'fas fa-file-archive',
+                    'fas fa-rocket',
                     'system.api.index',
                 ];
             }

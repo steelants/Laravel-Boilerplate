@@ -206,9 +206,9 @@ class InstallCommand extends Command
 
     protected static function appendExceptions()
     {
+		self::appendFile("bootstrap/app.php", 'cookies.stub', '->withMiddleware(function (Middleware $middleware) {');
         self::appendFile("bootstrap/app.php", 'exceptions.stub', '->withExceptions(function (Exceptions $exceptions) {');
         self::appendFile("bootstrap/app.php", 'exceptionUses.stub', 'use Illuminate\Foundation\Application;');
-
         //remove old version exceptions
         File::deleteDirectory("../app/Exceptions");
     }

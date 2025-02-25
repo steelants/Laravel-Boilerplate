@@ -63,11 +63,11 @@
             @if($systemMenuItems)
                 {{-- MAIN NAVIGATION ALL --}}
                 <div>
-                    <div class="text-body-tertiary nav-collapsed-hide d-flex align-items-center small nav-title-toggle py-2 {{getToggleState('nav-system') == 'open' ? '' : 'collapsed'}}" data-bs-toggle="collapse" data-bs-target="#nav-system">
+                    <div class="text-body-tertiary nav-collapsed-hide d-flex align-items-center small nav-title-toggle py-2 {{/*getToggleState('nav-system') == 'open' ? '' : 'collapsed'*/ ''}}" data-bs-toggle="collapse" data-bs-target="#nav-system" onclick="toggleSystemNav()">
                         <i class="fas fa-angle-down collapse-icon"></i>
                         <span class="fw-medium">{{ __('boilerplate::ui.system') }}</span>
                     </div>
-                    <div class="remember collapse {{getToggleState('nav-system') == 'open' ? 'show' : ''}}" id="nav-system">
+                    <div class="remember collapse {{/*getToggleState('nav-system') == 'open' ? 'show' : ''*/ 'show'}}" id="nav-system">
                         <ul class="app-nav nav flex-column">
                             @foreach ($systemMenuItems as $item)
                                 <li class="nav-item {{ $item->isActive() ? 'is-active' : '' }}">
