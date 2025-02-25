@@ -4,6 +4,8 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\File;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class LogController extends BaseController
 {
@@ -75,10 +77,26 @@ class LogController extends BaseController
 
     public function download($filename)
     {
+        #Gate::authorize('is-admin');
+
         $path = storage_path('logs/' . $filename);
 
         if (File::exists($path)) {
             return response()->download($path);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function delete($filename)
+    {
+        #Gate::authorize('is-admin');
+
+        $path = storage_path('logs/' . $filename);
+
+        if (File::exists($path)) {
+            File::delete($path);
+            return redirect()->route('system.log.index');
         } else {
             abort(404);
         }
@@ -105,8 +123,10 @@ class LogController extends BaseController
         }
     }
 
-    public function clear()
+    public function clear(Request $request)
     {
+        #Gate::authorize('is-admin');
+
         $path = storage_path('logs');
         $files = glob($path.'/lar*.log');
 
