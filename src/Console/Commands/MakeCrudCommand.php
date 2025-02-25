@@ -3,9 +3,6 @@
 namespace SteelAnts\LaravelBoilerplate\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\File;
-use App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Artisan;
 
@@ -56,7 +53,7 @@ class MakeCrudCommand extends Command
             Artisan::call('make:livewire ' . $model . '.Form --force');
 
             $content = $this->getFormClassSkeleton([
-                'model' => $model,
+                'model'   => $model,
                 'headers' => $fillable,
             ]);
             file_put_contents($testFilePath, $content);
@@ -64,14 +61,12 @@ class MakeCrudCommand extends Command
             $bladePathFile = explode("/app", (str_replace('/' . $fileName, "", $testFilePath)))[0];
 
             $bladePathFile = $bladePathFile . "/resources/views/livewire/" . Str::snake($model, "-") . "/form.blade.php";
-            $modaltcontent = $this->getFormBladeSkeleton([
-                'model' => $model,
-            ]);
+            $modaltcontent = $this->getFormBladeSkeleton(['model' => $model]);
 
             file_put_contents($bladePathFile, $modaltcontent);
         } elseif ($fileName == "DataTable.php") {
             $content = $this->getDataTableClassSkeleton([
-                'model' => $model,
+                'model'   => $model,
                 'headers' => $fillable,
             ]);
             file_put_contents($testFilePath, $content);
@@ -88,7 +83,8 @@ class MakeCrudCommand extends Command
         foreach ($arguments['headers'] as $key => $header) {
             $headerProperties .= "\t\t\t'" . $header . "' => '" . $header . "',\n";
         }
-        $arguments['headerProperties'] =   rtrim(ltrim($headerProperties, "\t"),"\n");;
+        $arguments['headerProperties'] = rtrim(ltrim($headerProperties, "\t"), "\n");
+        ;
         unset($arguments['headers']);
 
         $stubFilePath = ('/stubs/DataTable.stub');
@@ -120,9 +116,9 @@ class MakeCrudCommand extends Command
             $loadProperties .= "\t\t\t\$this->" . $header . " = $" . $arguments['model_camel_case'] . "->".$header.";\n";
         }
 
-        $arguments['properties'] = rtrim(ltrim($propertiesString, "\t"),"\n");
-        $arguments['validationRules'] = rtrim(ltrim($validationRules, "\t"),"\n");
-        $arguments['loadProperties'] = rtrim(ltrim($loadProperties, "\t"),"\n");
+        $arguments['properties'] = rtrim(ltrim($propertiesString, "\t"), "\n");
+        $arguments['validationRules'] = rtrim(ltrim($validationRules, "\t"), "\n");
+        $arguments['loadProperties'] = rtrim(ltrim($loadProperties, "\t"), "\n");
 
         unset($arguments['headers']);
 

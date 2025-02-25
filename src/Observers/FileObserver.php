@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Observers;
+namespace SteelAnts\LaravelBoilerplate\Observers;
 
 use App\Models\File;
 use Illuminate\Support\Facades\Storage;

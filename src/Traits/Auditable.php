@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Traits;
+namespace SteelAnts\LaravelBoilerplate\Traits;
 
 use App\Models\Activity;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait Auditable
 {
-    public function activities() : MorphMany
+    public function activities(): MorphMany
     {
         return $this->morphMany(Activity::class, 'actor');
     }

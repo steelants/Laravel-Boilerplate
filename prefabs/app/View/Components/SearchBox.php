@@ -18,7 +18,10 @@ class SearchBox extends Component
         array $options,
     ) {
         foreach ($options as $id => $value) {
-            $this->options[] = ['id' => $id, 'name' => $value];
+            $this->options[] = [
+                'id'   => $id,
+                'name' => $value,
+            ];
         }
     }
 

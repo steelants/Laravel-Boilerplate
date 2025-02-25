@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace SteelAnts\LaravelBoilerplate\Traits;
 
 use App\Models\File;
 use Illuminate\Http\UploadedFile;
@@ -17,18 +17,19 @@ trait Fileable
         return $this->morphMany(File::class, 'fileable');
     }
 
-    public function uploadFile(UploadedFile|TemporaryUploadedFile $file, string $rootPath) : string {
+    public function uploadFile(UploadedFile|TemporaryUploadedFile $file, string $rootPath): string
+    {
         $filename = Str::uuid()->toString() . "." . $file->getClientOriginalExtension();
         $file_path = $file->storeAs($rootPath, $filename);
 
         $this->files()->updateOrCreate(
             [
                 'filename' => $filename,
-                'path' => $file_path,
+                'path'     => $file_path,
             ],
             [
                 'original_name' => $file->getClientOriginalName(),
-                'size' => $file->getSize(),
+                'size'          => $file->getSize(),
             ],
         );
 

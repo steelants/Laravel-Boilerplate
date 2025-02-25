@@ -1,15 +1,11 @@
 <?php
 
-namespace App\Jobs;
+namespace SteelAnts\LaravelBoilerplate\Jobs;
 
-use Directory;
-use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -113,7 +109,7 @@ class Backup implements ShouldQueue
             exec($command, $output);
             Log::info('Zipping hash');
 
-            $charSet = preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $output[count($output)-1]);
+            $charSet = preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $output[count($output) - 1]);
             $charSet = rtrim($charSet);
 
             $fileMD5Hash = explode(" ", $charSet)[0];

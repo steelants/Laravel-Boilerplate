@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 
 class LogController extends BaseController
@@ -16,7 +15,7 @@ class LogController extends BaseController
 
         foreach (File::allFiles($path) as $file) {
             $items[] = [
-                'fileName' => $file->getFilename(),
+                'fileName'          => $file->getFilename(),
                 'humanReadableSize' => $this->getHumanReadableSize($file->getSize()),
             ];
         }
@@ -24,9 +23,9 @@ class LogController extends BaseController
         $items = array_reverse($items);
 
         $todayStats = [
-            'ERROR' => 0,
+            'ERROR'   => 0,
             'WARNING' => 0,
-            'INFO' => 0,
+            'INFO'    => 0,
         ];
 
         $todayLog = storage_path('logs/laravel.log');
@@ -38,9 +37,9 @@ class LogController extends BaseController
         if (File::exists($todayLog)) {
             if (File::size($todayLog) > 1000 * 1000 * 1000 * 1000) {
                 $todayStats = [
-                    'ERROR' => '??',
+                    'ERROR'   => '??',
                     'WARNING' => '??',
-                    'INFO' => '??',
+                    'INFO'    => '??',
                 ];
             } else {
                 $content = File::get($todayLog);
@@ -51,7 +50,7 @@ class LogController extends BaseController
         }
 
         return view('system.log.index', [
-            'items' => $items,
+            'items'      => $items,
             'todayStats' => $todayStats,
         ]);
     }
@@ -66,7 +65,7 @@ class LogController extends BaseController
             }
 
             return view('system.log.detail', [
-                'content' => File::get($path),
+                'content'  => File::get($path),
                 'filename' => $filename,
             ]);
         } else {
@@ -74,7 +73,8 @@ class LogController extends BaseController
         }
     }
 
-    public function download($filename){
+    public function download($filename)
+    {
         $path = storage_path('logs/' . $filename);
 
         if (File::exists($path)) {
@@ -88,7 +88,17 @@ class LogController extends BaseController
     {
         if ($bytes > 0) {
             $base = floor(log($bytes) / log(1024));
-            $units = array("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"); //units of measurement
+            $units = array(
+                "B",
+                "KB",
+                "MB",
+                "GB",
+                "TB",
+                "PB",
+                "EB",
+                "ZB",
+                "YB",
+            ); //units of measurement
             return number_format(($bytes / pow(1024, floor($base))), 3) . " $units[$base]";
         } else {
             return "0 bytes";

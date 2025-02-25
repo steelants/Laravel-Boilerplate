@@ -24,8 +24,8 @@ class CacheController extends BaseController
             $redisConnection = $storage->connection();
             foreach ($redisConnection->command('keys', ['*']) as $full_key) {
                 $cache_items[] = [
-                    'key' => str_replace($storage->getPrefix(), "", $full_key), 
-                    'expire_at' => null
+                    'key'       => str_replace($storage->getPrefix(), "", $full_key),
+                    'expire_at' => null,
                 ];
             }
         } elseif ($cache_driver == 'file') {
@@ -33,16 +33,16 @@ class CacheController extends BaseController
             $items = File::allFiles($cachePath);
             foreach ($items as $file2) {
                 $cache_items[] = [
-                    'key' => $file2->getFilename(), 
-                    'expire_at' => Carbon::parse(substr($file2->getContents(), 0,10))->setTimezone(config('app.timezone'))
+                    'key'       => $file2->getFilename(),
+                    'expire_at' => Carbon::parse(substr($file2->getContents(), 0, 10))->setTimezone(config('app.timezone')),
                 ];
             }
         } elseif ($cache_driver == 'database') {
             $items = DB::select("SELECT * FROM ".config('cache.stores.database.table').";");
             foreach ($items as $item) {
                 $cache_items[] = [
-                    'key' => $item->key, 
-                    'expire_at' => Carbon::parse($item->expiration)->setTimezone(config('app.timezone'))
+                    'key'       => $item->key,
+                    'expire_at' => Carbon::parse($item->expiration)->setTimezone(config('app.timezone')),
                 ];
             }
         }
@@ -50,7 +50,7 @@ class CacheController extends BaseController
         //TODO: ADD SUPPORT FOR MEM CASH AND DB
 
         return view('system.cache.index', [
-            'cache_items' => $cache_items,
+            'cache_items'  => $cache_items,
             'cache_driver' => $cache_driver,
 
         ]);

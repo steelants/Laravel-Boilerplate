@@ -4,7 +4,6 @@ namespace App\Http\Controllers\System;
 
 use App\Helpers\AbstractHelper;
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 class JobsController extends BaseController
@@ -19,7 +18,7 @@ class JobsController extends BaseController
 
         return view('system.jobs.index', [
             'failed_jobs' => $failed_jobs,
-            'jobs' => $jobs,
+            'jobs'        => $jobs,
             'job_actions' => $job_actions,
         ]);
     }

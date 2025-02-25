@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'class_namespace' => 'App\\Livewire',
+    'class_namespace'       => 'App\\Livewire',
 
     /*
     |--------------------------------------------------------------------------
@@ -27,7 +27,7 @@ return [
     |
     */
 
-    'view_path' => resource_path('views/livewire'),
+    'view_path'             => resource_path('views/livewire'),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'layout' => 'components.layout-app',
+    'layout'                => 'components.layout-app',
 
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'asset_url' =>  env('ASSET_URL', null),
+    'asset_url'             => env('ASSET_URL', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ return [
     |
     */
 
-    'app_url' =>  env('ASSET_URL', null),
+    'app_url'               => env('ASSET_URL', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -81,7 +81,7 @@ return [
     |
     */
 
-    'middleware_group' => 'web',
+    'middleware_group'      => 'web',
 
     /*
     |--------------------------------------------------------------------------
@@ -96,14 +96,27 @@ return [
     */
 
     'temporary_file_upload' => [
-        'disk' => null,        // Example: 'local', 's3'              Default: 'default'
-        'rules' => null,       // Example: ['file', 'mimes:png,jpg']  Default: ['required', 'file', 'max:12288'] (12MB)
-        'directory' => null,   // Example: 'tmp'                      Default  'livewire-tmp'
-        'middleware' => null,  // Example: 'throttle:5,1'             Default: 'throttle:60,1'
-        'preview_mimes' => [   // Supported file types for temporary pre-signed file URLs.
-            'png', 'gif', 'bmp', 'svg', 'wav', 'mp4',
-            'mov', 'avi', 'wmv', 'mp3', 'm4a',
-            'jpg', 'jpeg', 'mpga', 'webp', 'wma',
+        'disk'            => null,        // Example: 'local', 's3'              Default: 'default'
+        'rules'           => null,       // Example: ['file', 'mimes:png,jpg']  Default: ['required', 'file', 'max:12288'] (12MB)
+        'directory'       => null,   // Example: 'tmp'                      Default  'livewire-tmp'
+        'middleware'      => null,  // Example: 'throttle:5,1'             Default: 'throttle:60,1'
+        'preview_mimes'   => [   // Supported file types for temporary pre-signed file URLs.
+            'png',
+            'gif',
+            'bmp',
+            'svg',
+            'wav',
+            'mp4',
+            'mov',
+            'avi',
+            'wmv',
+            'mp3',
+            'm4a',
+            'jpg',
+            'jpeg',
+            'mpga',
+            'webp',
+            'wma',
         ],
         'max_upload_time' => 5, // Max duration (in minutes) before an upload gets invalidated.
     ],
@@ -122,7 +135,7 @@ return [
     |
     */
 
-    'manifest_path' => null,
+    'manifest_path'         => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -138,7 +151,7 @@ return [
     |
     */
 
-    'back_button_cache' => false,
+    'back_button_cache'     => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -153,6 +166,6 @@ return [
     |
     */
 
-    'render_on_redirect' => false,
+    'render_on_redirect'    => false,
 
 ];

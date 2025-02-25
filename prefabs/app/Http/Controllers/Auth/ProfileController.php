@@ -16,7 +16,7 @@ class ProfileController extends BaseController
     public function index(Request $request)
     {
         return view('auth.profile', [
-            'user' => $request->user(),
+            'user'     => $request->user(),
             'sessions' => [],
         ]);
     }
@@ -24,8 +24,7 @@ class ProfileController extends BaseController
     public function update(UpdateUserRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        if (!Hash::check($validated['password'], auth()->user()->password))
-        {
+        if (!Hash::check($validated['password'], auth()->user()->password)) {
             return redirect()->route('profile.index')->with('error', __('boilerplate::ui.incorect.old.password'));
         }
 
@@ -44,16 +43,16 @@ class ProfileController extends BaseController
     public function api(Request $request)
     {
         return view('auth.profile_api', [
-            'user' => $request->user(),
+            'user'   => $request->user(),
             'tokens' => $request->user()->tokens->all(),
         ]);
     }
 
-     public function createApiToken(CreateApiTokenRequest $request): RedirectResponse
+    public function createApiToken(CreateApiTokenRequest $request): RedirectResponse
     {
         $validated = $request->validated();
         $tokenCreationParameters = [
-            "name" => $validated['token_name'],
+            "name"      => $validated['token_name'],
             "abilities" => ['*'],
         ];
 
@@ -63,8 +62,8 @@ class ProfileController extends BaseController
 
         $newToken = $request->user()->createToken(...$tokenCreationParameters)->plainTextToken;
         return redirect()->route('profile.api')->with([
-            'success'=>  __('boilerplate::ui.created'),
-            'secret'=> $newToken,
+            'success' => __('boilerplate::ui.created'),
+            'secret'  => $newToken,
         ]);
     }
 

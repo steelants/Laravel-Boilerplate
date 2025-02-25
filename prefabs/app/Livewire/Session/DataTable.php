@@ -2,16 +2,14 @@
 
 namespace App\Livewire\Session;
 
-use App\Models\Session;
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use SteelAnts\DataTable\Traits\UseDatabase;
 
 class DataTable extends DataTableComponent
 {
     use UseDatabase;
-    
+
     public bool $paginated = false;
     public bool $sortable = false;
 
@@ -23,12 +21,12 @@ class DataTable extends DataTableComponent
     public function row($row): array
     {
         return [
-            'id' => $row->id,
-            'ip_address' => $row->ip_address,
-            'last_activity' => $row->last_activity->format('d. m. Y H:m'),
+            'id'              => $row->id,
+            'ip_address'      => $row->ip_address,
+            'last_activity'   => $row->last_activity->format('d. m. Y H:m'),
             'browser_os_name' => $row->browser_o_s_name,
-            'browser_name' => $row->browser_name,
-            'last_activity' => $row->last_activity->format('d. m. Y H:m'),
+            'browser_name'    => $row->browser_name,
+            'last_activity'   => $row->last_activity->format('d. m. Y H:m'),
 
         ];
     }
@@ -36,10 +34,10 @@ class DataTable extends DataTableComponent
     public function headers(): array
     {
         return [
-            'ip_address' => "IP Address",
+            'ip_address'      => "IP Address",
             'browser_os_name' => "OS Name",
-            'browser_name' => "Browser",
-            'last_activity' => "Last Activity"
+            'browser_name'    => "Browser",
+            'last_activity'   => "Last Activity",
         ];
     }
 
@@ -47,13 +45,13 @@ class DataTable extends DataTableComponent
     {
         return [
             [
-                'type' => "livewire",
-                'action' => "logout",
-                'parameters' => $item['id'],
-                'text' => "Logout",
+                'type'        => "livewire",
+                'action'      => "logout",
+                'parameters'  => $item['id'],
+                'text'        => "Logout",
                 'actionClass' => 'text-danger',
-                'iconClass' => 'fas fa-trash',
-            ]
+                'iconClass'   => 'fas fa-trash',
+            ],
         ];
     }
 

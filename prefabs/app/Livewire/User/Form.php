@@ -2,22 +2,21 @@
 
 namespace App\Livewire\User;
 
-use App\Http\Requests\System\CreateUserRequest;
 use Livewire\Component;
 use App\Models\User;
 
 class Form extends Component
 {
-    public string $name ='';
-    public string $email ='';
-    public string $password ='';
-    public string $password_confirmation ='';
+    public string $name = '';
+    public string $email = '';
+    public string $password = '';
+    public string $password_confirmation = '';
 
     protected function rules()
     {
         return [
-            'name' => 'required|max:255|unique:users,name',
-            'email' => 'required|string|email|max:255|unique:users,email',
+            'name'     => 'required|max:255|unique:users,name',
+            'email'    => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|max:255|confirmed',
         ];
     }

@@ -1,20 +1,15 @@
 <?php
 
-namespace SteelAnts\LaravelBoilerplate\Controllers\Http;
+namespace SteelAnts\LaravelBoilerplate\Traits;
 
-use SteelAnts\LaravelBoilerplate\Traits\CreateReadUpdateDelete;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use ErrorException;
-use Illuminate\Http\Request;
 
-class CrudController extends Controller
+trait CreateReadUpdateDelete
 {
-    use CreateReadUpdateDelete;
-
     public string $viewName = 'boilerplate::crud';
 
-    public function model(Request $request)
+    public function index()
     {
         if (property_exists($this, 'model')) {
             $model = $this->model;
@@ -25,7 +20,6 @@ class CrudController extends Controller
             }
             $model = $modelName::class;
         }
-
 
         return view($this->viewName, [
             'title'           => 'boilerplate::ui.' . $model . 's',

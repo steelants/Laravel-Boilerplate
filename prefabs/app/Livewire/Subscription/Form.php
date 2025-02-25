@@ -18,7 +18,7 @@ class Form extends Component
     protected function rules()
     {
         return [
-            'tier' => 'required|integer|min:1',
+            'tier'     => 'required|integer|min:1',
             'valid_to' => 'required|date',
         ];
     }

@@ -22,8 +22,15 @@ class CreateApiTokenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'token_name' => ['required', 'string'],
-            'expires_at' => ['nullable', 'date', 'after_or_equal:' . date('Y-m-d')],
+            'token_name' => [
+                'required',
+                'string',
+            ],
+            'expires_at' => [
+                'nullable',
+                'date',
+                'after_or_equal:' . date('Y-m-d'),
+            ],
         ];
     }
 }

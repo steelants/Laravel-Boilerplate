@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\System;
 
-use App\Models\User;
-use SteelAnts\LaravelBoilerplate\Controllers\Http\CrudController;
+use App\Http\Controllers\BaseController;
+use SteelAnts\LaravelBoilerplate\Traits\CreateReadUpdateDelete;
 
-class UserController extends CrudController
+class UserController extends BaseController
 {
+    use CreateReadUpdateDelete;
     public string $model = "user";
 }

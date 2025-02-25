@@ -10,7 +10,7 @@ use SteelAnts\DataTable\Traits\UseDatabase;
 class DataTable extends DataTableComponent
 {
     use UseDatabase;
-    
+
     public bool $paginated = true;
     public int $itemsPerPage = 100;
 
@@ -22,15 +22,15 @@ class DataTable extends DataTableComponent
     public function row($row): array
     {
         $affectedJson = json_encode([
-            'id'=> $row->affected->id ?? '',
-            'name'=> ($row->affected->title ??($row->affected->name ?? ($row->affected->description ?? ''))),
+            'id'   => $row->affected->id ?? '',
+            'name' => ($row->affected->title ?? ($row->affected->name ?? ($row->affected->description ?? ''))),
         ], JSON_UNESCAPED_UNICODE);
 
         return [
-            'created_at' => $row->created_at,
-            'ip_address' => $row->ip,
-            'note' => $row->lang_text ,
-            'actor_id' => ($row->actor->username ?? ($row->actor->name ?? __('System'))),
+            'created_at'  => $row->created_at,
+            'ip_address'  => $row->ip,
+            'note'        => $row->lang_text,
+            'actor_id'    => ($row->actor->username ?? ($row->actor->name ?? __('System'))),
             'affected_id' => $affectedJson,
         ];
     }
@@ -38,11 +38,11 @@ class DataTable extends DataTableComponent
     public function headers(): array
     {
         return [
-            'created_at' => "Created",
-            'ip_address' => "IP Address",
-            'note' => "Note",
-            'actor_id' => "Author",
-            'affected_id' => "Model"
+            'created_at'  => "Created",
+            'ip_address'  => "IP Address",
+            'note'        => "Note",
+            'actor_id'    => "Author",
+            'affected_id' => "Model",
         ];
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
 use App\Jobs\Backup;
-use Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -58,7 +57,7 @@ class BackupController extends BaseController
 
     public function delete($backup_date)
     {
-        foreach ([$backup_date . '_database.zip',$backup_date . '_storage.zip'] as $file) {
+        foreach ([$backup_date . '_database.zip', $backup_date . '_storage.zip'] as $file) {
             $path = storage_path('backups/' . $file);
             if (!empty($path)) {
                 File::delete($path);

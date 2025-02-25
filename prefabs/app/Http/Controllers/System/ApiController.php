@@ -6,12 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use ReflectionClass;
-use ReflectionFunction;
 use ReflectionMethod;
 
 class ApiController extends Controller
 {
-
     /**
      * Handle the incoming request.
      *
@@ -24,28 +22,30 @@ class ApiController extends Controller
         $routesCollection = Route::getRoutes();
 
         foreach ($routesCollection as $route) {
-            if (!str_starts_with($route->uri(), "api"))
+            if (!str_starts_with($route->uri(), "api")) {
                 continue;
+            }
 
             $reflectionMethod = null;
-            if (str_contains($route->getActionName(), "@")){
-                [$class, $method] = explode("@", $route->getActionName());
+            if (str_contains($route->getActionName(), "@")) {
+                [
+                    $class,
+                    $method,
+                ] = explode("@", $route->getActionName());
                 $reflectionClass = new ReflectionClass($class);
                 $reflectionMethod = $reflectionClass->getMethod($method);
             }
 
             $routes[] = [
-                "Method" => $route->methods()[0],
-                "Uri" => $route->uri(),
+                "Method"      => $route->methods()[0],
+                "Uri"         => $route->uri(),
                 "Description" => ($reflectionMethod != null ? $this->phpDocsDescription($reflectionMethod) : ""),
-                "Parameters" => ($reflectionMethod != null ? $this->phpDocsParameters($reflectionMethod) : []),
-                "Returns" => ($reflectionMethod != null ? ($reflectionMethod->getReturnType() ? $reflectionMethod->getReturnType()->getName() : "NULL") : "NULL" )
+                "Parameters"  => ($reflectionMethod != null ? $this->phpDocsParameters($reflectionMethod) : []),
+                "Returns"     => ($reflectionMethod != null ? ($reflectionMethod->getReturnType() ? $reflectionMethod->getReturnType()->getName() : "NULL") : "NULL" ),
             ];
         }
 
-        return view('system.api.index', [
-            'routes' => $routes,
-        ]);
+        return view('system.api.index', ['routes' => $routes]);
     }
 
     private function phpDocsParameters(ReflectionMethod $method): array
@@ -67,12 +67,17 @@ class ApiController extends Controller
 
         // Push each value in the corresponding @param array
         foreach ($lines as $line) {
-            [$null, $type, $name, $comment] = explode(' ', $line, 4);
+            [
+                $null,
+                $type,
+                $name,
+                $comment,
+            ] = explode(' ', $line, 4);
 
             $args[] = [
-                'type' => $type,
-                'name' => $name,
-                'comment' => $comment
+                'type'    => $type,
+                'name'    => $name,
+                'comment' => $comment,
             ];
         }
 
@@ -84,8 +89,8 @@ class ApiController extends Controller
         $doc = $method->getDocComment();
         $lines = [];
 
-        foreach (explode("\n", $doc) as $i =>$line) {
-            $trimedLine =trim(trim($line, " *"), "/");
+        foreach (explode("\n", $doc) as $i => $line) {
+            $trimedLine = trim(trim($line, " *"), "/");
 
             if (str_starts_with($trimedLine, "@")) {
                 break;

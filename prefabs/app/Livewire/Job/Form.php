@@ -3,7 +3,6 @@
 namespace App\Livewire\Job;
 
 use Livewire\Component;
-use App\Models\Job;
 use App\Types\PermissionType;
 use Illuminate\Http\Request;
 use ReflectionClass;
@@ -18,7 +17,7 @@ class Form extends Component
     protected function rules()
     {
         return [
-            'rule_class' => 'required',
+            'rule_class'     => 'required',
             'rules_values.*' => 'required',
         ];
     }
@@ -33,7 +32,10 @@ class Form extends Component
             $typeClass = $param->getType()?->getName();
             $reflBar = $reflection->getProperty($param->name);
 
-            $this->job_parameters[$param->name] = [$typeClass, ""];
+            $this->job_parameters[$param->name] = [
+                $typeClass,
+                "",
+            ];
 
             // $value = $reflBar->getValue($reflection->newInstanceWithoutConstructor());
             // if (!in_array($typeClass, ["string", "int", "bool"])) {
@@ -49,7 +51,7 @@ class Form extends Component
         $request->user()->hasPermission(PermissionType::ADMIN);
         $class = '\\App\\Jobs\\' . $job;
 
-		dispatch(new $class(...$this->job_parameters_value));
+        dispatch(new $class(...$this->job_parameters_value));
 
         $this->dispatch('snackbar', ['message' => ($job . ' ' . __('Job Scheduled')), 'type' => 'success', 'icon' => 'fas fa-check']);
         $this->dispatch('closeModal');

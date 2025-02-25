@@ -25,13 +25,15 @@ class AbstractHelper
         $out = [];
         $results = scandir($path);
         foreach ($results as $result) {
-            if ($result === '.' or $result === '..') continue;
+            if ($result === '.' or $result === '..') {
+                continue;
+            }
             $filename = $path . '/' . $result;
             if (is_dir($filename)) {
                 $out = array_merge($out, self::getClassNames($filename));
             } else {
-                $classFilePath = explode('/',$filename);
-                $out[] = substr($classFilePath[count($classFilePath)-1], 0, -4);
+                $classFilePath = explode('/', $filename);
+                $out[] = substr($classFilePath[count($classFilePath) - 1], 0, -4);
             }
         }
 

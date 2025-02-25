@@ -14,7 +14,5 @@ class Subscription extends Model
         'valid_to',
     ];
 
-    protected $casts = [
-        'valid_to' => 'datetime',
-    ];
+    protected $casts = ['valid_to' => 'datetime'];
 }

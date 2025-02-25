@@ -16,12 +16,8 @@ class SubscriptionTier
                 'limit_name' => 100,
                 // Add more limits if needed
             ],
-            self::TIER_2 => [
-                'limit_name' => 1000,
-            ],
-            self::TIER_3 => [
-                'limit_name' => 10000,
-            ],
+            self::TIER_2 => ['limit_name' => 1000],
+            self::TIER_3 => ['limit_name' => 10000],
         ];
     }
 

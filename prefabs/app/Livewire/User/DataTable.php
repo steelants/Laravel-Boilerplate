@@ -10,10 +10,8 @@ use SteelAnts\DataTable\Traits\UseDatabase;
 class DataTable extends DataTableComponent
 {
     use UseDatabase;
-    
-    public $listeners = [
-        'userAdded' => '$refresh'
-    ];
+
+    public $listeners = ['userAdded' => '$refresh'];
 
     public function query(): Builder
     {
@@ -23,8 +21,8 @@ class DataTable extends DataTableComponent
     public function headers(): array
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
+            'id'    => 'ID',
+            'name'  => 'Name',
             'email' => 'E-mail',
         ];
     }
@@ -37,13 +35,13 @@ class DataTable extends DataTableComponent
 
         return [
             [
-                'type' => "livewire",
-                'action' => "remove",
-                'parameters' => $item['id'],
-                'text' => "Remove",
+                'type'        => "livewire",
+                'action'      => "remove",
+                'parameters'  => $item['id'],
+                'text'        => "Remove",
                 'actionClass' => 'text-danger',
-                'iconClass' => 'fas fa-trash',
-            ]
+                'iconClass'   => 'fas fa-trash',
+            ],
         ];
     }
 

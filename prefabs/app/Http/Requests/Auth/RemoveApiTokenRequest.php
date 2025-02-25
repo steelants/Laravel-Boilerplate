@@ -22,7 +22,10 @@ class RemoveApiTokenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'token_id' => ['required', 'exists:personal_access_tokens,id'],
+            'token_id' => [
+                'required',
+                'exists:personal_access_tokens,id',
+            ],
         ];
     }
 }

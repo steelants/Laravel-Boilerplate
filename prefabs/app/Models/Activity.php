@@ -4,15 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Observers\ActivityObserver;
+use SteelAnts\LaravelBoilerplate\Observers\ActivityObserver as ObserversActivityObserver;
 
 class Activity extends Model
 {
     use HasFactory;
 
-    protected $casts = [
-        'data' => 'array',
-    ];
+    protected $casts = ['data' => 'array'];
     const UPDATED_AT = null;
 
     /**
@@ -32,7 +30,7 @@ class Activity extends Model
 
     protected static function booted()
     {
-        Activity::observe(ActivityObserver::class);
+        Activity::observe(ObserversActivityObserver::class);
     }
 
     public function actor()
