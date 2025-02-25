@@ -5,6 +5,7 @@ namespace App\Livewire\Job;
 use Livewire\Component;
 use App\Types\PermissionType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use ReflectionClass;
 
 class Form extends Component
@@ -25,7 +26,13 @@ class Form extends Component
     public function mount($job)
     {
         $this->job = $job;
-        $reflection = new ReflectionClass("App\\Jobs\\" . $job);
+
+		$class = '\\App\\Jobs\\' . $job;
+        if (!class_exists($class)){
+            $class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' . $job;
+        }
+
+        $reflection = new ReflectionClass($class);
         $this->note = $reflection->getDocComment();
         $params = $reflection->getConstructor()->getParameters();
         foreach ($params as $param) {
@@ -48,8 +55,12 @@ class Form extends Component
 
     public function run(Request $request, $job)
     {
-        $request->user()->hasPermission(PermissionType::ADMIN);
+		Gate::authorize('is-admin');
+
         $class = '\\App\\Jobs\\' . $job;
+        if (!class_exists($class)){
+            $class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' . $job;
+        }
 
         dispatch(new $class(...$this->job_parameters_value));
 

@@ -27,7 +27,12 @@ class DispatchJob extends Command
      */
     public function handle()
     {
-        $class = '\\App\\Jobs\\' . $this->argument('job');
+		$job = $this->argument('job');
+		$class = '\\App\\Jobs\\' . $job;
+        if (!class_exists($class)){
+            $class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' . $job;
+        }
+
         dispatch(new $class());
     }
 }
