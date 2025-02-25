@@ -27,7 +27,7 @@ Route::prefix('system')->name('system.')->middleware(['auth'])->group(function (
         Route::get('/clear', [App\Http\Controllers\System\JobsController::class, 'clear'])->name('clear');
     });
 
-   Route::prefix('cache')->name('cache.')->group(function () {
+    Route::prefix('cache')->name('cache.')->group(function () {
         Route::get('/', [App\Http\Controllers\System\CacheController::class, 'index'])->name('index');
         Route::get('/clear', [App\Http\Controllers\System\CacheController::class, 'clear'])->name('clear');
     });
