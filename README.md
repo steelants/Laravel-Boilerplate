@@ -50,12 +50,12 @@ git clone https://github.com/steelants/Laravel-Boilerplate.git /packages/Laravel
 	}
 }
 ```
-4. Add providwe to `bootstrap/providers.php`
+4. Add provider to `bootstrap/providers.php`
 ```php
 return [
     ...
     SteelAnts\LaravelBoilerplate\BoilerplateServiceProvider::class,
-	...
+    ...
 ];
 ```
 5. use commands to aplicate changes
