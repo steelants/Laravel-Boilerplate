@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\System;
 
+use App\Helpers\SizeHelper;
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class LogController extends BaseController
         foreach (File::allFiles($path) as $file) {
             $items[] = [
                 'fileName'          => $file->getFilename(),
-                'humanReadableSize' => $this->getHumanReadableSize($file->getSize()),
+                'humanReadableSize' => SizeHelper::getHumanReadableSize($file->getSize()),
             ];
         }
 
@@ -99,27 +100,6 @@ class LogController extends BaseController
             return redirect()->route('system.log.index');
         } else {
             abort(404);
-        }
-    }
-
-    private function getHumanReadableSize($bytes)
-    {
-        if ($bytes > 0) {
-            $base = floor(log($bytes) / log(1024));
-            $units = array(
-                "B",
-                "KB",
-                "MB",
-                "GB",
-                "TB",
-                "PB",
-                "EB",
-                "ZB",
-                "YB",
-            ); //units of measurement
-            return number_format(($bytes / pow(1024, floor($base))), 3) . " $units[$base]";
-        } else {
-            return "0 bytes";
         }
     }
 

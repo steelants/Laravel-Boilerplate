@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\System;
 
+use App\Helpers\SizeHelper;
 use App\Http\Controllers\BaseController;
-use App\Jobs\Backup;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 
 class BackupController extends BaseController
 {
@@ -35,7 +36,7 @@ class BackupController extends BaseController
             }
 
             foreach ($backups as $key => $backup) {
-                $backups[$key]['fileSize'] = $this->humanFileSize($backup['fileSize']);
+                $backups[$key]['fileSize'] = SizeHelper::getHumanReadableSize($backup['fileSize']);
             }
         }
 
@@ -45,7 +46,7 @@ class BackupController extends BaseController
     {
         if (!empty($file_name)) {
             $path = storage_path('backups/' . $file_name);
-            if (!\File::exists($path)) {
+            if (!File::exists($path)) {
                 abort(404);
             }
 
@@ -65,12 +66,5 @@ class BackupController extends BaseController
         }
 
         return redirect()->back()->with('success', __('boilerplate::ui.deleted'));
-    }
-
-    private function humanFileSize($bytes, $decimals = 2)
-    {
-        $sz = 'BKMGTP';
-        $factor = floor((strlen($bytes) - 1) / 3);
-        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
     }
 }
