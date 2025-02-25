@@ -2,7 +2,6 @@
 
 namespace SteelAnts\LaravelBoilerplate;
 
-use App\Jobs\Backup;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use SteelAnts\LaravelBoilerplate\Console\Commands\InstallCommand;
@@ -12,6 +11,7 @@ use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
 use SteelAnts\LaravelBoilerplate\Facades\Menu;
 use SteelAnts\LaravelBoilerplate\Support\MenuCollector;
 use App\Http\Middleware\GenerateMenus;
+use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {
@@ -35,6 +35,12 @@ class BoilerplateServiceProvider extends ServiceProvider
             $schedule->job(new Backup())->dailyAT('00:00')->withoutOverlapping();
         });
 
+		$this->commands([InstallCommand::class]);
+        $this->commands([MakeCrudCommand::class]);
+
+        $this->commands([MakeBasicTestsCommand::class]);
+        $this->commands([DispatchJob::class]);
+
         $this->publishes([
             __DIR__ . '/../lang'                  => $this->app->langPath('vendor/boilerplate'),
             __DIR__ . '/../resources/views/views' => resource_path('views/vendor/boilerplate'),
@@ -51,12 +57,6 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->publishes([
             dirname(__DIR__) . '/resources/views' => resource_path('views/vendor/cms'),
         ], 'boilerplate-views');
-
-        $this->commands([InstallCommand::class]);
-        $this->commands([MakeCrudCommand::class]);
-
-        $this->commands([MakeBasicTestsCommand::class]);
-        $this->commands([DispatchJob::class]);
 
         # schedule tasks from db https://stackoverflow.com/a/38664283
         // $this->app->booted(function () {
