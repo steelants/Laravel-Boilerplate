@@ -5,10 +5,11 @@ namespace SteelAnts\LaravelBoilerplate\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
 
 class MakeCrudCommand extends Command
 {
-    protected $signature = 'make:crud {model} 
+    protected $signature = 'make:crud {model}
                             {--force : Overwrite existing files by default}'; // {--view : Generate controller and blade files}
 
     protected $description = 'Creates CRUD for specified Command';
@@ -32,6 +33,7 @@ class MakeCrudCommand extends Command
 
         $this->makeClassFile('app/Livewire/' . $model, "Form.php", $model, $fillable);
         $this->makeClassFile('app/Livewire/' . $model, "DataTable.php", $model, $fillable);
+		$this->makeClassFile('app/Http/Controllers', $model . "Controller.php", $model, $fillable);
     }
 
     private function makeClassFile(string $path, string $fileName, string $model, array $fillable)
@@ -48,7 +50,7 @@ class MakeCrudCommand extends Command
             mkdir($folderpath, 0777, true);
         }
 
-        $this->components->info("creting File: " . $testFilePath);
+        $this->components->info("creating File: " . $testFilePath);
         if ($fileName == "Form.php") {
             Artisan::call('make:livewire ' . $model . '.Form --force');
 
@@ -70,7 +72,26 @@ class MakeCrudCommand extends Command
                 'headers' => $fillable,
             ]);
             file_put_contents($testFilePath, $content);
-        }
+        } elseif (Str::contains($fileName, "Controller.php")) {
+			$model_name = Str::lower($model);
+			$namespace = Str::replace("/", '\\', Str::afterLast($path, "/Controllers"));
+			$content = $this->getControllerSkeleton([
+				'namespace' => (!empty($namespace) ? "\\" . $namespace : ""),
+                'model' => $model,
+                'model_name' => $model_name,
+            ]);
+            file_put_contents($testFilePath, $content);
+
+			if (!Route::has(Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.index')) {
+				$this->components->info("creating Route: " . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.index');
+				$routesPathFile = explode("/app", (str_replace('/' . $fileName, "", $testFilePath)))[0];
+				$route = "Route::get('/" . $model_name . "', [App\Http\Controllers\\" . $model . "Controller::class, 'index'])->name('" . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.index' . "');";
+            	$routesPathFile = $routesPathFile . "/routes/web.php";
+				file_put_contents($routesPathFile, $route, FILE_APPEND);
+			} else {
+				$this->components->info("Route exists: " . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.index');
+			}
+		}
     }
 
     private function getDataTableClassSkeleton(array $arguments)
@@ -84,7 +105,6 @@ class MakeCrudCommand extends Command
             $headerProperties .= "\t\t\t'" . $header . "' => '" . $header . "',\n";
         }
         $arguments['headerProperties'] = rtrim(ltrim($headerProperties, "\t"), "\n");
-        ;
         unset($arguments['headers']);
 
         $stubFilePath = ('/stubs/DataTable.stub');
@@ -155,5 +175,21 @@ class MakeCrudCommand extends Command
         $content .= "</div>";
 
         return $content;
+    }
+
+	private function getControllerSkeleton(array $arguments) //model (User), model_name (user)
+    {
+        $stubFilePath = ('/stubs/Controllers.stub');
+        $moduleRootPath = realpath($this->getPackageBasePath() . $stubFilePath);
+
+        $fileContent = file_get_contents($moduleRootPath, true);
+        foreach ($arguments as $ArgumentName => $ArgumentValue) {
+            if (gettype($ArgumentValue) != 'string') {
+                continue;
+            }
+
+            $fileContent = str_replace("{{" . $ArgumentName . "}}", $ArgumentValue, $fileContent);
+        }
+        return $fileContent;
     }
 }

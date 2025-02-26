@@ -1,0 +1,12 @@
+<?php
+
+namespace App\Http\Controllers{{namespace}};
+
+use App\Http\Controllers\BaseController;
+use SteelAnts\LaravelBoilerplate\Traits\CreateReadUpdateDelete;
+
+class {{model}}Controller extends BaseController
+{
+    use CreateReadUpdateDelete;
+    public string $model = "{{model_name}}";
+}
