@@ -43,27 +43,6 @@ window.toggleLayoutNav = function(){
     }
 }
 
-window.toggleLayoutNav = function(){
-    if(document.getElementById('layout-nav').classList.contains('nav-collapsed')){
-        document.getElementById('layout-nav').classList.remove('nav-collapsed');
-        setCookie('layout-nav', '', 360);
-    }else{
-        document.getElementById('layout-nav').classList.add('nav-collapsed');
-        setCookie('layout-nav', 'nav-collapsed', 360);
-    }
-}
-
-
-window.toggleSystemNav = function(){
-    if(document.getElementById('nav-system').classList.contains('nav-collapsed')){
-        document.getElementById('nav-system').classList.remove('nav-collapsed');
-        setCookie('nav-system', '', 360);
-    }else{
-        document.getElementById('nav-system').classList.add('nav-collapsed');
-        setCookie('nav-system', 'open', 360);
-    }
-}
-
 window.snackbar = function (message, details = false, type = false, icon = false){
 
     var template = `
