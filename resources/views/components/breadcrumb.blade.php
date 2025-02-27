@@ -1,17 +1,11 @@
 <nav {{ $attributes }} aria-label="breadcrumb" x-data="{
-    options: @js(array_values($items))
+    options: @js($items)
 }">
-	< ol class ="breadcrumb">
+	<ol class ="breadcrumb">
 		<template :key="option.link" x-for="option in options">
-
 			<li class="breadcrumb-item">
-				@if ($item["link"] == null)
-					{{ $item["name"] }}
-				@else
-					<a href="{{  }}" x-text="option.name"></a>
-				@endif
+				<a x-bind:href="option.link" x-text="option.name"></a>
 			</li>
-
 		</template>
-		</ol>
+	</ol>
 </nav>
