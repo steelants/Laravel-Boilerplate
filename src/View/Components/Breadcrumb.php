@@ -14,12 +14,7 @@ class Breadcrumb extends Component
     public function __construct(
         public $items
     ) {
-        foreach ($items as $name => $link) {
-            $this->items[] = [
-                'name'   => $name,
-                'link'   => url($link) ?? null,
-            ];
-        }
+		//
     }
 
     /**
