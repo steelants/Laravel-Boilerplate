@@ -179,7 +179,7 @@ class MakeCrudCommand extends Command
 
 	private function getControllerSkeleton(array $arguments) //model (User), model_name (user)
     {
-        $stubFilePath = ('/stubs/Controllers.stub');
+        $stubFilePath = ('/stubs/controllers.stub');
         $moduleRootPath = realpath($this->getPackageBasePath() . $stubFilePath);
 
         $fileContent = file_get_contents($moduleRootPath, true);
