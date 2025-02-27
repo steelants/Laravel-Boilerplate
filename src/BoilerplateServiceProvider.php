@@ -11,6 +11,7 @@ use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
 use SteelAnts\LaravelBoilerplate\Facades\Menu;
 use SteelAnts\LaravelBoilerplate\Support\MenuCollector;
 use App\Http\Middleware\GenerateMenus;
+use Illuminate\Support\Facades\Blade;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 
 class BoilerplateServiceProvider extends ServiceProvider
@@ -20,8 +21,9 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'boilerplate');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'boilerplate');
         $this->loadMigrationsFrom(dirname(__DIR__) . '/database/migrations');
+        Blade::componentNamespace('SteelAnts\LaravelBoilerplate\View\Components', 'boilerplate');
 
-        if (class_exists('App\Http\Middleware\GenerateMenus')) {
+		if (class_exists('App\Http\Middleware\GenerateMenus')) {
             $router = $this->app['router'];
             $router->pushMiddlewareToGroup('web', GenerateMenus::class);
         }
