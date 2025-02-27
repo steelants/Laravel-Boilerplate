@@ -6,18 +6,22 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Breadcrumb extends Component
+class Searchbox extends Component
 {
     /**
      * Create a new component instance.
      */
     public function __construct(
-        public $items
+        public $options,
+        public $property,
+        public $label = '',
+        public $autoclose = 'outside',
     ) {
-        foreach ($items as $name => $link) {
-            $this->items[] = [
-                'name'   => $name,
-                'link'   => url($link) ?? null,
+        foreach ($options as $id => $value) {
+			unset($this->options[$id]);
+            $this->options[] = [
+                'id'   => $id,
+                'name' => $value,
             ];
         }
     }
@@ -27,6 +31,6 @@ class Breadcrumb extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('boilerplate::components.breadcrumb');
+        return view('components.searchbox');
     }
 }

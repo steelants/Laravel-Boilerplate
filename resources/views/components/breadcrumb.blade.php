@@ -1,14 +1,17 @@
-<nav {{ $attributes }}  aria-label="breadcrumb">
-	<ol class="breadcrumb">
-		@foreach ($items as $link => $item)
+<nav {{ $attributes }} aria-label="breadcrumb" x-data="{
+    options: @js(array_values($items))
+}">
+	< ol class ="breadcrumb">
+		<template :key="option.link" x-for="option in options">
+
 			<li class="breadcrumb-item">
 				@if ($item["link"] == null)
 					{{ $item["name"] }}
 				@else
-					<a href="{{ url($item["link"]) }}">{{ $item["name"] }}</a>
+					<a href="{{  }}" x-text="option.name"></a>
 				@endif
 			</li>
-		@endforeach
-	</ol>
-</nav>
 
+		</template>
+		</ol>
+</nav>
