@@ -8,13 +8,21 @@ use Illuminate\View\Component;
 
 class Breadcrumb extends Component
 {
+    public $items = [];
+
     /**
      * Create a new component instance.
      */
     public function __construct(
-        public $items
+        $items
     ) {
-		//
+        foreach ($items as $link => $name) {
+            $this->items[] = [
+                'name'   => $name,
+                'link'   => url($link) ?? null,
+            ];
+        }
+
     }
 
     /**
