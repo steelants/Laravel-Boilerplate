@@ -3,3 +3,21 @@ $body-bg-dark: #000;
 
 $body-secondary-bg-dark:  $gray-800;
 $body-tertiary-bg-dark: $gray-900;
+
+$primary-text-emphasis-dark:        tint-color($primary, 70%) !default;
+$secondary-text-emphasis-dark:      tint-color($secondary, 70%) !default;
+$success-text-emphasis-dark:        tint-color($success, 50%) !default;
+$info-text-emphasis-dark:           tint-color($info, 50%) !default;
+$warning-text-emphasis-dark:        tint-color($warning, 50%) !default;
+$danger-text-emphasis-dark:         tint-color($danger, 50%) !default;
+$light-text-emphasis-dark:          $gray-300 !default;
+$dark-text-emphasis-dark:           $gray-200 !default;
+
+$primary-bg-subtle-dark:            shade-color($primary, 40%) !default;
+$secondary-bg-subtle-dark:          shade-color($secondary, 10%) !default;
+$success-bg-subtle-dark:            shade-color($success, 60%) !default;
+$info-bg-subtle-dark:               shade-color($info, 60%) !default;
+$warning-bg-subtle-dark:            shade-color($warning, 60%) !default;
+$danger-bg-subtle-dark:             shade-color($danger, 60%) !default;
+$light-bg-subtle-dark:              $gray-800 !default;
+$dark-bg-subtle-dark:               $gray-500 !default;

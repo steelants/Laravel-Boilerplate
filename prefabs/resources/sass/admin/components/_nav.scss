@@ -133,6 +133,7 @@
         border-left: none !important;
         border-right: none !important;
         color: var(--bs-tertiary-color);
+        padding: calc(var(--#{$prefix}nav-link-padding-y)) calc(var(--#{$prefix}nav-link-padding-x) * 1.5);
 
         &.disabled,
         &:disabled{
@@ -151,6 +152,7 @@
 .nav-pills{
     .nav-link{
         color: var(--bs-body-color);
+        padding: calc(var(--#{$prefix}nav-link-padding-y)) calc(var(--#{$prefix}nav-link-padding-x) * 1.5);
 
         &:hover{
             color: var(--bs-body-color);

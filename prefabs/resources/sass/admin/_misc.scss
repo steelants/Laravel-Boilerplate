@@ -1,24 +1,3 @@
-// TODO
-[data-bs-theme="dark"] {
-
-    // https://getbootstrap.com/docs/5.3/customize/color-modes/#custom-color-modes
-    // https://stackoverflow.com/a/75794448
-
-
-    --bs-light: #{$dark};
-    // --bs-secondary-bg-subtle: #{$dark};
-    // --bs-secondary-bg-subtle-dark: #{$dark};
-
-    // .btn-secondary {
-    //   --bs-btn-bg: #{$dark};
-    // }
-
-    .dark-invert{
-        filter: invert(100%);
-    }
-}
-
-
 a{
     // text-decoration: none;
 }
@@ -393,17 +372,18 @@ select[multiple]{
     font-size: 1em;
 }
 
-.badge-icon{
-    width: 1em;
-    text-align: center;
-}
-
 .fa, .fas, .far, .fal, .fad, .fab{
     width: 1.25rem;
     height: 1.25rem;
     text-align: center;
     line-height: 1.25rem;
     flex-shrink: 0;
+
+    &.badge-icon{
+        width: 1em;
+        height: 1em;
+        line-height: 1em;
+    }
 }
 
 .btn-sq{

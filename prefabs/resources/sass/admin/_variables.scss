@@ -1,5 +1,7 @@
 @use "sass:map";
 
+$prefix: 'bs-';
+
 @mixin desktop(){
     @include media-breakpoint-up(lg) {
         @content;
@@ -54,6 +56,8 @@ $warning:       $yellow;
 $danger:        $red;
 $light:         $gray-100;
 $dark:          $gray-900;
+$white:    #fff;
+$black:    #000;
 
 $primary-text-emphasis:   shade-color($primary, 40%);
 $secondary-text-emphasis: shade-color($secondary, 40%);
@@ -63,6 +67,9 @@ $warning-text-emphasis:   shade-color($warning, 40%);
 $danger-text-emphasis:    shade-color($danger, 40%);
 $light-text-emphasis:     $gray-700;
 $dark-text-emphasis:      $gray-700;
+
+$light-bg-subtle:         $gray-100;
+$dark-bg-subtle:          $gray-300;
 
 // Body
 $body-color: $gray-900;
@@ -122,6 +129,7 @@ $input-btn-font-size-lg:      1rem;
     --bs-btn-active-border-color: transparent;
     --bs-btn-hover-bg: #{rgba($gray-300, .2)};
     --bs-btn-active-bg: #{rgba($gray-300, .3)};
+    --bs-btn-hover-color: var(--bs-body-color);
 }
 
 $navbar-brand-font-size: 1rem;
@@ -148,7 +156,7 @@ $alert-padding-x: 1rem;
 
 $paragraph-margin-bottom: .5rem;
 
-$badge-font-weight: 500;
+$badge-font-weight: 600;
 $badge-border-radius: 6px;
 
 $breadcrumb-divider: '›';
