@@ -8,17 +8,18 @@ use Illuminate\View\Component;
 
 class Searchbox extends Component
 {
+    public $options = [];
+
     /**
      * Create a new component instance.
      */
     public function __construct(
-        public $options,
+        $options,
         public $property,
         public $label = '',
         public $autoclose = 'outside',
     ) {
         foreach ($options as $id => $value) {
-			unset($this->options[$id]);
             $this->options[] = [
                 'id'   => $id,
                 'name' => $value,
