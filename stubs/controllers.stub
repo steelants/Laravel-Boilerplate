@@ -3,10 +3,10 @@
 namespace App\Http\Controllers{{namespace}};
 
 use App\Http\Controllers\BaseController;
-use SteelAnts\LaravelBoilerplate\Traits\CreateReadUpdateDelete;
+use SteelAnts\LaravelBoilerplate\Traits\{{trait}};
 
 class {{model}}Controller extends BaseController
 {
-    use CreateReadUpdateDelete;
+    use {{trait}};
     public string $model = "{{model_name}}";
 }

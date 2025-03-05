@@ -101,6 +101,23 @@ composer dump-autoload
 php artisan install:boilerplate --force
 ```
 
+## CRUD
+### Create CRUD
+Create default files in model livewire
+```bash
+php artisan make:crud {model name}
+```
+### Create CRUD Forced
+Create default files in model livewire with ovewrite
+```bash
+php artisan make:crud {model name} --force
+```
+### Create CRUD Full Page
+Create default files in livewire with create and edit as full page
+```bash
+php artisan make:crud {model name} --full-page-components
+```
+
 ## Contributors
 <a href="https://github.com/steelants/Laravel-Boilerplate/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=steelants/Laravel-Boilerplate" />

@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Route;
 class MakeCrudCommand extends Command
 {
     protected $signature = 'make:crud {model}
-                            {--force : Overwrite existing files by default}'; // {--view : Generate controller and blade files}
+                            {--force : Overwrite existing files by default}
+							{--full-page-components : Make form full page}';// {--view : Generate controller and blade files}
 
     protected $description = 'Creates CRUD for specified Command';
 
@@ -50,6 +51,8 @@ class MakeCrudCommand extends Command
             mkdir($folderpath, 0777, true);
         }
 
+		$namespace = Str::replace("/", '\\', Str::afterLast($path, "/Controllers"));
+
         $this->components->info("creating File: " . $testFilePath);
         if ($fileName == "Form.php") {
             Artisan::call('make:livewire ' . $model . '.Form --force');
@@ -57,6 +60,7 @@ class MakeCrudCommand extends Command
             $content = $this->getFormClassSkeleton([
                 'model'   => $model,
                 'headers' => $fillable,
+				'action_back' => $this->option('full-page-components') ? '$this->redirectRoute(\'' . (Str::contains($namespace, '/Controllers') ? Str::replace("\\", ".", $namespace) . "." : "") . Str::snake($model, ".") . '.index' . '\');' : '',
             ]);
             file_put_contents($testFilePath, $content);
 
@@ -74,22 +78,36 @@ class MakeCrudCommand extends Command
             file_put_contents($testFilePath, $content);
         } elseif (Str::contains($fileName, "Controller.php")) {
 			$model_name = Str::lower($model);
-			$namespace = Str::replace("/", '\\', Str::afterLast($path, "/Controllers"));
 			$content = $this->getControllerSkeleton([
 				'namespace' => (!empty($namespace) ? "\\" . $namespace : ""),
                 'model' => $model,
                 'model_name' => $model_name,
+				'trait' => $this->option('full-page-components') ? 'FullPageCRUD' : 'CreateReadUpdateDelete',
             ]);
             file_put_contents($testFilePath, $content);
 
+			$routesPathFile = explode("/app", (str_replace('/' . $fileName, "", $testFilePath)))[0];
+
+			//index route
 			if (!Route::has(Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.index')) {
 				$this->components->info("creating Route: " . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.index');
-				$routesPathFile = explode("/app", (str_replace('/' . $fileName, "", $testFilePath)))[0];
 				$route = "Route::get('/" . $model_name . "', [App\Http\Controllers\\" . $model . "Controller::class, 'index'])->name('" . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.index' . "');";
-            	$routesPathFile = $routesPathFile . "/routes/web.php";
-				file_put_contents($routesPathFile, $route, FILE_APPEND);
+            	$pathFile = $routesPathFile . "/routes/web.php";
+				file_put_contents($pathFile, $route, FILE_APPEND);
 			} else {
 				$this->components->info("Route exists: " . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.index');
+			}
+
+			if ($this->option('full-page-components')) {
+				//form route
+				if (!Route::has(Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.form')) {
+					$this->components->info("creating Route: " . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.form');
+					$route = "\r\nRoute::get('/" . $model_name . "/form/{modelId?}', [App\Http\Controllers\\" . $model . "Controller::class, 'form'])->name('" . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.form' . "');";
+					$pathFile = $routesPathFile . "/routes/web.php";
+					file_put_contents($pathFile, $route, FILE_APPEND);
+				} else {
+					$this->components->info("Route exists: " . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.form');
+				}
 			}
 		}
     }
@@ -107,7 +125,7 @@ class MakeCrudCommand extends Command
         $arguments['headerProperties'] = rtrim(ltrim($headerProperties, "\t"), "\n");
         unset($arguments['headers']);
 
-        $stubFilePath = ('/stubs/DataTable.stub');
+        $stubFilePath = $this->option('full-page-components') ? ('/stubs/FullPageDataTable.stub') : ('/stubs/DataTable.stub');
         $moduleRootPath = realpath($this->getPackageBasePath() . $stubFilePath);
 
         $fileContent = file_get_contents($moduleRootPath, true);
@@ -170,7 +188,7 @@ class MakeCrudCommand extends Command
             $content .= "\t\t" . "<x-form::input group-class=\"mb-3\" type=\"text\" wire:model=\"" . $LVModelName . "\" id=\"" . $LVModelName . "\" label=\"" . $LVModelName . "\"/>\n";
         }
 
-        $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">@if(\$action == 'update') {{__('boulerplate::ui.save')}} @else {{__('boulerplate::ui.create')}} @endif</x-form::button>\n";
+        $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">@if(\$action == 'update') {{__('boilerplate::ui.save')}} @else {{__('boilerplate::ui.create')}} @endif</x-form::button>\n";
         $content .= "\t</x-form::form>\n";
         $content .= "</div>";
 

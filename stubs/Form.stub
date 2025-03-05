@@ -36,6 +36,7 @@ class Form extends Component
         {{model}}::create($validatedData);
         $this->dispatch('{{model_camel_case}}Added');
         $this->dispatch('closeModal');
+		{{action_back}}
     }
 
     public function update()
@@ -46,6 +47,7 @@ class Form extends Component
             ${{model_camel_case}}->update($validatedData);
         }
         $this->dispatch('closeModal');
+		{{action_back}}
     }
 
     public function render()

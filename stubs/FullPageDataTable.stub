@@ -1,0 +1,53 @@
+<?php
+namespace App\Livewire\{{model}};
+
+use App\Models\{{model}};
+use SteelAnts\DataTable\Livewire\DataTableComponent;
+use Illuminate\Database\Eloquent\Builder;
+use SteelAnts\DataTable\Traits\UseDatabase;
+
+class DataTable extends DataTableComponent
+{
+    use UseDatabase;
+
+    public $listeners = [
+        '{{model_camel_case}}Added' => '$refresh',
+        'closeModal' => '$refresh',
+    ];
+
+    public function query(): Builder
+    {
+        return {{model}}::query();
+    }
+
+    public function headers(): array
+    {
+        return [
+            {{headerProperties}}
+        ];
+    }
+
+    public function actions($item)
+    {
+        return [
+            [
+                'type' => "url",
+                'url' => route('{{model_snake_case_dash}}.form', ['modelId' => $item['id']]),
+                'text' => "edit",
+                'iconClass' => 'fas fa-pen',
+            ],
+            [
+                'type' => "livewire",
+                'action' => "remove",
+                'parameters' => $item['id'],
+                'text' => "Remove",
+                'actionClass' => 'text-danger',
+                'iconClass' => 'fas fa-trash',
+            ]
+        ];
+    }
+
+    public function remove(${{model_snake_case}}_id){
+        {{model}}::find(${{model_snake_case}}_id)->delete();
+    }
+}
