@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
-use SteelAnts\LaravelBoilerplate\Traits\CreateReadUpdateDelete;
+use SteelAnts\LaravelBoilerplate\Traits\CRUD;
 
 class UserController extends BaseController
 {
-    use CreateReadUpdateDelete;
+    use CRUD;
     public string $model = "user";
 }

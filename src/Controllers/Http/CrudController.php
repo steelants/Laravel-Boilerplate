@@ -2,7 +2,7 @@
 
 namespace SteelAnts\LaravelBoilerplate\Controllers\Http;
 
-use SteelAnts\LaravelBoilerplate\Traits\CreateReadUpdateDelete;
+use SteelAnts\LaravelBoilerplate\Traits\CRUD;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use ErrorException;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class CrudController extends Controller
 {
-    use CreateReadUpdateDelete;
+    use CRUD;
 
     public string $viewName = 'boilerplate::crud';
 

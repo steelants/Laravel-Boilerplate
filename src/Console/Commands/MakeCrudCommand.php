@@ -82,7 +82,7 @@ class MakeCrudCommand extends Command
 				'namespace' => (!empty($namespace) ? "\\" . $namespace : ""),
                 'model' => $model,
                 'model_name' => $model_name,
-				'trait' => $this->option('full-page-components') ? 'FullPageCRUD' : 'CreateReadUpdateDelete',
+				'trait' => $this->option('full-page-components') ? 'FullPageCRUD' : 'CRUD',
             ]);
             file_put_contents($testFilePath, $content);
 
