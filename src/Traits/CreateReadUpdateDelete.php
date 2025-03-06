@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Lang;
 
 trait CreateReadUpdateDelete
 {
-    public string $viewName = 'boilerplate::crud';
 	public array $data = [];
 
 	public function loadModel(Request $request){
@@ -29,7 +28,7 @@ trait CreateReadUpdateDelete
     {
 		$model = $this->loadModel($request);
 
-        return view($this->viewName, [
+        return view(($this->viewName ?? 'boilerplate::crud'), [
             'title'           => Lang::has('boilerplate::ui.' . $model . 's') ? 'boilerplate::ui.' . $model . 's' : 'ui.' . $model . 's',
             'modal_component' => $model . '.form',
             'page_component'  => $model . '.data-table',
