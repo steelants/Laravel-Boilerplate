@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Lang;
 
 trait CreateReadUpdateDelete
 {
+	//public string $viewName; change default blade
 	public array $data = [];
 
 	public function loadModel(Request $request){
