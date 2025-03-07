@@ -1,0 +1,4 @@
+#[Computed]
+    public function {{model_camel_case_plural}} () {
+        return {{model}}::get()->pluck('name', 'id')->toArray();
+    }
