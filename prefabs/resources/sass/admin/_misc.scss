@@ -64,33 +64,6 @@ a{
 //     max-width: calc(100% - 4rem);
 // }
 
-
-.card-action {
-    padding: 0 $card-spacer-x $card-spacer-y;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.custom-checkbox{
-    cursor: pointer;
-
-    .custom-control-label{
-        cursor: pointer;
-    }
-}
-
-.form-group label{
-    font-weight: 500;
-}
-
-.invalid-feedback strong{
-    font-weight: 500;
-}
-
-.form-group{
-    margin-bottom: 1rem;
-}
-
 .editor{
    min-height: 80px;
 }
@@ -156,14 +129,6 @@ a{
     .ql-snow .ql-stroke{
         stroke: #a5a5a5;
     }
-}
-
-select[multiple]{
-    height: 50px;
-}
-
-.form-select{
-    cursor: default;
 }
 
 .select2{
@@ -239,8 +204,4 @@ select[multiple]{
     text-align: center;
     line-height: 1.25rem;
     flex-shrink: 0;
-}
-
-.form-switch{
-    line-height: 1;
 }

@@ -117,14 +117,15 @@ $input-padding-x: .625rem;
 $btn-font-weight: 500;
 $btn-border-radius: 10px;
 $btn-border-radius-sm: 10px;
+$btn-line-height: 1.25rem;
 
-$input-btn-padding-y-sm:      .25rem !default;
+$input-btn-padding-y-sm:      .3125rem !default;
 $input-btn-padding-x-sm:      .625rem !default;
 $input-btn-font-size-sm:      .875rem;
 
 $input-btn-padding-y-lg:      .5rem !default;
 $input-btn-padding-x-lg:      1rem !default;
-$input-btn-font-size-lg:      1rem;
+$input-btn-font-size-lg: 1rem;
 
 :root{
     --bs-btn-active-border-color: transparent;
