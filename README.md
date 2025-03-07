@@ -1,12 +1,16 @@
 # Laravel-Boilerplate
 
-## Currently WIP
+#### Currently WIP
 
 ### Created by: [SteelAnts s.r.o.](https://www.steelants.cz/)
 
 [![Total Downloads](https://img.shields.io/packagist/dt/steelants/laravel-boilerplate.svg?style=flat-square)](https://packagist.org/packages/steelants/laravel-boilerplate)
 
-## Content
+## Preview
+[boilerplate.steelants.cz](https://boilerplate.steelants.cz)
+
+## What's included
+### Functions
 - User Management
 - Job Management
 - Cache Management
@@ -14,6 +18,15 @@
 - Log Viewer
 - Audit
 - API Routes view page
+- Menu builder
+- From builder
+- Datatable builder
+
+### Template
+- Reponsive app template
+- Light/dark theme
+- Build on Bootstrap and Livewire
+- Quill editor
   
 ## Install
 
