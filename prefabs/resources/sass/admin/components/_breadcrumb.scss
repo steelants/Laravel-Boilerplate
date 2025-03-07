@@ -1,0 +1,28 @@
+.breadcrumb{
+    align-items: center;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    overflow: auto;
+    flex-grow: 1;
+}
+
+.breadcrumb-item{
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-item a{
+    display: inline-block;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+
+    &:hover{
+        color: var(--bs-body-color);
+    }
+
+    @include mobile(){
+        max-width: 4rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

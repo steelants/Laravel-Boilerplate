@@ -1,0 +1,39 @@
+.badge{
+    display: inline-flex;
+    gap: .25rem;
+
+    .fa, .fas, .far, .fal, .fad, .fab{
+        width: 1em;
+        height: 1em;
+        line-height: 1em;
+    }
+}
+
+.badge-sm {
+    font-size: 11px;
+}
+.badge-lg {
+    font-size: 14px;
+}
+
+.badge-addon{
+    cursor: pointer;
+    display: inline-block;
+    margin-top: calc(-1*var(--bs-badge-padding-y));
+    margin-bottom: calc(-1*var(--bs-badge-padding-y));
+    margin-right: calc(-1*var(--bs-badge-padding-x));
+    padding: var(--bs-badge-padding-y);
+    border-top-right-radius: var(--bs-badge-border-radius);
+    border-bottom-right-radius: var(--bs-badge-border-radius);
+    background-color: inherit;
+    opacity: .5;
+
+    &:hover{
+        opacity: 1;
+        filter: brightness(95%);
+    }
+
+    &>*{
+        display: block;
+    }
+}

@@ -58,9 +58,8 @@
     }
 }
 
-.app-nav-profile{
-    border-radius: 100%;
-    font-size: .875rem;
+.app-nav-profile.avatar{
+    box-shadow: none;
 }
 
 .app-nav .nav-link{

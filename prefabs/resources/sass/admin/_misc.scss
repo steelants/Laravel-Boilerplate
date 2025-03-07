@@ -7,12 +7,6 @@ a{
     font-size: 1rem;
 }
 
-.logincard{
-    width: 430px;
-    max-width: 100%;
-}
-
-
 .stat{
     display: flex;
     align-items: start;
@@ -54,28 +48,6 @@ a{
     padding-left: 1rem;
 }
 
-.btn-facebook{
-    color: white;
-    background: #4267B2;
-
-    &:hover,
-    &:focus{
-        color: white;
-        background: #3a5b9c;
-    }
-}
-
-.btn-link:hover,
-.btn-link:focus,
-.btn-link:active{
-    background: transparent !important;
-}
-
-.table-actions{
-    text-align: right;
-}
-
-
 .list-notifications{
     max-height: 500px;
     max-width: 80vw;
@@ -113,11 +85,6 @@ a{
 
 .invalid-feedback strong{
     font-weight: 500;
-}
-
-.table th{
-    font-weight: 500;
-    vertical-align: middle;
 }
 
 .form-group{
@@ -166,6 +133,9 @@ a{
     transform: rotate(180deg);
 }
 
+.collapsed .collapse-icon {
+    transform: rotate(-90deg);
+}
 
 .ql-toolbar.ql-snow,
 .ql-container.ql-snow{
@@ -196,43 +166,6 @@ select[multiple]{
     width: 100% !important;
 }
 
-.breadcrumb{
-    align-items: center;
-    white-space: nowrap;
-    flex-wrap: nowrap;
-    overflow: auto;
-    flex-grow: 1;
-}
-
-.breadcrumb-item{
-    display: flex;
-    align-items: center;
-}
-
-.breadcrumb-item a{
-    display: inline-block;
-    text-decoration: none;
-    color: var(--bs-secondary-color);
-
-    &:hover{
-        color: var(--bs-body-color);
-    }
-
-    @include mobile(){
-        max-width: 4rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-}
-
-.btn-danger{
-    color: white;
-
-    &:hover{
-        color: white;
-    }
-}
-
 .bi{
     width: 1em;
     height: 1em;
@@ -243,89 +176,48 @@ select[multiple]{
 }
 
 .random-bg-0{
-    background-color: rgba($tw-gray-500, .5);
+    background-color: $tw-gray-300;
 }
 .random-bg-1{
-    background-color: rgba($tw-green-500, .5);
+    background-color: $tw-green-200;
 }
 .random-bg-2{
-    background-color: rgba($tw-sky-400, .5);
+    background-color: $tw-sky-200;
 }
 .random-bg-3{
-    background-color: rgba($tw-red-500, .5);
+    background-color: $tw-red-300;
 }
 .random-bg-4{
-    background-color: rgba($tw-yellow-500, .5);
+    background-color: $tw-yellow-200;
 }
 .random-bg-5{
-    background-color: rgba($tw-indigo-500, .5);
+    background-color: $tw-indigo-200;
 }
 .random-bg-6{
-    background-color: rgba($tw-orange-500, .5);
-}
-
-.dropdown-menu{
-    box-shadow: var(--bs-dropdown-box-shadow);
+    background-color: $tw-orange-200;
 }
 
 @include color-mode(dark) {
-    .dropdown-menu{
-        --bs-dropdown-border-color: rgba(115, 115, 115, 0.25);
-        background-color: #0f0f0f;
+    .random-bg-0{
+        background-color: $tw-gray-700;
     }
-}
-
-.dropdown-item{
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.dropdown-ico{
-    color: var(--bs-tertiary-color);
-    margin-right: .5rem;
-    border-radius: var(--bs-border-radius);
-}
-
-.dropdown-img{
-    width: 2rem;
-    height: 2rem;
-    border-radius: 4px;
-    overflow: hidden;
-    font-weight: 600;
-    text-align: center;
-    line-height: 2rem;
-    margin-right: .75rem;
-    font-size: .875rem;
-
-    img{
-        width: 100%;
-        height: 100%;
+    .random-bg-1{
+        background-color: $tw-green-800;
     }
-}
-
-.dropdown-item .form-check-input {
-    margin-right: .75rem;
-    margin-top: 0;
-}
-
-.dropdown-input {
-    background: transparent;
-    border: none;
-    border-top-left-radius: calc(var(--bs-border-radius) - var(--bs-border-width));
-    border-top-right-radius: calc(var(--bs-border-radius) - var(--bs-border-width));
-    color: inherit;
-    display: block;
-    margin-bottom: 4px;
-    margin-top: -4px;
-    min-width: 12rem;
-    padding: .35rem .75rem;
-    width: calc(100% + calc(2 * var(--bs-dropdown-padding-y)));
-    margin-left: calc(-1*var(--bs-dropdown-padding-y));
-    margin-right: calc(-1*var(--bs-dropdown-padding-y));
-
-    &:focus{
-        outline: none;
+    .random-bg-2{
+        background-color: $tw-sky-800;
+    }
+    .random-bg-3{
+        background-color: $tw-red-800;
+    }
+    .random-bg-4{
+        background-color: $tw-yellow-800;
+    }
+    .random-bg-5{
+        background-color: $tw-indigo-700;
+    }
+    .random-bg-6{
+        background-color: $tw-orange-800;
     }
 }
 
@@ -337,66 +229,12 @@ select[multiple]{
     border-radius: $pagination-border-radius;
 }
 
-.avatar{
-    width: 2rem;
-    height: 2rem;
-    line-height: 2rem;
-    overflow: hidden;
-    font-weight: 600;
-    text-align: center;
-    border-radius: 100%;
-    font-size: .875rem;
-
-    img{
-        display: block;
-        width: 100%;
-        height: 100%;
-    }
-}
-
-.avatar-sm{
-    width: 1.5rem;
-    height: 1.5rem;
-    line-height: 1.5rem;
-    font-size: .75rem;
-}
-
-.avatar-lg{
-    width: 3rem;
-    height: 3rem;
-    line-height: 3rem;
-    font-size: 1rem;
-}
-
-.badge-lg {
-    font-size: 1em;
-}
-
 .fa, .fas, .far, .fal, .fad, .fab{
     width: 1.25rem;
     height: 1.25rem;
     text-align: center;
     line-height: 1.25rem;
     flex-shrink: 0;
-
-    &.badge-icon{
-        width: 1em;
-        height: 1em;
-        line-height: 1em;
-    }
-}
-
-.btn-sq{
-    padding: var(--bs-btn-padding-y) var(--bs-btn-padding-y);
-    width: 2.25rem;
-
-    &.btn-sm{
-        width: 2rem;
-    }
-}
-
-.collapsed .collapse-icon {
-    transform: rotate(-90deg);
 }
 
 .form-switch{

@@ -1,0 +1,33 @@
+.btn-facebook{
+    color: white;
+    background: #4267B2;
+
+    &:hover,
+    &:focus{
+        color: white;
+        background: #3a5b9c;
+    }
+}
+
+.btn-link:hover,
+.btn-link:focus,
+.btn-link:active{
+    background: transparent !important;
+}
+
+.btn-danger{
+    color: white;
+
+    &:hover{
+        color: white;
+    }
+}
+
+.btn-sq{
+    padding: var(--bs-btn-padding-y) var(--bs-btn-padding-y);
+    width: 2.25rem;
+
+    &.btn-sm{
+        width: 2rem;
+    }
+}
