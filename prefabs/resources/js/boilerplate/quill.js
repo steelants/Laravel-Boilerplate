@@ -7,6 +7,10 @@ Quill.register({
     'modules/tableUI': quillTableUI.default
 }, true);
 
+import {Mention, MentionBlot} from "quill-mention";
+
+Quill.register({ "blots/mention": MentionBlot, "modules/mention": Mention });
+
 // Quill.register(Quill.import('attributors/attribute/direction'), true);
 // Quill.register(Quill.import('attributors/class/align'), true);
 // Quill.register(Quill.import('attributors/class/background'), true);
@@ -36,6 +40,11 @@ window.loadQuill = function(){
             ['clean'],
         ];
 
+        const atValues = [
+            { id: 1, value: "Fredrik Sundqvist" },
+            { id: 2, value: "Patrik Sjölin" }
+          ];
+
         let quill = new Quill(element, {
             theme: 'snow',
             modules: {
@@ -51,6 +60,31 @@ window.loadQuill = function(){
                 },
                 clipboard: {
                     matchVisual: false
+                },
+                mention: {
+                    allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+                    mentionDenotationChars: ["@", "#"],
+                    source: function(searchTerm, renderList, mentionChar) {
+                      let values;
+
+                      if (mentionChar === "@") {
+                        values = atValues;
+                      } else {
+                        values = hashValues;
+                      }
+
+                      if (searchTerm.length === 0) {
+                        renderList(values, searchTerm);
+                      } else {
+                        const matches = [];
+                        for (let i = 0; i < values.length; i++)
+                          if (
+                            ~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())
+                          )
+                            matches.push(values[i]);
+                        renderList(matches, searchTerm);
+                      }
+                    }
                 }
             }
         });

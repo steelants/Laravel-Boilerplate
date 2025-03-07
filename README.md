@@ -25,6 +25,20 @@ composer install
 php artisan install:boilerplate
 ```
 
+Import javascript and styles (includes bootstrap and font awesome)
+```scss
+// /resources/scss/app.scss
+@import "./boilerplate/boilerplate.scss"
+```
+```js
+// /resources/js/app.scss
+import './boilerplate/boilerplate.js';
+```
+> [!NOTE]
+> If you need customize any of included js/scss files, don't change files inside boilerplate folder.
+> Instead create new root file boilerplate.scss/js by copying it from boilerplate folder. By changing paths of imported files you can make your custom verison or keep importing from boilerplate. 
+> When you update boilerplate package you will need to check changes only in root files boilerplate.scss/js and update yout custom version accordingly.
+
 ## Menu Builder
 ### Single Level
 ```php
