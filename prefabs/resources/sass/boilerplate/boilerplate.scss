@@ -1,0 +1,42 @@
+@import "@fortawesome/fontawesome-free/css/all.css";
+
+@import "bootstrap/scss/functions";
+
+// Variables
+@import "./tailwind/colors";
+@import "./variables";
+@import "./variables-dark";
+
+// Bootstrap
+@import "bootstrap/scss/bootstrap";
+
+@import "./quill";
+
+// Other
+@import "./misc";
+@import "./dark-overrides";
+
+@import "./layout/layout";
+@import "./layout/containers";
+@import "./layout/layout-nav-default";
+@import "./layout/layout-nav-mobile";
+@import "./layout/sidebar";
+
+@import "./components/nav";
+@import "./components/tables";
+@import "./components/snackbar";
+@import "./components/gantt";
+@import "./components/sidebar";
+@import "./components/avatar";
+@import "./components/button";
+@import "./components/badge";
+@import "./components/breadcrumb";
+@import "./components/dropdown";
+@import "./components/table";
+@import "./components/form";
+
+@import "./helpers/hover-group";
+
+@import "./utilities/sizing";
+
+@import "./responsive";

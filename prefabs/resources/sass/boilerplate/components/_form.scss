@@ -1,0 +1,42 @@
+.card-action {
+    padding: 0 $card-spacer-x $card-spacer-y;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.custom-checkbox{
+    cursor: pointer;
+
+    .custom-control-label{
+        cursor: pointer;
+    }
+}
+
+.form-group label{
+    font-weight: 500;
+}
+
+.invalid-feedback strong{
+    font-weight: 500;
+}
+
+.form-group{
+    margin-bottom: 1rem;
+}
+
+select[multiple]{
+    height: 50px;
+}
+
+.form-select{
+    cursor: default;
+}
+
+.form-control-lg,
+.btn-lg{
+    line-height: 1.5;
+}
+
+.form-switch{
+    line-height: 1;
+}

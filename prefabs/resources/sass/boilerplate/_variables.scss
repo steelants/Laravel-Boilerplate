@@ -83,6 +83,8 @@ $body-tertiary-bg: $gray-050;
 // Typography
 $font-family-sans-serif: 'Inter', sans-serif;
 $font-size-base: .875rem;
+$line-height-base: calc(1.25 / 0.875);
+
 $h1-font-size: 2.25rem;
 $h2-font-size: 1.875rem;
 $h3-font-size: 1.5rem;
@@ -98,8 +100,8 @@ $text-muted: #a7abc3;
 
 // $border-color: $gray-200;
 $border-color-translucent: rgba($gray-900, .075);
-$border-radius-sm: 4px;
-$border-radius: 6px;
+$border-radius-sm: 6px;
+$border-radius: 10px;
 $border-radius-lg: 10px;
 $border-radius-xl: 12px;
 $border-radius-xxl: 16px;
@@ -109,21 +111,21 @@ $box-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 $box-shadow-lg: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 
 $input-btn-padding-x: .75rem;
-$input-btn-padding-y: .375rem;
+$input-btn-padding-y: .4375rem;
+$input-padding-x: .625rem;
 
-// $btn-font-size: 0.875rem;
-$btn-line-height: calc(1.5rem - 2px);
 $btn-font-weight: 500;
 $btn-border-radius: 10px;
 $btn-border-radius-sm: 10px;
+$btn-line-height: 1.25rem;
 
-$input-btn-padding-y-sm:      .25rem !default;
+$input-btn-padding-y-sm:      .3125rem !default;
 $input-btn-padding-x-sm:      .625rem !default;
 $input-btn-font-size-sm:      .875rem;
 
 $input-btn-padding-y-lg:      .5rem !default;
 $input-btn-padding-x-lg:      1rem !default;
-$input-btn-font-size-lg:      1rem;
+$input-btn-font-size-lg: 1rem;
 
 :root{
     --bs-btn-active-border-color: transparent;
@@ -156,8 +158,11 @@ $alert-padding-x: 1rem;
 
 $paragraph-margin-bottom: .5rem;
 
-$badge-font-weight: 600;
+$badge-font-weight: 500;
 $badge-border-radius: 6px;
+$badge-font-size: 12px;
+$badge-padding-x: .375rem;
+$badge-padding-y: .25rem;
 
 $breadcrumb-divider: '›';
 $breadcrumb-margin-bottom: 0;

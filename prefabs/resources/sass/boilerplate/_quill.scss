@@ -135,11 +135,16 @@
     @extend .active;
 }
 
-.mention {
-    @extend .badge;
-    color: var(--bs-body-color);
-    background: var(--bs-secondary-bg);
-    margin-right: 2px;
-    user-select: all;
-}
+.quill-container.is-invalid .quill-editor-wrap{
+    border-radius: var(--bs-border-radius);
 
+    .ql-container{
+        border-color: var(--bs-form-invalid-border-color);
+    }
+
+    .ql-toolbar{
+        border-top-color: var(--bs-form-invalid-border-color);
+        border-left-color: var(--bs-form-invalid-border-color);
+        border-right-color: var(--bs-form-invalid-border-color);
+    }
+}
