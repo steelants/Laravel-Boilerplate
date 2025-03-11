@@ -39,8 +39,8 @@ class InstallCommand extends Command
         }
 
         self::exportPrefabs('resources/views');
-        self::exportPrefabs('resources/js');
-        self::exportPrefabs('resources/sass');
+        self::exportPrefabs('resources/js/boilerplate');
+        self::exportPrefabs('resources/sass/boilerplate');
         self::exportPrefabs('storage');
 
         if (!$this->option('views-only')) {
@@ -90,6 +90,7 @@ class InstallCommand extends Command
         $packages["dependencies"]["vite"] = '^6.2.0';
         $packages["dependencies"]["laravel-vite-plugin"] = '^1.0.0';
         $packages["dependencies"]["quill"] = "2.0.0-rc.2";
+        $packages["dependencies"]["quill-mention"] = "^6.0.2";
         $packages["dependencies"]["quill-table-ui"] = "^1.0.7";
 
         file_put_contents(base_path('package.json'), json_encode($packages, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . PHP_EOL);
