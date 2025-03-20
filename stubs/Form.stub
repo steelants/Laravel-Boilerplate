@@ -10,8 +10,9 @@ class Form extends Component
     {{properties}}
 
     public $action = 'store';
+	public bool $isModal = false;
 
-    protected function rules()
+	protected function rules()
     {
         return [
             {{validationRules}}
@@ -34,8 +35,13 @@ class Form extends Component
     {
         $validatedData = $this->validate();
         {{model}}::create($validatedData);
-        $this->dispatch('{{model_camel_case}}Added');
-        $this->dispatch('closeModal');
+
+        if ($this->isModal) {
+            $this->dispatch('closeModal');
+        } else {
+        	$this->dispatch('{{model_camel_case}}Added');
+        }
+
 		{{action_back}}
     }
 
@@ -46,7 +52,13 @@ class Form extends Component
         if (!empty(${{model_camel_case}})) {
             ${{model_camel_case}}->update($validatedData);
         }
-        $this->dispatch('closeModal');
+
+		if ($this->isModal) {
+            $this->dispatch('closeModal');
+        } else {
+        	$this->dispatch('{{model_camel_case}}Updated');
+        }
+
 		{{action_back}}
     }
 

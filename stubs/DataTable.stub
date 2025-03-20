@@ -12,6 +12,7 @@ class DataTable extends DataTableComponent
 
     public $listeners = [
         '{{model_camel_case}}Added' => '$refresh',
+        '{{model_camel_case}}Updated' => '$refresh',
         'closeModal' => '$refresh',
     ];
 
