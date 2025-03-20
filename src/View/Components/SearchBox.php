@@ -32,6 +32,6 @@ class Searchbox extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.searchbox');
+        return view('boilerplate::components.searchbox');
     }
 }

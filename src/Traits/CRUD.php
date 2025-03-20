@@ -7,8 +7,9 @@ use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 
-trait CreateReadUpdateDelete
+trait CRUD
 {
+	//public array $views = ['index' => 'crud.index']; change default blade
 	public array $data = [];
 
 	public function loadModel(Request $request){
@@ -28,7 +29,7 @@ trait CreateReadUpdateDelete
     {
 		$model = $this->loadModel($request);
 
-        return view(($this->viewName ?? 'boilerplate::crud'), [
+        return view(($this->views['index'] ?? 'boilerplate::crud'), [
             'title'           => Lang::has('boilerplate::ui.' . $model . 's') ? 'boilerplate::ui.' . $model . 's' : 'ui.' . $model . 's',
             'modal_component' => $model . '.form',
             'page_component'  => $model . '.data-table',

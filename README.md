@@ -1,12 +1,16 @@
 # Laravel-Boilerplate
 
-## Currently WIP
+#### Currently WIP
 
 ### Created by: [SteelAnts s.r.o.](https://www.steelants.cz/)
 
 [![Total Downloads](https://img.shields.io/packagist/dt/steelants/laravel-boilerplate.svg?style=flat-square)](https://packagist.org/packages/steelants/laravel-boilerplate)
 
-## Content
+## Preview
+[boilerplate.steelants.cz](https://boilerplate.steelants.cz)
+
+## What's included
+### Functions
 - User Management
 - Job Management
 - Cache Management
@@ -14,6 +18,15 @@
 - Log Viewer
 - Audit
 - API Routes view page
+- Menu builder
+- From builder
+- Datatable builder
+
+### Template
+- Reponsive app template
+- Light/dark theme
+- Build on Bootstrap and Livewire
+- Quill editor
   
 ## Install
 
@@ -24,6 +37,20 @@ composer install
 #add Basic Controllers Routes and Features to APP namespace for customization
 php artisan install:boilerplate
 ```
+
+Import javascript and styles (includes bootstrap and font awesome)
+```scss
+// /resources/scss/app.scss
+@import "./boilerplate/boilerplate.scss"
+```
+```js
+// /resources/js/app.scss
+import './boilerplate/boilerplate.js';
+```
+> [!NOTE]
+> If you need customize any of included js/scss files, don't change files inside boilerplate folder.
+> Instead create new root file boilerplate.scss/js by copying it from boilerplate folder. By changing paths of imported files you can make your custom verison or keep importing from boilerplate. 
+> When you update boilerplate package you will need to check changes only in root files boilerplate.scss/js and update your custom version accordingly.
 
 ## Menu Builder
 ### Single Level
