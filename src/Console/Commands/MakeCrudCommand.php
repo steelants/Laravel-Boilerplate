@@ -37,7 +37,7 @@ class MakeCrudCommand extends Command
             $modelClassName = ucfirst(Str::camel(Str::replace('_id', '', $fillable, false)));
             $finalCast = 'string';
             if (
-                Str::contains($fillable, '_id', true) && 
+                Str::contains($fillable, '_id', true) &&
                 class_exists('App\\Models\\' . $modelClassName)
             ) {
                 if (method_exists($modelObject,Str::camel($modelClassName))) {
@@ -85,7 +85,7 @@ class MakeCrudCommand extends Command
 
             $bladePathFile = $bladePathFile . "/resources/views/livewire/" . Str::snake($model, "-") . "/form.blade.php";
             $modaltcontent = $this->getFormBladeSkeleton([
-                'model' => $model, 
+                'model' => $model,
                 'properties' => $properties
             ]);
 
@@ -242,7 +242,7 @@ class MakeCrudCommand extends Command
             $propertyType = $arguments['properties'][$name];
             if (Str::contains($propertyType, "App\\Models\\")) {
                 $tableName = (new $propertyType)->getTable();
-                $content .= "\t\t" . "<x-form::select :options=\"\$this->" . Str::camel($tableName) . "\" name=\"" . $propertyName . "\" placeholder=\"Vyberte\" wire:model.blur=\"" . $propertyName . "\" label=\"" . $propertyName . "\"/>\n";
+                $content .= "\t\t" . "<x-form::select group-class=\"mb-3\"  :options=\"\$this->" . Str::camel($tableName) . "\" name=\"" . $propertyName . "\" placeholder=\"Vyberte\" wire:model.blur=\"" . $propertyName . "\" label=\"" . $propertyName . "\"/>\n";
             } elseif ($propertyType == "integer") {
                 $content .= "\t\t" . "<x-form::input group-class=\"mb-3\" type=\"number\" wire:model=\"" . $propertyName . "\" id=\"" . $propertyName . "\" label=\"" . $propertyName . "\"/>\n";
             } elseif ($propertyType == "boolean") {
