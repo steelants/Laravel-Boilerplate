@@ -40,7 +40,9 @@ class InstallCommand extends Command
 
         self::exportPrefabs('resources/views');
         self::exportPrefabs('resources/js/boilerplate');
+        self::appendJS();
         self::exportPrefabs('resources/sass/boilerplate');
+        self::appendSASS();
         self::exportPrefabs('storage');
 
         if (!$this->option('views-only')) {
@@ -203,6 +205,16 @@ class InstallCommand extends Command
     protected static function appendRoutes(string $RouteType = "web")
     {
         self::appendFile("routes/" . $RouteType . '.php', 'routes.stub', 'use Illuminate\Support\Facades\Route;');
+    }
+
+    protected static function appendSASS()
+    {
+        self::appendFile("resources/sass/app.sass", 'scss.stub', '@import "./boilerplate/boilerplate.scss"');
+    }
+
+    protected static function appendJS()
+    {
+        self::appendFile("resources/js/app.js", 'js.stub', 'import \'./boilerplate/boilerplate.js \';');
     }
 
     protected static function appendExceptions()

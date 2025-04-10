@@ -14,6 +14,10 @@
             <p>{{ $user->email ?? '' }}</p>
         </div>
 
+        <hr/>
+        @livewire('user.limitation', ['user' => $user])
+        <hr/>
+
         @if (config('session.driver') == 'database')
             <div>
                 <h4>{{ __('boilerplate::ui.sessions') }}</h4>

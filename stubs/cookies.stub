@@ -3,3 +3,6 @@
 			'layout-nav',
 			'toggleState',
 		]);
+		$middleware->alias([
+            'is-system-admin' => IsSystemAdmin::class,
+        ]);
