@@ -40,7 +40,9 @@ class InstallCommand extends Command
 
         self::exportPrefabs('resources/views');
         self::exportPrefabs('resources/js/boilerplate');
+        self::appendJS();
         self::exportPrefabs('resources/sass/boilerplate');
+        self::appendSASS();
         self::exportPrefabs('storage');
 
         if (!$this->option('views-only')) {
@@ -89,7 +91,8 @@ class InstallCommand extends Command
         $packages["dependencies"]["@popperjs/core"] = '^2.11.6';
         $packages["dependencies"]["vite"] = '^6.2.0';
         $packages["dependencies"]["laravel-vite-plugin"] = '^1.0.0';
-        $packages["dependencies"]["quill"] = "2.0.0-rc.2";
+        $packages["dependencies"]["quill"] = "^2.0.3";
+        $packages["dependencies"]["quill-magic-url"] = "^4.2.0";
         $packages["dependencies"]["quill-mention"] = "^6.0.2";
         $packages["dependencies"]["quill-table-ui"] = "^1.0.7";
 
@@ -203,6 +206,16 @@ class InstallCommand extends Command
     protected static function appendRoutes(string $RouteType = "web")
     {
         self::appendFile("routes/" . $RouteType . '.php', 'routes.stub', 'use Illuminate\Support\Facades\Route;');
+    }
+
+    protected static function appendSASS()
+    {
+        self::appendFile("resources/sass/app.sass", 'scss.stub', '@import "./boilerplate/boilerplate.scss"');
+    }
+
+    protected static function appendJS()
+    {
+        self::appendFile("resources/js/app.js", 'js.stub', 'import \'./boilerplate/boilerplate.js \';');
     }
 
     protected static function appendExceptions()

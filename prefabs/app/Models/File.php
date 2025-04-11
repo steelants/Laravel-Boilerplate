@@ -15,6 +15,7 @@ class File extends Model
         'path',
         'original_name',
         'size',
+        'type',
     ];
 
     /**
