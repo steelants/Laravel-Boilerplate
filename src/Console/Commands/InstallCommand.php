@@ -91,7 +91,8 @@ class InstallCommand extends Command
         $packages["dependencies"]["@popperjs/core"] = '^2.11.6';
         $packages["dependencies"]["vite"] = '^6.2.0';
         $packages["dependencies"]["laravel-vite-plugin"] = '^1.0.0';
-        $packages["dependencies"]["quill"] = "2.0.0-rc.2";
+        $packages["dependencies"]["quill"] = "^2.0.3";
+        $packages["dependencies"]["quill-magic-url"] = "^4.2.0";
         $packages["dependencies"]["quill-mention"] = "^6.0.2";
         $packages["dependencies"]["quill-table-ui"] = "^1.0.7";
 

@@ -2,14 +2,15 @@ import Quill from 'quill';
 window.Quill = Quill;
 
 import * as quillTableUI from 'quill-table-ui'
+import MagicUrl from 'quill-magic-url'
+import { Mention, MentionBlot } from "quill-mention";
 
 Quill.register({
     'modules/tableUI': quillTableUI.default
 }, true);
 
-import {Mention, MentionBlot} from "quill-mention";
-
 Quill.register({ "blots/mention": MentionBlot, "modules/mention": Mention });
+Quill.register('modules/magicUrl', MagicUrl);
 
 // Quill.register(Quill.import('attributors/attribute/direction'), true);
 // Quill.register(Quill.import('attributors/class/align'), true);
@@ -25,7 +26,7 @@ Quill.register(Quill.import('attributors/style/direction'), true);
 Quill.register(Quill.import('attributors/style/font'), true);
 Quill.register(Quill.import('attributors/style/size'), true);
 
-window.loadQuill = function(element, $wire = null){
+window.loadQuill = function (element, $wire = null, mentions = [], tags = []) {
     let container = element.closest('.quill-container');
     let textarea = container.querySelector('.quill-textarea');
 
@@ -34,15 +35,10 @@ window.loadQuill = function(element, $wire = null){
         ['bold', 'italic', 'underline', 'strike'],
         ['blockquote', 'code-block'],
         ['link', 'image'],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
         ['table'],
         ['clean'],
     ];
-
-    const atValues = [
-        { id: 1, value: "Fredrik Sundqvist" },
-        { id: 2, value: "Patrik Sjölin" }
-      ];
 
     let quill = new Quill(element, {
         theme: 'snow',
@@ -52,7 +48,7 @@ window.loadQuill = function(element, $wire = null){
             toolbar: {
                 container: toolbarOptions,
                 handlers: {
-                    table: function() {
+                    table: function () {
                         this.quill.getModule('table').insertTable(3, 3);
                     }
                 }
@@ -63,28 +59,29 @@ window.loadQuill = function(element, $wire = null){
             mention: {
                 allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
                 mentionDenotationChars: ["@", "#"],
-                source: function(searchTerm, renderList, mentionChar) {
-                  let values;
+                source: function (searchTerm, renderList, mentionChar) {
+                    let values;
 
-                  if (mentionChar === "@") {
-                    values = atValues;
-                  } else {
-                    values = hashValues;
-                  }
+                    if (mentionChar === "@") {
+                        values = mentions;
+                    } else {
+                        values = tags;
+                    }
 
-                  if (searchTerm.length === 0) {
-                    renderList(values, searchTerm);
-                  } else {
-                    const matches = [];
-                    for (let i = 0; i < values.length; i++)
-                      if (
-                        ~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())
-                      )
-                        matches.push(values[i]);
-                    renderList(matches, searchTerm);
-                  }
+                    if (searchTerm.length === 0) {
+                        renderList(values, searchTerm);
+                    } else {
+                        const matches = [];
+                        for (let i = 0; i < values.length; i++) {
+                            if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) {
+                                matches.push(values[i]);
+                            }
+                        }
+                        renderList(matches, searchTerm);
+                    }
                 }
-            }
+            },
+            magicUrl: true,
         }
     });
 
@@ -102,12 +99,12 @@ window.loadQuill = function(element, $wire = null){
         textarea.dispatchEvent(new Event('input'));
     });
 
-    textarea.addEventListener('change', function(){
+    textarea.addEventListener('change', function () {
         quill.root.innerHTML = textarea.value;
     });
 
-    if($wire){
-        $wire.hook('morphed', function(){
+    if ($wire) {
+        $wire.hook('morphed', function () {
             quill.root.innerHTML = textarea.value;
         });
     }
@@ -115,8 +112,3 @@ window.loadQuill = function(element, $wire = null){
     element.classList.add('ready');
     container.querySelector('.quill-loading').remove();
 }
-
-document.querySelectorAll('.quill-editor:not(.quill-livewire):not(.ready)').forEach(function(element){
-    window.loadQuill(element);
-});
-
