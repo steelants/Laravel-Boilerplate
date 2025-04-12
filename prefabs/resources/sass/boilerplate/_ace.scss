@@ -1,0 +1,35 @@
+.ace-editor-wrap {
+    position: relative;
+    min-height: 6rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.ace-textarea {
+    display: none;
+}
+
+.ace-editor {
+    flex-grow: 1;
+	border: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+.ace-loading {
+    position: absolute;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    border-radius: var(--bs-border-radius);
+    border: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+.ace-editor.ready+.ace-loading {
+    display: none;
+}
