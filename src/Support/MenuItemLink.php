@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Route;
 
 class MenuItemLink extends MenuItem
 {
-    public function __construct(public string $title, public string $id, public string $route, public string $icon, public array $parameters = [])
+	protected string $type = 'route';
+
+    public function __construct(public string $title, public string $id, public string $route, public string $icon = '', public array $parameters = [], public array $options = [])
     {
         if (!Route::has($route)) {
             throw new Exception("route with name: " . $route . " dont exists!", 1);
