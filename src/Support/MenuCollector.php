@@ -13,14 +13,19 @@ class MenuCollector
         $this->menus = new Collection();
     }
 
-    public function make(string $menuKey, callable $callback)
+    public function make(string $menuKey = '', callable $callback = null)
     {
-        if (is_callable($callback)) {
-            $menu = new MenuBuilder($menuKey);
+		$menu = new MenuBuilder();
+
+		if (is_callable($callback)) {
             call_user_func($callback, $menu);
-            $this->menus->put($menuKey, $menu);
-            return $menu;
         }
+
+		if (!empty($menuKey)) {
+			$this->menus->put($menuKey, $menu);
+		}
+
+		return $menu;
     }
 
     public function get(string $menuKey)
