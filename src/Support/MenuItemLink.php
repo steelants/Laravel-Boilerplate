@@ -19,11 +19,15 @@ class MenuItemLink extends MenuItem
 
     public function isUse(): bool
     {
-        return Request::is(trim(route($this->route, [], false), '/').'*');
+        return Request::is(trim(route($this->route, $this->parameters, false), '/').'*');
     }
 
     public function isActive(): bool
     {
-        return request()->routeIs($this->route);
+		if(empty($this->parameters)){
+			return request()->routeIs($this->route);
+		}
+
+		return request()->fullUrlIs(trim(route($this->route, $this->parameters), '/'));
     }
 }

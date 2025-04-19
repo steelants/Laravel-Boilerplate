@@ -72,4 +72,14 @@ class MenuItem
 	public function type() {
 		return $this->type;
 	}
+
+	public function isUse(): bool
+    {
+        return false;
+    }
+
+    public function isActive(): bool
+    {
+        return false;
+    }
 }
