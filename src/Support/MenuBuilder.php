@@ -13,7 +13,7 @@ class MenuBuilder
         $this->menuItems = new Collection();
     }
 
-    public function add(string $title, array $options = [])
+    public function add(string $title, array $options = []): Collection|MenuItem
     {
         $item = $this::createMenuItem($title, $options);
         $item->setBuilder($this);
@@ -47,4 +47,36 @@ class MenuBuilder
         $item = new MenuItem($title, ...$options);
         return $item;
     }
+
+	public function addItem(string $title, string $id, string $icon = '', array $parameters = [], array $options = [])
+	{
+		return $this->add($title, [
+			'id' => $id,
+			'icon' => $icon,
+			'parameters' => $parameters,
+			'options' => $options,
+		]);
+	}
+
+	public function addRoute(string $title, string $id, string $route, string $icon = '', array $parameters = [], array $options = [])
+	{
+		return $this->add($title, [
+			'id' => $id,
+			'route' => $route,
+			'icon' => $icon,
+			'parameters' => $parameters,
+			'options' => $options,
+		]);
+	}
+
+	public function addAction(string $title, string $id, string $action, string $icon = '', array $parameters = [], array $options = [])
+	{
+		return $this->add($title, [
+			'id' => $id,
+			'action' => $action,
+			'icon' => $icon,
+			'parameters' => $parameters,
+			'options' => $options,
+		]);
+	}
 }

@@ -19,7 +19,7 @@ class MenuItem
         $this->builder = $builder;
     }
 
-    public function add(string $title, array $options = []): MenuItem
+    public function add(string $title, array $options = []): Collection|MenuItem
     {
         if (!isset($this->items)) {
             $this->items = new Collection();
@@ -32,15 +32,36 @@ class MenuItem
         return $item;
     }
 
-	public function addItem($item){
-		if (!isset($this->items)) {
-            $this->items = new Collection();
-        }
+	public function addItem(string $title, string $id, string $icon = '', array $parameters = [], array $options = [])
+	{
+		return $this->add($title, [
+			'id' => $id,
+			'icon' => $icon,
+			'parameters' => $parameters,
+			'options' => $options,
+		]);
+	}
 
-		$item->setBuilder($this->builder);
-        $this->items->push($item);
+	public function addRoute(string $title, string $id, string $route, string $icon = '', array $parameters = [], array $options = [])
+	{
+		return $this->add($title, [
+			'id' => $id,
+			'route' => $route,
+			'icon' => $icon,
+			'parameters' => $parameters,
+			'options' => $options,
+		]);
+	}
 
-        return $item;
+	public function addAction(string $title, string $id, string $action, string $icon = '', array $parameters = [], array $options = [])
+	{
+		return $this->add($title, [
+			'id' => $id,
+			'action' => $action,
+			'icon' => $icon,
+			'parameters' => $parameters,
+			'options' => $options,
+		]);
 	}
 
     public function items(): Collection|bool
