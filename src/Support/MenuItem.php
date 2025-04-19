@@ -64,9 +64,9 @@ class MenuItem
 		]);
 	}
 
-    public function items(): Collection|bool
+    public function items(): Collection|null
     {
-        return isset($this->items) ? $this->items : false;
+        return isset($this->items) ? $this->items : null;
     }
 
 	public function type() {
