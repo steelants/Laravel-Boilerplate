@@ -68,8 +68,8 @@ class MenuItem
 
 	public function addDropdown(string $title, array $options = []): Collection|MenuItem
     {
-        if (!isset($this->items)) {
-            $this->items = new Collection();
+        if (!isset($this->dropdown)) {
+            $this->dropdown = new Collection();
         }
 
         $item = $this->builder::createMenuItem($title, $options);
@@ -114,6 +114,11 @@ class MenuItem
     public function items(): Collection|null
     {
         return isset($this->items) ? $this->items : null;
+    }
+
+	public function dropdown(): Collection|null
+    {
+        return isset($this->dropdown) ? $this->dropdown : null;
     }
 
 	public function type() {
