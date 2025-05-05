@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use DOMDocument;
 use App\Models\File;
 use App\Models\Tenant;
 use App\Types\FileType;
@@ -32,7 +33,7 @@ class FileService
 
         libxml_use_internal_errors(true);
 
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         $dom->encoding = 'utf-8';
         $dom->loadHTML(mb_convert_encoding($rawContent, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $images = $dom->getElementsByTagName('img');
@@ -95,7 +96,7 @@ class FileService
     {
         libxml_use_internal_errors(true);
 
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         $dom->encoding = 'utf-8';
         $dom->loadHTML(mb_convert_encoding($rawContent, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $images = $dom->getElementsByTagName('img');
@@ -114,7 +115,7 @@ class FileService
         return $files;
     }
 
-    public static function uploadFile(Model $owner, UploadedFile|TemporaryUploadedFile $file, string $rootPath): string
+    public static function uploadFile(Model $owner, UploadedFile|TemporaryUploadedFile $file, string $rootPath, bool $public = false): string
     {
         $filename = Str::uuid()->toString() . "." . $file->getClientOriginalExtension();
         $file_path = $file->storeAs($rootPath, $filename);
@@ -130,16 +131,20 @@ class FileService
             ],
         );
 
+        if ($public == true) {
+            return str_replace('public', 'storage', $file_path);
+        }
+
         return route("file.serv", [
             "path"      => str_replace(DIRECTORY_SEPARATOR, '-', trim($rootPath, DIRECTORY_SEPARATOR)),
             "file_name" => $filename,
         ], false);
     }
 
-    public static function uploadTenantFile(Tenant $tenant, Model $owner, UploadedFile|TemporaryUploadedFile $file, string $rootPath): string
+    public static function uploadTenantFile(Tenant $tenant, Model $owner, UploadedFile|TemporaryUploadedFile $file, string $rootPath, bool $public = false): string
     {
-        $tenantRootPath = 'uploads'.DIRECTORY_SEPARATOR.'tenant_media'. DIRECTORY_SEPARATOR . $tenant->id . DIRECTORY_SEPARATOR;
-        return self::uploadFile($owner, $file, ($tenantRootPath . trim($rootPath, DIRECTORY_SEPARATOR)));
+        $tenantRootPath = ($public == true ? DIRECTORY_SEPARATOR.'public' : 'uploads').DIRECTORY_SEPARATOR.'tenant_media'. DIRECTORY_SEPARATOR . $tenant->id . DIRECTORY_SEPARATOR;
+        return self::uploadFile($owner, $file, ($tenantRootPath . trim($rootPath, DIRECTORY_SEPARATOR)), $public);
     }
 
     public static function loadTenantFile(Tenant $tenant, string $filename, string $rootPath): string
