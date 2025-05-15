@@ -3,23 +3,23 @@
 namespace SteelAnts\LaravelBoilerplate\Support;
 
 use Illuminate\Support\Collection;
+use SteelAnts\LaravelBoilerplate\Types\AlertModeType;
 
 class AlertCollector
 {
-	protected Collection $alerts;
-
-	public function __construct()
+	public function add(string $type = 'info', string $text, string $icon = '', int $mode = AlertModeType::RELOAD)
 	{
-		$this->alerts = new Collection();
+		$alerts = session('alerts-' . $mode, []);
+		$alerts[] = new AlertItem(type: $type, text: $text, icon: $icon);
+		if ($mode == AlertModeType::RELOAD) {
+			session()->flash('alerts-'. $mode, $alerts);
+		} else if ($mode == AlertModeType::INSTANT) {
+			session()->now('alerts-'. $mode, $alerts);
+		}
 	}
 
-	public function add(string $type = 'info', string $icon = '', string $text)
+	public function get(int $mode = AlertModeType::RELOAD)
 	{
-		$this->alerts->add(new AlertItem(type: $type, icon: $icon, text: $text));
-	}
-
-	public function get()
-	{
-		return $this->alerts;
+		return session('alerts-' . $mode, []);
 	}
 }
