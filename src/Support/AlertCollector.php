@@ -20,6 +20,12 @@ class AlertCollector
 
 	public function get(int $mode = AlertModeType::RELOAD)
 	{
-		return Session::get('alerts-' . $mode, []);
+		$alerts = Session::get('alerts-' . $mode, []);
+		$limitedAlerts = array_slice($alerts, 0, 5); // limit
+		$restAlerts = array_slice($alerts, 5);
+		if (count($restAlerts) > 0) {
+			Session::flash('alerts-'. $mode, $restAlerts);
+		}
+		return $limitedAlerts;
 	}
 }
