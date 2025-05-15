@@ -15,7 +15,7 @@ class AlertCollector
 
 	public function add(string $type = 'info', string $icon = '', string $text)
 	{
-		$this->alerts->add(new AlertItem($type, $icon, $text));
+		$this->alerts->add(new AlertItem(type: $type, icon: $icon, text: $text));
 	}
 
 	public function get()
