@@ -8,15 +8,17 @@
     display: flex;
     align-items: center;
     gap: .5rem;
-    cursor: pointer;
     color: var(--bs-body-color);
     text-decoration: none;
     padding: .25rem;
     border-radius: $border-radius;
 
-    &:hover,
-    &.show{
-        background-color: var(--bs-secondary-bg);
+    &[data-bs-toggle="dropdown"]{
+        cursor: pointer;
+
+        &:hover{
+            background-color: var(--bs-secondary-bg);
+        }
     }
 
     &+.dropdown-menu{
