@@ -30,9 +30,23 @@
                     <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                 </li>
             </ul>
-            <ul class="nav nav-pills">
+            <ul class="nav nav-pills mb-4">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Active</a>
+                    <a class="nav-link active" aria-current="page" href="#">Pills</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+            <ul class="nav nav-switch mb-4">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Switch</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
@@ -47,60 +61,191 @@
         </div>
 
         <div class="my-4 d-flex">
-            <div class="app-nav-profile random-bg-1">
-                PS
-            </div>
-            <div class="app-nav-profile random-bg-2">
-                PS
-            </div>
-            <div class="app-nav-profile random-bg-3">
-                PS
-            </div>
-            <div class="app-nav-profile random-bg-4">
-                PS
-            </div>
-            <div class="app-nav-profile random-bg-5">
-                PS
-            </div>
-            <div class="app-nav-profile random-bg-6">
-                PS
-            </div>
+            <x-avatar :user="auth()->user()" size="lg"/>
+            <x-avatar name="Test test test" />
+            <x-avatar name="S M" size="sm"/>
+            <x-avatar name="X S" size="xs"/>
+            <x-avatar name="Test long very" />
+            <x-avatar name="System" color="0"/>
         </div>
+
+        @php
+            $themes = [
+                'primary',
+                'secondary',
+                'success',
+                'info',
+                'warning',
+                'danger',
+                'light',
+                'dark',
+            ]
+        @endphp
 
         <div class="my-4">
             <h4>Buttons</h4>
-            <button type="button" class="btn btn-primary">Primary</button>
-            <button type="button" class="btn btn-secondary">Secondary</button>
-            <button type="button" class="btn btn-success">Success</button>
-            <button type="button" class="btn btn-danger">Danger</button>
-            <button type="button" class="btn btn-warning">Warning</button>
-            <button type="button" class="btn btn-info">Info</button>
-            <button type="button" class="btn btn-light">Light</button>
-            <button type="button" class="btn btn-dark">Dark</button>
+            @foreach ($themes as $theme)
+                        <button type="button" class="btn btn-{{$theme}}">{{ucfirst($theme)}}</button>
+                    @endforeach
             <button type="button" class="btn">Button</button>
             <button type="button" class="btn btn-link">Link</button>
+            <br>
+            <br>
+
+            <div data-bs-theme="dark">
+                <div class="bg-body p-4">
+                    @foreach ($themes as $theme)
+                        <button type="button" class="btn btn-{{$theme}}">{{ucfirst($theme)}}</button>
+                    @endforeach
+                    <button type="button" class="btn">Button</button>
+                </div>
+            </div>
+
+            <br>
+            <br>
+            <button type="button" class="btn btn-light btn-sq"><i class="fas fa-angle-double-up"></i></button>
+            <button type="button" class="btn btn-sm btn-light"><i class="fas fa-angle-down me-2"></i><small>System</small></button>
+            <button type="button" class="btn btn-sq">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                  </svg>
+            </button>
+            <br>
+            <div class="d-flex gap-2 my-2">
+                <input type="text" class="form-control w-auto">
+                <button type="button" class="btn btn-light">Light</button>
+                <button type="button" class="btn border">Light</button>
+            </div>
+            <button type="button" class="btn btn-sm border">Small</button>
+            <button type="button" class="btn btn-lg border">Large</button>
         </div>
 
         <div class="my-4">
             <h4>Badges</h4>
-            <span class="badge text-bg-primary">Primary</span>
-            <span class="badge text-bg-secondary">Secondary</span>
-            <span class="badge text-bg-success">Success</span>
-            <span class="badge text-bg-danger">Danger</span>
-            <span class="badge text-bg-warning">Warning</span>
-            <span class="badge text-bg-info">Info</span>
-            <span class="badge text-bg-light">Light</span>
-            <span class="badge text-bg-dark">Dark</span>
+            @foreach ($themes as $theme)
+                <x-badge color="{{$theme}}" icon="far fa-circle">{{ucfirst($theme)}}</x-badge>
+            @endforeach
             <br>
-            <span class="badge rounded-pill text-bg-primary">Primary</span>
-            <span class="badge rounded-pill text-bg-secondary">Secondary</span>
-            <span class="badge rounded-pill text-bg-success">Success</span>
-            <span class="badge rounded-pill text-bg-danger">Danger</span>
-            <span class="badge rounded-pill text-bg-warning">Warning</span>
-            <span class="badge rounded-pill text-bg-info">Info</span>
-            <span class="badge rounded-pill text-bg-light">Light</span>
-            <span class="badge rounded-pill text-bg-dark">Dark</span>
             <br>
+
+            @foreach ($themes as $theme)
+                <x-badge color="{{$theme}}" variant="subtle" icon="far fa-circle">{{ucfirst($theme)}}</x-badge>
+            @endforeach
+            <br>
+            <br>
+
+            <div data-bs-theme="dark">
+                <div class="bg-body p-4">
+                    @foreach ($themes as $theme)
+                        <x-badge color="{{$theme}}" icon="far fa-circle">{{ucfirst($theme)}}</x-badge>
+                    @endforeach
+                    <br>
+                    <br>
+
+                    @foreach ($themes as $theme)
+                        <x-badge color="{{$theme}}" variant="subtle" icon="far fa-circle">{{ucfirst($theme)}}</x-badge>
+                    @endforeach
+                </div>
+            </div>
+            <br>
+
+            <x-badge color="primary" variant="subtle" icon="far fa-circle" size="sm">Small</x-badge>
+            <x-badge color="primary" variant="subtle" icon="far fa-circle" size="md">Normal</x-badge>
+            <x-badge color="primary" variant="subtle" icon="far fa-circle" size="lg">Large</x-badge>
+            <br>
+            <x-badge color="primary" variant="subtle" size="sm">Small</x-badge>
+            <x-badge color="primary" variant="subtle" size="md">Normal</x-badge>
+            <x-badge color="primary" variant="subtle" size="lg">Large</x-badge>
+
+        </div>
+
+        <div class="my-4">
+            <h4>Dropdowns</h4>
+
+            @php
+                $priorities = [
+                    ['danger', 'fas fa-skull-crossbones', 'Critical'],
+                    ['warning', 'fas fa-angle-double-up', 'High'],
+                    ['info', 'fas fa-equals', 'Normal'],
+                    ['light', 'fas fa-angle-double-down', 'Low'],
+                ];
+            @endphp
+
+            <div class="row g-3">
+                <div class="col-2">
+                    <div class="d-block dropdown-menu position-static">
+                        @foreach ($priorities as $item)
+                            <div class="dropdown-item">
+                                <x-badge color="{{$item[0]}}" variant="subtle" icon="{{$item[1]}}">{{$item[2]}}</x-badge>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="d-block dropdown-menu position-static">
+                        @foreach ($priorities as $item)
+                            <div class="dropdown-item">
+                                <x-badge color="{{$item[0]}}" variant="subtle" icon="{{$item[1]}}" size="lg">{{$item[2]}}</x-badge>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="d-block dropdown-menu position-static">
+                        @foreach ($priorities as $item)
+                            <div class="dropdown-item">
+                                <i class="dropdown-ico {{$item[1]}} text-{{$item[0]}}"></i>
+                                {{$item[2]}}
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="d-block dropdown-menu position-static">
+                        @foreach ($priorities as $item)
+                            <div class="dropdown-item">
+                                <i class="dropdown-ico {{$item[1]}} text-{{$item[0]}}-emphasis bg-{{$item[0]}}-subtle"></i>
+                                {{$item[2]}}
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="col-2">
+                    <div class="d-block dropdown-menu position-static">
+                        @foreach ($priorities as $item)
+                            <div class="dropdown-item">
+                                <i class="dropdown-ico {{$item[1]}} text-{{$item[0]}} bg-{{$item[0]}}-subtle"></i>
+                                {{$item[2]}}
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="col-2">
+                    <div class="d-block dropdown-menu position-static">
+                        @foreach ($priorities as $item)
+                            <div class="dropdown-item">
+                                <i class="dropdown-ico {{$item[1]}} text-{{$item[0]}} bg-{{$item[0]}}-subtle border border-{{$item[0]}}-subtle small"></i>
+                                {{$item[2]}}
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="col-2">
+                    <div class="d-block dropdown-menu position-static">
+                        @foreach ($priorities as $item)
+                            <div class="dropdown-item">
+                                <i class="dropdown-ico {{$item[1]}} text-bg-{{$item[0]}}"></i>
+                                {{$item[2]}}
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+
         </div>
 
         <div class="my-4">
