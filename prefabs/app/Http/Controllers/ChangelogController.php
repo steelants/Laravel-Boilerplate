@@ -15,6 +15,6 @@ class ChangelogController extends Controller
             $content = Str::markdown($fileContent);
         }
 
-        return view('markdown.index', ['content' => $content]);
+        return view('changelog.index', ['content' => $content]);
     }
 }
