@@ -18,7 +18,37 @@ class Alerts extends Component
         public ?array $alerts = [],
     )
     {
-		$this->alerts = Alert::get(AlertModeType::INSTANT);
+        $types = [
+            'success',
+            'error',
+            'warning',
+            'info',
+            'message',
+        ];
+
+        foreach($types as $type){
+            $message = session()->get($type);
+            if(!empty($message)){
+                $this->alerts[] = [
+                    'type' => $type,
+                    'message' => $message
+                ];
+            }
+        }
+
+        if(session()->has('errors')){
+            $items = session()->get('errors')->toArray();
+            foreach($items as $item){
+                if(!empty($item['error'])){
+                    $this->alerts[] = [
+                        'type' => 'error',
+                        'message' => $item['error']
+                    ];
+                }
+            }
+        }
+
+		$this->alerts = array_merge($this->alerts, Alert::get(AlertModeType::INSTANT));
 		$this->alerts = array_merge($this->alerts, Alert::get(AlertModeType::RELOAD));
     }
 
