@@ -19,10 +19,12 @@
   box-shadow: 0 4px 6px -1px rgb(0 0 0/0.1), 0 2px 4px -2px rgb(0 0 0/0.1);
   border: 1px solid var(--bs-secondary-bg);
 
-  margin-right: -400px;
-  opacity: 0;
-  animation: slideSnackbar 3s forwards;
-  animation-delay: 0.2s;
+  &:not(.snackbar-persist){
+    margin-right: -400px;
+    opacity: 0;
+    animation: slideSnackbar 3s forwards;
+    animation-delay: 0.2s;
+  }
 }
 
 @keyframes slideSnackbar {
