@@ -91,6 +91,27 @@ Menu::make('main-menu', function ($menu) {
 });
 ```
 
+## Alerts
+### types
+	success
+	error
+	warning
+	info
+
+### RELOAD type
+```php
+	Alert::add(type: 'info', text: 'Informační zpráva po redirektu', icon: '', mode: AlertModeType::RELOAD, persist: false);
+```
+
+### INSTANT type
+```php
+	Alert::add(type: 'error', text: 'Error zpráva ve stejném requestu', icon: '', mode: AlertModeType::INSTANT, persist: false);
+```
+### parametry
+icon - využívá defaultní ikonu dle typu, pokud není nastavena
+persist - pokud je true, zůstává notifikace aktivní dokud ji neodklikne uživatel nebo neprovede redirect.
+
+
 ## Development
 
 1. Create subfolder `/packages` at root of your laravel project

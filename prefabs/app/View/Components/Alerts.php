@@ -5,6 +5,9 @@ namespace App\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use SteelAnts\LaravelBoilerplate\Facades\Alert;
+use SteelAnts\LaravelBoilerplate\Support\AlertItem;
+use SteelAnts\LaravelBoilerplate\Types\AlertModeType;
 
 class Alerts extends Component
 {
@@ -27,10 +30,7 @@ class Alerts extends Component
         foreach($types as $type){
             $message = session()->get($type);
             if(!empty($message)){
-                $this->alerts[] = [
-                    'type' => $type,
-                    'message' => $message
-                ];
+                $this->alerts[] = new AlertItem(type: $type, text: $message);
             }
         }
 
@@ -38,14 +38,13 @@ class Alerts extends Component
             $items = session()->get('errors')->toArray();
             foreach($items as $item){
                 if(!empty($item['error'])){
-                    $this->alerts[] = [
-                        'type' => 'error',
-                        'message' => $item['error']
-                    ];
+                    $this->alerts[] = new AlertItem(type: 'error', text: $item['error']);
                 }
             }
         }
 
+		$this->alerts = array_merge($this->alerts, Alert::get(AlertModeType::INSTANT));
+		$this->alerts = array_merge($this->alerts, Alert::get(AlertModeType::RELOAD));
     }
 
     /**

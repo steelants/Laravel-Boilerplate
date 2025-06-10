@@ -12,7 +12,9 @@ use SteelAnts\LaravelBoilerplate\Facades\Menu;
 use SteelAnts\LaravelBoilerplate\Support\MenuCollector;
 use App\Http\Middleware\GenerateMenus;
 use Illuminate\Support\Facades\Blade;
+use SteelAnts\LaravelBoilerplate\Facades\Alert;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
+use SteelAnts\LaravelBoilerplate\Support\AlertCollector;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {
@@ -71,5 +73,8 @@ class BoilerplateServiceProvider extends ServiceProvider
     {
         $this->app->bind('menu', MenuCollector::class);
         $this->app->alias('Menu', Menu::class);
+
+		$this->app->bind('alert', AlertCollector::class);
+        $this->app->alias('Alert', Alert::class);
     }
 }

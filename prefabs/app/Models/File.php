@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use App\Observers\FileObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use SteelAnts\LaravelBoilerplate\Observers\FileObserver;
 
+#[ObservedBy([FileObserver::class])]
 class File extends Model
 {
     use HasFactory;
@@ -24,15 +26,5 @@ class File extends Model
     public function fileable()
     {
         return $this->morphTo();
-    }
-
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        File::observe(FileObserver::class);
     }
 }
