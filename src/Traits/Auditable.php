@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait Auditable
 {
+	protected static $textValue = "name";
+
     public function activities(): MorphMany
     {
         return $this->morphMany(Activity::class, 'actor');
@@ -19,35 +21,35 @@ trait Auditable
         }
 
         static::created(function ($model) {
-            $this->createdBy($model);
+            self::createdBy($model);
         });
 
         static::updating(function ($model) {
-            $this->updatingBy($model);
+            self::updatingBy($model);
         });
 
         static::deleting(function ($model) {
-            $this->deletingBy($model);
+            self::deletingBy($model);
         });
     }
 
-	public function createdBy($model){
+	protected static function createdBy($model){
 		$activity = new Activity();
-		$activity->lang_text = __('boilerplate::ui.created', ["model" => class_basename($model) . " " . $model->name]);
+		$activity->lang_text = __('boilerplate::ui.created', ["model" => class_basename($model) . " " . $model->{self::$textValue}]);
 		$activity->affected()->associate($model);
 		$activity->save();
 	}
 
-	public function updatingBy($model){
+	protected static function updatingBy($model){
 		$activity = new Activity();
-		$activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->name]);
+		$activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->{self::$textValue}]);
 		$activity->affected()->associate($model);
 		$activity->save();
 	}
 
-	public function deletingBy($model){
+	protected static function deletingBy($model){
 		$activity = new Activity();
-        $activity->lang_text = __('boilerplate::ui.deleted', ["model" => class_basename($model) . " " . $model->name]);
+        $activity->lang_text = __('boilerplate::ui.deleted', ["model" => class_basename($model) . " " . $model->{self::$textValue}]);
         $activity->save();
 	}
 }

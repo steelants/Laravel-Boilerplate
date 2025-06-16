@@ -11,15 +11,17 @@ trait AuditableDetailed
         updatingBy as originalUpdatingBy;
     }
 
-	public function updatingBy($model){
+	public static function updatingBy($model){
 		if ($model->isDirty()) {
 			foreach ($model->getAttributes() as $key => $value) {
 				if (!$model->isDirty($key)) {
 					continue;
 				}
-
+				dump($model->getOriginal($key));
+				dump($model->$key);
+				//dd("test");
 				$activity = new Activity();
-				$activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->name]);
+				$activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->{self::$textValue}]);
 				$activity->affected()->associate($model);
 
 				$activity->data = [
@@ -32,7 +34,7 @@ trait AuditableDetailed
 				$activity->save();
 			}
 		} else {
-			$this->originalUpdatingBy($model);
+			self::originalUpdatingBy($model);
 		}
 	}
 }
