@@ -210,11 +210,21 @@ class InstallCommand extends Command
 
     protected static function appendSASS()
     {
+		$path = resource_path('sass\app.scss');
+		if (!File::exists($path)) {
+			$content = self::boilerplateString('@import "./boilerplate/boilerplate.scss";', "scss");
+            File::put($path, $content);
+        }
         self::appendFile("resources/sass/app.scss", 'scss.stub', '@import "./boilerplate/boilerplate.scss";');
     }
 
     protected static function appendJS()
     {
+		$path = resource_path('js\app.js');
+		if (!File::exists($path)) {
+			$content = self::boilerplateString('import \'./boilerplate/boilerplate.js \';', "js");
+            File::put($path, $content);
+        }
         self::appendFile("resources/js/app.js", 'js.stub', 'import \'./boilerplate/boilerplate.js \';');
     }
 
