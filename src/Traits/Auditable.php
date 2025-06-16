@@ -19,23 +19,35 @@ trait Auditable
         }
 
         static::created(function ($model) {
-            $activity = new Activity();
-            $activity->lang_text = __('boilerplate::ui.created', ["model" => class_basename($model) . " " . $model->name]);
-            $activity->affected()->associate($model);
-            $activity->save();
+            $this->createdBy($model);
         });
 
         static::updating(function ($model) {
-            $activity = new Activity();
-            $activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->name]);
-            $activity->affected()->associate($model);
-            $activity->save();
+            $this->updatingBy($model);
         });
 
         static::deleting(function ($model) {
-            $activity = new Activity();
-            $activity->lang_text = __('boilerplate::ui.deleted', ["model" => class_basename($model) . " " . $model->name]);
-            $activity->save();
+            $this->deletingBy($model);
         });
     }
+
+	public function createdBy($model){
+		$activity = new Activity();
+		$activity->lang_text = __('boilerplate::ui.created', ["model" => class_basename($model) . " " . $model->name]);
+		$activity->affected()->associate($model);
+		$activity->save();
+	}
+
+	public function updatingBy($model){
+		$activity = new Activity();
+		$activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->name]);
+		$activity->affected()->associate($model);
+		$activity->save();
+	}
+
+	public function deletingBy($model){
+		$activity = new Activity();
+        $activity->lang_text = __('boilerplate::ui.deleted', ["model" => class_basename($model) . " " . $model->name]);
+        $activity->save();
+	}
 }
