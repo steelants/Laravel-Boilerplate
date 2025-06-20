@@ -13,7 +13,7 @@ class ActivityObserver
     {
         if (!app()->runningInConsole()) {
             $activity->ip = $this->getIp();
-            if (empty($activity->actor_id)) {
+            if (empty($activity->actor_id) && auth()->check()) {
                 $activity->actor()->associate(auth()->user());
             }
         } else {

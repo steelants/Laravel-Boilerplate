@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use SteelAnts\LaravelBoilerplate\Observers\ActivityObserver as ObserversActivityObserver;
+use SteelAnts\LaravelBoilerplate\Observers\ActivityObserver;
 
 class Activity extends Model
 {
@@ -30,7 +30,7 @@ class Activity extends Model
 
     protected static function booted()
     {
-        Activity::observe(ObserversActivityObserver::class);
+        Activity::observe(ActivityObserver::class);
     }
 
     public function actor()

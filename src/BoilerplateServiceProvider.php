@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Blade;
 use SteelAnts\LaravelBoilerplate\Facades\Alert;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 use SteelAnts\LaravelBoilerplate\Support\AlertCollector;
+use Illuminate\Support\Facades\Event;
+use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {
@@ -30,10 +32,14 @@ class BoilerplateServiceProvider extends ServiceProvider
             $router->pushMiddlewareToGroup('web', GenerateMenus::class);
         }
 
-        if (!$this->app->runningInConsole()) {
-            return;
-        }
+		Event::subscribe(UserEventSubscriber::class);
 
+        if ($this->app->runningInConsole()) {
+            $this->bootConsole();
+        }
+    }
+
+	public function bootConsole(){
         $this->app->booted(function () {
             $schedule = app(Schedule::class);
             $schedule->job(new Backup())->dailyAT('00:00')->withoutOverlapping();
@@ -67,14 +73,11 @@ class BoilerplateServiceProvider extends ServiceProvider
         //     $schedule = $this->app->make(Schedule::class);
         //     $schedule->command('inspire')->everyMinute();
         // });
-    }
+	}
 
     public function register()
     {
-        $this->app->bind('menu', MenuCollector::class);
         $this->app->alias('Menu', Menu::class);
-
-		$this->app->bind('alert', AlertCollector::class);
         $this->app->alias('Alert', Alert::class);
     }
 }
