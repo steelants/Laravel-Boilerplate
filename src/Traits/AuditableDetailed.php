@@ -3,7 +3,7 @@
 namespace SteelAnts\LaravelBoilerplate\Traits;
 
 use App\Models\Activity;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Model;
 
 trait AuditableDetailed
 {
@@ -13,23 +13,18 @@ trait AuditableDetailed
 
 	public static function updatingBy($model){
 		if ($model->isDirty()) {
-			foreach ($model->getAttributes() as $key => $value) {
-				if (!$model->isDirty($key)) {
-					continue;
-				}
-				$activity = new Activity();
-				$activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->{self::$nameColumn}]);
-				$activity->affected()->associate($model);
-
-				$activity->data = [
-					$key => [
-						"from" => $model->getOriginal($key),
-						"to"   => $model->$key,
-					],
+			$data = [];
+			foreach ($model->getDirty() as $key => $value) {
+				$data[$key] = [
+					"from" => $model->getOriginal($key),
+					"to"   => $value,
 				];
-
-				$activity->save();
 			}
+			$activity = new Activity();
+			$activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->{self::$nameColumn}]);
+			$activity->data = $data;
+			$activity->affected()->associate($model);
+			$activity->save();
 		} else {
 			self::originalUpdatingBy($model);
 		}
