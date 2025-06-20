@@ -18,7 +18,7 @@ trait AuditableDetailed
 					continue;
 				}
 				$activity = new Activity();
-				$activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->{self::$textValue}]);
+				$activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->{self::$nameColumn}]);
 				$activity->affected()->associate($model);
 
 				$activity->data = [
