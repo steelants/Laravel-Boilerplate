@@ -22,7 +22,7 @@ class UserEventSubscriber
 
     public function handleFailed(Failed $event): void
 	{
-		ActivityService::log('Failed login');
+		ActivityService::log('Failed login', ['email' => $event->credentials['email']]);
 	}
 
     public function subscribe(Dispatcher $events): array
