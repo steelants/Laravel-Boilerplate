@@ -10,11 +10,11 @@
         "steelants/modal": "^2.0.1",
         "steelants/datatable": "^2.3.5",
         "steelants/laravel-auth": "^1.0.3",
-        "steelants/livewire-form": "^0.0.3"
+        "steelants/livewire-form": "^0.0.3",
+        "stevebauman/autodoc-facades": "^1.3"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.9",
-        "stevebauman/autodoc-facades": "^1.3"
+        "barryvdh/laravel-debugbar": "^3.9"
     },
     "autoload": {
 		"psr-4": {
