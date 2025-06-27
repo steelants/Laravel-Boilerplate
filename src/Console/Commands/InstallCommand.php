@@ -26,7 +26,9 @@ class InstallCommand extends Command
 
         if (strpos(file_get_contents($RouteFilePath), 'Route::auth();') === false) {
             //If authentication not installed install
-            $this->call('install:api', ['--without-migration-prompt' => true, '--force' => $this->option('force')]);
+             if (strpos(file_get_contents('bootstrap/app.php'), "api: __DIR__.'/../routes/api.php',") === false) {
+                $this->call('install:api', ['--without-migration-prompt' => true, '--force' => $this->option('force')]);
+            }
             $this->call('install:auth', ['--force' => $this->option('force')]);
             //Artisan::call('install:auth --force');
             file_put_contents($RouteFilePath, str_replace('Route::auth();', '', file_get_contents($RouteFilePath)));
@@ -222,10 +224,10 @@ class InstallCommand extends Command
     {
 		$path = resource_path('js\app.js');
 		if (!File::exists($path)) {
-			$content = self::boilerplateString('import \'./boilerplate/boilerplate.js \';', "js");
+			$content = self::boilerplateString("import './boilerplate/boilerplate.js';", "js");
             File::put($path, $content);
         }
-        self::appendFile("resources/js/app.js", 'js.stub', 'import \'./boilerplate/boilerplate.js \';');
+        self::appendFile("resources/js/app.js", 'js.stub', "import './bootstrap';");
     }
 
     protected static function appendExceptions()

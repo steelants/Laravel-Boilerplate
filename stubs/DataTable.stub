@@ -45,6 +45,7 @@ class DataTable extends DataTableComponent
                 'text' => "Remove",
                 'actionClass' => 'text-danger',
                 'iconClass' => 'fas fa-trash',
+                'confirm' => 'Opravdu smazat?',
             ]
         ];
     }
