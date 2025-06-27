@@ -33,7 +33,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "SteelAnts\\LaravelBoilerplate\\BoilerplateServiceProvider"
+                "SteelAnts\\LaravelBoilerplate\\BoilerplateServiceProvider",
+                "Stevebauman\\AutodocFacades\\AutodocServiceProvider"
             ]
         }
     }
