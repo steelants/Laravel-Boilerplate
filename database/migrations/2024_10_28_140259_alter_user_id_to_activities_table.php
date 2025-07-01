@@ -13,7 +13,7 @@ return new class extends Migration
 	 */
 	public function up(): void
 	{
-		if (!Schema::hasColumn('activities', 'actor')) {
+		if (!Schema::hasColumn('activities', 'actor_id')) {
 			Schema::table('activities', function (Blueprint $table) {
 				$table->nullableMorphs(name: 'actor');
 			});
