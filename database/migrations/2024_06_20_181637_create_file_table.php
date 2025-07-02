@@ -1,5 +1,6 @@
 <?php
 
+use App\Types\FileType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,7 @@ return new class extends Migration
             $table->string("path");
             $table->string("original_name");
             $table->integer("size");
+			$table->integer("type")->default(FileType::ATTACHMENT);
             $table->morphs('fileable');
         });
     }
