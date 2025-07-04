@@ -26,7 +26,6 @@ class CrudController extends Controller
             $model = $modelName::class;
         }
 
-
         return view($this->viewName, [
             'title'           => 'boilerplate::ui.' . $model . 's',
             'modal_component' => $model . '.form',
