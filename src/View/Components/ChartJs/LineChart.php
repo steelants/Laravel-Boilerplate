@@ -38,6 +38,6 @@ class LineChart extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.chart-js.line-chart');
+        return view('boilerplate::components.chart-js.line-chart');
     }
 }

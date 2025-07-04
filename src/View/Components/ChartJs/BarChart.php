@@ -38,6 +38,6 @@ class BarChart extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.chart-js.bar-chart');
+        return view('boilerplate::components.chart-js.bar-chart');
     }
 }

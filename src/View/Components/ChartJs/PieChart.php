@@ -137,6 +137,6 @@ class PieChart extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.chart-js.pie-chart');
+        return view('boilerplate::components.chart-js.pie-chart');
     }
 }
