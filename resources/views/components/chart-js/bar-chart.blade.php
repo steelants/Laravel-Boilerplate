@@ -1,9 +1,9 @@
 <div>
-	<canvas height=500 id="line-chart-{{ $uuid }}"></canvas>
+	<canvas height=500 id="bar-chart-{{ $uuid }}"></canvas>
 	<script>
 		var labels = @json($labels);
 
-		new Chart(document.getElementById("line-chart-{{ $uuid }}"), {
+		new Chart(document.getElementById("bar-chart-{{ $uuid }}"), {
 			type: 'bar',
 			data: {
 				labels: @json($labels),

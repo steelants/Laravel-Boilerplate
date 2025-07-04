@@ -127,7 +127,7 @@ class PieChart extends Component
      */
     public function __construct(array $dataset)
     {
-        $this->uuid =  uniqid();
+        $this->uuid = uniqid();
         $this->labels = array_keys($dataset);
         $this->values = array_values($dataset);
     }
