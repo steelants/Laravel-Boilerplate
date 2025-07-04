@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 trait AuditableDetailed
 {
-	use Auditable{
+	use Auditable {
         updatingBy as originalUpdatingBy;
     }
 
