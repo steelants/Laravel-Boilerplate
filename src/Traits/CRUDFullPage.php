@@ -24,7 +24,7 @@ trait CRUDFullPage
         return view(($this->views['edit'] ?? 'boilerplate::crud'), [
             'title'           => (Lang::has('boilerplate::' . $model . '.create') || Lang::has('boilerplate::' . $model . '.edit') ? 'boilerplate::' . $model : $model . '.') . (empty($modelId) ? 'create' : 'edit'),
             'page_component'  => $model . '.edit',
-			'model_back' => $model,
+			'model_back' => $model . '.index',
 			'data' => $data,
         ]);
     }

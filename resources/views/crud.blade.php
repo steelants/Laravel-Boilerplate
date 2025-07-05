@@ -3,7 +3,7 @@
         <div class="page-header">
             <h1>{{ __($title) }}</h1>
 			@if(!empty($model_back))
-				<a class="btn btn-secondary" href="{{ route($model_back . ".index") }}">
+				<a class="btn btn-secondary" href="{{ $model_back }}">
                     <i class="me-2 fas fa-arrow-left"></i><span>{{ __('boilerplate::ui.back') }}</span>
                 </a>
             @endif
