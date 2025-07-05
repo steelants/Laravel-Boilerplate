@@ -14,15 +14,18 @@ trait CRUD
 
 	public function loadModel(Request $request){
 		if (property_exists($this, 'model')) {
-            $model = $this->model;
+            $modelClass = $this->model;
+            $modelName = substr(strrchr($modelClass, '\\'), 1);
         } else {
-            $modelName = ucfirst(Str::camel(str_replace('-', '_', $request->route('accountId'))));
-            if (!class_exists('App\\Models\\' . $modelName)) {
-                throw new ErrorException($modelName .  " model not found!");
-            }
-            $model = $modelName::class;
+            $modelName = ucfirst(Str::camel(str_replace('-', '_', $request->route('model'))));
+            $modelClass = $modelName::class;
         }
-		return $model;
+
+        if (!class_exists($modelClass)) {
+            throw new ErrorException($modelName .  " model not found!");
+        }
+
+        return str_replace( '_','-', Str::camel($modelName));
 	}
 
     public function index(Request $request)
