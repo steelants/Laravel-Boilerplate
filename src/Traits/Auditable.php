@@ -19,7 +19,6 @@ trait Auditable
         if (app()->runningInConsole()) {
             return;
         }
-
         static::created(function ($model) {
             self::createdBy($model);
         });

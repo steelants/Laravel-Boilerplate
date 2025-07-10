@@ -15,12 +15,16 @@ trait AuditableDetailed
 		}
 
 		$collection = collect($model->getDirty());
-		if (method_exists($model, 'auditedColumns')){
-			$collection = $collection->intersectByKeys(array_flip($model->auditedColumns()));
+		if (method_exists($model, 'auditableColumns')){
+			$collection = $collection->intersectByKeys(array_flip($model->auditableColumns()));
 		}
 
-		if (method_exists($model, 'auditedExceptions')){
-			$collection = $collection->except($model->auditedExceptions());
+		if (method_exists($model, 'auditableIgnored')){
+			$collection = $collection->except($model->auditableIgnored());
+		}
+
+		if (empty($collection) || count($collection) <= 0) {
+			return;
 		}
 
 		$data = [];
