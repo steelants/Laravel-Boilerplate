@@ -13,26 +13,27 @@ return new class extends Migration
 	 */
 	public function up(): void
 	{
-		if (!Schema::hasColumn('activities', 'actor')) {
+		if (!Schema::hasColumn('activities', 'actor_id')) {
 			Schema::table('activities', function (Blueprint $table) {
 				$table->nullableMorphs(name: 'actor');
 			});
 		}
 
-		$activities = Activity::all();
-		if (!empty($activities) && $activities->count() > 0) {
-			foreach ($activities as $activity) {
-				if (empty($activity->user_id)) {
-					continue;
+		Activity::chunk(500, function ($activities) {
+			if (!empty($activities) && $activities->count() > 0) {
+				foreach ($activities as $activity) {
+					if (empty($activity->user_id)) {
+						continue;
+					}
+					$user = User::find($activity->user_id);
+					if (empty($user) || $user->count() <= 0) {
+						continue;
+					}
+					$activity->actor()->associate($user);
+					$activity->save();
 				}
-				$user = User::find($activity->user_id);
-				if (empty($user) || $user->count() <= 0) {
-					continue;
-				}
-				$activity->actor()->associate($user);
-				$activity->save();
 			}
-		}
+		});
 
 		Schema::table('activities', function (Blueprint $table) {
 			$table->dropForeign(['user_id']);

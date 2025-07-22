@@ -45,46 +45,55 @@ class Backup implements ShouldQueue
         }
 
         //REMOVE OLD BACKUPS
-        $command = "rm -f " . storage_path('app/backups') . "/" . date("Y-m-d", strtotime('-' . $days . ' days')) . ".zip";
-        exec($command, $output);
+        foreach (['database', 'storage'] as $backupPath) {
+            $command = "rm -f " . storage_path('app/backups') . "/" . date("Y-m-d", strtotime('-' . $days . ' days')) . '_' . $backupPath . ".zip";
+            exec($command, $output);
+        }
         Log::info('Clean Old backups ' . $days . ' old');
 
         ///DATABASE
-        if (config('database.default') == 'sqlite') {
-            $dbFile = database_path('database.sqlite');
-            $backupFile = $db_backup_path . '/' . $dbName  . '_' . date("Y-m-d", time()) . '.sqlite';
-            $command = "cp $dbFile $backupFile 2>&1";
-            exec($command, $output);
-            Log::info('Backup ' . $dbName . ' db ');
-            Log::Debug($output);
-        } else {
-            foreach (['data', 'scheme'] as $type) {
-                $parameters = "--no-data";
-                if ($type == "data") {
-                    $parameters = "--no-create-info";
-                }
-
-                $backupFile = $db_backup_path . '/' . $dbName  . '_' . $type . '_' . date("Y-m-d", time()) . '.sql';
-                $command = "mysqldump --skip-comments " . $parameters . " -h " . $dbHost . " -u " . $dbUserName . " -p" . $dbPassword  . " " . $dbName  . " -r $backupFile 2>&1";
+        if (config('backup.database')) {
+            if (config('database.default') == 'sqlite') {
+                $dbFile = database_path('database.sqlite');
+                $backupFile = $db_backup_path . '/' . $dbName  . '_' . date("Y-m-d", time()) . '.sqlite';
+                $command = "cp $dbFile $backupFile 2>&1";
                 exec($command, $output);
-                Log::info('Backup ' . $dbName . ' db ' . $type);
+                Log::info('Backup ' . $dbName . ' db ');
                 Log::Debug($output);
+            } else {
+                foreach (['data', 'scheme'] as $type) {
+                    $parameters = "--no-data";
+                    if ($type == "data") {
+                        $parameters = "--no-create-info";
+                    }
+
+                    $backupFile = $db_backup_path . '/' . $dbName  . '_' . $type . '_' . date("Y-m-d", time()) . '.sql';
+                    $command = "mysqldump --skip-comments " . $parameters . " -h " . $dbHost . " -u " . $dbUserName . " -p" . $dbPassword  . " " . $dbName  . " -r $backupFile 2>&1";
+                    exec($command, $output);
+                    Log::info('Backup ' . $dbName . ' db ' . $type);
+                    Log::Debug($output);
+                }
             }
         }
 
-        //STORAGE
-        $command = "cp -R " . storage_path('app') . " " . storage_path('backups/tmp/storage');
-        exec($command, $output);
-        Log::info('storage backup done');
-        Log::Debug($output);
+        if (config('backup.storage')) {
+            //STORAGE
+            $command = "cp -R " . storage_path('app') . " " . storage_path('backups/tmp/storage');
+            exec($command, $output);
+            Log::info('storage backup done');
+            Log::Debug($output);
+        }
 
-        //Backupo .env
-        $envBackupFile = storage_path("backups/tmp/storage/env.backup");
-        $envSourceFile = app()->environmentFilePath();
+        if (config('backup.enviroment')) {
+            //Backupo .env
+            $envBackupFile = storage_path("backups/tmp/storage/env.backup");
+            $envSourceFile = app()->environmentFilePath();
 
-        $command = "cp " . $envSourceFile . " " . $envBackupFile;
-        exec($command, $output);
-        Log::info('Backup .env');
+            $command = "cp " . $envSourceFile . " " . $envBackupFile;
+            exec($command, $output);
+            Log::info('Backup .env');
+        }
+
 
         //Clear previouse backups from same day
         $command = "rm -f " . storage_path('backups') . "/" . date("Y-m-d", time()) . ".zip";
@@ -101,11 +110,11 @@ class Backup implements ShouldQueue
                 Log::Debug($output);
             }
 
-            $command = "cd ".$backupPath."; zip -rm ".$zippedFilePath." ./*" ;
+            $command = "cd " . $backupPath . "; zip -rm " . $zippedFilePath . " ./*";
             exec($command, $output);
             Log::info($backupPath . '=>' . $zippedFilePath);
 
-            $command = "md5sum ".  $zippedFilePath;
+            $command = "md5sum " .  $zippedFilePath;
             exec($command, $output);
             Log::info('Zipping hash');
 
@@ -114,12 +123,12 @@ class Backup implements ShouldQueue
 
             $fileMD5Hash = explode(" ", $charSet)[0];
             Log::debug($fileMD5Hash);
-            Log::info($backupPath . '=>'.$zippedFilePath.'=>' .$fileMD5Hash);
+            Log::info($backupPath . '=>' . $zippedFilePath . '=>' . $fileMD5Hash);
         }
 
         if (!empty(env('APP_ADMIN'))) {
             Mail::raw(__('Backup Run successfully'), function ($message) {
-                $message->to('vasek@steelants.cz')->subject(_('Backup Run successfully ') . env('APP_NAME'));
+                $message->to('vasek@steelants.cz')->subject(__('Backup Run successfully ') . env('APP_NAME'));
             });
             Log::info('Sending Notification');
         }
@@ -127,7 +136,7 @@ class Backup implements ShouldQueue
 
     private function execShellCommand($command, &$output)
     {
-        $output = $null;
+        $output = null;
         exec($command, $output);
         Log::debug($output);
     }
