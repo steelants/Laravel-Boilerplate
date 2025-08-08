@@ -122,7 +122,7 @@ window.addEventListener('hidden.bs.dropdown', event => {
     }
 })
 
-window.initSelectbox = function(property, options, multiple, pills, selected = null){
+window.initSelectbox = function($wire, property, options, multiple, pills, selected = null, required = false){
     if(multiple){
         selected = selected || [];
         return {
@@ -135,6 +135,8 @@ window.initSelectbox = function(property, options, multiple, pills, selected = n
                 return this.options.filter(option => option.name.toLowerCase().includes(this.search.toLowerCase()));
             },
             get selectedOptionsText(){
+                if(this.selected == null) return '';
+
                 if(this.selected.length == 0){
                     return '';
                 }else if(this.selected.length <= pills){
@@ -144,9 +146,11 @@ window.initSelectbox = function(property, options, multiple, pills, selected = n
                 }
             },
             get renderedOptions(){
+                if(this.selected == null) return [];
                 return this.selectedOptions.slice(0, pills);
             },
             get selectedOptions(){
+                if(this.selected == null) return [];
                 if(this.selected.length == 0){
                     return [];
                 }else{
@@ -154,6 +158,7 @@ window.initSelectbox = function(property, options, multiple, pills, selected = n
                 }
             },
             isSelectedOption(option) {
+                if(this.selected == null) return false;
                 return this.selected.includes(option.id);
             },
             selectOption(option) {
@@ -179,22 +184,23 @@ window.initSelectbox = function(property, options, multiple, pills, selected = n
             },
             get selectedOptionsText(){
                 let selected = this.selectedOptions;
-                return selected === null ? '' : selected.name;
+                return selected == null ? '' : selected.name;
             },
             get renderedOptions(){
                 let selected = this.selectedOptions;
-                return selected === null ? [] : [selected];
+                return selected == null ? [] : [selected];
             },
             get selectedOptions(){
-                return this.selected === null ? null : this.options.find(option => option.id == this.selected);
+                return this.selected == null ? null : this.options.find(option => option.id == this.selected);
             },
             isSelectedOption(option) {
+                if(this.selected == null) return false;
                 return this.selected === option.id;
             },
             selectOption(option) {
                 if(this.selected !== option.id){
                     this.selected = option.id;
-                }else{
+                }else if(!required){
                     this.selected = null;
                 }
             },
