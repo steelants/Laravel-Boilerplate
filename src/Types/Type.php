@@ -8,13 +8,13 @@ abstract class Type
 
     public static function getNames()
     {
-        $all = self::getAll();
+        $all = static::getAll();
         return array_map(fn ($val) => __($val), $all);
     }
 
     public static function getName($type)
     {
-        $all = self::getAll();
+        $all = static::getAll();
         if (isset($all[$type])) {
             return __($all[$type]);
         }
@@ -23,6 +23,6 @@ abstract class Type
 
     public static function getkeys()
     {
-        return array_keys(self::getAll());
+        return array_keys(static::getAll());
     }
 }
