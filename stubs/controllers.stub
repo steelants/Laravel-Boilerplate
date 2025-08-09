@@ -4,9 +4,10 @@ namespace App\Http\Controllers{{namespace}};
 
 use App\Http\Controllers\BaseController;
 use SteelAnts\LaravelBoilerplate\Traits\{{trait}};
+use App\Models\{{model}};
 
 class {{model}}Controller extends BaseController
 {
     use {{trait}};
-    public string $model = "{{model_name}}";
+    public string $model = "{{model}}"::class;
 }
