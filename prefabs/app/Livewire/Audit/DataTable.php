@@ -13,10 +13,12 @@ class DataTable extends DataTableComponent
 
     public bool $paginated = true;
     public int $itemsPerPage = 100;
+    public string $sortBy = 'crated_at';
+    public string $sortDirection = 'asc';
 
     public function query(): Builder
     {
-        return Activity::with(["affected", "actor"])->orderByDesc("created_at");
+        return Activity::with(["affected", "actor"]);
     }
 
     public function row($row): array
