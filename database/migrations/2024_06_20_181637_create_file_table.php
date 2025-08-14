@@ -1,9 +1,9 @@
 <?php
 
-use App\Types\FileType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use SteelAnts\LaravelBoilerplate\Types\FileType;
 
 return new class extends Migration
 {

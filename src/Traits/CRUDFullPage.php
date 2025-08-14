@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Lang;
 trait CRUDFullPage
 {
     use CRUD;
-    //public array $views = ['index' => 'crud.index', 'edit' => 'crud.edit']; change default blade
+    //public array $views = ['index' => 'crud.index', 'form' => 'crud.form']; change default blade
 
-	public function edit(Request $request, $modelId = null)
+	public function form(Request $request, $modelId = null)
     {
         $model = $this->loadModel($request);
 
@@ -21,9 +21,9 @@ trait CRUDFullPage
 			$data['model'] = $modelId;
 		}
 
-        return view(($this->views['edit'] ?? 'boilerplate::crud'), [
+        return view(($this->views['form'] ?? 'boilerplate::crud'), [
             'title'           => (Lang::has('boilerplate::' . $model . '.create') || Lang::has('boilerplate::' . $model . '.edit') ? 'boilerplate::' . $model : $model . '.') . (empty($modelId) ? 'create' : 'edit'),
-            'page_component'  => $model . '.edit',
+            'page_component'  => $model . '.form',
 			'model_back' => $model . '.index',
 			'data' => $data,
         ]);

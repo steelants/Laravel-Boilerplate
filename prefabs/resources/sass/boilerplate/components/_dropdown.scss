@@ -2,6 +2,15 @@
     box-shadow: var(--bs-dropdown-box-shadow);
 }
 
+.selectbox .dropdown-menu{
+    min-width: 100%;
+}
+
+.selectbox .dropdown-items{
+    max-height: min(400px, 60vh);
+    overflow: auto;
+}
+
 @include color-mode(dark) {
     .dropdown-menu{
         --bs-dropdown-border-color: rgba(115, 115, 115, 0.25);

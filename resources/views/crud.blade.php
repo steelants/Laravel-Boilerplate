@@ -3,12 +3,12 @@
         <div class="page-header">
             <h1>{{ __($title) }}</h1>
 			@if(!empty($model_back))
-				<a class="btn btn-secondary" href="{{ $model_back }}">
+				<a class="btn btn-secondary" href="{{ route($model_back) }}">
                     <i class="me-2 fas fa-arrow-left"></i><span>{{ __('boilerplate::ui.back') }}</span>
                 </a>
             @endif
             @if(isset($modal_component))
-                <button class="btn btn-primary" onclick="Livewire.dispatch('openModal', {livewireComponents: '{{$modal_component}}', title: '{{ __('boilerplate::model.create') }}'})">
+                <button class="btn btn-primary" onclick="Livewire.dispatch('openModal', {livewireComponents: '{{$modal_component}}', title: '{{ __('boilerplate::model.create') }}', static: true})">
                     <i class="me-2 fas fa-plus"></i><span>{{ __('boilerplate::ui.add') }}</span>
                 </button>
 			@elseif(isset($full_page_component))

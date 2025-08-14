@@ -30,7 +30,7 @@ trait CRUD
 
     public function index(Request $request)
     {
-		$model = $this->loadModel($request);
+		$model = Str::kebab($this->loadModel($request));
 
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
             'title'           => Lang::has('boilerplate::ui.' . $model . 's') ? 'boilerplate::ui.' . $model . 's' : 'ui.' . $model . 's',
