@@ -103,7 +103,7 @@ class MakeCrudCommand extends Command
 				'namespace' => (!empty($namespace) ? "\\" . $namespace : ""),
                 'model' => $model,
                 'model_name' => $model_name,
-				'trait' => $this->option('full-page-components') ? 'FullPageCRUD' : 'CRUD',
+				'trait' => $this->option('full-page-components') ? 'CRUDFullPage' : 'CRUD',
             ]);
             file_put_contents($testFilePath, $content);
 
