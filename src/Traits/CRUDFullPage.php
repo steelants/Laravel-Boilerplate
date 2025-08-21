@@ -12,6 +12,17 @@ trait CRUDFullPage
     use CRUD;
     //public array $views = ['index' => 'crud.index', 'form' => 'crud.form']; change default blade
 
+	public function index(Request $request)
+    {
+		$model = Str::kebab($this->loadModel($request));
+
+        return view(($this->views['index'] ?? 'boilerplate::crud'), [
+            'title'           => Lang::has('boilerplate::ui.' . $model . 's') ? 'boilerplate::ui.' . $model . 's' : 'ui.' . $model . 's',
+            'full_page_component' => $model . '.form',
+            'page_component'  => $model . '.data-table',
+        ]);
+    }
+
 	public function form(Request $request, $modelId = null)
     {
 		$model = Str::kebab($this->loadModel($request));

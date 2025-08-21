@@ -112,7 +112,7 @@ class MakeCrudCommand extends Command
 			//index route
 			if (!Route::has(Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.index')) {
 				$this->components->info("creating Route: " . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.index');
-				$route = "Route::get('/" . $model_name . "', [App\Http\Controllers\\" . $model . "Controller::class, 'index'])->name('" . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.index' . "');";
+				$route = "Route::get('/" . $model_name . "', [App\Http\Controllers\\" . $model . "Controller::class, 'index'])->name('" . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::kebab($model) . '.index' . "');";
             	$pathFile = $routesPathFile . "/routes/web.php";
 				file_put_contents($pathFile, $route, FILE_APPEND);
 			} else {
@@ -123,7 +123,7 @@ class MakeCrudCommand extends Command
 				//form route
 				if (!Route::has(Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.form')) {
 					$this->components->info("creating Route: " . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.form');
-					$route = "\r\nRoute::get('/" . $model_name . "/form/{modelId?}', [App\Http\Controllers\\" . $model . "Controller::class, 'form'])->name('" . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::snake($model, ".") . '.form' . "');";
+					$route = "\r\nRoute::get('/" . $model_name . "/form/{modelId?}', [App\Http\Controllers\\" . $model . "Controller::class, 'form'])->name('" . Str::replace("\\", ".", $namespace) . (!empty($namespace) ? "." : "") . Str::kebab($model) . '.form' . "');";
 					$pathFile = $routesPathFile . "/routes/web.php";
 					file_put_contents($pathFile, $route, FILE_APPEND);
 				} else {
