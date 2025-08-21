@@ -14,7 +14,7 @@ trait CRUDFullPage
 
 	public function form(Request $request, $modelId = null)
     {
-        $model = $this->loadModel($request);
+		$model = Str::kebab($this->loadModel($request));
 
 		$data = [];
 		if (!empty($modelId)) {
