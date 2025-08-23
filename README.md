@@ -11,8 +11,8 @@
 
 #### Tag project
 ```bash
-  git checkout master
-  git pull origin master
+  git checkout main
+  git pull origin main
   git pull origin dev
   git tag 1.8.4
   git push --tags
