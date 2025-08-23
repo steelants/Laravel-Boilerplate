@@ -78,7 +78,7 @@ class MakeCrudCommand extends Command
                 'model'   => $model,
                 'properties' => $properties,
 				'action_back' => $this->option('full-page-components') ? '$this->redirectRoute(\'' . (Str::contains($namespace, '/Controllers') ? Str::replace("\\", ".", $namespace) . "." : "") . Str::snake($model, ".") . '.index' . '\');' : '',
-				'isModal' => $this->option('full-page-components') ? false : true,
+				'isModal' => $this->option('full-page-components') ? "false" : "true",
             ]);
             file_put_contents($testFilePath, $content);
 
