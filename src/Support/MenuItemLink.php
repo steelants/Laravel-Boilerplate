@@ -24,7 +24,7 @@ class MenuItemLink extends MenuItem
 
     public function isActive(): bool
     {
-		$fullUrl = request()->url();
+		$fullUrl = request()->path();
 		if (preg_match('/livewire/', $fullUrl)) {
 			$fullUrl = request()->headers->get('referer');
 		}
