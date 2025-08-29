@@ -9,6 +9,16 @@
 ## Preview
 [boilerplate.steelants.cz](https://boilerplate.steelants.cz)
 
+#### Tag project
+```bash
+  git checkout main
+  git pull origin main
+  git pull origin dev
+  git tag 1.8.4
+  git push --tags
+  git checkout dev
+```
+
 ## What's included
 ### Functions
 - User Management
