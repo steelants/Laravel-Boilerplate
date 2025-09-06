@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Log;
+
 class AbstractHelper
 {
     public static function classes_in_namespace($namespace)
