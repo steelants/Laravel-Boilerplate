@@ -40,4 +40,45 @@ class AbstractHelper
 
         return $out;
     }
+
+    public static function findFiles(array $patterns, array $except = []): array
+    {
+        $files = [];
+
+        foreach ($patterns as $pattern) {
+            Log::info(json_encode($pattern));
+            foreach (glob($pattern) as $file) {
+                Log::info(json_encode($file));
+                $contents = file_get_contents($file);
+                Log::info(json_encode($contents));
+
+                if (
+                    preg_match('/namespace\s+(.+?);/', $contents, $nsMatch) &&
+                    preg_match('/class\s+(\w+)/', $contents, $classMatch)
+                ) {
+                    $namespace = trim($nsMatch[1]);
+                    $className = trim($classMatch[1]);
+                    $fqcn = $namespace . '\\' . $className;
+
+                    if (!empty($except) && count($except) > 0 && in_array($fqcn, $except)) {
+                        continue;
+                    }
+
+                    if (!class_exists($fqcn)) {
+                        require_once $file;
+                    }
+
+                    if (
+                        class_exists($fqcn) &&
+                        is_subclass_of($fqcn, Model::class) &&
+                        !(new ReflectionClass($fqcn))->isAbstract()
+                    ) {
+                        $files[] = $fqcn;
+                    }
+                }
+            }
+        }
+
+        return $files;
+    }
 }
