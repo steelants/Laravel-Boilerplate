@@ -33,6 +33,7 @@ class MenuItemLink extends MenuItem
 			$data = explode(".", $this->route);
 			return (preg_match("/{$data[0]}/" , $fullUrl) && (empty($data[1]) || $data[1] == "index")) || rtrim($fullUrl) == rtrim(route($this->route), '/');
 		}
+
 		return rtrim($fullUrl) == rtrim(route($this->route, $this->parameters), '/');
     }
 }
