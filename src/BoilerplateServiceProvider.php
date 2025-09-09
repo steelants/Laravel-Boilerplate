@@ -61,8 +61,8 @@ class BoilerplateServiceProvider extends ServiceProvider
         ], 'boilerplate-migrations');
 
         $this->publishes([
-            dirname(__DIR__) . '/config/cms.php' => config_path('cms.php'),
-        ], 'cms-config');
+            dirname(__DIR__) . '/config/boilerplate.php' => config_path('boilerplate.php'),
+        ], 'boilerplate-config');
 
         $this->publishes([
             dirname(__DIR__) . '/resources/views' => resource_path('views/vendor/cms'),
@@ -79,5 +79,9 @@ class BoilerplateServiceProvider extends ServiceProvider
     {
         $this->app->alias('Menu', Menu::class);
         $this->app->alias('Alert', Alert::class);
+
+         $this->mergeConfigFrom(
+        __DIR__.'/../config/courier.php', 'courier'
+    );
     }
 }
