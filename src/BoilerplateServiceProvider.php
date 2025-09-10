@@ -81,7 +81,7 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->app->alias('Alert', Alert::class);
 
          $this->mergeConfigFrom(
-        __DIR__.'/../config/courier.php', 'courier'
+        __DIR__.'/../config/boilerplate.php', 'boilerplate'
     );
     }
 }
