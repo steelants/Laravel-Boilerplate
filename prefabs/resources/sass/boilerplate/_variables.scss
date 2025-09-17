@@ -1,6 +1,6 @@
 @use "sass:map";
 
-$prefix: 'bs-';
+$prefix: 'bs-' !default;
 
 @mixin desktop(){
     @include media-breakpoint-up(lg) {
@@ -14,7 +14,7 @@ $prefix: 'bs-';
     }
 }
 
-$enable-container-classes: false;
+$enable-container-classes: false !default;
 $container-max-widths: (
   xs: 360px,
   sm: 640px,
@@ -22,20 +22,20 @@ $container-max-widths: (
   lg: 960px,
   xl: 1140px,
   xxl: 1320px
-);
+) !default;
 
-$grid-gutter-width: 30px;
+$grid-gutter-width: 30px !default;
 
-$gray-050: $tw-neutral-050;
-$gray-100: $tw-neutral-100;
-$gray-200: $tw-neutral-200;
-$gray-300: $tw-neutral-300;
-$gray-400: $tw-neutral-400;
-$gray-500: $tw-neutral-500;
-$gray-600: $tw-neutral-600;
-$gray-700: $tw-neutral-700;
-$gray-800: $tw-neutral-800;
-$gray-900: $tw-neutral-900;
+$gray-050: $tw-neutral-050 !default;
+$gray-100: $tw-neutral-100 !default;
+$gray-200: $tw-neutral-200 !default;
+$gray-300: $tw-neutral-300 !default;
+$gray-400: $tw-neutral-400 !default;
+$gray-500: $tw-neutral-500 !default;
+$gray-600: $tw-neutral-600 !default;
+$gray-700: $tw-neutral-700 !default;
+$gray-800: $tw-neutral-800 !default;
+$gray-900: $tw-neutral-900 !default;
 
 $blue:    $tw-blue-500 !default;
 $indigo:  $tw-indigo-500 !default;
@@ -48,84 +48,84 @@ $green:   $tw-green-500 !default;
 $teal:    $tw-teal-500 !default;
 $cyan:    $tw-cyan-500 !default;
 
-$primary:       $blue;
-$secondary:     $gray-600;
-$success:       $green;
-$info:          $cyan;
-$warning:       $yellow;
-$danger:        $red;
-$light:         $gray-100;
-$dark:          $gray-900;
-$white:    #fff;
-$black:    #000;
+$primary:       $blue !default;
+$secondary:     $gray-600 !default;
+$success:       $green !default;
+$info:          $cyan !default;
+$warning:       $yellow !default;
+$danger:        $red !default;
+$light:         $gray-100 !default;
+$dark:          $gray-900 !default;
+$white:    #fff !default;
+$black:    #000 !default;
 
-$primary-text-emphasis:   shade-color($primary, 40%);
-$secondary-text-emphasis: shade-color($secondary, 40%);
-$success-text-emphasis:   shade-color($success, 40%);
-$info-text-emphasis:      shade-color($info, 40%);
-$warning-text-emphasis:   shade-color($warning, 40%);
-$danger-text-emphasis:    shade-color($danger, 40%);
-$light-text-emphasis:     $gray-700;
-$dark-text-emphasis:      $gray-700;
+$primary-text-emphasis:   shade-color($primary, 40%) !default;
+$secondary-text-emphasis: shade-color($secondary, 40%) !default;
+$success-text-emphasis:   shade-color($success, 40%) !default;
+$info-text-emphasis:      shade-color($info, 40%) !default;
+$warning-text-emphasis:   shade-color($warning, 40%) !default;
+$danger-text-emphasis:    shade-color($danger, 40%) !default;
+$light-text-emphasis:     $gray-700 !default;
+$dark-text-emphasis:      $gray-700 !default;
 
-$light-bg-subtle:         $gray-100;
-$dark-bg-subtle:          $gray-300;
+$light-bg-subtle:         $gray-100 !default;
+$dark-bg-subtle:          $gray-300 !default;
 
 // Body
-$body-color: $gray-900;
-$body-bg: #fff;
+$body-color: $gray-900 !default;
+$body-bg: #fff !default;
 
-$primary: $tw-indigo-600;
+$primary: $tw-indigo-600 !default;
 // $body-secondary-bg: #ededed;
-$body-secondary-bg: $tw-neutral-150;
-$body-tertiary-bg: $gray-050;
+$body-secondary-bg: $tw-neutral-150 !default;
+$body-tertiary-bg: $gray-050 !default;
 
 // Typography
-$font-family-sans-serif: 'Inter', sans-serif;
-$font-size-base: .875rem;
-$line-height-base: calc(1.25 / 0.875);
+$font-family-sans-serif: 'Inter', sans-serif !default;
+$font-size-base: .875rem !default;
+$line-height-base: calc(1.25 / 0.875) !default;
 
-$h1-font-size: 2.25rem;
-$h2-font-size: 1.875rem;
-$h3-font-size: 1.5rem;
-$h4-font-size: 1.25rem;
-$h5-font-size: 1.125rem;
+$h1-font-size: 2.25rem !default;
+$h2-font-size: 1.875rem !default;
+$h3-font-size: 1.5rem !default;
+$h4-font-size: 1.25rem !default;
+$h5-font-size: 1.125rem !default;
 
-$card-cap-bg: #f9fbfc;
-$card-spacer-y: 1rem;
+// $card-cap-bg: #f9fbfc;
+$card-spacer-y: 1rem !default;
 
-$headings-font-weight: 600;
+$headings-font-weight: 600 !default;
 
-$text-muted: #a7abc3;
+$text-muted: #a7abc3 !default;
 
 // $border-color: $gray-200;
-$border-color-translucent: rgba($gray-900, .075);
-$border-radius-sm: 6px;
-$border-radius: 10px;
-$border-radius-lg: 10px;
-$border-radius-xl: 12px;
-$border-radius-xxl: 16px;
+$border-color-translucent: rgba($gray-900, .075) !default;
+$border-radius-sm: 6px !default;
+$border-radius: 10px !default;
+$border-radius-lg: 10px !default;
+$border-radius-xl: 12px !default;
+$border-radius-xxl: 16px !default;
 
-$box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-$box-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-$box-shadow-lg: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+$box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !default;
+$box-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05) !default;
+$box-shadow-lg: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !default;
 
-$input-btn-padding-x: .75rem;
-$input-btn-padding-y: .4375rem;
-$input-padding-x: .625rem;
+$input-btn-padding-x: .75rem !default;
+$input-btn-padding-y: .4375rem !default;
+$input-padding-x: .625rem !default;
 
-$btn-font-weight: 500;
-$btn-border-radius: 10px;
-$btn-border-radius-sm: 10px;
-$btn-line-height: 1.25rem;
+$btn-font-weight: 500 !default;
+$btn-border-radius: 10px !default;
+$btn-border-radius-sm: 10px !default;
+$btn-line-height: 1.25rem !default;
 
 $input-btn-padding-y-sm:      .3125rem !default;
 $input-btn-padding-x-sm:      .625rem !default;
-$input-btn-font-size-sm:      .875rem;
+$input-btn-font-size-sm:      .875rem !default;
 
 $input-btn-padding-y-lg:      .5rem !default;
 $input-btn-padding-x-lg:      1rem !default;
-$input-btn-font-size-lg: 1rem;
+$input-btn-font-size-lg: 1rem !default;
 
 :root{
     --bs-btn-active-border-color: transparent;
@@ -134,76 +134,76 @@ $input-btn-font-size-lg: 1rem;
     --bs-btn-hover-color: var(--bs-body-color);
 }
 
-$navbar-brand-font-size: 1rem;
+$navbar-brand-font-size: 1rem !default;
 
-$nav-link-font-weight: 500;
-$nav-tabs-link-color: var(--bs-body-color);
-$nav-tabs-link-active-color: $primary;
-$nav-tabs-link-active-border-color: $primary;
-$nav-tabs-link-hover-border-color: var(--bs-border-color);
-$nav-tabs-border-width: 2px;
-$nav-tabs-border-radius: 0;
-$nav-tabs-link-active-bg: transparent;
-$nav-tabs-border-color: var(--bs-secondary-bg);
-$nav-pills-border-radius: $border-radius;
-$nav-pills-link-color: var(--bs-body-color);
-$nav-pills-link-active-color: var(--bs-body-color);
-$nav-pills-link-active-bg: var(--bs-secondary-bg);
-$nav-link-padding-y: .5rem;
-$nav-link-padding-x: .5rem;
+$nav-link-font-weight: 500 !default;
+$nav-tabs-link-color: var(--bs-body-color) !default;
+$nav-tabs-link-active-color: $primary !default;
+$nav-tabs-link-active-border-color: $primary !default;
+$nav-tabs-link-hover-border-color: var(--bs-border-color) !default;
+$nav-tabs-border-width: 2px !default;
+$nav-tabs-border-radius: 0 !default;
+$nav-tabs-link-active-bg: transparent !default;
+$nav-tabs-border-color: var(--bs-secondary-bg) !default;
+$nav-pills-border-radius: $border-radius !default;
+$nav-pills-link-color: var(--bs-body-color) !default;
+$nav-pills-link-active-color: var(--bs-body-color) !default;
+$nav-pills-link-active-bg: var(--bs-secondary-bg) !default;
+$nav-link-padding-y: .5rem !default;
+$nav-link-padding-x: .5rem !default;
 
-$label-margin-bottom: .25rem;
+$label-margin-bottom: .25rem !default;
 
-$alert-padding-x: 1rem;
+$alert-padding-x: 1rem !default;
 
-$paragraph-margin-bottom: .5rem;
+$paragraph-margin-bottom: .5rem !default;
 
-$badge-font-weight: 500;
-$badge-border-radius: 6px;
-$badge-font-size: 12px;
-$badge-padding-x: .375rem;
-$badge-padding-y: .25rem;
+$badge-font-weight: 500 !default;
+$badge-border-radius: 6px !default;
+$badge-font-size: 12px !default;
+$badge-padding-x: .375rem !default;
+$badge-padding-y: .25rem !default;
 
-$breadcrumb-divider: '›';
-$breadcrumb-margin-bottom: 0;
+$breadcrumb-divider: '›' !default;
+$breadcrumb-margin-bottom: 0 !default;
 
-$dropdown-min-width: 12rem;
-$dropdown-padding-x: .5rem;
-$dropdown-padding-y: .5rem;
-$dropdown-item-padding-y: .4rem;
-$dropdown-item-padding-x: .4rem;
-$dropdown-border-radius: calc(4px + .5rem);
+$dropdown-min-width: 12rem !default;
+$dropdown-padding-x: .5rem !default;
+$dropdown-padding-y: .5rem !default;
+$dropdown-item-padding-y: .4rem !default;
+$dropdown-item-padding-x: .4rem !default;
+$dropdown-border-radius: calc(4px + .5rem) !default;
 :root{
     --bs-dropdown-item-border-radius: 4px;
 }
-$dropdown-link-active-bg: var(--bs-secondary-bg);
-$dropdown-link-active-color: var(--bs-body-color);
-$dropdown-border-color: rgba($gray-500, .075);
-$dropdown-divider-bg: rgba($gray-500, .1);
+$dropdown-link-active-bg: var(--bs-secondary-bg) !default;
+$dropdown-link-active-color: var(--bs-body-color) !default;
+$dropdown-border-color: rgba($gray-500, .075) !default;
+$dropdown-divider-bg: rgba($gray-500, .1) !default;
 
-$form-label-font-weight: 500;
-$form-label-margin-bottom: .25rem;
+$form-label-font-weight: 500 !default;
+$form-label-margin-bottom: .25rem !default;
 
-$pagination-color: var(--bs-body-color);
-$pagination-border-width: 0;
-$pagination-bg: transparent;
-$pagination-active-bg: var(--bs-secondary-bg);
-$pagination-active-color: var(--bs-body-color);
-$pagination-hover-color: var(--bs-body-color);
-$pagination-focus-color: var(--bs-body-color);
-$pagination-disabled-color: var(--bs-tertiary-color);
-$pagination-disabled-bg: transparent;
+$pagination-color: var(--bs-body-color) !default;
+$pagination-border-width: 0 !default;
+$pagination-bg: transparent !default;
+$pagination-active-bg: var(--bs-secondary-bg) !default;
+$pagination-active-color: var(--bs-body-color) !default;
+$pagination-hover-color: var(--bs-body-color) !default;
+$pagination-focus-color: var(--bs-body-color) !default;
+$pagination-disabled-color: var(--bs-tertiary-color) !default;
+$pagination-disabled-bg: transparent !default;
 
-$list-group-item-padding-y: .5rem;
-$list-group-item-padding-x: .5rem;
-$list-group-border-color: var(--bs-secondary-bg);
-$list-group-bg: transparent;
+$list-group-item-padding-y: .5rem !default;
+$list-group-item-padding-x: .5rem !default;
+$list-group-border-color: var(--bs-secondary-bg) !default;
+$list-group-bg: transparent !default;
 
-$enable-negative-margins: true;
-$spacer: 1rem;
+$enable-negative-margins: true !default;
+$spacer: 1rem !default;
 $spacers: (
   0: 0,
-);
+) !default;
 
 @for $i from 1 through 20 {
     $spacers : map.merge($spacers, (
