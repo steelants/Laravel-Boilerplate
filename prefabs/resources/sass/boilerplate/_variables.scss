@@ -48,7 +48,7 @@ $green:   $tw-green-500 !default;
 $teal:    $tw-teal-500 !default;
 $cyan:    $tw-cyan-500 !default;
 
-$primary:       $blue !default;
+$primary:       $tw-indigo-600 !default;
 $secondary:     $gray-600 !default;
 $success:       $green !default;
 $info:          $cyan !default;
@@ -75,7 +75,6 @@ $dark-bg-subtle:          $gray-300 !default;
 $body-color: $gray-900 !default;
 $body-bg: #fff !default;
 
-$primary: $tw-indigo-600 !default;
 // $body-secondary-bg: #ededed;
 $body-secondary-bg: $tw-neutral-150 !default;
 $body-tertiary-bg: $gray-050 !default;
