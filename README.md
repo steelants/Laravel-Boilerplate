@@ -176,6 +176,12 @@ Create default files in livewire with create and edit as full page
 php artisan make:crud {model name} --full-page-components
 ```
 
+### Create CRUD Full Page
+Create components in custome namespace
+```bash
+php artisan make:crud {model name} --namespace=\\Admin 
+```
+
 ## Contributors
 <a href="https://github.com/steelants/Laravel-Boilerplate/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=steelants/Laravel-Boilerplate" />
