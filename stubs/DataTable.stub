@@ -5,6 +5,7 @@ use App\Models\{{model}};
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
 use SteelAnts\DataTable\Traits\UseDatabase;
+use Illuminate\Support\Facades\Lang;
 
 class DataTable extends DataTableComponent
 {
@@ -56,6 +57,6 @@ class DataTable extends DataTableComponent
 
     public function edit(${{model_snake_case}}_id)
     {
-        $this->dispatch('openModal', '{{model_snake_case_dash}}.form', __('boilerplate::{{model_snake_case}}.edit'), ['model' => ${{model_snake_case}}_id]);
+        $this->dispatch('openModal', '{{model_snake_case_dash}}.form', Lang::has('boilerplate::{{model_snake_case}}.edit') ? __('boilerplate::{{model_snake_case}}.edit') : __('{{model_snake_case}}.edit'), ['model' => ${{model_snake_case}}_id]);
     }
 }

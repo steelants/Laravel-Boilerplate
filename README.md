@@ -176,6 +176,24 @@ Create default files in livewire with create and edit as full page
 php artisan make:crud {model name} --full-page-components
 ```
 
+## CRUD parameters
+### Add prefix in TestController
+Give you for example "admin.test.datatable"
+```php
+public string $prefix = "admin.";
+```
+
+### Add model options in TestController
+Give to add modal size parameter
+```php
+    public function __construct()
+    {
+        $this->model_component = [
+            'size' => 'lg',
+        ];
+    }
+```
+
 ## Contributors
 <a href="https://github.com/steelants/Laravel-Boilerplate/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=steelants/Laravel-Boilerplate" />

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Lang;
 trait CRUD
 {
 	//public array $views = ['index' => 'crud.index']; change default blade
+    //public string $prefix = "";
+    public array $model_component = [];
 	public array $data = [];
 
 	public function loadModel(Request $request){
@@ -32,10 +34,25 @@ trait CRUD
     {
 		$model = Str::kebab($this->loadModel($request));
 
+        if (empty($this->model_component['livewireComponents'])) {
+            $this->model_component['livewireComponents'] = ($this->prefix ?? "") . $model . '.form';
+        }
+
+        if (empty($this->model_component['title'])) {
+            $this->model_component['title'] = Lang::has('boilerplate::' . $model . '.create') ? __('boilerplate::' . $model . '.create') : __($model . '.create');
+        }
+
+        if (empty($this->model_component['static'])) {
+            $this->model_component['static'] = true;
+        }
+
+        $json = json_encode($this->model_component, JSON_UNESCAPED_UNICODE);
+        $jsObj = preg_replace('/"([a-zA-Z0-9_]+)":/', '$1:', $json);
+
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
-            'title'           => Lang::has('boilerplate::ui.' . $model . 's') ? 'boilerplate::ui.' . $model . 's' : 'ui.' . $model . 's',
-            'modal_component' => $model . '.form',
-            'page_component'  => $model . '.data-table',
+            'title'           => Lang::has('boilerplate::' . $model . '.plural') ? 'boilerplate::' . $model . '.plural' : $model . '.plural',
+            'modal_component' => $jsObj,
+            'page_component'  => ($this->prefix ?? "") . $model . '.data-table',
         ]);
     }
 }
