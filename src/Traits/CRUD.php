@@ -46,12 +46,9 @@ trait CRUD
             $this->model_component['static'] = true;
         }
 
-        $json = json_encode($this->model_component, JSON_UNESCAPED_UNICODE);
-        $jsObj = preg_replace('/"([a-zA-Z0-9_]+)":/', '$1:', $json);
-
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
             'title'           => Lang::has('boilerplate::' . $model . '.plural') ? 'boilerplate::' . $model . '.plural' : $model . '.plural',
-            'modal_component' => $jsObj,
+            'modal_component' => $this->model_component,
             'page_component'  => ($this->prefix ?? "") . $model . '.data-table',
         ]);
     }

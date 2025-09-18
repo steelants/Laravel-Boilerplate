@@ -8,7 +8,7 @@
                 </a>
             @endif
             @if(isset($modal_component))
-                <button class="btn btn-primary" onclick="Livewire.dispatch('openModal', {{$modal_component}})">
+                <button class="btn btn-primary" onclick="Livewire.dispatch('openModal', @js($modal_component))">
                     <i class="me-2 fas fa-plus"></i><span>{{ __('boilerplate::ui.add') }}</span>
                 </button>
 			@elseif(isset($full_page_component))
