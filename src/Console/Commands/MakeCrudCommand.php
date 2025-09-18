@@ -146,7 +146,7 @@ class MakeCrudCommand extends Command
             file_put_contents($modifiedSceletonFilePath, $datatableClassContent);
         } elseif (Str::contains($fileName, 'Controller.php')) {
              $controllerClassContent = $this->getControllerSkeleton([
-                'namespace' => (! empty($namespace) ? '\\'.$namespace : ''),
+                'namespace' => $namespace,
                 'model' => $model,
                 'model_name' => Str::lower($model),
                 'trait' => $this->option('full-page-components') ? 'CRUDFullPage' : 'CRUD',
@@ -157,25 +157,21 @@ class MakeCrudCommand extends Command
             $routeFilePath = (base_path() . DIRECTORY_SEPARATOR.'routes' . DIRECTORY_SEPARATOR.'web.php');
 
             // index route
-            if (!Route::has($route)) {
-                $this->components->info('creating Route: '. $route . ' inside: '. $routeFilePath);
-                $route = "Route::get('/".Str::lower($model)."', [".$namespace. '\\' . Str::remove('.php', $fileName)."::class, 'index'])->name('".$route."');";
-                file_put_contents($routeFilePath, $route, FILE_APPEND);
-            } else {
-                $this->components->info('creating Route: '.$route. ' inside: '. $routeFilePath);
+            $routesToadd = [$route];
+            if ($this->option('full-page-components')){
+                $fornRoute = Str::replace('.index', '.form', $route);
+                $routesToadd[] = $fornRoute;
             }
 
-            // if ($this->option('full-page-components')) {
-            //     // form route
-            //     if (! Route::has(Str::replace('\\', '.', $namespace).(! empty($namespace) ? '.' : '').Str::snake($model, '.').'.form')) {
-            //         $this->components->info('creating Route: '.Str::replace('\\', '.', $namespace).(! empty($namespace) ? '.' : '').Str::snake($model, '.').'.form');
-            //         $route = "\r\nRoute::get('/".$model_name."/form/{modelId?}', [App\Http\Controllers\\".$model."Controller::class, 'form'])->name('".Str::replace('\\', '.', $namespace).(! empty($namespace) ? '.' : '').Str::kebab($model).'.form'."');";
-            //         $pathFile = $routesPathFile.'/routes/web.php';
-            //         file_put_contents($pathFile, $route, FILE_APPEND);
-            //     } else {
-            //         $this->components->info('Route exists: '.Str::replace('\\', '.', $namespace).(! empty($namespace) ? '.' : '').Str::snake($model, '.').'.form');
-            //     }
-            // }
+            foreach ($routesToadd as $route) {
+                if (!Route::has($route)) {
+                    $this->components->info('creating route: '. $route . ' inside: '. $routeFilePath);
+                    $routeFileContent = "\nRoute::get('/".Str::replace('.','/', Str::remove('.index', $route))."', [".$namespace. '\\' . Str::remove('.php', $fileName)."::class, 'index'])->name('".$route."');";
+                    file_put_contents($routeFilePath, $routeFileContent, FILE_APPEND);
+                } else {
+                    $this->components->warn('found route: '.$route. ' inside: '. $routeFilePath);
+                }
+            }
         }
     }
 
