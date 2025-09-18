@@ -18,9 +18,9 @@ trait CRUDFullPage
 		$model = Str::kebab($this->loadModel($request));
 
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
-            'title'           => Lang::has('boilerplate::' . $model . '.plural') ? 'boilerplate::' . $model . '.plural' : $model . '.plural',
-            'full_page_component' => ($this->prefix ?? "") . $model . '.form',
-            'page_component'  => ($this->prefix ?? "") . '.data-table',
+            'title'               => Lang::has('boilerplate::' . $model . '.plural') ? 'boilerplate::' . $model . '.plural' : $model . '.plural',
+            'full_page_component' => $this->getRouteRoot($model, 'form'),
+            'page_component'      => $this->getRouteRoot($model, 'data-table'),
         ]);
     }
 
@@ -34,10 +34,10 @@ trait CRUDFullPage
 		}
 
         return view(($this->views['form'] ?? 'boilerplate::crud'), [
-            'title'           => (Lang::has('boilerplate::' . $model . '.create') || Lang::has('boilerplate::' . $model . '.edit') ? 'boilerplate::' . $model : $model . '.') . (empty($modelId) ? 'create' : 'edit'),
-            'page_component'  => ($this->prefix ?? "") . $model . '.form',
-			'model_back' => ($this->prefix ?? "") . $model . '.index',
-			'data' => $data,
+            'title'          => (Lang::has('boilerplate::' . $model . '.create') || Lang::has('boilerplate::' . $model . '.edit') ? 'boilerplate::' . $model : $model . '.') . (empty($modelId) ? 'create' : 'edit'),
+            'page_component' => $this->getRouteRoot($model, 'form'),
+			'model_back'     => $this->getRouteRoot($model, 'data-table'),
+			'data'           => $data,
         ]);
     }
 }

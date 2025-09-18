@@ -14,6 +14,11 @@ trait CRUD
     public array $model_component = [];
 	public array $data = [];
 
+    public function getRouteRoot(string $model, string $route): string
+    {
+        return (isset($this->prefix) ? (Str::trim($this->prefix, '.') . '.') : '') . $model . '.' . Str::trim($route, '.');
+    }
+
 	public function loadModel(Request $request){
 		if (property_exists($this, 'model')) {
             $modelClass = $this->model;
@@ -35,7 +40,7 @@ trait CRUD
 		$model = Str::kebab($this->loadModel($request));
 
         if (empty($this->model_component['livewireComponents'])) {
-            $this->model_component['livewireComponents'] = ($this->prefix ?? "") . $model . '.form';
+            $this->model_component['livewireComponents'] = $this->getRouteRoot($model, 'form');
         }
 
         if (empty($this->model_component['title'])) {
@@ -49,7 +54,7 @@ trait CRUD
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
             'title'           => Lang::has('boilerplate::' . $model . '.plural') ? 'boilerplate::' . $model . '.plural' : $model . '.plural',
             'modal_component' => $this->model_component,
-            'page_component'  => ($this->prefix ?? "") . $model . '.data-table',
+            'page_component'  => $this->getRouteRoot($model, 'data-table'),
         ]);
     }
 }
