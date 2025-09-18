@@ -46,6 +46,7 @@ class Form extends Component
         }
 
 		{{action_back}}
+
     }
 
     public function update()
@@ -67,6 +68,6 @@ class Form extends Component
 
     public function render()
     {
-        return view('livewire.{{model_snake_case}}.form');
+        return view('{{view}}');
     }
 }

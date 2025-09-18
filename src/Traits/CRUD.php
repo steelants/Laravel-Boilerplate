@@ -11,7 +11,7 @@ trait CRUD
 {
 	//public array $views = ['index' => 'crud.index']; change default blade
     //public string $prefix = "";
-    public array $model_component = [];
+    //public array $model_component = [];
 	public array $data = [];
 
     public function getRouteRoot(string $model, string $route): string
@@ -38,22 +38,15 @@ trait CRUD
     public function index(Request $request)
     {
 		$model = Str::kebab($this->loadModel($request));
-
-        if (empty($this->model_component['livewireComponents'])) {
-            $this->model_component['livewireComponents'] = $this->getRouteRoot($model, 'form');
-        }
-
-        if (empty($this->model_component['title'])) {
-            $this->model_component['title'] = Lang::has('boilerplate::' . $model . '.create') ? __('boilerplate::' . $model . '.create') : __($model . '.create');
-        }
-
-        if (empty($this->model_component['static'])) {
-            $this->model_component['static'] = true;
-        }
+        $options = array_merge([
+            'livewireComponents' => $this->getRouteRoot($model, 'form'),
+            'title'           => Lang::has('boilerplate::' . $model . '.create') ? __('boilerplate::' . $model . '.create') : __($model . '.create'),
+            'static'          => true,
+        ], $this->model_component ?? []);
 
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
             'title'           => Lang::has('boilerplate::' . $model . '.plural') ? 'boilerplate::' . $model . '.plural' : $model . '.plural',
-            'modal_component' => $this->model_component,
+            'options'         => $options,
             'page_component'  => $this->getRouteRoot($model, 'data-table'),
         ]);
     }

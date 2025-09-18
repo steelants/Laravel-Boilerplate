@@ -57,6 +57,6 @@ class DataTable extends DataTableComponent
 
     public function edit(${{model_snake_case}}_id)
     {
-        $this->dispatch('openModal', '{{model_snake_case_dash}}.form', Lang::has('boilerplate::{{model_snake_case}}.edit') ? __('boilerplate::{{model_snake_case}}.edit') : __('{{model_snake_case}}.edit'), ['model' => ${{model_snake_case}}_id]);
+        $this->dispatch('openModal', '{{action_form}}', Lang::has('boilerplate::{{model_snake_case}}.edit') ? __('boilerplate::{{model_snake_case}}.edit') : __('{{model_snake_case}}.edit'), ['model' => ${{model_snake_case}}_id]);
     }
 }

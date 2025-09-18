@@ -81,12 +81,14 @@ class MakeCrudCommand extends Command
             $properties[$fillable] = $finalCast;
         }
 
-        $this->makeClassFile($namespacesAbsolut['livewire'], AbstractHelper::namespaceToPath($namespacesAbsolut['livewire']), 'Form.php', $model, $properties);
-        $this->makeClassFile($namespacesAbsolut['livewire'], AbstractHelper::namespaceToPath($namespacesAbsolut['livewire']), 'DataTable.php', $model, $properties);
-        $this->makeClassFile($namespacesAbsolut['controller'], AbstractHelper::namespaceToPath($namespacesAbsolut['controller']), (Str::trim($model,"\\").'Controller.php') , $model, $properties);
+        $safeProperties = array_intersect_key($modelClass->getFillable(), $modelClass->getHidden());
+
+        $this->makeClassFile($namespacesAbsolut['livewire'], AbstractHelper::namespaceToPath($namespacesAbsolut['livewire']), 'Form.php', $model, $properties,$safeProperties);
+        $this->makeClassFile($namespacesAbsolut['livewire'], AbstractHelper::namespaceToPath($namespacesAbsolut['livewire']), 'DataTable.php', $model, $properties,$safeProperties);
+        $this->makeClassFile($namespacesAbsolut['controller'], AbstractHelper::namespaceToPath($namespacesAbsolut['controller']), (Str::trim($model,"\\").'Controller.php') , $model, $properties,$safeProperties);
     }
 
-    private function makeClassFile(string $namespace, string $path, string $fileName, string $model, array $properties)
+    private function makeClassFile(string $namespace, string $path, string $fileName, string $model, array $properties, array $safeProperties)
     {
         $modifiedSceletonFilePath = ($path.DIRECTORY_SEPARATOR.$fileName);
         if (file_exists($modifiedSceletonFilePath) && ! $this->option('force')) {
@@ -113,28 +115,32 @@ class MakeCrudCommand extends Command
             $livewireDotPath = Str::replace($pathPart, Str::kebab($pathPart), $livewireDotPath);
         }
 
-        $routeprefix = Str::trim(Str::remove(Str::lower($model), $livewireDotPath), '.');
+        $routeprefix = Str::trim(Str::remove(Str::lower(Str::kebab($model)), $livewireDotPath), '.');
         $route =  $livewireDotPath . '.index';
 
         if ($fileName == 'Form.php') {
             Artisan::call('make:livewire '.$livewireDotPath.'.Form --force');
 
+            $viewName = 'livewire.'.Str::replace('.index', '.form', $route);
             $formClassContent = $this->getFormClassSkeleton([
                 'namespace' => $namespace,
                 'model' => $model,
+                'view' => $viewName,
                 'properties' => $properties,
+                'safeProperties' => $safeProperties,
                 'action_back' => $this->option('full-page-components') ? '$this->redirectRoute('.$route.');' : '',
                 'isModal' => $this->option('full-page-components') ? 'false' : 'true',
             ]);
+            
+            $bladePathFile = explode((DIRECTORY_SEPARATOR . 'app'), (str_replace((DIRECTORY_SEPARATOR.$fileName), '', $modifiedSceletonFilePath)))[0];
+            $bladePathFile = ($bladePathFile.DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.Str::replace('.', DIRECTORY_SEPARATOR,$viewName).'.blade.php');
 
             file_put_contents($modifiedSceletonFilePath, $formClassContent);
-
-            $bladePathFile = explode((DIRECTORY_SEPARATOR . 'app'), (str_replace((DIRECTORY_SEPARATOR.$fileName), '', $modifiedSceletonFilePath)))[0];
-            $bladePathFile = ($bladePathFile.DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'livewire'.DIRECTORY_SEPARATOR.Str::snake($model, '-').DIRECTORY_SEPARATOR.'form.blade.php');
 
             $modalBladeContent = $this->getFormBladeSkeleton([
                  'model' => $model,
                  'properties' => $properties,
+                 'safeProperties' => $safeProperties,
             ]);
 
             file_put_contents($bladePathFile, $modalBladeContent);
@@ -142,8 +148,8 @@ class MakeCrudCommand extends Command
             $datatableClassContent = $this->getDataTableClassSkeleton([
                 'namespace' => $namespace,
                 'model' => $model,
-                'headers' => array_keys($properties),
-                'action_form' => $this->option('full-page-components') ? Str::replace('.index', '.form', $route) : '',
+                'headers' => $safeProperties,
+                'action_form' => Str::replace('.index', '.form', $route),
             ]);
 
             file_put_contents($modifiedSceletonFilePath, $datatableClassContent);
@@ -153,7 +159,7 @@ class MakeCrudCommand extends Command
                 'model' => $model,
                 'model_name' => Str::lower($model),
                 'trait' => $this->option('full-page-components') ? 'CRUDFullPage' : 'CRUD',
-                'overides' => $this->option('full-page-components') ? 'public string $prefix = \''.$routeprefix.'\';' : '',
+                'overides' =>  'public string $prefix = \''.$routeprefix.'\';',
             ]);
 
             file_put_contents($modifiedSceletonFilePath, $controllerClassContent);
@@ -219,7 +225,8 @@ class MakeCrudCommand extends Command
         $validationRules = '';
         $loadProperties = '';
 
-        foreach ($arguments['properties'] as $propertyName => $propertyType) {
+        $safeToEditProperties = array_intersect_key($arguments['properties'], array_flip($arguments['safeProperties'] ));
+        foreach ($safeToEditProperties as $propertyName => $propertyType) {
             $rule = 'required|'.$propertyType;
             $publicType = $propertyType;
             if (Str::contains($propertyType, 'App\\Models\\')) {
@@ -288,9 +295,8 @@ class MakeCrudCommand extends Command
         $content = "<div>\n";
         $content .= "\t<x-form::form wire:submit.prevent=\"{{\$action}}\">\n";
 
-        foreach ($model->getFillable() as $name) {
-            $propertyName = $name;
-            $propertyType = $arguments['properties'][$name];
+        $safeToEditProperties = array_intersect_key($arguments['properties'], array_flip($arguments['safeProperties'] ));
+        foreach ($safeToEditProperties as $propertyName => $propertyType) {
             if (Str::contains($propertyType, 'App\\Models\\')) {
                 $tableName = (new $propertyType)->getTable();
                 $content .= "\t\t".'<x-form::select group-class="mb-3"  :options="$this->'.Str::camel($tableName).'" name="'.$propertyName.'" placeholder="Vyberte" wire:model.blur="'.$propertyName.'" label="'.$propertyName."\"/>\n";
