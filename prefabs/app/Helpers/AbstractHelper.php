@@ -9,7 +9,7 @@ class AbstractHelper
     public static function classes_in_namespace($namespace)
     {
         $namespace .= '\\';
-        $myClasses  = array_filter(get_declared_classes(), function ($item) use ($namespace) {
+        $myClasses = array_filter(get_declared_classes(), function ($item) use ($namespace) {
             return substr($item, 0, strlen($namespace)) === $namespace;
         });
 
@@ -30,7 +30,7 @@ class AbstractHelper
             if ($result === '.' or $result === '..') {
                 continue;
             }
-            $filename = $path . '/' . $result;
+            $filename = $path.'/'.$result;
             if (is_dir($filename)) {
                 $out = array_merge($out, self::getClassNames($filename));
             } else {
@@ -38,7 +38,6 @@ class AbstractHelper
                 $out[] = substr($classFilePath[count($classFilePath) - 1], 0, -4);
             }
         }
-
 
         return $out;
     }
@@ -60,20 +59,20 @@ class AbstractHelper
                 ) {
                     $namespace = trim($nsMatch[1]);
                     $className = trim($classMatch[1]);
-                    $fqcn = $namespace . '\\' . $className;
+                    $fqcn = $namespace.'\\'.$className;
 
-                    if (!empty($except) && count($except) > 0 && in_array($fqcn, $except)) {
+                    if (! empty($except) && count($except) > 0 && in_array($fqcn, $except)) {
                         continue;
                     }
 
-                    if (!class_exists($fqcn)) {
+                    if (! class_exists($fqcn)) {
                         require_once $file;
                     }
 
                     if (
                         class_exists($fqcn) &&
                         is_subclass_of($fqcn, Model::class) &&
-                        !(new ReflectionClass($fqcn))->isAbstract()
+                        ! (new ReflectionClass($fqcn))->isAbstract()
                     ) {
                         $files[] = $fqcn;
                     }
@@ -82,5 +81,20 @@ class AbstractHelper
         }
 
         return $files;
+    }
+
+    public static function namespaceToPath(string $namespace): string
+    {
+        // mechanicky: App\ → app/ a \ → /
+        $ns = ltrim($namespace, '\\');                 // odstraň úvodní backslash
+        if (str_starts_with($ns, 'App\\')) {
+            $rel = substr($ns, strlen('App\\')); // zahodí "App\"
+            $rel = str_replace('\\', DIRECTORY_SEPARATOR, $rel);
+
+            return base_path('app'.DIRECTORY_SEPARATOR.$rel);
+        }
+
+        // když není App\, jen nahraď backslashe a vrať pod base_path
+        return base_path(str_replace('\\', DIRECTORY_SEPARATOR, $ns));
     }
 }
