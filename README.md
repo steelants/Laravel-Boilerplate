@@ -176,6 +176,7 @@ Create default files in livewire with create and edit as full page
 php artisan make:crud {model name} --full-page-components
 ```
 
+<<<<<<< HEAD
 ## CRUD parameters
 ### Add prefix in TestController
 Give you for example "admin.test.datatable"
@@ -192,6 +193,12 @@ Give to add modal size parameter
             'size' => 'lg',
         ];
     }
+=======
+### Create CRUD Full Page
+Create components in custome namespace
+```bash
+php artisan make:crud {model name} --namespace=\\Admin 
+>>>>>>> 37945c09ef448d0093bd8d0faf3ee2c7486de889
 ```
 
 ## Contributors

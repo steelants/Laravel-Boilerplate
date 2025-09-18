@@ -1,5 +1,5 @@
 <?php
-namespace App\Livewire\{{model}};
+namespace {{namespace}};
 
 use App\Models\{{model}};
 use SteelAnts\DataTable\Livewire\DataTableComponent;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers{{namespace}};
+namespace {{namespace}};
 
 use App\Http\Controllers\BaseController;
 use SteelAnts\LaravelBoilerplate\Traits\{{trait}};
@@ -9,5 +9,7 @@ use App\Models\{{model}};
 class {{model}}Controller extends BaseController
 {
     use {{trait}};
+    {{overides}}
+
     public string $model = {{model}}::class;
 }
