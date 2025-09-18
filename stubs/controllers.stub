@@ -9,5 +9,7 @@ use App\Models\{{model}};
 class {{model}}Controller extends BaseController
 {
     use {{trait}};
+    {{overides}}
+
     public string $model = {{model}}::class;
 }

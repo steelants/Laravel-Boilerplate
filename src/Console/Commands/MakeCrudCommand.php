@@ -48,7 +48,6 @@ class MakeCrudCommand extends Command
         $modelClass = (new ('App\\Models\\'.$model));
         if (! class_exists($modelClass::class)) {
             $this->components->error($modelClass.' model not Found!');
-
             return;
         }
 
@@ -114,12 +113,14 @@ class MakeCrudCommand extends Command
             $livewireDotPath = Str::replace($pathPart, Str::kebab($pathPart), $livewireDotPath);
         }
 
+        $routeprefix = Str::trim(Str::remove(Str::lower($model), $livewireDotPath), '.');
         $route =  $livewireDotPath . '.index';
 
         if ($fileName == 'Form.php') {
             Artisan::call('make:livewire '.$livewireDotPath.'.Form --force');
 
             $formClassContent = $this->getFormClassSkeleton([
+                'namespace' => $namespace,
                 'model' => $model,
                 'properties' => $properties,
                 'action_back' => $this->option('full-page-components') ? '$this->redirectRoute('.$route.');' : '',
@@ -139,8 +140,10 @@ class MakeCrudCommand extends Command
             file_put_contents($bladePathFile, $modalBladeContent);
         } elseif ($fileName == 'DataTable.php') {
             $datatableClassContent = $this->getDataTableClassSkeleton([
+                'namespace' => $namespace,
                 'model' => $model,
                 'headers' => array_keys($properties),
+                'action_form' => $this->option('full-page-components') ? Str::replace('.index', '.form', $route) : '',
             ]);
 
             file_put_contents($modifiedSceletonFilePath, $datatableClassContent);
@@ -150,6 +153,7 @@ class MakeCrudCommand extends Command
                 'model' => $model,
                 'model_name' => Str::lower($model),
                 'trait' => $this->option('full-page-components') ? 'CRUDFullPage' : 'CRUD',
+                'overides' => $this->option('full-page-components') ? 'public string $prefix = \''.$routeprefix.'\';' : '',
             ]);
 
             file_put_contents($modifiedSceletonFilePath, $controllerClassContent);
@@ -157,16 +161,18 @@ class MakeCrudCommand extends Command
             $routeFilePath = (base_path() . DIRECTORY_SEPARATOR.'routes' . DIRECTORY_SEPARATOR.'web.php');
 
             // index route
-            $routesToadd = [$route];
+            $routesToadd = [
+                'index' => $route
+            ];
             if ($this->option('full-page-components')){
                 $fornRoute = Str::replace('.index', '.form', $route);
-                $routesToadd[] = $fornRoute;
+                $routesToadd['form' ] = $fornRoute;
             }
 
-            foreach ($routesToadd as $route) {
+            foreach ($routesToadd as $function => $route) {
                 if (!Route::has($route)) {
                     $this->components->info('creating route: '. $route . ' inside: '. $routeFilePath);
-                    $routeFileContent = "\nRoute::get('/".Str::replace('.','/', Str::remove('.index', $route))."', [".$namespace. '\\' . Str::remove('.php', $fileName)."::class, 'index'])->name('".$route."');";
+                    $routeFileContent = "\nRoute::get('/".Str::replace('.','/', Str::remove('.index', $route))."', [".$namespace. '\\' . Str::remove('.php', $fileName)."::class, '". $function ."'])->name('".$route."');";
                     file_put_contents($routeFilePath, $routeFileContent, FILE_APPEND);
                 } else {
                     $this->components->warn('found route: '.$route. ' inside: '. $routeFilePath);
@@ -179,7 +185,6 @@ class MakeCrudCommand extends Command
     {
         $arguments['model_camel_case'] = Str::camel($arguments['model']);
         $arguments['model_snake_case'] = Str::snake($arguments['model_camel_case']);
-        $arguments['model_snake_case_dash'] = Str::snake($arguments['model_camel_case'], '-');
 
         $headerProperties = '';
         foreach ($arguments['headers'] as $key => $header) {
