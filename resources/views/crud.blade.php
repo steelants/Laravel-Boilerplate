@@ -7,8 +7,8 @@
                     <i class="me-2 fas fa-arrow-left"></i><span>{{ __('boilerplate::ui.back') }}</span>
                 </a>
             @endif
-            @if(isset($modal_component))
-                <button class="btn btn-primary" onclick="Livewire.dispatch('openModal', {livewireComponents: '{{$modal_component}}', title: '{{ __('boilerplate::model.create') }}', static: true})">
+            @if(isset($options['livewireComponents']))
+                <button class="btn btn-primary" onclick="Livewire.dispatch('openModal', {{ json_encode($options) }})">
                     <i class="me-2 fas fa-plus"></i><span>{{ __('boilerplate::ui.add') }}</span>
                 </button>
 			@elseif(isset($full_page_component))
