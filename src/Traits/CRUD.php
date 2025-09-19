@@ -16,7 +16,7 @@ trait CRUD
 
     public function getRouteRoot(string $model, string $route): string
     {
-        return (isset($this->prefix) ? (Str::trim($this->prefix, '.') . '.') : '') . $model . '.' . Str::trim($route, '.');
+        return (!empty($this->prefix) ? (Str::trim($this->prefix, '.') . '.') : '') . $model . '.' . Str::trim($route, '.');
     }
 
 	public function loadModel(Request $request){

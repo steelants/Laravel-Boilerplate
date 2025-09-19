@@ -50,10 +50,9 @@ class MakeCrudCommand extends Command
             $this->components->error($modelClass.' model not Found!');
             return;
         }
-
         $namespacesAbsolut = [
-            'controller' => ($this->getComponentRootnamespace('App\\Http\\Controllers\\'.Str::trim($this->option('namespace'), '\\'))),
-            'livewire' => ($this->getComponentRootnamespace('App\\Livewire\\'.Str::trim($this->option('namespace'), '\\')).'\\'.$model),
+            'controller' => ($this->getComponentRootnamespace('App\\Http\\Controllers'. ($this->option('namespace') != '/' ? '\\' . Str::trim($this->option('namespace'), '\\') : ""))),
+            'livewire' => ($this->getComponentRootnamespace('App\\Livewire'.($this->option('namespace') != '/' ? '\\' . Str::trim($this->option('namespace'), '\\') : '')).'\\'.$model),
         ];
 
         foreach ($namespacesAbsolut as $namespaceAbsolut) {
@@ -81,7 +80,7 @@ class MakeCrudCommand extends Command
             $properties[$fillable] = $finalCast;
         }
 
-        $safeProperties = array_intersect_key($modelClass->getFillable(), $modelClass->getHidden());
+        $safeProperties = array_diff_key($modelClass->getFillable(), $modelClass->getHidden());
 
         $this->makeClassFile($namespacesAbsolut['livewire'], AbstractHelper::namespaceToPath($namespacesAbsolut['livewire']), 'Form.php', $model, $properties,$safeProperties);
         $this->makeClassFile($namespacesAbsolut['livewire'], AbstractHelper::namespaceToPath($namespacesAbsolut['livewire']), 'DataTable.php', $model, $properties,$safeProperties);
@@ -131,7 +130,7 @@ class MakeCrudCommand extends Command
                 'action_back' => $this->option('full-page-components') ? '$this->redirectRoute('.$route.');' : '',
                 'isModal' => $this->option('full-page-components') ? 'false' : 'true',
             ]);
-            
+
             $bladePathFile = explode((DIRECTORY_SEPARATOR . 'app'), (str_replace((DIRECTORY_SEPARATOR.$fileName), '', $modifiedSceletonFilePath)))[0];
             $bladePathFile = ($bladePathFile.DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.Str::replace('.', DIRECTORY_SEPARATOR,$viewName).'.blade.php');
 
