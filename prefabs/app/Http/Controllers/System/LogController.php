@@ -52,7 +52,8 @@ class LogController extends BaseController
             }
         }
 
-        return view('system.log.index', [
+		return view('system.log.index', [
+			'layout' => config('boilerplate.layouts.system'),
             'items'      => $items,
             'todayStats' => $todayStats,
         ]);

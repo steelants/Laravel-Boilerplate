@@ -1,4 +1,4 @@
-<x-layout-app>
+<x-dynamic-component :component="$layout">
     <div class="container-xl">
         <div class="page-header">
             <h1>{{ __('boilerplate::ui.cache') }}</h1>
@@ -30,4 +30,4 @@
     </div>
 
     </div>
-</x-layout-app>
+</x-dynamic-component>

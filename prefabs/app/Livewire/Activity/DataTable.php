@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Livewire\Audit;
-
+namespace App\Livewire\Activity;
 
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;

@@ -6,15 +6,18 @@ use Illuminate\Support\Str;
 use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
+use Livewire\Livewire;
 
 trait CRUD
 {
 	//public array $views = ['index' => 'crud.index']; change default blade
     //public string $prefix = "";
     //public array $model_component = [];
+
+	public string $layout = "layout-app";
 	public array $data = [];
 
-    public function getRouteRoot(string $model, string $route): string
+	public function getRouteRoot(string $model, string $route): string
     {
         return (!empty($this->prefix) ? (Str::trim($this->prefix, '.') . '.') : '') . $model . '.' . Str::trim($route, '.');
     }
@@ -39,13 +42,19 @@ trait CRUD
     public function index(Request $request)
     {
 		$model = Str::kebab($this->loadModel($request));
+
         $options = array_merge([
             'livewireComponents' => $this->getRouteRoot($model, 'form'),
             'title'              => Lang::has('boilerplate::' . $model . '.create') ? __('boilerplate::' . $model . '.create') : __($model . '.create'),
             'static'             => true,
         ], $this->model_component ?? []);
 
+		if (!Livewire::isDiscoverable($options['livewireComponents'])) {
+			unset($options['livewireComponents']);
+		}
+
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
+			'layout' 		 => $this->layout,
             'title'          => Lang::has('boilerplate::' . $model . '.plural') ? 'boilerplate::' . $model . '.plural' : $model . '.plural',
             'options'        => $options,
             'page_component' => $this->getRouteRoot($model, 'data-table'),

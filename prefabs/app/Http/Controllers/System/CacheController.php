@@ -50,6 +50,7 @@ class CacheController extends BaseController
         //TODO: ADD SUPPORT FOR MEM CASH AND DB
 
         return view('system.cache.index', [
+			'layout' => config('boilerplate.layouts.system'),
             'cache_items'  => $cache_items,
             'cache_driver' => $cache_driver,
 

@@ -35,6 +35,7 @@ class JobsController extends BaseController
 		$jobs = DB::table('jobs')->select(['id', 'queue', 'available_at'])->selectRaw('SUBSTRING(payload, 1, 150) AS payload')->get();
 
 		return view('system.job.index', [
+			'layout' => config('boilerplate.layouts.system'),
 			'jobs_classes' => $rules,
 			'failed_jobs'  => $failed_jobs,
 			'jobs'         => $jobs,

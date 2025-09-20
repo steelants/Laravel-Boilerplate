@@ -23,6 +23,7 @@ return [
 		'storage_paths' => explode(',', env('BACKUP_STORAGE_PATHS', 'app')), # Later storage_path() is used to get full path
 		'enviroment' 	=> (bool) env('BACKUP_ENV', true),
 	],
+
 	'models'=>[
 		'activity' 	   => Activity::class,
 		'file' 		   => File::class,
@@ -30,5 +31,10 @@ return [
 		'setting'	   => Setting::class,
 		'session' 	   => Session::class,
 		'subscription' => Subscription::class,
+	],
+
+	'layouts' => [
+		'default'    => 'layout-app',
+		'system' 	 => 'layout-fuck',
 	],
 ];

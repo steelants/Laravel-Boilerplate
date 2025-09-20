@@ -40,7 +40,10 @@ class BackupController extends BaseController
             }
         }
 
-        return view('system.backup.index', ['backups' => $backups]);
+		return view('system.backup.index', [
+			'layout' => config('boilerplate.layouts.system'),
+			'backups' => $backups
+		]);
     }
     public function download($file_name = null)
     {
