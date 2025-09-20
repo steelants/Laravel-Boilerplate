@@ -49,10 +49,6 @@ class GenerateMenus
 				'fas fa-folder',
                 'system.file.index',
             ],
-			'boilerplate::ui.api'           => [
-				'fas fa-folder',
-				'system.api.index',
-			],
             'boilerplate::ui.log'              => [
                 'fas fa-bug',
                 'system.log.index',
@@ -70,6 +66,13 @@ class GenerateMenus
                 'system.backup.index',
             ],
         ];
+
+		if (file_exists(base_path() . '/routes/api.php')) {
+			$systemRoutes['boilerplate::ui.api'] = [
+				'fas fa-rocket',
+				'system.api.index',
+			];
+		}
 
         $menus = [
             'main-menu' => $menuRoutes,
