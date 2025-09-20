@@ -14,7 +14,8 @@ return new class extends Migration
 	public function up(): void
 	{
         Schema::table('files', function (Blueprint $table) {
-			$table->morphs('fileable')->nullbale();
+			$table->string("fileable_type")->nullable()->change();
+            $table->unsignedBigInteger("fileable_id")->nullable()->change();
 		});
 	}
 
@@ -23,6 +24,9 @@ return new class extends Migration
 	 */
 	public function down(): void
 	{
-
+		Schema::table('files', function (Blueprint $table) {
+			$table->string("fileable_type")->nullable(false)->change();
+            $table->unsignedBigInteger("fileable_id")->nullable(false)->change();
+		});
 	}
 };
