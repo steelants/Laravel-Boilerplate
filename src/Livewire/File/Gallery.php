@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Livewire\File;
+namespace SteelAnts\LaravelBoilerplate\Livewire\File;
 
-use App\Models\File;
+use SteelAnts\LaravelBoilerplate\Models\File;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use SplFileInfo;
@@ -57,7 +57,6 @@ class Gallery extends Component
 
     public function render()
     {
-
         return view('livewire.file.gallery');
     }
 

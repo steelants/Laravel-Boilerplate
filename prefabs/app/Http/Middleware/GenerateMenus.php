@@ -20,18 +20,18 @@ class GenerateMenus
         if (Auth::guest()) {
             return $next($request);
         }
-        
+
         if ($request->route()->getName() === 'livewire.message') {
             return $next($request);
         }
-        
+
         $menuRoutes = [
             'boilerplate::ui.home' => [
                 ' fas fa-home',
                 'home',
             ],
         ];
-        
+
         $systemRoutes = [
             'boilerplate::ui.audit'            => [
                 'fas fa-eye',
@@ -44,6 +44,10 @@ class GenerateMenus
             'boilerplate::subscriptions.title' => [
                 'fas fa-dollar-sign',
                 'system.subscription.index',
+            ],
+			'boilerplate::ui.file'           => [
+                'fas fa-file-folder',
+                'system.file.index',
             ],
             'boilerplate::ui.log'              => [
                 'fas fa-bug',
@@ -62,18 +66,18 @@ class GenerateMenus
                 'system.backup.index',
             ],
         ];
-        
+
         $menus = [
             'main-menu' => $menuRoutes,
             'system-menu' => $systemRoutes,
         ];
-        
+
         foreach ($menus as $menuKey => $MenuItems) {
             $menu = Menu::get($menuKey) ?? Menu::make($menuKey, function () {});
             foreach ($MenuItems as $title => $route_data) {
                 $icon = $route_data[0];
                 $route = $route_data[1];
-                
+
                 $menu->add($title, [
                     'id'    => strtolower($title),
                     'icon'  => $icon,
@@ -81,7 +85,7 @@ class GenerateMenus
                 ]);
             }
         }
-        
+
         return $next($request);
     }
 }

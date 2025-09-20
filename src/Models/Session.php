@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace SteelAnts\LaravelBoilerplate\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Session extends Model
 {
     use HasFactory;
+
     protected $keyType = 'string';
     public $incrementing = false;
     public $timestamps = false;
@@ -32,8 +33,7 @@ class Session extends Model
                 preg_match($pattern, $this->user_agent, $matches);
 
                 if (isset($matches[1])) {
-                    $browserName = $matches[1];
-                    return $browserName;
+                    return $matches[1];
                 }
 
                 return 'Unknown';
@@ -50,8 +50,7 @@ class Session extends Model
                 preg_match($pattern, $this->user_agent, $matches);
 
                 if (isset($matches[1])) {
-                    $browserName = $matches[1];
-                    return $browserName;
+                    return $matches[1];
                 }
 
                 return 'Unknown';

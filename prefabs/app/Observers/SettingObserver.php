@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Models\File as ModelsFile;
-use App\Models\Setting;
+use SteelAnts\LaravelBoilerplate\Models\File as ModelsFile;
+use SteelAnts\LaravelBoilerplate\Models\Setting;
 use Carbon\Carbon;
 use App\Types\SettingDataType;
 use Illuminate\Support\Facades\Crypt;

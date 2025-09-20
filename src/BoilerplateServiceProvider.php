@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\Blade;
 use SteelAnts\LaravelBoilerplate\Facades\Alert;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 use Illuminate\Support\Facades\Event;
+use Livewire\Livewire;
+use SteelAnts\LaravelBoilerplate\File\Gallery;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
+use SteelAnts\LaravelBoilerplate\Models\File;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {
@@ -23,14 +26,17 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'boilerplate');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'boilerplate');
         $this->loadMigrationsFrom(dirname(__DIR__) . '/database/migrations');
+
         Blade::componentNamespace('SteelAnts\LaravelBoilerplate\View\Components', 'boilerplate');
 
 		if (class_exists('App\Http\Middleware\GenerateMenus')) {
-            $router = $this->app['router'];
+			$router = $this->app['router'];
             $router->pushMiddlewareToGroup('web', GenerateMenus::class);
         }
 
 		Event::subscribe(UserEventSubscriber::class);
+
+		Livewire::component('boilerplate.file.gallery', Gallery::class);
 
         if ($this->app->runningInConsole()) {
             $this->bootConsole();
@@ -52,7 +58,7 @@ class BoilerplateServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../lang'                  => $this->app->langPath('vendor/boilerplate'),
-            __DIR__ . '/../resources/views/views' => resource_path('views/vendor/boilerplate'),
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/boilerplate'),
         ]);
 
         $this->publishesMigrations([

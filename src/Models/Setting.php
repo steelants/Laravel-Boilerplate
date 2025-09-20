@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace SteelAnts\LaravelBoilerplate\Models;
 
 use App\Observers\SettingObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;

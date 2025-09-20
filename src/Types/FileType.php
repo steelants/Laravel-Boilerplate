@@ -1,6 +1,6 @@
 <?php
 
-namespace SteelAnts\LaravelBoilerplate\Types;
+namespace App\Types;
 
 class FileType
 {

@@ -2,10 +2,11 @@
 
 namespace App\Livewire\Audit;
 
-use App\Models\Activity;
+
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
 use SteelAnts\DataTable\Traits\UseDatabase;
+use SteelAnts\LaravelBoilerplate\Models\Activity;
 
 class DataTable extends DataTableComponent
 {

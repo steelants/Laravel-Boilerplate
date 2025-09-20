@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use DOMDocument;
-use App\Models\File;
-use App\Models\Tenant;
+use SteelAnts\LaravelBoilerplate\Models\File;
+use SteelAnts\LaravelBoilerplate\Models\Tenant;
 use App\Types\FileType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
