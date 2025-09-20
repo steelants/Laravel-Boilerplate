@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Observers;
+namespace SteelAnts\LaravelBoilerplate\Observers;
 
 use SteelAnts\LaravelBoilerplate\Models\File as ModelsFile;
 use SteelAnts\LaravelBoilerplate\Models\Setting;

@@ -2,11 +2,11 @@
 
 namespace SteelAnts\LaravelBoilerplate\Models;
 
-use App\Observers\SettingObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use SteelAnts\LaravelBoilerplate\Observers\SettingObserver;
 
 #[ObservedBy([SettingObserver::class])]
 class Setting extends Model
