@@ -46,9 +46,13 @@ class GenerateMenus
                 'system.subscription.index',
             ],
 			'boilerplate::ui.file'           => [
-                'fas fa-folder',
+				'fas fa-folder',
                 'system.file.index',
             ],
+			'boilerplate::ui.api'           => [
+				'fas fa-folder',
+				'system.api.index',
+			],
             'boilerplate::ui.log'              => [
                 'fas fa-bug',
                 'system.log.index',
