@@ -15,7 +15,7 @@ use SteelAnts\LaravelBoilerplate\Facades\Alert;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 use Illuminate\Support\Facades\Event;
 use Livewire\Livewire;
-use SteelAnts\LaravelBoilerplate\File\Gallery;
+use SteelAnts\LaravelBoilerplate\Livewire\File\Gallery;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
 use SteelAnts\LaravelBoilerplate\Models\File;
 
