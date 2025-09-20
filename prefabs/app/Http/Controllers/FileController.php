@@ -7,10 +7,6 @@ use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-	public function index(){
-		return view('system.file.index');
-	}
-
     public function serv($file_group = "", $file_name)
     {
         $file_group_path = str_replace('-', DIRECTORY_SEPARATOR, $file_group);
