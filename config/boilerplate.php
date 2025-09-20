@@ -35,6 +35,6 @@ return [
 
 	'layouts' => [
 		'default'    => 'layout-app',
-		'system' 	 => 'layout-fuck',
+		'system' 	 => 'layout-app',
 	],
 ];
