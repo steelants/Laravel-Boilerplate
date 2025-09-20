@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Event;
 use Livewire\Livewire;
 use SteelAnts\LaravelBoilerplate\Livewire\File\Gallery;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
-use SteelAnts\LaravelBoilerplate\Models\File;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {
@@ -57,7 +56,7 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->commands([DispatchJob::class]);
 
         $this->publishes([
-            __DIR__ . '/../lang'                  => $this->app->langPath('vendor/boilerplate'),
+            __DIR__ . '/../lang'            => $this->app->langPath('vendor/boilerplate'),
             __DIR__ . '/../resources/views' => resource_path('views/vendor/boilerplate'),
         ]);
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\System;
 
-use App\Helpers\SizeHelper;
+use SteelAnts\LaravelBoilerplate\Helpers\SizeHelper;
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;

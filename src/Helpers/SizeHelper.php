@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace SteelAnts\LaravelBoilerplate\Helpers;
 
 class SizeHelper
 {

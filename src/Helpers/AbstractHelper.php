@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Helpers;
+namespace SteelAnts\LaravelBoilerplate\Helpers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use ReflectionClass;
 
 class AbstractHelper
 {
-    public static function classes_in_namespace($namespace)
+    public static function getClassesInNamespace($namespace)
     {
         $namespace .= '\\';
         $myClasses = array_filter(get_declared_classes(), function ($item) use ($namespace) {
@@ -86,7 +88,7 @@ class AbstractHelper
     public static function namespaceToPath(string $namespace): string
     {
         // mechanicky: App\ → app/ a \ → /
-        $ns = ltrim($namespace, '\\');                 // odstraň úvodní backslash
+        $ns = ltrim($namespace, '\\'); // odstraň úvodní backslash
         if (str_starts_with($ns, 'App\\')) {
             $rel = substr($ns, strlen('App\\')); // zahodí "App\"
             $rel = str_replace('\\', DIRECTORY_SEPARATOR, $rel);

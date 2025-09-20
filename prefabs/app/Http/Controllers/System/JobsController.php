@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\System;
 
-use App\Helpers\AbstractHelper;
+use SteelAnts\LaravelBoilerplate\Helpers\AbstractHelper;
 use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

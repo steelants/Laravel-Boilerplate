@@ -84,7 +84,7 @@ class Gallery extends Component
         foreach ($files as $fileObj) {
             $file = new SplFileInfo($fileObj->path);
             $this->files[$fileObj->id] = route("file.serv", [
-                "path"      => str_replace(DIRECTORY_SEPARATOR, '-', trim($file->getPath() .  DIRECTORY_SEPARATOR)),
+                "path"      => str_replace(DIRECTORY_SEPARATOR, '-', trim($file->getPath() . DIRECTORY_SEPARATOR)),
                 "file_name" => $file->getFilename(),
             ], false);
         }
