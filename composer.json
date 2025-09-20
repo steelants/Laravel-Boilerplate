@@ -13,15 +13,18 @@
         "steelants/livewire-form": "^0.0.3"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.9"
+        "barryvdh/laravel-debugbar": "^3.9",
+        "phpunit/phpunit": "^11.0.1",
+        "squizlabs/php_codesniffer": "^4.0",
+        "slevomat/coding-standard": "^8.19"
     },
     "autoload": {
-		"psr-4": {
-			"SteelAnts\\LaravelBoilerplate\\": "src/"
+        "psr-4": {
+            "SteelAnts\\LaravelBoilerplate\\": "src/"
         },
-		"files": [
-			"src/helpers.php"
-		]
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "authors": [
         {
@@ -34,6 +37,16 @@
             "providers": [
                 "SteelAnts\\LaravelBoilerplate\\BoilerplateServiceProvider"
             ]
+        }
+    },
+    "scripts": {
+        "check-static": "phpstan --memory-limit=2g",
+        "format": "phpcbf -v -d memory_limit=512M",
+        "lint": "phpcs"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     }
 }
