@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\System;
 
-use App\Helpers\SizeHelper;
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use SteelAnts\LaravelBoilerplate\Helpers\SizeHelper;
 
 class LogController extends BaseController
 {
