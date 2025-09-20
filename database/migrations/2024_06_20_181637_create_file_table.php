@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string("original_name");
             $table->integer("size");
 			$table->integer("type")->default(FileType::ATTACHMENT);
-            $table->morphs('fileable');
+            $table->morphs('fileable')->nullbale();
         });
     }
 

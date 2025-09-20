@@ -186,4 +186,23 @@ class FileService
         $explode = explode(".", $filename);
         return in_array(end($explode), $imageExtensions);
     }
+
+	public static function uploadFileAnonymouse(UploadedFile|TemporaryUploadedFile $file, string $rootPath): string
+	{
+		$filename = Str::uuid()->toString() . "." . $file->getClientOriginalExtension();
+        $file_path = $file->storeAs($rootPath, $filename);
+
+        File::updateOrCreate(
+			[
+				'filename' => $filename,
+                'path'     => $file_path,
+            ],
+            [
+				'original_name' => $file->getClientOriginalName(),
+                'size'          => $file->getSize(),
+            ],
+        );
+
+        return "";
+	}
 }

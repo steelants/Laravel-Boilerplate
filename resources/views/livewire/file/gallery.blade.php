@@ -3,7 +3,7 @@
         @foreach ($files as $id => $file)
             <div class="col-auto">
                 <div class="position-relative">
-                    <div class="position-absolute top-0 end-0 m-2 btn btn-primary" wire:click="remove({{ $id }})" wire:confirm="Are you sure you want to delete this fiile?">
+                    <div class="position-absolute top-0 end-0 m-2 btn btn-danger" wire:click="remove({{ $id }})" wire:confirm="Are you sure you want to delete this fiile?">
                         <i class="fas fa-trash "></i>
                     </div>
                     <a href="{{ $file }}" target="_blank">
