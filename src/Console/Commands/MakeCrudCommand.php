@@ -36,7 +36,7 @@ class MakeCrudCommand extends Command
     protected function ensurePath($path)
     {
         if (! file_exists($path)) {
-            $fs = new Filesystem;
+            $fs = new Filesystem();
             $path = $path;
             $fs->makeDirectory($path, 0755, true, true);
         }
@@ -52,7 +52,7 @@ class MakeCrudCommand extends Command
         }
         $namespacesAbsolut = [
             'controller' => ($this->getComponentRootnamespace('App\\Http\\Controllers'. ($this->option('namespace') != '/' ? '\\' . Str::trim($this->option('namespace'), '\\') : ""))),
-            'livewire' => ($this->getComponentRootnamespace('App\\Livewire'.($this->option('namespace') != '/' ? '\\' . Str::trim($this->option('namespace'), '\\') : '')).'\\'.$model),
+            'livewire'   => ($this->getComponentRootnamespace('App\\Livewire'.($this->option('namespace') != '/' ? '\\' . Str::trim($this->option('namespace'), '\\') : '')).'\\'.$model),
         ];
 
         foreach ($namespacesAbsolut as $namespaceAbsolut) {
@@ -82,9 +82,9 @@ class MakeCrudCommand extends Command
 
         $safeProperties = array_diff_key($modelClass->getFillable(), $modelClass->getHidden());
 
-        $this->makeClassFile($namespacesAbsolut['livewire'], AbstractHelper::namespaceToPath($namespacesAbsolut['livewire']), 'Form.php', $model, $properties,$safeProperties);
-        $this->makeClassFile($namespacesAbsolut['livewire'], AbstractHelper::namespaceToPath($namespacesAbsolut['livewire']), 'DataTable.php', $model, $properties,$safeProperties);
-        $this->makeClassFile($namespacesAbsolut['controller'], AbstractHelper::namespaceToPath($namespacesAbsolut['controller']), (Str::trim($model,"\\").'Controller.php') , $model, $properties,$safeProperties);
+        $this->makeClassFile($namespacesAbsolut['livewire'], AbstractHelper::namespaceToPath($namespacesAbsolut['livewire']), 'Form.php', $model, $properties, $safeProperties);
+        $this->makeClassFile($namespacesAbsolut['livewire'], AbstractHelper::namespaceToPath($namespacesAbsolut['livewire']), 'DataTable.php', $model, $properties, $safeProperties);
+        $this->makeClassFile($namespacesAbsolut['controller'], AbstractHelper::namespaceToPath($namespacesAbsolut['controller']), (Str::trim($model, "\\").'Controller.php'), $model, $properties, $safeProperties);
     }
 
     private function makeClassFile(string $namespace, string $path, string $fileName, string $model, array $properties, array $safeProperties)
@@ -103,7 +103,7 @@ class MakeCrudCommand extends Command
         $livewireDotPath = Str::remove('App\Livewire', ($namespace));
         $livewireDotPath = Str::remove('App\Http\Controllers', $livewireDotPath);
 
-        if (!Str::contains($livewireDotPath, $model)){
+        if (!Str::contains($livewireDotPath, $model)) {
             $livewireDotPath .= '\\'.$model;
         }
 
@@ -115,50 +115,50 @@ class MakeCrudCommand extends Command
         }
 
         $routeprefix = Str::trim(Str::remove(Str::lower(Str::kebab($model)), $livewireDotPath), '.');
-        $route =  $livewireDotPath . '.index';
+        $route = $livewireDotPath . '.index';
 
         if ($fileName == 'Form.php') {
             Artisan::call('make:livewire '.$livewireDotPath.'.Form --force');
 
             $viewName = 'livewire.'.Str::replace('.index', '.form', $route);
             $formClassContent = $this->getFormClassSkeleton([
-                'namespace' => $namespace,
-                'model' => $model,
-                'view' => $viewName,
-                'properties' => $properties,
+                'namespace'      => $namespace,
+                'model'          => $model,
+                'view'           => $viewName,
+                'properties'     => $properties,
                 'safeProperties' => $safeProperties,
-                'action_back' => $this->option('full-page-components') ? '$this->redirectRoute('.$route.');' : '',
-                'isModal' => $this->option('full-page-components') ? 'false' : 'true',
+                'action_back'    => $this->option('full-page-components') ? '$this->redirectRoute(\''.$route.'\');' : '',
+                'isModal'        => $this->option('full-page-components') ? 'false' : 'true',
             ]);
 
             $bladePathFile = explode((DIRECTORY_SEPARATOR . 'app'), (str_replace((DIRECTORY_SEPARATOR.$fileName), '', $modifiedSceletonFilePath)))[0];
-            $bladePathFile = ($bladePathFile.DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.Str::replace('.', DIRECTORY_SEPARATOR,$viewName).'.blade.php');
+            $bladePathFile = ($bladePathFile.DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.Str::replace('.', DIRECTORY_SEPARATOR, $viewName).'.blade.php');
 
             file_put_contents($modifiedSceletonFilePath, $formClassContent);
 
             $modalBladeContent = $this->getFormBladeSkeleton([
-                 'model' => $model,
-                 'properties' => $properties,
-                 'safeProperties' => $safeProperties,
+                'model'          => $model,
+                'properties'     => $properties,
+                'safeProperties' => $safeProperties,
             ]);
 
             file_put_contents($bladePathFile, $modalBladeContent);
         } elseif ($fileName == 'DataTable.php') {
             $datatableClassContent = $this->getDataTableClassSkeleton([
-                'namespace' => $namespace,
-                'model' => $model,
-                'headers' => $safeProperties,
+                'namespace'   => $namespace,
+                'model'       => $model,
+                'headers'     => $safeProperties,
                 'action_form' => Str::replace('.index', '.form', $route),
             ]);
 
             file_put_contents($modifiedSceletonFilePath, $datatableClassContent);
         } elseif (Str::contains($fileName, 'Controller.php')) {
-             $controllerClassContent = $this->getControllerSkeleton([
-                'namespace' => $namespace,
-                'model' => $model,
+            $controllerClassContent = $this->getControllerSkeleton([
+                'namespace'  => $namespace,
+                'model'      => $model,
                 'model_name' => Str::lower($model),
-                'trait' => $this->option('full-page-components') ? 'CRUDFullPage' : 'CRUD',
-                'overides' =>  'public string $prefix = \''.$routeprefix.'\';',
+                'trait'      => $this->option('full-page-components') ? 'CRUDFullPage' : 'CRUD',
+                'overides'   => 'public string $prefix = \''.$routeprefix.'\';',
             ]);
 
             file_put_contents($modifiedSceletonFilePath, $controllerClassContent);
@@ -166,10 +166,8 @@ class MakeCrudCommand extends Command
             $routeFilePath = (base_path() . DIRECTORY_SEPARATOR.'routes' . DIRECTORY_SEPARATOR.'web.php');
 
             // index route
-            $routesToadd = [
-                'index' => $route
-            ];
-            if ($this->option('full-page-components')){
+            $routesToadd = ['index' => $route];
+            if ($this->option('full-page-components')) {
                 $fornRoute = Str::replace('.index', '.form', $route);
                 $routesToadd['form' ] = $fornRoute;
             }
@@ -177,7 +175,7 @@ class MakeCrudCommand extends Command
             foreach ($routesToadd as $function => $route) {
                 if (!Route::has($route)) {
                     $this->components->info('creating route: '. $route . ' inside: '. $routeFilePath);
-                    $routeFileContent = "\nRoute::get('/".Str::replace('.','/', Str::remove('.index', $route))."', [".$namespace. '\\' . Str::remove('.php', $fileName)."::class, '". $function ."'])->name('".$route."');";
+                    $routeFileContent = "\nRoute::get('/".Str::replace('.', '/', Str::remove('.index', $route))."', [".$namespace. '\\' . Str::remove('.php', $fileName)."::class, '". $function ."'])->name('".$route."');";
                     file_put_contents($routeFilePath, $routeFileContent, FILE_APPEND);
                 } else {
                     $this->components->warn('found route: '.$route. ' inside: '. $routeFilePath);
@@ -224,12 +222,12 @@ class MakeCrudCommand extends Command
         $validationRules = '';
         $loadProperties = '';
 
-        $safeToEditProperties = array_intersect_key($arguments['properties'], array_flip($arguments['safeProperties'] ));
+        $safeToEditProperties = array_intersect_key($arguments['properties'], array_flip($arguments['safeProperties']));
         foreach ($safeToEditProperties as $propertyName => $propertyType) {
             $rule = 'required|'.$propertyType;
             $publicType = $propertyType;
             if (Str::contains($propertyType, 'App\\Models\\')) {
-                $tableName = (new $propertyType)->getTable();
+                $tableName = (new $propertyType())->getTable();
                 $rule = 'required|exists:'.$tableName.',id';
                 $publicType = '';
 
@@ -238,7 +236,7 @@ class MakeCrudCommand extends Command
                 $fileContent = file_get_contents($moduleRootPath, true);
                 $modelArguments = [
                     'model_camel_case_plural' => Str::camel($tableName),
-                    'model' => Str::afterLast($propertyType, 'Models\\'),
+                    'model'                   => Str::afterLast($propertyType, 'Models\\'),
                 ];
                 foreach ($modelArguments as $ArgumentName => $ArgumentValue) {
                     if (gettype($ArgumentValue) != 'string') {
@@ -289,15 +287,15 @@ class MakeCrudCommand extends Command
     {
         $modelName = $arguments['model'];
         $className = 'App\\Models\\'.$modelName;
-        $model = new $className;
+        $model = new $className();
 
         $content = "<div>\n";
         $content .= "\t<x-form::form wire:submit.prevent=\"{{\$action}}\">\n";
 
-        $safeToEditProperties = array_intersect_key($arguments['properties'], array_flip($arguments['safeProperties'] ));
+        $safeToEditProperties = array_intersect_key($arguments['properties'], array_flip($arguments['safeProperties']));
         foreach ($safeToEditProperties as $propertyName => $propertyType) {
             if (Str::contains($propertyType, 'App\\Models\\')) {
-                $tableName = (new $propertyType)->getTable();
+                $tableName = (new $propertyType())->getTable();
                 $content .= "\t\t".'<x-form::select group-class="mb-3"  :options="$this->'.Str::camel($tableName).'" name="'.$propertyName.'" placeholder="Vyberte" wire:model.blur="'.$propertyName.'" label="'.$propertyName."\"/>\n";
             } elseif ($propertyType == 'integer') {
                 $content .= "\t\t".'<x-form::input group-class="mb-3" type="number" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="'.$propertyName."\"/>\n";

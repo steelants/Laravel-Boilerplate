@@ -35,48 +35,45 @@ class MenuBuilder
     public static function createMenuItem(string $title, array $options = [])
     {
         if (isset($options['route'])) {
-            $item = new MenuItemLink($title, ...$options);
-            return $item;
+            return new MenuItemLink($title, ...$options);
         }
 
         if (isset($options['action'])) {
-            $item = new MenuItemAction($title, ...$options);
-            return $item;
+            return new MenuItemAction($title, ...$options);
         }
 
-        $item = new MenuItem($title, ...$options);
-        return $item;
+        return new MenuItem($title, ...$options);
     }
 
 	public function addItem(string $title, string $id, string $icon = '', array $parameters = [], array $options = [])
 	{
 		return $this->add($title, [
-			'id' => $id,
-			'icon' => $icon,
+			'id'         => $id,
+			'icon'       => $icon,
 			'parameters' => $parameters,
-			'options' => $options,
+			'options'    => $options,
 		]);
 	}
 
 	public function addRoute(string $title, string $id, string $route, string $icon = '', array $parameters = [], array $options = [])
 	{
 		return $this->add($title, [
-			'id' => $id,
-			'route' => $route,
-			'icon' => $icon,
+			'id'         => $id,
+			'route'      => $route,
+			'icon'       => $icon,
 			'parameters' => $parameters,
-			'options' => $options,
+			'options'    => $options,
 		]);
 	}
 
 	public function addAction(string $title, string $id, string $action, string $icon = '', array $parameters = [], array $options = [])
 	{
 		return $this->add($title, [
-			'id' => $id,
-			'action' => $action,
-			'icon' => $icon,
+			'id'         => $id,
+			'action'     => $action,
+			'icon'       => $icon,
 			'parameters' => $parameters,
-			'options' => $options,
+			'options'    => $options,
 		]);
 	}
 }

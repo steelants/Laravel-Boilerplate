@@ -9,12 +9,10 @@ use SteelAnts\LaravelBoilerplate\Console\Commands\MakeBasicTestsCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
 use SteelAnts\LaravelBoilerplate\Facades\Menu;
-use SteelAnts\LaravelBoilerplate\Support\MenuCollector;
 use App\Http\Middleware\GenerateMenus;
 use Illuminate\Support\Facades\Blade;
 use SteelAnts\LaravelBoilerplate\Facades\Alert;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
-use SteelAnts\LaravelBoilerplate\Support\AlertCollector;
 use Illuminate\Support\Facades\Event;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
 
@@ -39,7 +37,8 @@ class BoilerplateServiceProvider extends ServiceProvider
         }
     }
 
-	public function bootConsole(){
+	public function bootConsole()
+    {
         $this->app->booted(function () {
             $schedule = app(Schedule::class);
             $schedule->job(new Backup())->dailyAT('00:00')->withoutOverlapping();
@@ -81,7 +80,8 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->app->alias('Alert', Alert::class);
 
          $this->mergeConfigFrom(
-        __DIR__.'/../config/boilerplate.php', 'boilerplate'
-    );
+             __DIR__.'/../config/boilerplate.php',
+             'boilerplate'
+         );
     }
 }

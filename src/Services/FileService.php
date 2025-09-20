@@ -87,9 +87,7 @@ class FileService
         }
 
         #preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1">$1</a>',
-        $text = $dom->savehtml($dom->documentElement);
-
-        return $text;
+        return $dom->savehtml($dom->documentElement);
     }
 
     public static function getInLineImagesFileIds(Model $owner, $rawContent): array

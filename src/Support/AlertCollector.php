@@ -20,7 +20,6 @@ class AlertCollector
 
 	public function get(int $mode = AlertModeType::RELOAD)
 	{
-		$alerts = Session::get('alerts-' . $mode, []);
-		return $alerts;
+		return Session::get('alerts-' . $mode, []);
 	}
 }

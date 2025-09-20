@@ -30,7 +30,8 @@ class MenuItem
         return $this->dropdown ?? null;
     }
 
-	public function type() {
+	public function type()
+    {
 		return $this->type;
 	}
 
@@ -60,32 +61,32 @@ class MenuItem
 	public function addItem(string $title, string $id, string $icon = '', array $parameters = [], array $options = [])
 	{
 		return $this->add($title, [
-			'id' => $id,
-			'icon' => $icon,
+			'id'         => $id,
+			'icon'       => $icon,
 			'parameters' => $parameters,
-			'options' => $options,
+			'options'    => $options,
 		]);
 	}
 
 	public function addRoute(string $title, string $id, string $route, string $icon = '', array $parameters = [], array $options = [])
 	{
 		return $this->add($title, [
-			'id' => $id,
-			'route' => $route,
-			'icon' => $icon,
+			'id'         => $id,
+			'route'      => $route,
+			'icon'       => $icon,
 			'parameters' => $parameters,
-			'options' => $options,
+			'options'    => $options,
 		]);
 	}
 
 	public function addAction(string $title, string $id, string $action, string $icon = '', array $parameters = [], array $options = [])
 	{
 		return $this->add($title, [
-			'id' => $id,
-			'action' => $action,
-			'icon' => $icon,
+			'id'         => $id,
+			'action'     => $action,
+			'icon'       => $icon,
 			'parameters' => $parameters,
-			'options' => $options,
+			'options'    => $options,
 		]);
 	}
 
@@ -105,32 +106,32 @@ class MenuItem
 	public function addDropdownItem(string $title, string $id, string $icon = '', array $parameters = [], array $options = [])
 	{
 		return $this->addDropdown($title, [
-			'id' => $id,
-			'icon' => $icon,
+			'id'         => $id,
+			'icon'       => $icon,
 			'parameters' => $parameters,
-			'options' => $options,
+			'options'    => $options,
 		]);
 	}
 
 	public function addDropdownRoute(string $title, string $id, string $route, string $icon = '', array $parameters = [], array $options = [])
 	{
 		return $this->addDropdown($title, [
-			'id' => $id,
-			'route' => $route,
-			'icon' => $icon,
+			'id'         => $id,
+			'route'      => $route,
+			'icon'       => $icon,
 			'parameters' => $parameters,
-			'options' => $options,
+			'options'    => $options,
 		]);
 	}
 
 	public function addDropdownAction(string $title, string $id, string $action, string $icon = '', array $parameters = [], array $options = [])
 	{
 		return $this->addDropdown($title, [
-			'id' => $id,
-			'action' => $action,
-			'icon' => $icon,
+			'id'         => $id,
+			'action'     => $action,
+			'icon'       => $icon,
 			'parameters' => $parameters,
-			'options' => $options,
+			'options'    => $options,
 		]);
 	}
 }

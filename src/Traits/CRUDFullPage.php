@@ -3,13 +3,13 @@
 namespace SteelAnts\LaravelBoilerplate\Traits;
 
 use Illuminate\Support\Str;
-use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 
 trait CRUDFullPage
 {
     use CRUD;
+
     //public array $views = ['index' => 'crud.index', 'form' => 'crud.form']; change default blade
     //public string $prefix = "";
 

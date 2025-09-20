@@ -32,21 +32,24 @@ trait Auditable
         });
     }
 
-	protected static function createdBy($model){
+	protected static function createdBy($model)
+    {
 		$activity = new Activity();
 		$activity->lang_text = __('boilerplate::ui.created', ["model" => class_basename($model) . " " . $model->{self::$nameColumn}]);
 		$activity->affected()->associate($model);
 		$activity->save();
 	}
 
-	protected static function updatingBy($model){
+	protected static function updatingBy($model)
+    {
 		$activity = new Activity();
 		$activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->{self::$nameColumn}]);
 		$activity->affected()->associate($model);
 		$activity->save();
 	}
 
-	protected static function deletingBy($model){
+	protected static function deletingBy($model)
+    {
 		$activity = new Activity();
         $activity->lang_text = __('boilerplate::ui.deleted', ["model" => class_basename($model) . " " . $model->{self::$nameColumn}]);
         $activity->save();

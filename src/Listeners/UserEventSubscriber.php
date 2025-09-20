@@ -28,7 +28,7 @@ class UserEventSubscriber
     public function subscribe(Dispatcher $events): array
     {
         return [
-            Login::class => 'handleLogin',
+            Login::class  => 'handleLogin',
             Logout::class => 'handleLogout',
             Failed::class => 'handleFailed',
         ];

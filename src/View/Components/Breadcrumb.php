@@ -18,11 +18,10 @@ class Breadcrumb extends Component
     ) {
         foreach ($items as $link => $name) {
             $this->items[] = [
-                'name'   => $name,
-                'link'   => url($link) ?? null,
+                'name' => $name,
+                'link' => url($link) ?? null,
             ];
         }
-
     }
 
     /**
