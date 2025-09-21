@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Types;
+namespace SteelAnts\LaravelBoilerplate\Types;
 
 class SubscriptionTier
 {

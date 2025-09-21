@@ -84,9 +84,9 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->app->alias('Menu', Menu::class);
         $this->app->alias('Alert', Alert::class);
 
-         $this->mergeConfigFrom(
-             __DIR__.'/../config/boilerplate.php',
-             'boilerplate'
-         );
+		$this->mergeConfigFrom(
+			__DIR__.'/../config/boilerplate.php',
+			'boilerplate'
+		);
     }
 }

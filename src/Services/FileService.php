@@ -5,12 +5,12 @@ namespace SteelAnts\LaravelBoilerplate\Services;
 use DOMDocument;
 use App\Models\File;
 use App\Models\Tenant;
-use App\Types\FileType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use SteelAnts\LaravelBoilerplate\Types\FileType;
 
 class FileService
 {
