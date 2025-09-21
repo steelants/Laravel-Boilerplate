@@ -46,6 +46,7 @@
     transform-origin: .5em 50%;
 }
 
-.btn-toggle[aria-expanded="true"]::before {
+.btn-toggle[aria-expanded="true"]::before,
+.btn-toggle:has([aria-expanded="true"])::before {
     transform: rotate(90deg);
 }
