@@ -15,13 +15,18 @@ class Gallery extends Component
 
     public $model;
     public $files = [];
+	public $files_replacements = [];
+
     public $uploadEnabled = true;
 
     public $listeners = ['filesAdded' => '$refresh'];
 
     protected function rules()
     {
-        return ['files.*' => 'required|image'];
+        return [
+			'files.*' => 'required|image',
+			'files_replacements.*' => 'required|image',
+		];
     }
 
     public function mount($model = null)
@@ -34,22 +39,35 @@ class Gallery extends Component
 
     public function updatedFiles()
     {
-        try {
-            $validatedData = $this->validate();
-
-            if (count($validatedData['files']) > 0) {
-                foreach ($validatedData['files'] as $file) {
+		try {
+			$validatedData = $this->validateOnly('files.*');
+			if (count($validatedData['files']) > 0) {
+				foreach ($validatedData['files'] as $file) {
 					if (!empty($this->model)) {
 						$this->model->uploadFile($file, "uploads" . DIRECTORY_SEPARATOR . class_basename(get_class($this->model)));
 					} else {
 						FileService::uploadFileAnonymouse($file, "uploads");
 					}
-                }
+				}
 
-                $this->refreshFiles();
-                $this->dispatch('filesAdded');
-            }
+				$this->refreshFiles();
+					$this->dispatch('filesAdded');
+				}
         } catch (Throwable $th) {
+            $this->refreshFiles();
+            $this->addError('files', $th->getMessage());
+        }
+    }
+
+	public function updatedFilesReplacements($property, $key)
+    {
+		dd($key);
+		try {
+			$validatedData = $this->validateOnly('files_replacements.*');
+			if (count($validatedData['files_replacements']) > 1) {
+				dd($validatedData['files_replacements']);
+			}
+		} catch (Throwable $th) {
             $this->refreshFiles();
             $this->addError('files', $th->getMessage());
         }

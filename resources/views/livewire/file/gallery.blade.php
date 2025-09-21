@@ -3,6 +3,12 @@
         @foreach ($files as $id => $file)
             <div class="col-auto">
                 <div class="position-relative">
+                    <div class="position-absolute top-0 end-1 m-2 btn btn-primary">
+                        <label for="files_replacements">
+                            <i class="fas fa-upload @error('files_replacements') text-danger @enderror"></i>
+                        </label>
+						<input id="files_replacements" name="files_replacements" style="display:none;visibility:hidden" type="file" wire:model="files_replacements.{{ $id }}" accept="image/*" capture="environment">
+                    </div>
                     <div class="position-absolute top-0 end-0 m-2 btn btn-danger" wire:click="remove({{ $id }})" wire:confirm="Are you sure you want to delete this fiile?">
                         <i class="fas fa-trash "></i>
                     </div>
