@@ -10,6 +10,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use SteelAnts\LaravelBoilerplate\Models\File as ModelsFile;
 use SteelAnts\LaravelBoilerplate\Types\FileType;
 
 class FileService
@@ -195,6 +196,25 @@ class FileService
         File::updateOrCreate(
 			[
 				'filename' => $filename,
+                'path'     => $file_path,
+            ],
+            [
+				'original_name' => $file->getClientOriginalName(),
+                'size'          => $file->getSize(),
+            ],
+        );
+
+        return "";
+	}
+
+	public static function replaceFile(ModelsFile $fileModel, UploadedFile|TemporaryUploadedFile $file): string
+	{
+		$rootPath = Str::rtrim(Str::remove($fileModel->filename, $fileModel->path), '/');
+        $file_path = $file->storeAs($rootPath, $fileModel->filename);
+
+        File::updateOrCreate(
+			[
+				'filename' => $fileModel->filename,
                 'path'     => $file_path,
             ],
             [

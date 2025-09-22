@@ -2,11 +2,16 @@
 
 namespace SteelAnts\LaravelBoilerplate\Livewire\File;
 
+use Exception;
+use Illuminate\Http\UploadedFile;
 use SteelAnts\LaravelBoilerplate\Models\File;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 use SplFileInfo;
+use SteelAnts\LaravelBoilerplate\Facades\Alert;
 use SteelAnts\LaravelBoilerplate\Services\FileService;
+use SteelAnts\LaravelBoilerplate\Types\AlertModeType;
 use Throwable;
 
 class Gallery extends Component
@@ -18,14 +23,18 @@ class Gallery extends Component
 	public $files_replacements = [];
 
     public $uploadEnabled = true;
+    public $replaceEnabled = true;
 
     public $listeners = ['filesAdded' => '$refresh'];
 
     protected function rules()
     {
         return [
+			'files' => 'required|array',
 			'files.*' => 'required|image',
-			'files_replacements.*' => 'required|image',
+			'files_replacements' => 'required|array',
+			'files_replacements.*' => 'required|exists:files,id',
+			'files_replacements.*.*' => 'required|image',
 		];
     }
 
@@ -39,8 +48,12 @@ class Gallery extends Component
 
     public function updatedFiles()
     {
+		if (!$this->uploadEnabled){
+			return;
+		}
+
 		try {
-			$validatedData = $this->validateOnly('files.*');
+			$validatedData = $this->validateOnly('files');
 			if (count($validatedData['files']) > 0) {
 				foreach ($validatedData['files'] as $file) {
 					if (!empty($this->model)) {
@@ -51,25 +64,37 @@ class Gallery extends Component
 				}
 
 				$this->refreshFiles();
-					$this->dispatch('filesAdded');
-				}
+				$this->dispatch('filesAdded');
+				$this->dispatch('snackbar', ['message' => "test", 'type' => 'sucess', 'icon' => 'fas fa-check']);
+			}
         } catch (Throwable $th) {
             $this->refreshFiles();
             $this->addError('files', $th->getMessage());
+			$this->dispatch('snackbar', ['message' => $th->getMessage(), 'type' => 'error', 'icon' => 'fas fa-x']);
         }
     }
 
-	public function updatedFilesReplacements($property, $key)
+	public function updatedFilesReplacements(TemporaryUploadedFile $file, File $fileModel)
     {
-		dd($key);
+		if (!$this->replaceEnabled){
+			return;
+		}
+
 		try {
-			$validatedData = $this->validateOnly('files_replacements.*');
-			if (count($validatedData['files_replacements']) > 1) {
-				dd($validatedData['files_replacements']);
+			$validatedData = $this->validateOnly('files_replacements');
+			if (!empty($this->model)) {
+				$this->model->replaceFile($fileModel, $file);
+			} else {
+				FileService::replaceFile($fileModel, $file);
 			}
+
+			$this->refreshFiles();
+			$this->dispatch('filesAdded');
+			$this->dispatch('snackbar', ['message' => "test", 'type' => 'sucess', 'icon' => 'fas fa-check']);
 		} catch (Throwable $th) {
             $this->refreshFiles();
-            $this->addError('files', $th->getMessage());
+            $this->addError('files_replacements.' . $fileModel->id, $th->getMessage());
+			$this->dispatch('snackbar', ['message' => $th->getMessage(), 'type' => 'error', 'icon' => 'fas fa-x']);
         }
     }
 
@@ -104,7 +129,7 @@ class Gallery extends Component
             $this->files[$fileObj->id] = route("file.serv", [
                 "path"      => str_replace(DIRECTORY_SEPARATOR, '-', trim($file->getPath() . DIRECTORY_SEPARATOR)),
                 "file_name" => $file->getFilename(),
-            ], false);
+            ], false). '?t=' . $fileObj->updated_at;
         }
     }
 
