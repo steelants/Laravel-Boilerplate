@@ -2,16 +2,12 @@
 
 namespace SteelAnts\LaravelBoilerplate\Livewire\File;
 
-use Exception;
-use Illuminate\Http\UploadedFile;
 use SteelAnts\LaravelBoilerplate\Models\File;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 use SplFileInfo;
-use SteelAnts\LaravelBoilerplate\Facades\Alert;
 use SteelAnts\LaravelBoilerplate\Services\FileService;
-use SteelAnts\LaravelBoilerplate\Types\AlertModeType;
 use Throwable;
 
 class Gallery extends Component
@@ -30,10 +26,10 @@ class Gallery extends Component
     protected function rules()
     {
         return [
-			'files' => 'required|array',
-			'files.*' => 'required|image',
-			'files_replacements' => 'required|array',
-			'files_replacements.*' => 'required|exists:files,id',
+			'files'                  => 'required|array',
+			'files.*'                => 'required|image',
+			'files_replacements'     => 'required|array',
+			'files_replacements.*'   => 'required|exists:files,id',
 			'files_replacements.*.*' => 'required|image',
 		];
     }
@@ -48,7 +44,7 @@ class Gallery extends Component
 
     public function updatedFiles()
     {
-		if (!$this->uploadEnabled){
+		if (!$this->uploadEnabled) {
 			return;
 		}
 
@@ -76,7 +72,7 @@ class Gallery extends Component
 
 	public function updatedFilesReplacements(TemporaryUploadedFile $file, File $fileModel)
     {
-		if (!$this->replaceEnabled){
+		if (!$this->replaceEnabled) {
 			return;
 		}
 

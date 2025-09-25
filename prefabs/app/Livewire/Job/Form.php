@@ -66,6 +66,7 @@ class Form extends Component
 
         $this->dispatch('snackbar', ['message' => ($job . ' ' . __('Job Scheduled')), 'type' => 'success', 'icon' => 'fas fa-check']);
         $this->dispatch('closeModal');
+        $this->dispatch('jobAdded');
     }
 
     public function render()
