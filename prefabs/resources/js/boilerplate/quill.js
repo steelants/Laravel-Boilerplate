@@ -91,21 +91,21 @@ window.loadQuill = function (element, $wire = null, mentions = [], tags = []) {
     //     table.insertTable(2, 2);
     // });
 
-    quill.root.innerHTML = textarea.value;
-
+    quill.clipboard.dangerouslyPasteHTML(textarea.value)
     quill.on('text-change', function (delta, oldDelta, source) {
         let value = quill.root.innerHTML;
+        //quill.getSanitizedHTML(); // mnělo by se použít tohle ale nefungují pak syly pro listy a podobne
         textarea.value = value;
         textarea.dispatchEvent(new Event('input'));
     });
 
     textarea.addEventListener('change', function () {
-        quill.root.innerHTML = textarea.value;
+        quill.clipboard.dangerouslyPasteHTML(textarea.value)
     });
 
     if ($wire) {
         $wire.hook('morphed', function () {
-            quill.root.innerHTML = textarea.value;
+            quill.clipboard.dangerouslyPasteHTML(textarea.value)
         });
     }
 
