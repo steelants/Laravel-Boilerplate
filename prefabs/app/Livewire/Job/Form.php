@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Gate;
 use ReflectionClass;
 use SteelAnts\LivewireForm\Livewire\FormComponent;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 
 class Form extends FormComponent
@@ -20,6 +21,29 @@ class Form extends FormComponent
     public int $perPage = 50;
 
     public string $viewName = 'livewire.job.form';
+
+    protected function rules() 
+    { 
+        $rules = [];
+        if (!empty($this->job_parameters) && count($this->job_parameters) > 0) {
+            foreach ($this->job_parameters as $name => $data) {
+                $rules['properties.' . $name] = [];
+                $rules['properties.' . $name][] = !isset($data['value']) ? 'required' : 'nullable';
+                if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
+                    $rules['properties.' . $name][] = match($data['type']) {
+                        'int', 'float' => 'numeric',
+                        'bool' => 'boolean',
+                        Carbon::class => 'date',
+                        SupportCarbon::class=> 'date',
+                        default => 'string',
+                    };
+                } else {
+                    $rules['properties.' . $name][] = Rule::exists(($data['type'])::first()->getTable(), 'id');
+                }
+            }
+        }
+        return $rules; 
+    }
 
     #[Computed()]
     public function fields()
@@ -45,7 +69,8 @@ class Form extends FormComponent
                     $properties[$name] = match($data['type']) {
                         'int', 'float' => $data['value'] ?? 0,
                         'bool' => $data['value'] ?? false,
-                        'carbon' => $data['value'] ?? null,
+                        Carbon::class => $data['value'] ?? null,
+                        SupportCarbon::class => $data['value'] ?? null,
                         default => $data['value'] ?? "",
                     };
                 } else {
@@ -121,11 +146,11 @@ class Form extends FormComponent
         $params = $reflection->getConstructor()->getParameters();
         foreach ($params as $param) {
             $typeClass = $param->getType()?->getName();
-            $reflBar = $reflection->getProperty($param->name);
 
             $this->job_parameters[$param->name] = [
                 "type" => $typeClass
             ];
+
             if ($param->isDefaultValueAvailable()) {
                 $this->job_parameters[$param->name]['value'] = $param->getDefaultValue();
             }
@@ -133,7 +158,11 @@ class Form extends FormComponent
     }
 
     public function submit(){
-        Gate::authorize('is-admin');
+        Gate::authorize('is-system-admin');
+
+        if (method_exists($this, 'rules')) {
+            $this->validate();                
+        }
 
         $class = '\\App\\Jobs\\' . $this->job;
         if (!class_exists($class)){
@@ -153,7 +182,7 @@ class Form extends FormComponent
                     };
                     continue;
                 }
-                $this->properties[$name] = ($data['type'])::find($this->properties[$name]);
+                $this->properties[$name] = !empty($this->properties[$name]) ? ($data['type'])::find($this->properties[$name]) : null;
             }
         }
 
@@ -161,5 +190,13 @@ class Form extends FormComponent
 
         $this->dispatch('snackbar', ['message' => ($this->job . ' ' . __('Job Scheduled')), 'type' => 'success', 'icon' => 'fas fa-check']);
         $this->dispatch('closeModal');
+    }
+
+    function onSuccess(){
+        //DO SOMETHING ON SUCESS;
+    }
+
+    function onError(){
+        //DO SOMETHING ON ERROR;
     }
 }
