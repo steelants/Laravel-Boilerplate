@@ -2,29 +2,138 @@
 
 namespace App\Livewire\Job;
 
-use Livewire\Component;
-use App\Types\PermissionType;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon as SupportCarbon;
 use Illuminate\Support\Facades\Gate;
 use ReflectionClass;
+use SteelAnts\LivewireForm\Livewire\FormComponent;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Livewire\Attributes\Computed;
 
-class Form extends Component
+class Form extends FormComponent
 {
     public string $job;
     public array $job_parameters = [];
-    public array $job_parameters_value = [];
     public $note;
+    public array $search = [];   // per-field search text
+    public int $perPage = 50;
 
-    protected function rules()
-    {
-        return [
-            'rule_class'     => 'required',
-            'rules_values.*' => 'required',
-        ];
+    public string $viewName = 'livewire.job.form';
+
+    protected function rules() 
+    { 
+        $rules = [];
+        if (!empty($this->job_parameters) && count($this->job_parameters) > 0) {
+            foreach ($this->job_parameters as $name => $data) {
+                $rules['properties.' . $name] = [];
+                $rules['properties.' . $name][] = !isset($data['value']) ? 'required' : 'nullable';
+                if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
+                    $rules['properties.' . $name][] = match($data['type']) {
+                        'int', 'float' => 'numeric',
+                        'bool' => 'boolean',
+                        Carbon::class => 'date',
+                        SupportCarbon::class=> 'date',
+                        default => 'string',
+                    };
+                } else {
+                    $rules['properties.' . $name][] = Rule::exists(($data['type'])::first()->getTable(), 'id');
+                }
+            }
+        }
+        return $rules; 
     }
 
-    public function mount($job)
+    #[Computed()]
+    public function fields()
     {
+        $fields = [];
+
+        if (!empty($this->job_parameters) && count($this->job_parameters) > 0) {
+            foreach ($this->job_parameters as $name => $data) {
+                $fields[] = $name;
+            }
+        }
+
+        return $fields;
+    }
+
+    public function properties()
+    {
+        $properties = [];
+
+        if (!empty($this->job_parameters) && count($this->job_parameters) > 0) {
+            foreach ($this->job_parameters as $name => $data) {
+                if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
+                    $properties[$name] = match($data['type']) {
+                        'int', 'float' => $data['value'] ?? 0,
+                        'bool' => $data['value'] ?? false,
+                        Carbon::class => $data['value'] ?? null,
+                        SupportCarbon::class => $data['value'] ?? null,
+                        default => $data['value'] ?? "",
+                    };
+                } else {
+                    $properties[$name] = $data['value'] ?? ($data['type'])::select('id')->first()->id;
+                }
+            }
+        }
+
+        return $properties;
+    }
+
+    #[Computed()]
+    public function types()
+    {
+        $types = [];
+        if (!empty($this->job_parameters) && count($this->job_parameters) > 0) {
+            foreach ($this->job_parameters as $name => $data) {
+                if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
+                    $types[$name] = match($data['type']) {
+                        'int', 'float' => 'int',
+                        'bool' => 'checkbox',
+                        Carbon::class => 'datetime',
+                        SupportCarbon::class => 'datetime',
+                        default => 'string',
+                    };
+                }
+            }
+        }
+        return $types;
+    }
+
+    #[Computed()]
+    public function labels()
+    {
+        $labels = [];
+
+        if (!empty($this->job_parameters) && count($this->job_parameters) > 0) {
+            foreach ($this->job_parameters as $name => $data) {
+                $labels[$name] = Str::title($name);
+            }
+        }
+
+        return $labels;
+    }
+
+    public function getOptions($field, $options = []): array
+    {
+        $parameter = $this->job_parameters[$field] ?? null;
+
+        if (
+            empty($parameter)
+            || !class_exists($parameter['type'])
+            || !is_subclass_of($parameter['type'], \Illuminate\Database\Eloquent\Model::class)
+        ) {
+            return [];
+        }
+
+        return ($parameter['type'])::limit(1000)->pluck('name', 'id')->toArray();
+    }
+
+    public function mount($job = null)
+    {
+        parent::mount();
         $this->job = $job;
 
 		$class = '\\App\\Jobs\\' . $job;
@@ -37,40 +146,57 @@ class Form extends Component
         $params = $reflection->getConstructor()->getParameters();
         foreach ($params as $param) {
             $typeClass = $param->getType()?->getName();
-            $reflBar = $reflection->getProperty($param->name);
 
             $this->job_parameters[$param->name] = [
-                $typeClass,
-                "",
+                "type" => $typeClass
             ];
 
-            // $value = $reflBar->getValue($reflection->newInstanceWithoutConstructor());
-            // if (!in_array($typeClass, ["string", "int", "bool"])) {
-            //     $this->job_parameters_value[$param->name] = is_object($value) ? $value->id : null;
-            // } else {
-            //     $this->job_parameters_value[$param->name] = $value;
-            // }
+            if ($param->isDefaultValueAvailable()) {
+                $this->job_parameters[$param->name]['value'] = $param->getDefaultValue();
+            }
         }
     }
 
-    public function run(Request $request, $job)
-    {
-		Gate::authorize('is-admin');
+    public function submit(){
+        Gate::authorize('is-system-admin');
 
-        $class = '\\App\\Jobs\\' . $job;
+        if (method_exists($this, 'rules')) {
+            $this->validate();                
+        }
+
+        $class = '\\App\\Jobs\\' . $this->job;
         if (!class_exists($class)){
-            $class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' . $job;
+            $class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' .  $this->job;
         }
 
-        dispatch(new $class(...$this->job_parameters_value));
+        if (!empty($this->job_parameters) && count($this->job_parameters) > 0) {
+            foreach ($this->job_parameters as $name => $data) {
+                if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
+                    $this->properties[$name] = match($data['type']) {
+                        'int' => (int)($this->properties[$name] ?? 0),
+                        'float' => (float)($this->properties[$name] ?? 0.0),
+                        'bool' => (bool)($this->properties[$name] ?? false),
+                        Carbon::class => !empty($this->properties[$name]) ? Carbon::parse($this->properties[$name]) : null,
+                        SupportCarbon::class => !empty($this->properties[$name]) ? SupportCarbon::parse($this->properties[$name]) : null,
+                        default => (string)($this->properties[$name] ?? ""),
+                    };
+                    continue;
+                }
+                $this->properties[$name] = !empty($this->properties[$name]) ? ($data['type'])::find($this->properties[$name]) : null;
+            }
+        }
 
-        $this->dispatch('snackbar', ['message' => ($job . ' ' . __('Job Scheduled')), 'type' => 'success', 'icon' => 'fas fa-check']);
+        dispatch(new $class(...$this->properties));
+
+        $this->dispatch('snackbar', ['message' => ($this->job . ' ' . __('Job Scheduled')), 'type' => 'success', 'icon' => 'fas fa-check']);
         $this->dispatch('closeModal');
-        $this->dispatch('jobAdded');
     }
 
-    public function render()
-    {
-        return view('livewire.job.form');
+    function onSuccess(){
+        //DO SOMETHING ON SUCESS;
+    }
+
+    function onError(){
+        //DO SOMETHING ON ERROR;
     }
 }
