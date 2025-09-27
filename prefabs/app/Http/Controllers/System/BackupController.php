@@ -45,6 +45,7 @@ class BackupController extends BaseController
 			'backups' => $backups
 		]);
     }
+
     public function download($file_name = null)
     {
         if (!empty($file_name)) {

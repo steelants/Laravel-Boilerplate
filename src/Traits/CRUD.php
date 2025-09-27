@@ -2,10 +2,10 @@
 
 namespace SteelAnts\LaravelBoilerplate\Traits;
 
-use Illuminate\Support\Str;
 use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 
 trait CRUD

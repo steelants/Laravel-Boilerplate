@@ -2,9 +2,9 @@
 
 namespace SteelAnts\LaravelBoilerplate\Services;
 
-use DOMDocument;
 use App\Models\File;
 use App\Models\Tenant;
+use DOMDocument;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

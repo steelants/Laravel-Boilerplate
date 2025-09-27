@@ -2,9 +2,9 @@
 
 namespace SteelAnts\LaravelBoilerplate\Traits;
 
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 
 trait CRUDFullPage
 {

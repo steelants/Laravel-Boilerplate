@@ -2,21 +2,21 @@
 
 namespace SteelAnts\LaravelBoilerplate;
 
-use Illuminate\Support\ServiceProvider;
+use App\Http\Middleware\GenerateMenus;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
+use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;
 use SteelAnts\LaravelBoilerplate\Console\Commands\InstallCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeBasicTestsCommand;
-use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
-use SteelAnts\LaravelBoilerplate\Facades\Menu;
-use App\Http\Middleware\GenerateMenus;
-use Illuminate\Support\Facades\Blade;
 use SteelAnts\LaravelBoilerplate\Facades\Alert;
+use SteelAnts\LaravelBoilerplate\Facades\Menu;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
-use Illuminate\Support\Facades\Event;
-use Livewire\Livewire;
-use SteelAnts\LaravelBoilerplate\Livewire\File\Gallery;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
+use SteelAnts\LaravelBoilerplate\Livewire\File\Gallery;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {

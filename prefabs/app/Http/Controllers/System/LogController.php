@@ -5,7 +5,6 @@ namespace App\Http\Controllers\System;
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use SteelAnts\LaravelBoilerplate\Helpers\SizeHelper;
 
 class LogController extends BaseController
@@ -79,8 +78,6 @@ class LogController extends BaseController
 
     public function download($filename)
     {
-        #Gate::authorize('is-admin');
-
         $path = storage_path('logs/' . $filename);
 
         if (File::exists($path)) {
@@ -92,8 +89,6 @@ class LogController extends BaseController
 
     public function delete($filename)
     {
-        #Gate::authorize('is-admin');
-
         $path = storage_path('logs/' . $filename);
 
         if (File::exists($path)) {
@@ -106,8 +101,6 @@ class LogController extends BaseController
 
     public function clear(Request $request)
     {
-        #Gate::authorize('is-admin');
-
         $path = storage_path('logs');
         $files = glob($path.'/lar*.log');
 

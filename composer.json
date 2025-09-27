@@ -41,7 +41,7 @@
     },
     "scripts": {
         "check-static": "phpstan --memory-limit=2g",
-        "format": "phpcbf -v -d memory_limit=512M",
+        "format": "phpcbf",
         "lint": "phpcs"
     },
     "config": {

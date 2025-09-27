@@ -97,13 +97,13 @@ class DataTable extends DataTableComponent
 
     public function stop($job_id)
     {
-		Gate::authorize('is-admin');
+		#Gate::authorize('is-admin');
         Job::find($job_id)->delete();
     }
 
     public function retry($job_uuid)
     {
-		Gate::authorize('is-admin');
+		#Gate::authorize('is-admin');
         Artisan::call('queue:retry', ['id' => [$job_uuid]]);
     }
 }

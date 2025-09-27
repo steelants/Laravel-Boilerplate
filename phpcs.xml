@@ -47,7 +47,7 @@
 			<property name="linesCountBeforeFirstUse" value="0" />
 		</properties>
 	</rule>
-
+	<rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses" />
 	<rule ref="SlevomatCodingStandard.Functions.NamedArgumentSpacing" />
 	<rule ref="SlevomatCodingStandard.Variables.UselessVariable" />
 	<rule ref="SlevomatCodingStandard.Namespaces.UselessAlias" />

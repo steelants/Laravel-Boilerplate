@@ -2,11 +2,11 @@
 
 namespace SteelAnts\LaravelBoilerplate\Listeners;
 
+use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Events\Dispatcher;
 use SteelAnts\LaravelBoilerplate\Services\ActivityService;
-use Illuminate\Auth\Events\Failed;
 
 class UserEventSubscriber
 {

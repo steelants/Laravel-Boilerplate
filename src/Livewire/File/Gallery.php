@@ -2,11 +2,11 @@
 
 namespace SteelAnts\LaravelBoilerplate\Livewire\File;
 
-use SteelAnts\LaravelBoilerplate\Models\File;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 use SplFileInfo;
+use SteelAnts\LaravelBoilerplate\Models\File;
 use SteelAnts\LaravelBoilerplate\Services\FileService;
 use Throwable;
 
