@@ -189,7 +189,7 @@ class FileService
 	{
 		$filename = Str::uuid()->toString() . "." . $file->getClientOriginalExtension();
 		$drive = !empty($public) ? 'public' : 'local';
-		Storage::drive($drive)->put(trim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename, $file);
+		Storage::drive($drive)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);
 
         File::updateOrCreate(
 			[
