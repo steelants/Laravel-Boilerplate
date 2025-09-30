@@ -15,7 +15,7 @@ use SteelAnts\LaravelBoilerplate\Types\FileType;
 
 class FileService
 {
-    public static function parseInlineImages(Model $owner, $rawContent, $imageFilePrefix = '', $imagesStoragePath = '', $imageLazyLoad = true, Tenant $tenant = null)
+    public static function parseInlineImages(Model $owner, $rawContent, $imageFilePrefix = '', $imagesStoragePath = '', $imageLazyLoad = true, bool $public = false, Tenant $tenant = null)
     {
         if (empty($rawContent)) {
             return "";
@@ -46,6 +46,8 @@ class FileService
         $images = $dom->getElementsByTagName('img');
         $filesName = $owner->files()->where('type', FileType::INLINE)->pluck('filename', 'id')->toArray();
 
+        $drive = !empty($public) ? 'public' : 'local';
+
         foreach ($images as $image) {
             $src = $image->getAttribute('src');
             //unset file from files if exists
@@ -60,7 +62,7 @@ class FileService
 
                 $filename = $imageFilePrefix . uniqid('', true) . '.' . $mimeType;
 
-                Storage::drive('local')->put(trim($imagesStoragePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename, file_get_contents($src));
+                Storage::drive($drive)->put(trim($imagesStoragePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename, file_get_contents($src));
 
                 $owner->files()->updateOrCreate(
                     [
