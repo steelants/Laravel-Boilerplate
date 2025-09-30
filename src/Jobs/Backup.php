@@ -2,20 +2,22 @@
 
 namespace SteelAnts\LaravelBoilerplate\Jobs;
 
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class Backup implements ShouldQueue
 {
 	use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-	public function __construct() {}
+	public function __construct()
+    {
+    }
 
 	public function handle()
 	{
@@ -49,12 +51,12 @@ class Backup implements ShouldQueue
 			if (config('database.default') == 'sqlite') {
 				$dbFile = database_path('database.sqlite');
 				$dbName = basename($dbFile, ".php");
-				$backupFile = $db_backup_path . '/' . $dbName  . '_' . date("Y-m-d", time()) . '.sqlite';
+				$backupFile = $db_backup_path . '/' . $dbName . '_' . date("Y-m-d", time()) . '.sqlite';
 				$command = "cp $dbFile $backupFile 2>&1";
 				exec($command, $output);
 				Log::info('Backup ' . $dbName . ' db ');
 				Log::Debug($output);
-			} else  if (config('database.default') == 'pgsql') {
+			} else if (config('database.default') == 'pgsql') {
 				$dbHost = config('database.connections.pgsql.host');
 				$dbName = config('database.connections.pgsql.database');
 				$dbUserName = config('database.connections.pgsql.username');
@@ -68,7 +70,7 @@ class Backup implements ShouldQueue
 
 					putenv("PGPASSWORD=" . $dbPassword);
 
-					$backupFile = $db_backup_path . '/' . $dbName  . '_' . $type . '_' . date("Y-m-d", time()) . '.sql';
+					$backupFile = $db_backup_path . '/' . $dbName . '_' . $type . '_' . date("Y-m-d", time()) . '.sql';
 					$command = "pg_dump --no-comments $parameters -h $dbHost -U $dbUserName -d $dbName -f \"$backupFile\" 2>&1";
 					exec($command, $output);
 					Log::info('Backup ' . $dbName . ' db ' . $type);
@@ -86,8 +88,8 @@ class Backup implements ShouldQueue
 						$parameters = "--no-create-info";
 					}
 
-					$backupFile = $db_backup_path . '/' . $dbName  . '_' . $type . '_' . date("Y-m-d", time()) . '.sql';
-					$command = "mysqldump --skip-comments " . $parameters . " -h " . $dbHost . " -u " . $dbUserName . " -p" . $dbPassword  . " " . $dbName  . " -r $backupFile 2>&1";
+					$backupFile = $db_backup_path . '/' . $dbName . '_' . $type . '_' . date("Y-m-d", time()) . '.sql';
+					$command = "mysqldump --skip-comments " . $parameters . " -h " . $dbHost . " -u " . $dbUserName . " -p" . $dbPassword . " " . $dbName . " -r $backupFile 2>&1";
 					exec($command, $output);
 					Log::info('Backup ' . $dbName . ' db ' . $type);
 					Log::Debug($output);
@@ -134,7 +136,7 @@ class Backup implements ShouldQueue
 			exec($command, $output);
 			Log::info($backupPath . '=>' . $zippedFilePath);
 
-			$command = "md5sum " .  $zippedFilePath;
+			$command = "md5sum " . $zippedFilePath;
 			exec($command, $output);
 			Log::info('Zipping hash');
 

@@ -9,6 +9,16 @@
 ## Preview
 [boilerplate.steelants.cz](https://boilerplate.steelants.cz)
 
+#### Tag project
+```bash
+  git checkout main
+  git pull origin main
+  git pull origin dev
+  git tag 1.8.4
+  git push --tags
+  git checkout dev
+```
+
 ## What's included
 ### Functions
 - User Management
@@ -164,6 +174,29 @@ php artisan make:crud {model name} --force
 Create default files in livewire with create and edit as full page
 ```bash
 php artisan make:crud {model name} --full-page-components
+```
+### Create CRUD Full Page
+Create components in custome namespace
+```bash
+php artisan make:crud {model name} --namespace=\\Admin 
+```
+
+## CRUD parameters
+### Add prefix in TestController
+Give you for example "admin.test.datatable"
+```php
+public string $prefix = "admin.";
+```
+
+### Add model options in TestController
+Give to add modal size parameter
+```php
+public function __construct()
+{
+	$this->model_component = [
+		'size' => 'lg',
+	];
+}
 ```
 
 ## Contributors

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\System;
 
-use App\Helpers\SizeHelper;
+use SteelAnts\LaravelBoilerplate\Helpers\SizeHelper;
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -40,8 +40,12 @@ class BackupController extends BaseController
             }
         }
 
-        return view('system.backup.index', ['backups' => $backups]);
+		return view('system.backup.index', [
+			'layout' => config('boilerplate.layouts.system'),
+			'backups' => $backups
+		]);
     }
+
     public function download($file_name = null)
     {
         if (!empty($file_name)) {

@@ -19,7 +19,7 @@ class ActivityService
 		$activity = new Activity();
 		$activity->lang_text = $text;
 		$activity->data = [
-			'url' => url()->full()
+			'url' => url()->full(),
 		];
 		$activity->save();
 	}

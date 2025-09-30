@@ -1,5 +1,6 @@
 <div class="dropdown selectbox {{ $groupClass }}"
     x-data="initSelectbox($wire, @js($property ?? null), @js($options), @js($multiple), @js($pills), null, @js($required))"
+	wire:key="{{ md5(json_encode($options)) }}"
 >
     @isset($label)
         <label class="form-label">{{ $label }}</label>

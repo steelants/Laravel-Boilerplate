@@ -1,5 +1,5 @@
 <?php
-namespace App\Livewire\{{model}};
+namespace {{namespace}};
 
 use App\Models\{{model}};
 use SteelAnts\DataTable\Livewire\DataTableComponent;
@@ -32,7 +32,7 @@ class DataTable extends DataTableComponent
         return [
             [
                 'type' => "url",
-                'url' => route('{{model_snake_case_dash}}.form', ['modelId' => $item['id']]),
+                'url' => route('{{action_form}}', ['modelId' => $item['id']]),
                 'text' => "edit",
                 'iconClass' => 'fas fa-pen',
             ],

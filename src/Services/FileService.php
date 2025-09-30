@@ -3,18 +3,17 @@
 namespace SteelAnts\LaravelBoilerplate\Services;
 
 use DOMDocument;
-use App\Models\File;
-use App\Models\Tenant;
-use App\Types\FileType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use SteelAnts\LaravelBoilerplate\Models\File;
+use SteelAnts\LaravelBoilerplate\Types\FileType;
 
 class FileService
 {
-    public static function parseInlineImages(Model $owner, $rawContent, $imageFilePrefix = '', $imagesStoragePath = '', $imageLazyLoad = true)
+    public static function parseInlineImages(Model $owner, $rawContent, $imageFilePrefix = '', $imagesStoragePath = '', $imageLazyLoad = true, bool $public = false)
     {
         if (empty($rawContent)) {
             return "";
@@ -25,11 +24,13 @@ class FileService
         }
 
         if (empty($imagesStoragePath)) {
-            $imagesStoragePath = "/" . Str::snake($owner->getTable()) . "/";
+            $imagesStoragePath = 'uploads' . DIRECTORY_SEPARATOR . Str::snake($owner->getTable());
             if (method_exists($owner, 'rootPath')) {
                 $imagesStoragePath = $owner->rootPath($imagesStoragePath);
             }
         }
+
+		$imagesStoragePath = Str::lower($imagesStoragePath);
 
         libxml_use_internal_errors(true);
 
@@ -38,6 +39,8 @@ class FileService
         $dom->loadHTML(mb_convert_encoding($rawContent, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $images = $dom->getElementsByTagName('img');
         $filesName = $owner->files()->where('type', FileType::INLINE)->pluck('filename', 'id')->toArray();
+
+        $drive = !empty($public) ? 'public' : 'local';
 
         foreach ($images as $image) {
             $src = $image->getAttribute('src');
@@ -53,12 +56,12 @@ class FileService
 
                 $filename = $imageFilePrefix . uniqid('', true) . '.' . $mimeType;
 
-                Storage::put($imagesStoragePath . $filename, file_get_contents($src));
+                Storage::drive($drive)->put(trim($imagesStoragePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename, file_get_contents($src));
 
                 $owner->files()->updateOrCreate(
                     [
                         'filename' => $filename,
-                        'path'     => $imagesStoragePath . $filename,
+                        'path'     => $imagesStoragePath,
                     ],
                     [
                         'original_name' => $filename,
@@ -68,10 +71,7 @@ class FileService
                 );
 
                 $image->removeAttribute('src');
-                $image->setAttribute('src', route("file.serv", [
-                    "path"      => str_replace('/', '-', trim($imagesStoragePath, '/')),
-                    "file_name" => $filename,
-                ], false));
+                $image->setAttribute('src', static::loadFile($filename, $imagesStoragePath));
 
                 if ($imageLazyLoad) {
                     $image->setAttribute('loading', 'lazy');
@@ -87,9 +87,7 @@ class FileService
         }
 
         #preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1">$1</a>',
-        $text = $dom->savehtml($dom->documentElement);
-
-        return $text;
+        return $dom->savehtml($dom->documentElement);
     }
 
     public static function getInLineImagesFileIds(Model $owner, $rawContent): array
@@ -115,15 +113,26 @@ class FileService
         return $files;
     }
 
-    public static function uploadFile(Model $owner, UploadedFile|TemporaryUploadedFile $file, string $rootPath, bool $public = false): string
+    public static function uploadFile(Model $owner, UploadedFile|TemporaryUploadedFile $file, string $rootPath = "", bool $public = false): string
     {
         $filename = Str::uuid()->toString() . "." . $file->getClientOriginalExtension();
-        $file_path = $file->storeAs($rootPath, $filename);
+
+		if (empty($rootPath)) {
+            $rootPath = 'uploads' . DIRECTORY_SEPARATOR . Str::snake($owner->getTable());
+            if (method_exists($owner, 'rootPath')) {
+                $rootPath = $owner->rootPath($rootPath);
+            }
+        }
+
+		$rootPath = Str::lower($rootPath);
+
+		$drive = !empty($public) ? 'public' : 'local';
+		Storage::drive($drive)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);
 
         $owner->files()->updateOrCreate(
             [
                 'filename' => $filename,
-                'path'     => $file_path,
+                'path'     => $rootPath,
             ],
             [
                 'original_name' => $file->getClientOriginalName(),
@@ -131,28 +140,15 @@ class FileService
             ],
         );
 
-        if ($public == true) {
-            return str_replace('public', 'storage', $file_path);
-        }
+        return static::loadFile($filename, $rootPath);
+    }
 
+    public static function loadFile(string $filename, string $rootPath, bool $public = false): string
+    {
         return route("file.serv", [
             "path"      => str_replace(DIRECTORY_SEPARATOR, '-', trim($rootPath, DIRECTORY_SEPARATOR)),
             "file_name" => $filename,
-        ], false);
-    }
-
-    public static function uploadTenantFile(Tenant $tenant, Model $owner, UploadedFile|TemporaryUploadedFile $file, string $rootPath, bool $public = false): string
-    {
-        $tenantRootPath = ($public == true ? DIRECTORY_SEPARATOR.'public' : 'uploads').DIRECTORY_SEPARATOR.'tenant_media'. DIRECTORY_SEPARATOR . $tenant->id . DIRECTORY_SEPARATOR;
-        return self::uploadFile($owner, $file, ($tenantRootPath . trim($rootPath, DIRECTORY_SEPARATOR)), $public);
-    }
-
-    public static function loadTenantFile(Tenant $tenant, string $filename, string $rootPath): string
-    {
-        $tenantRootPath = 'uploads'.DIRECTORY_SEPARATOR.'tenant_media'. DIRECTORY_SEPARATOR . $tenant->id . DIRECTORY_SEPARATOR;
-        return route("file.serv", [
-            "path"      => str_replace(DIRECTORY_SEPARATOR, '-', trim(($tenantRootPath . trim($rootPath, DIRECTORY_SEPARATOR)), DIRECTORY_SEPARATOR)),
-            "file_name" => $filename,
+			"public"    => $public,
         ], false);
     }
 
@@ -188,4 +184,43 @@ class FileService
         $explode = explode(".", $filename);
         return in_array(end($explode), $imageExtensions);
     }
+
+	public static function uploadFileAnonymouse(UploadedFile|TemporaryUploadedFile $file, string $rootPath, bool $public = false): string
+	{
+		$filename = Str::uuid()->toString() . "." . $file->getClientOriginalExtension();
+		$drive = !empty($public) ? 'public' : 'local';
+		Storage::drive($drive)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);
+
+        File::updateOrCreate(
+			[
+				'filename' => $filename,
+                'path'     => $rootPath,
+            ],
+            [
+				'original_name' => $file->getClientOriginalName(),
+                'size'          => $file->getSize(),
+            ],
+        );
+
+        return "";
+	}
+
+	public static function replaceFile(File $fileModel, UploadedFile|TemporaryUploadedFile $file, bool $public = false): string
+	{
+        $drive = !empty($public) ? 'public' : 'local';
+        $file_path = Storage::drive($drive)->putFileAs(Str::trim($fileModel->path, DIRECTORY_SEPARATOR), $file, $fileModel->filename);
+
+        File::updateOrCreate(
+			[
+				'filename' => $fileModel->filename,
+                'path'     => $fileModel->path,
+            ],
+            [
+				'original_name' => $file->getClientOriginalName(),
+                'size'          => $file->getSize(),
+            ],
+        );
+
+        return "";
+	}
 }

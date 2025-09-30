@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Subscription;
 
-use App\Models\Subscription;
+use SteelAnts\LaravelBoilerplate\Models\Subscription;
 use Livewire\Component;
 use App\Types\SubscriptionTier;
 

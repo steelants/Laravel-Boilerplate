@@ -30,3 +30,4 @@ stubs/resources/views/livewire/test-*.blade.php
 Prefabs/resources/**/test-*.blade.php
 .vscode/sftp.json
 
+composer.lock

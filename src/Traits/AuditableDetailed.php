@@ -3,23 +3,23 @@
 namespace SteelAnts\LaravelBoilerplate\Traits;
 
 use App\Models\Activity;
-use Illuminate\Database\Eloquent\Model;
 
 trait AuditableDetailed
 {
 	use Auditable;
 
-	public static function updatingBy($model){
+	public static function updatingBy($model)
+    {
 		if (!$model->isDirty()) {
 			return;
 		}
 
 		$collection = collect($model->getDirty());
-		if (method_exists($model, 'auditableColumns')){
+		if (method_exists($model, 'auditableColumns')) {
 			$collection = $collection->intersectByKeys(array_flip($model->auditableColumns()));
 		}
 
-		if (method_exists($model, 'auditableIgnored')){
+		if (method_exists($model, 'auditableIgnored')) {
 			$collection = $collection->except($model->auditableIgnored());
 		}
 

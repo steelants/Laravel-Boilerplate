@@ -2,8 +2,8 @@
 
 namespace SteelAnts\LaravelBoilerplate\Observers;
 
-use App\Models\File;
 use Illuminate\Support\Facades\Storage;
+use SteelAnts\LaravelBoilerplate\Models\File;
 
 class FileObserver
 {

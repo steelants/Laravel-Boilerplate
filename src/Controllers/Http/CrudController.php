@@ -2,11 +2,11 @@
 
 namespace SteelAnts\LaravelBoilerplate\Controllers\Http;
 
-use SteelAnts\LaravelBoilerplate\Traits\CRUD;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Str;
 use ErrorException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use SteelAnts\LaravelBoilerplate\Traits\CRUD;
 
 class CrudController extends Controller
 {
@@ -21,7 +21,7 @@ class CrudController extends Controller
         } else {
             $modelName = ucfirst(Str::camel(str_replace('-', '_', $request->route('accountId'))));
             if (!class_exists('App\\Models\\' . $modelName)) {
-                throw new ErrorException($modelName .  " model not found!");
+                throw new ErrorException($modelName . " model not found!");
             }
             $model = $modelName::class;
         }

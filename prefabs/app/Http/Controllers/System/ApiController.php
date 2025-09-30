@@ -45,7 +45,10 @@ class ApiController extends Controller
             ];
         }
 
-        return view('system.api.index', ['routes' => $routes]);
+        return view('system.api.index', [
+			'layout' => config('boilerplate.layouts.system'),
+			'routes' => $routes,
+		]);
     }
 
     private function phpDocsParameters(ReflectionMethod $method): array

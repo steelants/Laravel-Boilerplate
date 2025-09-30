@@ -29,7 +29,7 @@ class DispatchJob extends Command
     {
 		$job = $this->argument('job');
 		$class = '\\App\\Jobs\\' . $job;
-        if (!class_exists($class)){
+        if (!class_exists($class)) {
             $class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' . $job;
         }
 

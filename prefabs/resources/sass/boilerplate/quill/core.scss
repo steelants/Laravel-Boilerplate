@@ -140,11 +140,15 @@ $MAX_INDENT: 9 !default;
   }
 
   li[data-list='checked'] > .ql-ui:before {
-    content: '\2611';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 400;
+    content: "\f0c8";
   }
 
   li[data-list='unchecked'] > .ql-ui:before {
-    content: '\2610';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    content: "\f14a";
   }
 
   li[data-list] {
@@ -174,7 +178,7 @@ $MAX_INDENT: 9 !default;
           '. ';
       }
     }
-    
+
     @if $num < $MAX_INDENT {
       li[data-list].ql-indent-#{$num} {
         @supports (counter-set: none) {
@@ -303,7 +307,7 @@ $MAX_INDENT: 9 !default;
   .ql-align-justify {
     text-align: justify;
   }
-  .ql-align-right { 
+  .ql-align-right {
     text-align: right;
   }
   .ql-ui {

@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
+use SteelAnts\LaravelBoilerplate\Models\Activity;
+use SteelAnts\LaravelBoilerplate\Traits\CRUD;
+use SteelAnts\LaravelBoilerplate\Traits\SystemPage;
 
 class AuditController extends BaseController
 {
-    public function index()
-    {
-        return view('system.audit.index');
-    }
+	use CRUD, SystemPage;
+	public string $model = Activity::class;
 }

@@ -26,7 +26,7 @@ class InstallCommand extends Command
 
         if (strpos(file_get_contents($RouteFilePath), 'Route::auth();') === false) {
             //If authentication not installed install
-             if (strpos(file_get_contents('bootstrap/app.php'), "api: __DIR__.'/../routes/api.php',") === false) {
+            if (strpos(file_get_contents('bootstrap/app.php'), "api: __DIR__.'/../routes/api.php',") === false) {
                 $this->call('install:api', ['--without-migration-prompt' => true, '--force' => $this->option('force')]);
             }
             $this->call('install:auth', ['--force' => $this->option('force')]);
