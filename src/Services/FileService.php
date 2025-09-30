@@ -2,7 +2,6 @@
 
 namespace SteelAnts\LaravelBoilerplate\Services;
 
-use App\Models\Tenant;
 use DOMDocument;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
@@ -14,7 +13,7 @@ use SteelAnts\LaravelBoilerplate\Types\FileType;
 
 class FileService
 {
-    public static function parseInlineImages(Model $owner, $rawContent, $imageFilePrefix = '', $imagesStoragePath = '', $imageLazyLoad = true, bool $public = false, Tenant $tenant = null)
+    public static function parseInlineImages(Model $owner, $rawContent, $imageFilePrefix = '', $imagesStoragePath = '', $imageLazyLoad = true, bool $public = false)
     {
         if (empty($rawContent)) {
             return "";
@@ -32,10 +31,6 @@ class FileService
         }
 
 		$imagesStoragePath = Str::lower($imagesStoragePath);
-
-		if (!empty($tenant)) {
-			static::addTenantPath($tenant, $imagesStoragePath);
-		}
 
         libxml_use_internal_errors(true);
 
@@ -118,7 +113,7 @@ class FileService
         return $files;
     }
 
-    public static function uploadFile(Model $owner, UploadedFile|TemporaryUploadedFile $file, string $rootPath = "", bool $public = false, Tenant $tenant = null): string
+    public static function uploadFile(Model $owner, UploadedFile|TemporaryUploadedFile $file, string $rootPath = "", bool $public = false): string
     {
         $filename = Str::uuid()->toString() . "." . $file->getClientOriginalExtension();
 
@@ -130,10 +125,6 @@ class FileService
         }
 
 		$rootPath = Str::lower($rootPath);
-
-		if (!empty($tenant)) {
-			static::addTenantPath($tenant, $rootPath);
-		}
 
 		$drive = !empty($public) ? 'public' : 'local';
 		Storage::drive($drive)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);
@@ -159,12 +150,6 @@ class FileService
             "file_name" => $filename,
 			"public"    => $public,
         ], false);
-    }
-
-	public static function addTenantPath(Tenant $tenant, string &$rootPath): void
-    {
-		// /tenant_media/id tenant/your path
-		$rootPath = DIRECTORY_SEPARATOR.'tenant_media'. DIRECTORY_SEPARATOR . $tenant->id . DIRECTORY_SEPARATOR . trim($rootPath, DIRECTORY_SEPARATOR);
     }
 
     public static function isImage($filename)
@@ -200,12 +185,9 @@ class FileService
         return in_array(end($explode), $imageExtensions);
     }
 
-	public static function uploadFileAnonymouse(UploadedFile|TemporaryUploadedFile $file, string $rootPath, bool $public = false, Tenant $tenant = null): string
+	public static function uploadFileAnonymouse(UploadedFile|TemporaryUploadedFile $file, string $rootPath, bool $public = false): string
 	{
 		$filename = Str::uuid()->toString() . "." . $file->getClientOriginalExtension();
-		if (!empty($tenant)) {
-			static::addTenantPath($tenant, $rootPath);
-		}
 		$drive = !empty($public) ? 'public' : 'local';
 		Storage::drive($drive)->put(trim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename, $file);
 

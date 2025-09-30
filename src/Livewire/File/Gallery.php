@@ -53,10 +53,9 @@ class Gallery extends Component
 			if (count($validatedData['files']) > 0) {
 				foreach ($validatedData['files'] as $file) {
 					if (!empty($this->model)) {
-						$tenant = $this->model->tenant ?? null;
-						$this->model->uploadFile($file, tenant: $tenant);
+						$this->model->uploadFile($file);
 					} else {
-						FileService::uploadFileAnonymouse($file, "uploads", tenant: tenant() ?? null);
+						FileService::uploadFileAnonymouse($file, "uploads");
 					}
 				}
 
