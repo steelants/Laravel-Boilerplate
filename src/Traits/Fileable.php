@@ -32,6 +32,6 @@ trait Fileable
 
     public function replaceFile(UploadedFile|TemporaryUploadedFile $file, bool $public = false): string
     {
-        FileService::replaceFile($this->files, $file, $public);
+        return FileService::replaceFile($this->files, $file, $public);
     }
 }
