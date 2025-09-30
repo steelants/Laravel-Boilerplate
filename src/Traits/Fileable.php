@@ -4,8 +4,9 @@ namespace SteelAnts\LaravelBoilerplate\Traits;
 
 use App\Models\File;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use SteelAnts\LaravelBoilerplate\Services\FileService;
+use Illuminate\Support\Str;
 
 trait Fileable
 {
@@ -17,22 +18,20 @@ trait Fileable
         return $this->morphMany(File::class, 'fileable');
     }
 
-    public function uploadFile(UploadedFile|TemporaryUploadedFile $file, string $rootPath): string
+	/**
+     * Get one latest file.
+     */
+	public function file()
     {
-        $filename = Str::uuid()->toString() . "." . $file->getClientOriginalExtension();
-        $file_path = $file->storeAs($rootPath, $filename);
+        return $this->morphOne(File::class, 'fileable')->latestOfMany();
+    }
 
-        $this->files()->updateOrCreate(
-            [
-                'filename' => $filename,
-                'path'     => $file_path,
-            ],
-            [
-                'original_name' => $file->getClientOriginalName(),
-                'size'          => $file->getSize(),
-            ],
-        );
+    public function uploadFile(UploadedFile|TemporaryUploadedFile $file, string $rootPath = "", bool $public = false) : string {
+        return FileService::uploadFile(owner: $this, file: $file, rootPath: $rootPath, public: $public);
+    }
 
-        return "";
+    public function replaceFile(UploadedFile|TemporaryUploadedFile $file, bool $public = false): string
+    {
+        return FileService::replaceFile($this->files, $file, $public);
     }
 }
