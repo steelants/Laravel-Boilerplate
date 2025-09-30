@@ -2,7 +2,6 @@
 
 namespace SteelAnts\LaravelBoilerplate\Services;
 
-use App\Models\File;
 use App\Models\Tenant;
 use DOMDocument;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +9,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use SteelAnts\LaravelBoilerplate\Models\File as ModelsFile;
+use SteelAnts\LaravelBoilerplate\Models\File;
 use SteelAnts\LaravelBoilerplate\Types\FileType;
 
 class FileService
@@ -224,15 +223,15 @@ class FileService
         return "";
 	}
 
-	public static function replaceFile(ModelsFile $fileModel, UploadedFile|TemporaryUploadedFile $file): string
+	public static function replaceFile(File $fileModel, UploadedFile|TemporaryUploadedFile $file, bool $public = false): string
 	{
-		$rootPath = Str::rtrim(Str::remove($fileModel->filename, $fileModel->path), '/');
-        $file_path = $file->storeAs($rootPath, $fileModel->filename);
+        $drive = !empty($public) ? 'public' : 'local';
+        $file_path = Storage::drive($drive)->putFileAs(Str::trim($fileModel->path, DIRECTORY_SEPARATOR), $file, $fileModel->filename);
 
         File::updateOrCreate(
 			[
 				'filename' => $fileModel->filename,
-                'path'     => $file_path,
+                'path'     => $fileModel->path,
             ],
             [
 				'original_name' => $file->getClientOriginalName(),
