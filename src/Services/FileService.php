@@ -60,7 +60,7 @@ class FileService
 
                 $filename = $imageFilePrefix . uniqid('', true) . '.' . $mimeType;
 
-                Storage::drive('local')->put(trim($imagesStoragePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . trim($filename, DIRECTORY_SEPARATOR), file_get_contents($src));
+                Storage::drive('local')->put(trim($imagesStoragePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename, file_get_contents($src));
 
                 $owner->files()->updateOrCreate(
                     [
@@ -135,7 +135,7 @@ class FileService
 		}
 
 		$drive = !empty($public) ? 'public' : 'local';
-		Storage::drive($drive)->put(trim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename, $file);
+		Storage::drive($drive)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);
 
         $owner->files()->updateOrCreate(
             [

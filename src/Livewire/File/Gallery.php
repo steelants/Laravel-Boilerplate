@@ -122,7 +122,7 @@ class Gallery extends Component
 
         $this->files = [];
         foreach ($files as $fileObj) {
-            $file = new SplFileInfo($fileObj->path);
+            $file = new SplFileInfo($fileObj->path . DIRECTORY_SEPARATOR . $fileObj->filename);
             $this->files[$fileObj->id] = FileService::loadFile($file->getFilename(), $file->getPath()). '?t=' . $fileObj->updated_at;
         }
     }
