@@ -7,10 +7,11 @@ use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    public function serv($file_group = "", $file_name)
+    public function serv(string $file_group = "", string $file_name = "", bool $public = false)
     {
         $file_group_path = str_replace('-', DIRECTORY_SEPARATOR, $file_group);
-        $path = Storage::path(DIRECTORY_SEPARATOR . $file_group_path . DIRECTORY_SEPARATOR . $file_name);
+		$drive = !empty($public) ? 'public' : 'local';
+        $path = Storage::drive($drive)->path(DIRECTORY_SEPARATOR . $file_group_path . DIRECTORY_SEPARATOR . $file_name);
 
         if (!File::exists($path)) {
             abort(404);

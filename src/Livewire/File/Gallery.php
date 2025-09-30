@@ -53,9 +53,10 @@ class Gallery extends Component
 			if (count($validatedData['files']) > 0) {
 				foreach ($validatedData['files'] as $file) {
 					if (!empty($this->model)) {
-						$this->model->uploadFile($file, "uploads" . DIRECTORY_SEPARATOR . class_basename(get_class($this->model)));
+						$tenant = $this->model->tenant ?? null;
+						$this->model->uploadFile($file, tenant: $tenant);
 					} else {
-						FileService::uploadFileAnonymouse($file, "uploads");
+						FileService::uploadFileAnonymouse($file, "uploads", tenant: tenant() ?? null);
 					}
 				}
 
@@ -122,10 +123,7 @@ class Gallery extends Component
         $this->files = [];
         foreach ($files as $fileObj) {
             $file = new SplFileInfo($fileObj->path);
-            $this->files[$fileObj->id] = route("file.serv", [
-                "path"      => str_replace(DIRECTORY_SEPARATOR, '-', trim($file->getPath() . DIRECTORY_SEPARATOR)),
-                "file_name" => $file->getFilename(),
-            ], false). '?t=' . $fileObj->updated_at;
+            $this->files[$fileObj->id] = FileService::loadFile($file->getFilename(), $file->getPath()). '?t=' . $fileObj->updated_at;
         }
     }
 
