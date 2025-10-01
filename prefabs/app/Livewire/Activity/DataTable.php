@@ -13,7 +13,7 @@ class DataTable extends DataTableComponent
 
     public bool $paginated = true;
     public int $itemsPerPage = 100;
-    public string $sortBy = 'crated_at';
+    public string $sortBy = 'created_at';
     public string $sortDirection = 'asc';
 
     public function query(): Builder
