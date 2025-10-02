@@ -16,7 +16,7 @@ return [
     */
 
 	'system_admins' => explode(',', env('APP_SYSTEM_ADMINS', '')),
-	'system_admins_mail' => explode(',', env('APP_SYSTEM_ADMINS', '')),
+	'system_admins_mail' => explode(',', env('APP_SYSTEM_ADMINS_MAIL', '')),
 	'backup' => [
 		'database' 		=> (bool) env('BACKUP_DATABASE', true),
 		'storage' 		=> (bool) env('BACKUP_STORAGE', true),
@@ -24,7 +24,7 @@ return [
 		'enviroment' 	=> (bool) env('BACKUP_ENV', true),
 	],
 
-	'models'=>[
+	'models' => [
 		'activity' 	   => Activity::class,
 		'file' 		   => File::class,
 		'activity'	   => Activity::class,
