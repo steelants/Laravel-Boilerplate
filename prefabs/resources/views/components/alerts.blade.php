@@ -1,6 +1,6 @@
 <div class="snackbar-container">
     @foreach ($alerts as $alert)
-        <div class="{{ !empty($alert->persist) ? 'snackbar-persist' : 'snackbar'}} alert">
+        <div class="snackbar {{ !empty($alert->persist) ? 'snackbar-persist' : ''}} alert">
             <button type="button" class="btn-close close" data-bs-dismiss="alert"></button>
 
             <div class="alert-content">
