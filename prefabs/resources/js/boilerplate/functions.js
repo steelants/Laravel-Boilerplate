@@ -46,7 +46,7 @@ window.toggleLayoutNav = function(){
 window.snackbar = function (message, details = false, type = false, icon = false){
 
     var template = `
-        <div class="snackbar alert border-1">
+        <div class="snackbar alert">
             <button type="button" class="btn-close btn-close-white close ${details ? '' : 'mt-2'}" data-bs-dismiss="alert"></button>
 
             <div class="alert-content">`;
