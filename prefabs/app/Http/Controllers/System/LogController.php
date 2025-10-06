@@ -68,6 +68,7 @@ class LogController extends BaseController
             }
 
             return view('system.log.detail', [
+				'layout' => config('boilerplate.layouts.system'),
                 'content'  => File::get($path),
                 'filename' => $filename,
             ]);
