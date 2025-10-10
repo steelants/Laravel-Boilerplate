@@ -34,7 +34,7 @@ trait CRUDFullPage
 		}
 
         return view(($this->views['form'] ?? 'boilerplate::crud'), [
-			'layout' 		 => $this->layout,
+			'layout' 		 => $this->layout ?? 'layout-app',
             'title'          => (Lang::has('boilerplate::' . $model . '.create') || Lang::has('boilerplate::' . $model . '.edit') ? 'boilerplate::' . $model : $model . '.') . (empty($modelId) ? 'create' : 'edit'),
             'page_component' => $this->getRouteRoot($model, 'form'),
 			'model_back'     => $this->getRouteRoot($model, 'data-table'),

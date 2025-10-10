@@ -14,7 +14,7 @@ trait CRUD
     //public string $prefix = "";
     //public array $model_component = [];
 
-	public string $layout = "layout-app";
+	// public string $layout = "layout-app";
 	public array $data = [];
 
 	public function getRouteRoot(string $model, string $route): string
@@ -54,7 +54,7 @@ trait CRUD
 		}
 
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
-			'layout' 		 => $this->layout,
+			'layout' 		 => $this->layout ?? 'layout-app',
             'title'          => Lang::has('boilerplate::' . $model . '.plural') ? 'boilerplate::' . $model . '.plural' : $model . '.plural',
             'options'        => $options,
             'page_component' => $this->getRouteRoot($model, 'data-table'),
