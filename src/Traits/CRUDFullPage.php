@@ -38,7 +38,7 @@ trait CRUDFullPage
 			'layout' 		 => $this->layout ?? config('boilerplate.layouts.default'),
             'title'          => (Lang::has('boilerplate::' . $model . '.create') || Lang::has('boilerplate::' . $model . '.edit') ? 'boilerplate::' . $model : $model . '.') . (empty($modelId) ? 'create' : 'edit'),
             'page_component' => $this->getRouteRoot($model, 'form'),
-			'model_back'     => $this->getRouteRoot($model, 'data-table'),
+			'model_back'     => $this->getRouteRoot($model, 'index'),
 			'data'           => $data,
         ]);
     }
