@@ -54,7 +54,7 @@ trait CRUD
 		}
 
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
-			'layout' 		 => $this->layout ?? 'layout-app',
+			'layout' 		 => $this->layout ?? config('boilerplate.layouts.default'),
             'title'          => Lang::has('boilerplate::' . $model . '.plural') ? 'boilerplate::' . $model . '.plural' : $model . '.plural',
             'options'        => $options,
             'page_component' => $this->getRouteRoot($model, 'data-table'),
