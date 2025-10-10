@@ -212,7 +212,7 @@ class InstallCommand extends Command
 
     protected static function appendSASS()
     {
-		$path = resource_path('sass\app.scss');
+		$path = resource_path('sass/app.scss');
 		if (!File::exists($path)) {
 			$content = self::boilerplateString('@import "./boilerplate/boilerplate.scss";', "scss");
             File::put($path, $content);
@@ -222,7 +222,7 @@ class InstallCommand extends Command
 
     protected static function appendJS()
     {
-		$path = resource_path('js\app.js');
+		$path = resource_path('js/app.js');
 		if (!File::exists($path)) {
 			$content = self::boilerplateString("import './boilerplate/boilerplate.js';", "js");
             File::put($path, $content);
