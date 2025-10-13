@@ -80,8 +80,6 @@ class Form extends FormComponent
 						SettingDataType::BOOL => 'checkbox',
 						default => 'string',
 					};
-				} else {
-					$types[$key] = SettingDataType::SELECT;
 				}
 			}
 		}
@@ -115,6 +113,6 @@ class Form extends FormComponent
 				return [];
         }
 
-			return ($parameter['type'])::limit(1000)->pluck('name', 'id')->toArray();
+		return ($parameter['type'])::limit(1000)->pluck('name', 'id')->toArray();
     }
 }
