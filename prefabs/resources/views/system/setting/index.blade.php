@@ -4,6 +4,6 @@
             <h1>{{ __('boilerplate::setting.title') }}</h1>
         </div>
 
-        @livewire('boilerplate.settings.form', ['key' => "main.general.default"])
+        @livewire('boilerplate.setting.form', ['key' => "main.general"])
     </div>
 </x-dynamic-component>

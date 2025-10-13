@@ -3,12 +3,12 @@
 use App\Types\SettingDataType;
 
 return [
-	'main'    => [ //Slug
+	'main' => [ //Slug
 		'general' => [ //Section 1
 			'default' => [
 				'type'  => SettingDataType::INT,
 				'rules' => 'required',
-				'help'  => 'Cena za 1GB - Kč',
+				'help'  => 'Help',
 			],
 		],
 	],
