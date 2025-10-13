@@ -32,7 +32,7 @@
                     </a>
                     <h1>{{ config('app.name', 'Laravel') }}</h1>
                     <p class="text-black-50">
-                        {{ __('general.MetaDescription') }}
+                        {{ __('Meta description') }}
                     </p>
                 </div>
             </div>
