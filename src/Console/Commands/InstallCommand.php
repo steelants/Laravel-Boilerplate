@@ -29,6 +29,7 @@ class InstallCommand extends Command
             if (strpos(file_get_contents('bootstrap/app.php'), "api: __DIR__.'/../routes/api.php',") === false) {
                 $this->call('install:api', ['--without-migration-prompt' => true, '--force' => $this->option('force')]);
             }
+
             $this->call('install:auth', ['--force' => $this->option('force')]);
             //Artisan::call('install:auth --force');
             file_put_contents($RouteFilePath, str_replace('Route::auth();', '', file_get_contents($RouteFilePath)));
@@ -119,27 +120,44 @@ class InstallCommand extends Command
         $moduleSubPath = ('/prefabs/' . $type);
         $laravelSubPath = ('/' . $type);
         $moduleRootPath = realpath($baseDir . $moduleSubPath);
+		$HashFilePath = (storage_path() . DIRECTORY_SEPARATOR . 'boilerplate_install.json');
+		$checkSums = (json_decode(file_get_contents($HashFilePath), true) ?? []);
 
         foreach (File::allFiles($moduleRootPath) as $file) {
             try {
                 $laravelViewRoot = str_replace($moduleRootPath, $laravelSubPath, $file->getPath());
                 $stubFullPath = ($file->getPath() . "/" . $file->getFilename());
                 $viewFullPath = (base_path($laravelViewRoot) . "/" . $file->getFilename());
+				$fileHash =  hash_file('sha256', $viewFullPath);
 
                 $this->checkDirectory(dirname($viewFullPath));
 
-                if (file_exists($viewFullPath) && !$this->option('force')) {
-                    if (!$this->components->confirm("The [" . $laravelViewRoot . '/' . $file->getFilename() . "] view already exists. Do you want to replace it?")) {
-                        continue;
-                    }
-                }
+				//TODO: Verifi hash of file
+				$FileWasCustomized = true;
+				if (isset($checkSums[$viewFullPath]) && $checkSums[$viewFullPath] == $fileHash)	{
+					$FileWasCustomized = false;
+				}
+
+				if (file_exists($viewFullPath) && (!$this->option('force') | $FileWasCustomized)) {
+					$message = "The [" . $laravelViewRoot . '/' . $file->getFilename() . "] ".PHP_EOL." file already exists. Do you want to replace it?";
+					if ($FileWasCustomized) {
+						$message = "The [" . $laravelViewRoot . '/' . $file->getFilename() . "] ".PHP_EOL." file was customized. Do you want to replace it?";
+					}
+					if (!$this->components->confirm($message)) {
+						continue;
+					}
+				}
 
                 copy($stubFullPath, $viewFullPath);
-                $this->components->info($stubFullPath . '>>' . $viewFullPath);
+				$checkSums[$viewFullPath] = $fileHash;
+				$message = "File: " . $viewFullPath . ' / '. PHP_EOL. " Replace With: ". $stubFullPath;
+                $this->components->info($message);
                 //code...
             } catch (Throwable $th) {
                 $this->components->error($type);
-            }
+            } finally {
+				file_put_contents($HashFilePath, json_encode($checkSums, JSON_PRETTY_PRINT));
+			}
         }
     }
 
