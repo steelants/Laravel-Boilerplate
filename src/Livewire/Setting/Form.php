@@ -137,7 +137,7 @@ class Form extends FormComponent
 					['index' => $dbKey],
 					[
 						'value' => $value ?? '',
-						'type'  => $this->types[$key] ?? $this->settings_parameters[$key]['type'],
+						'type'  => $this->types[$key] ?? $this->settings_parameters[$key]['type'], //TODO: Uggly as fuck
 					],
 				);
 			} else {
@@ -145,7 +145,7 @@ class Form extends FormComponent
 					['index' => $dbKey],
 					[
 						'value' => $value ?? '',
-						'type'  => $this->types[$key] ?? $this->settings_parameters[$key]['type'],
+						'type'  => $this->types[$key] ?? $this->settings_parameters[$key]['type'], //TODO: Uggly as fuck
 					],
 				);
 			}
@@ -153,13 +153,5 @@ class Form extends FormComponent
 
 		$this->dispatch('snackbar', ['message' =>  __('Setting Saved'), 'type' => 'success', 'icon' => 'fas fa-check']);
 		$this->dispatch('closeModal');
-	}
-
-	function onSuccess(){
-		//DO SOMETHING ON SUCESS;
-	}
-
-	function onError(){
-		//DO SOMETHING ON ERROR;
 	}
 }
