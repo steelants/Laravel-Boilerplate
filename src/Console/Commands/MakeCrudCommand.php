@@ -188,10 +188,11 @@ class MakeCrudCommand extends Command
     {
         $arguments['model_camel_case'] = Str::camel($arguments['model']);
         $arguments['model_snake_case'] = Str::snake($arguments['model_camel_case']);
+        $arguments['model_singular'] = Str::of($arguments['model'])->headline()->singular()->lower();
 
         $headerProperties = '';
         foreach ($arguments['headers'] as $key => $header) {
-            $headerProperties .= "\t\t\t'".$header."' => '".$header."',\n";
+            $headerProperties .= "\t\t\t'".$header."' => __('".Str::of($header)->headline()->lower()->ucfirst()."'),\n";
         }
         $arguments['headerProperties'] = rtrim(ltrim($headerProperties, "\t"), "\n");
         unset($arguments['headers']);

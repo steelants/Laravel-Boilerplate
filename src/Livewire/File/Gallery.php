@@ -61,12 +61,12 @@ class Gallery extends Component
 
 				$this->refreshFiles();
 				$this->dispatch('filesAdded');
-				$this->dispatch('snackbar', ['message' => "test", 'type' => 'sucess', 'icon' => 'fas fa-check']);
+				$this->dispatch('snackbar', ['message' => __("test"), 'type' => 'sucess', 'icon' => 'fas fa-check']);
 			}
         } catch (Throwable $th) {
             $this->refreshFiles();
             $this->addError('files', $th->getMessage());
-			$this->dispatch('snackbar', ['message' => $th->getMessage(), 'type' => 'error', 'icon' => 'fas fa-x']);
+			$this->dispatch('snackbar', ['message' => __($th->getMessage()), 'type' => 'error', 'icon' => 'fas fa-x']);
         }
     }
 
@@ -86,11 +86,11 @@ class Gallery extends Component
 
 			$this->refreshFiles();
 			$this->dispatch('filesAdded');
-			$this->dispatch('snackbar', ['message' => "test", 'type' => 'sucess', 'icon' => 'fas fa-check']);
+			$this->dispatch('snackbar', ['message' => __("test"), 'type' => 'sucess', 'icon' => 'fas fa-check']);
 		} catch (Throwable $th) {
             $this->refreshFiles();
             $this->addError('files_replacements.' . $fileModel->id, $th->getMessage());
-			$this->dispatch('snackbar', ['message' => $th->getMessage(), 'type' => 'error', 'icon' => 'fas fa-x']);
+			$this->dispatch('snackbar', ['message' => __($th->getMessage()), 'type' => 'error', 'icon' => 'fas fa-x']);
         }
     }
 
