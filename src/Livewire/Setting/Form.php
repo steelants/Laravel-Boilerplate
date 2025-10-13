@@ -151,6 +151,15 @@ class Form extends FormComponent
 		return ($parameter['type'])::limit(1000)->pluck('name', 'id')->toArray();
 	}
 
+	protected function resolvePersistedType(string $key): string|int
+	{
+		if (isset($this->settings_parameters[$key]['type'])) {
+			return $this->settings_parameters[$key]['type'];
+		}
+
+		return SettingDataType::STRING;
+	}
+
 	public function submit(){
 		if (method_exists($this, 'rules')) {
 			$this->validate();
@@ -158,12 +167,13 @@ class Form extends FormComponent
 
 		foreach ($this->properties as $key => $value) {
 			$dbKey = $this->key.'.'.$key;
+			$type = $this->resolvePersistedType($key);
 			if (!empty($this->owner)) {
 				$this->owner->settings()->updateOrCreate(
 					['index' => $dbKey],
 					[
 						'value' => $value ?? '',
-						'type'  => $this->types[$key] ?? $this->settings_parameters[$key]['type'], //TODO: Uggly as fuck
+						'type'  => $type,
 					],
 				);
 			} else {
@@ -171,7 +181,7 @@ class Form extends FormComponent
 					['index' => $dbKey],
 					[
 						'value' => $value ?? '',
-						'type'  => $this->types[$key] ?? $this->settings_parameters[$key]['type'], //TODO: Uggly as fuck
+						'type'  => $type,
 					],
 				);
 			}
