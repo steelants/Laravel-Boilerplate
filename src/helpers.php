@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Cookie;
-use App\Models\Setting;
+use SteelAnts\LaravelBoilerplate\Models\Setting;
 
 if (!function_exists('getToggleState')) {
     function getToggleState($name)
