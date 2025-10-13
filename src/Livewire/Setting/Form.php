@@ -41,12 +41,6 @@ class Form extends FormComponent
 
 		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
 			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
-				if (!empty($this->owner)) {
-					$properties[$key] =  $this->owner->settings()->updateOrCreate();
-				} else {
-					$properties[$key] = settings(implode('.',[$this->key, $key]));
-				}
-
 				if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
 					$properties[$key] = match ($data['type']) {
 						SettingDataType::INT  => $data['value'] ?? 0,
@@ -55,6 +49,12 @@ class Form extends FormComponent
 					};
 				} else {
 					$properties[$key] = $data['value'] ?? ($data['type'])::select('id')->first()->id;
+				}
+
+				if (!empty($this->owner)) {
+					$properties[$key] =  $this->owner->settings()->where('index', implode('.',[$this->key, $key]))->first()->value;
+				} else {
+					$properties[$key] = settings(implode('.',[$this->key, $key]), $properties[$key]);
 				}
 			}
 		}
@@ -149,7 +149,7 @@ class Form extends FormComponent
 
 
 
-		$this->dispatch('snackbar', ['message' =>  __('Job Scheduled'), 'type' => 'success', 'icon' => 'fas fa-check']);
+		$this->dispatch('snackbar', ['message' =>  __('Setting Saved'), 'type' => 'success', 'icon' => 'fas fa-check']);
 		$this->dispatch('closeModal');
 	}
 
