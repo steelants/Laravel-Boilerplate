@@ -2,6 +2,7 @@
 
 namespace SteelAnts\LaravelBoilerplate\Livewire\Setting;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Livewire\Attributes\Computed;
 use Livewire\WithFileUploads;
@@ -24,89 +25,95 @@ class Form extends FormComponent
 
 	public function mount()
 	{
+		parent::mount();
+
 		foreach (Arr::get(config('setting_field'), $this->key) as $key => $field) {
 			$this->rules['values.'.$key] = $field['rules'];
-
-			switch ($field['type']) {
-				case (SettingDataType::MODEL):
-					$modelClass = 'App\\Models\\'.ucfirst($field['model']);
-					$this->options[$key] = $modelClass::where('organization_id', tenant()->id)->pluck('name', 'id')->toArray();
-					break;
-
-				case (SettingDataType::SELECT):
-					$this->options[$key] = $field['values'];
-					break;
-
-				case (SettingDataType::FILE):
-					$this->isPublicFiles[$key] = $field['public'] ?? false;
-					break;
-
-				default:
-					break;
-			}
-
 		}
 	}
 
-	#[Computed()]
-    public function fields()
+	public function properties()
     {
-        $fields = [];
+        $properties = [];
 
         if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
-            foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
-                $fields[] = $key;
+			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
+                if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
+                    $properties[$key] = match($data['type']) {
+						SettingDataType::INT  => $data['value'] ?? 0,
+                        SettingDataType::BOOL => $data['value'] ?? false,
+                        default => $data['value'] ?? "",
+                    };
+                } else {
+                    $properties[$key] = $data['value'] ?? ($data['type'])::select('id')->first()->id;
+                }
             }
         }
 
-        return $fields;
+        return $properties;
     }
 
 	#[Computed()]
-    public function types()
-    {
-        $types = [];
+	public function fields()
+	{
+		$fields = [];
 
 		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
-            foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
-                $types[$key] = match($data['type']) {
-					SettingDataType::INT => 'int',
-					SettingDataType::BOOL => 'checkbox',
-					default => 'string',
-				};
-            }
-        }
+			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
+				$fields[] = $key;
+			}
+		}
 
-        return $types;
-    }
+		return $fields;
+	}
 
 	#[Computed()]
-    public function labels()
-    {
-        $labels = [];
+	public function types()
+	{
+		$types = [];
 
-       if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
-            foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
-                $labels[$key] = Str::title($key);
-            }
-        }
+		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
+			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
+				if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
+					$types[$key] = match($data['type']) {
+						SettingDataType::INT => 'int',
+						SettingDataType::BOOL => 'checkbox',
+						default => 'string',
+					};
+				};
+			}
+		}
 
-        return $labels;
-    }
+		return $types;
+	}
+
+	#[Computed()]
+	public function labels()
+	{
+		$labels = [];
+
+		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
+			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
+				$labels[$key] = Str::title($key);
+			}
+		}
+
+		return $labels;
+	}
 
 	public function getOptions($field, $options = []): array
-    {
-        $parameter = Arr::get(config('setting_field'), $this->key)[$field] ?? null;
-dd($parameter);
-        if (
-            empty($parameter)
-            || !class_exists($parameter['type'])
-            || !is_subclass_of($parameter['type'], \Illuminate\Database\Eloquent\Model::class)
-        ) {
-            return [];
-        }
+	{
+		$parameter = Arr::get(config('setting_field'), $this->key)[$field] ?? null;
+		dd($parameter);
+		if (
+			empty($parameter)
+			|| !class_exists($parameter['type'])
+			|| !is_subclass_of($parameter['type'], \Illuminate\Database\Eloquent\Model::class)
+			) {
+				return [];
+			}
 
-        return ($parameter['type'])::limit(1000)->pluck('name', 'id')->toArray();
-    }
+			return ($parameter['type'])::limit(1000)->pluck('name', 'id')->toArray();
+		}
 
-}
+	}
