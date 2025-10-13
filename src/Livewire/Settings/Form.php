@@ -1,6 +1,6 @@
 <?php
 
-namespace SteelAnts\LaravelBoilerplate\Livewire\Setting;
+namespace SteelAnts\LaravelBoilerplate\Livewire\Settings;
 
 use App\Models\File;
 use App\Models\Setting;
@@ -20,13 +20,11 @@ class Form extends FormComponent
 	public $key;
 	public $rules = [];
 
-	public function mount($key)
+	public function mount()
     {
-		$this->key = $key;
-
-		foreach (Arr::get(config('setting_field'), $key) as $section) {
+		foreach (Arr::get(config('setting_field'), $this->key) as $section) {
 			foreach ($section as $key => $field) {
-dd("adad");
+				dd("adad");
 			}
 		}
 	}
