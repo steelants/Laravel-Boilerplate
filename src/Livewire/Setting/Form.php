@@ -4,11 +4,11 @@ namespace SteelAnts\LaravelBoilerplate\Livewire\Setting;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\WithFileUploads;
 use SteelAnts\LaravelBoilerplate\Types\SettingDataType;
 use SteelAnts\LivewireForm\Livewire\FormComponent;
-use Illuminate\Support\Str;
 
 class Form extends FormComponent
 {
@@ -39,7 +39,7 @@ class Form extends FormComponent
 		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
 			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
 				if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
-					$properties[$key] = match($data['type']) {
+					$properties[$key] = match ($data['type']) {
 						SettingDataType::INT  => $data['value'] ?? 0,
 						SettingDataType::BOOL => $data['value'] ?? false,
 						default => $data['value'] ?? "",
@@ -75,13 +75,13 @@ class Form extends FormComponent
 		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
 			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
 				if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
-					$types[$key] = match($data['type']) {
+					$types[$key] = match ($data['type']) {
 						SettingDataType::INT => 'int',
 						SettingDataType::BOOL => 'checkbox',
 						default => 'string',
 					};
 				} else {
-					$types[$key] = $data['type'];
+					$types[$key] = SettingDataType::SELECT;
 				}
 			}
 		}
@@ -111,11 +111,10 @@ class Form extends FormComponent
 			empty($parameter)
 			|| !class_exists($parameter['type'])
 			|| !is_subclass_of($parameter['type'], \Illuminate\Database\Eloquent\Model::class)
-			) {
+        ) {
 				return [];
-			}
+        }
 
 			return ($parameter['type'])::limit(1000)->pluck('name', 'id')->toArray();
-		}
-
-	}
+    }
+}
