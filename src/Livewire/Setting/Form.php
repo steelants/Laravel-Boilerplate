@@ -16,7 +16,6 @@ class Form extends FormComponent
 
 	public $key;
 	public $rules = [];
-	public $options = [];
 
 	public function rules()
 	{
@@ -27,8 +26,10 @@ class Form extends FormComponent
 	{
 		parent::mount();
 
-		foreach (Arr::get(config('setting_field'), $this->key) as $key => $field) {
-			$this->rules['values.'.$key] = $field['rules'];
+		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
+			foreach (Arr::get(config('setting_field'), $this->key) as $key => $field) {
+				$this->rules['properties.'.$key] = $field['rules'];
+			}
 		}
 	}
 
@@ -104,13 +105,13 @@ class Form extends FormComponent
 	public function getOptions($field, $options = []): array
 	{
 		$parameter = Arr::get(config('setting_field'), $this->key)[$field] ?? null;
-		dd($parameter);
+
 		if (
 			empty($parameter)
 			|| !class_exists($parameter['type'])
 			|| !is_subclass_of($parameter['type'], \Illuminate\Database\Eloquent\Model::class)
         ) {
-				return [];
+			return [];
         }
 
 		return ($parameter['type'])::limit(1000)->pluck('name', 'id')->toArray();
