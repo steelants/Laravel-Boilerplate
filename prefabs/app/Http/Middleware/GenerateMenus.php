@@ -33,6 +33,10 @@ class GenerateMenus
         ];
 
         $systemRoutes = [
+			'boilerplate::ui.setting'            => [
+                'fas fa-cog',
+                'system.setting.index',
+            ],
             'boilerplate::ui.audit'            => [
                 'fas fa-eye',
                 'system.audit.index',
