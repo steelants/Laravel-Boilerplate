@@ -18,7 +18,7 @@ if (!function_exists('getToggleState')) {
 
 if (! function_exists('settings')) {
     function settings($key, $default = null) {
-        $value = Setting::where('index', $key)->get();
+        $value = Setting::whereNull('settable_id')->whereNull('settable_type')->where('index', $key)->get();
         if (empty($value)){
             return $default;
         }

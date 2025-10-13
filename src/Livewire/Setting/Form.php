@@ -15,9 +15,12 @@ class Form extends FormComponent
 {
 	use WithFileUploads;
 
-	public $owner;
+	public $owner = null;
 	public $key;
 	public $rules = [];
+	//TODO: Setting Field Load only once
+	//TODO: add Help
+	public array $settings_parameters = [];
 
 	public function rules()
 	{
@@ -26,21 +29,22 @@ class Form extends FormComponent
 
 	public function mount()
 	{
-		parent::mount();
-
-		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
-			foreach (Arr::get(config('setting_field'), $this->key) as $key => $field) {
+		$this->settings_parameters = Arr::get(config('setting_field'), $this->key);
+		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
+			foreach ($this->settings_parameters as $key => $field) {
 				$this->rules['properties.'.$key] = $field['rules'];
 			}
 		}
+
+		parent::mount();
 	}
 
 	public function properties()
 	{
 		$properties = [];
 
-		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
-			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
+		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
+			foreach ($this->settings_parameters as $key => $data) {
 				if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
 					$properties[$key] = match ($data['type']) {
 						SettingDataType::INT  => $data['value'] ?? 0,
@@ -52,9 +56,9 @@ class Form extends FormComponent
 				}
 
 				if (!empty($this->owner)) {
-					$properties[$key] =  $this->owner->settings()->where('index', implode('.',[$this->key, $key]))->first()->value;
+					$properties[$key] =  $this->owner->getSettings(implode('.', [$this->key, $key]), $properties[$key]);
 				} else {
-					$properties[$key] = settings(implode('.',[$this->key, $key]), $properties[$key]);
+					$properties[$key] = settings(implode('.', [$this->key, $key]), $properties[$key]);
 				}
 			}
 		}
@@ -67,8 +71,8 @@ class Form extends FormComponent
 	{
 		$fields = [];
 
-		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
-			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
+		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
+			foreach ($this->settings_parameters as $key => $data) {
 				$fields[] = $key;
 			}
 		}
@@ -81,8 +85,8 @@ class Form extends FormComponent
 	{
 		$types = [];
 
-		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
-			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
+		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
+			foreach ($this->settings_parameters as $key => $data) {
 				if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
 					$types[$key] = match ($data['type']) {
 						SettingDataType::INT => 'int',
@@ -101,8 +105,8 @@ class Form extends FormComponent
 	{
 		$labels = [];
 
-		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
-			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
+		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
+			foreach ($this->settings_parameters as $key => $data) {
 				$labels[$key] = Str::title($key);
 			}
 		}
@@ -112,7 +116,7 @@ class Form extends FormComponent
 
 	public function getOptions($field, $options = []): array
 	{
-		$parameter = Arr::get(config('setting_field'), $this->key)[$field] ?? null;
+		$parameter = $this->settings_parameters[$field] ?? null;
 
 		if ( empty($parameter) || !class_exists($parameter['type']) || !is_subclass_of($parameter['type'], \Illuminate\Database\Eloquent\Model::class) ) {
 			return [];
@@ -133,7 +137,7 @@ class Form extends FormComponent
 					['index' => $dbKey],
 					[
 						'value' => $value ?? '',
-						'type'  => $this->types[$key] ?? Arr::get(config('setting_field'), $this->key)[$key]['type'],
+						'type'  => $this->types[$key] ?? $this->settings_parameters[$key]['type'],
 					],
 				);
 			} else {
@@ -141,13 +145,11 @@ class Form extends FormComponent
 					['index' => $dbKey],
 					[
 						'value' => $value ?? '',
-						'type'  => $this->types[$key] ?? Arr::get(config('setting_field'), $this->key)[$key]['type'],
+						'type'  => $this->types[$key] ?? $this->settings_parameters[$key]['type'],
 					],
 				);
 			}
 		}
-
-
 
 		$this->dispatch('snackbar', ['message' =>  __('Setting Saved'), 'type' => 'success', 'icon' => 'fas fa-check']);
 		$this->dispatch('closeModal');
