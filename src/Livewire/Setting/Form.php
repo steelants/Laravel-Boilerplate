@@ -7,6 +7,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\WithFileUploads;
+use SteelAnts\LaravelBoilerplate\Models\Setting;
 use SteelAnts\LaravelBoilerplate\Types\SettingDataType;
 use SteelAnts\LivewireForm\Livewire\FormComponent;
 
@@ -14,6 +15,7 @@ class Form extends FormComponent
 {
 	use WithFileUploads;
 
+	public $owner;
 	public $key;
 	public $rules = [];
 
@@ -39,6 +41,12 @@ class Form extends FormComponent
 
 		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
 			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
+				if (!empty($this->owner)) {
+					$properties[$key] =  $this->owner->settings()->updateOrCreate();
+				} else {
+					$properties[$key] = settings(implode('.',[$this->key, $key]));
+				}
+
 				if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
 					$properties[$key] = match ($data['type']) {
 						SettingDataType::INT  => $data['value'] ?? 0,
@@ -106,14 +114,50 @@ class Form extends FormComponent
 	{
 		$parameter = Arr::get(config('setting_field'), $this->key)[$field] ?? null;
 
-		if (
-			empty($parameter)
-			|| !class_exists($parameter['type'])
-			|| !is_subclass_of($parameter['type'], \Illuminate\Database\Eloquent\Model::class)
-        ) {
+		if ( empty($parameter) || !class_exists($parameter['type']) || !is_subclass_of($parameter['type'], \Illuminate\Database\Eloquent\Model::class) ) {
 			return [];
-        }
+		}
 
 		return ($parameter['type'])::limit(1000)->pluck('name', 'id')->toArray();
-    }
+	}
+
+	public function submit(){
+		if (method_exists($this, 'rules')) {
+			$this->validate();
+		}
+
+		foreach ($this->properties as $key => $value) {
+			$dbKey = $this->key.'.'.$key;
+			if (!empty($this->owner)) {
+				$this->owner->settings()->updateOrCreate(
+					['index' => $dbKey],
+					[
+						'value' => $value ?? '',
+						'type'  => $this->types[$key] ?? Arr::get(config('setting_field'), $this->key)[$key]['type'],
+					],
+				);
+			} else {
+				Setting::updateOrCreate(
+					['index' => $dbKey],
+					[
+						'value' => $value ?? '',
+						'type'  => $this->types[$key] ?? Arr::get(config('setting_field'), $this->key)[$key]['type'],
+					],
+				);
+			}
+		}
+
+
+
+		$this->dispatch('snackbar', ['message' =>  __('Job Scheduled'), 'type' => 'success', 'icon' => 'fas fa-check']);
+		$this->dispatch('closeModal');
+	}
+
+	function onSuccess(){
+		//DO SOMETHING ON SUCESS;
+	}
+
+	function onError(){
+		//DO SOMETHING ON ERROR;
+	}
 }
