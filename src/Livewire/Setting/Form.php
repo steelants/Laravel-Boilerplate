@@ -16,11 +16,12 @@ class Form extends FormComponent
 	use WithFileUploads;
 
 	public $owner = null;
-	public $key;
-	public $rules = [];
+
+	public string $key;
+	public array $rules = [];
+	public array $settings_parameters = [];
 	//TODO: Setting Field Load only once
 	//TODO: add Help
-	public array $settings_parameters = [];
 
 	public function rules()
 	{
@@ -30,8 +31,17 @@ class Form extends FormComponent
 	public function mount()
 	{
 		$this->settings_parameters = Arr::get(config('setting_field'), $this->key);
+
+		if (!is_array($this->settings_parameters)) {
+			throw new \Exception("Only array value can be specified in \$key");
+		}
+
 		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
 			foreach ($this->settings_parameters as $key => $field) {
+				if (!isset($field['type'])) {
+					throw new \Exception("Only array value can be specified in \$key");
+				}
+
 				$this->rules['properties.'.$key] = $field['rules'];
 			}
 		}
@@ -112,6 +122,22 @@ class Form extends FormComponent
 		}
 
 		return $labels;
+	}
+
+	#[Computed()]
+	public function helps()
+	{
+		$helps = [];
+
+		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
+			foreach ($this->settings_parameters as $key => $data) {
+				if (isset($data['help']) && !empty($data['help'])) {
+					$helps[$key] = $data['help'];
+				}
+			}
+		}
+
+		return $helps;
 	}
 
 	public function getOptions($field, $options = []): array
