@@ -33,25 +33,25 @@ class Form extends FormComponent
 	}
 
 	public function properties()
-    {
-        $properties = [];
+	{
+		$properties = [];
 
-        if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
+		if (!empty(Arr::get(config('setting_field'), $this->key)) && count(Arr::get(config('setting_field'), $this->key)) > 0) {
 			foreach (Arr::get(config('setting_field'), $this->key) as $key => $data) {
-                if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
-                    $properties[$key] = match($data['type']) {
+				if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
+					$properties[$key] = match($data['type']) {
 						SettingDataType::INT  => $data['value'] ?? 0,
-                        SettingDataType::BOOL => $data['value'] ?? false,
-                        default => $data['value'] ?? "",
-                    };
-                } else {
-                    $properties[$key] = $data['value'] ?? ($data['type'])::select('id')->first()->id;
-                }
-            }
-        }
+						SettingDataType::BOOL => $data['value'] ?? false,
+						default => $data['value'] ?? "",
+					};
+				} else {
+					$properties[$key] = $data['value'] ?? ($data['type'])::select('id')->first()->id;
+				}
+			}
+		}
 
-        return $properties;
-    }
+		return $properties;
+	}
 
 	#[Computed()]
 	public function fields()
@@ -80,7 +80,9 @@ class Form extends FormComponent
 						SettingDataType::BOOL => 'checkbox',
 						default => 'string',
 					};
-				};
+				} else {
+					$types[$key] = $data['type'];
+				}
 			}
 		}
 
