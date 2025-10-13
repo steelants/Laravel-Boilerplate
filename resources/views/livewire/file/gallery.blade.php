@@ -11,7 +11,7 @@
 							<input id="files_replacements.{{ $id }}" name="files_replacements.{{ $id }}" style="display:none;visibility:hidden" type="file" wire:model="files_replacements.{{ $id }}" accept="image/*" capture="environment">
 						</div>
         			@endif
-                    <div class="position-absolute top-0 end-0 m-2 btn btn-danger" wire:click="remove({{ $id }})" wire:confirm="Are you sure you want to delete this fiile?">
+                    <div class="position-absolute top-0 end-0 m-2 btn btn-danger" wire:click="remove({{ $id }})" wire:confirm="{{ __('Are you sure you want to delete this file?') }}">
                         <i class="fas fa-trash "></i>
                     </div>
                     <a href="{{ $file }}" target="_blank" class="">

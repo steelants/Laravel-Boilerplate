@@ -21,13 +21,13 @@ class CrudController extends Controller
         } else {
             $modelName = ucfirst(Str::camel(str_replace('-', '_', $request->route('accountId'))));
             if (!class_exists('App\\Models\\' . $modelName)) {
-                throw new ErrorException($modelName . " model not found!");
+                throw new ErrorException(__(":modelName model not found!", ['modelName' => $modelName]));
             }
             $model = $modelName::class;
         }
 
         return view($this->viewName, [
-            'title'           => __(Str::ucfirst(Str::plural(class_basename($model)))),
+            'title'           => __(Str::of(class_basename($model))->headline()->plural()->lower()->ucfirst()),
             'modal_component' => $model . '.form',
             'page_component'  => $model . '.data-table',
         ]);

@@ -52,7 +52,7 @@ class Form extends Component
         Subscription::create($validatedData);
 
         $this->dispatch('close-modal');
-        $this->dispatch('snackbar', ['message' => __('boilerplate::ui.item-created'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        $this->dispatch('snackbar', ['message' => __('Item successfully created'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
         $this->dispatch('subscriptionRefresh');
 
@@ -70,7 +70,7 @@ class Form extends Component
         }
 
         $this->dispatch('close-modal');
-        $this->dispatch('snackbar', ['message' => __('boilerplate::ui.item-updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        $this->dispatch('snackbar', ['message' => __('Item successfully updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
         $this->dispatch('subscriptionRefresh');
 

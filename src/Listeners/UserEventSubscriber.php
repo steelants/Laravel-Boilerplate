@@ -12,17 +12,17 @@ class UserEventSubscriber
 {
     public function handleLogin(Login $event): void
 	{
-		ActivityService::log('Login');
+		ActivityService::log(__('Login'));
 	}
 
     public function handleLogout(Logout $event): void
 	{
-		ActivityService::log('Logout');
+		ActivityService::log(__('Logout'));
 	}
 
     public function handleFailed(Failed $event): void
 	{
-		ActivityService::log('Failed login', ['email' => $event->credentials['email']]);
+		ActivityService::log(__('Failed login'), ['email' => $event->credentials['email']]);
 	}
 
     public function subscribe(Dispatcher $events): array

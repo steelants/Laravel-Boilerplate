@@ -39,6 +39,6 @@ class JobsController extends BaseController
 	public function clear()
 	{
 		DB::table('failed_jobs')->delete();
-		return redirect()->route('system.jobs.index')->with('success', __('boilerplate::ui.jobs-cleared'));
+		return redirect()->route('system.jobs.index')->with('success', __('Jobs cleared!'));
 	}
 }

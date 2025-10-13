@@ -46,7 +46,7 @@ class DataTable extends DataTableComponent
                 'text' => __("Remove"),
                 'actionClass' => 'text-danger',
                 'iconClass' => 'fas fa-trash',
-                'confirm' => __('Opravdu smazat?'),
+                'confirm' => __('Are you shure?'),
             ]
         ];
     }
@@ -57,6 +57,6 @@ class DataTable extends DataTableComponent
 
     public function edit(${{model_snake_case}}_id)
     {
-        $this->dispatch('openModal', '{{action_form}}', __('Edit {{model_singular}}'), ['model' => ${{model_snake_case}}_id]);
+        $this->dispatch('openModal', '{{action_form}}', __('Edit :model', ['model' => __('{{model_singular}}')]), ['model' => ${{model_snake_case}}_id]);
     }
 }

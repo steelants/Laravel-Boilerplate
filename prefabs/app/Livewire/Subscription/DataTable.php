@@ -31,9 +31,9 @@ class DataTable extends DataTableComponent
     public function headers(): array
     {
         return [
-            "id",
-            "tier",
-            "valid_to",
+            "id" => __('ID'),
+            "tier" => __('Tier'),
+            "valid_to" => __('Valid to'),
         ];
     }
 
@@ -51,6 +51,6 @@ class DataTable extends DataTableComponent
 
     public function edit($id)
     {
-        $this->dispatch('openModal', 'subscription.form', __('boilerplate::subscriptions.edit'), $id);
+        $this->dispatch('openModal', 'subscription.form', __('Edit :model', ['model' => __('subscription')]), $id);
     }
 }

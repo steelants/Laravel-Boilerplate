@@ -26,49 +26,49 @@ class GenerateMenus
         }
 
         $menuRoutes = [
-            'boilerplate::ui.home' => [
+            'Home' => [
                 ' fas fa-home',
                 'home',
             ],
         ];
 
         $systemRoutes = [
-            'boilerplate::ui.audit'            => [
+            'Audit'            => [
                 'fas fa-eye',
                 'system.audit.index',
             ],
-            'boilerplate::ui.user'             => [
+            'User'             => [
                 'fas fa-users',
                 'system.user.index',
             ],
-            'boilerplate::subscriptions.title' => [
+            'Subscriptions' => [
                 'fas fa-dollar-sign',
                 'system.subscription.index',
             ],
-			'boilerplate::ui.file'           => [
+			'File'          => [
 				'fas fa-folder',
                 'system.file.index',
             ],
-            'boilerplate::ui.log'              => [
+            'Logs'         => [
                 'fas fa-bug',
                 'system.log.index',
             ],
-            'boilerplate::ui.jobs'             => [
+            'Jobs'             => [
                 'fas fa-business-time',
                 'system.jobs.index',
             ],
-            'boilerplate::ui.cache'            => [
+            'Cache'            => [
                 'fas fa-box',
                 'system.cache.index',
             ],
-            'boilerplate::ui.backup'           => [
+            'Backup'           => [
                 'fas fa-file-archive',
                 'system.backup.index',
             ],
         ];
 
 		if (file_exists(base_path() . '/routes/api.php')) {
-			$systemRoutes['boilerplate::ui.api'] = [
+			$systemRoutes['Api'] = [
 				'fas fa-rocket',
 				'system.api.index',
 			];

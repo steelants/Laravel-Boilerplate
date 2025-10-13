@@ -25,7 +25,7 @@ class ProfileController extends BaseController
     {
         $validated = $request->validated();
         if (!Hash::check($validated['password'], auth()->user()->password)) {
-            return redirect()->route('profile.index')->with('error', __('boilerplate::ui.incorect.old.password'));
+            return redirect()->route('profile.index')->with('error', __('Incorrect old password'));
         }
 
         if (!empty($validated['newPassword']) && !empty($validated['password'])) {
@@ -36,7 +36,7 @@ class ProfileController extends BaseController
             unset($validated['password']);
         }
         $request->user()->update($validated);
-        return redirect()->route('profile.index')->with('success', __('boilerplate::ui.updated'));
+        return redirect()->route('profile.index')->with('success', __('Updated'));
     }
 
 
@@ -62,7 +62,7 @@ class ProfileController extends BaseController
 
         $newToken = $request->user()->createToken(...$tokenCreationParameters)->plainTextToken;
         return redirect()->route('profile.api')->with([
-            'success' => __('boilerplate::ui.created'),
+            'success' => __('Created'),
             'secret'  => $newToken,
         ]);
     }
@@ -71,6 +71,6 @@ class ProfileController extends BaseController
     {
         $validated = $request->validated();
         $request->user()->tokens()->where('id', $validated['token_id'])->first()->delete();
-        return redirect()->route('profile.api')->with('success', __('boilerplate::ui.removed'));
+        return redirect()->route('profile.api')->with('success', __('Removed'));
     }
 }

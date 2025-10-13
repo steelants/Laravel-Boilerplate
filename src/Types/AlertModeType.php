@@ -10,8 +10,8 @@ class AlertModeType
     public static function getNames()
     {
         return $names = [
-            self::RELOAD  => __('Reload'),
-            self::INSTANT => __('Instant'),
+            self::RELOAD  => 'Reload',
+            self::INSTANT => 'Instant',
         ];
     }
 

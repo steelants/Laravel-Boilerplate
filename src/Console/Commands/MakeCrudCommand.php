@@ -295,23 +295,24 @@ class MakeCrudCommand extends Command
 
         $safeToEditProperties = array_intersect_key($arguments['properties'], array_flip($arguments['safeProperties']));
         foreach ($safeToEditProperties as $propertyName => $propertyType) {
+            $propertyNameStr = Str::of($propertyName)->headline()->lower()->ucfirst();
             if (Str::contains($propertyType, 'App\\Models\\')) {
                 $tableName = (new $propertyType())->getTable();
-                $content .= "\t\t".'<x-form::select group-class="mb-3"  :options="$this->'.Str::camel($tableName).'" name="'.$propertyName.'" placeholder="Vyberte" wire:model.blur="'.$propertyName.'" label="'.$propertyName."\"/>\n";
+                $content .= "\t\t".'<x-form::select group-class="mb-3"  :options="$this->'.Str::camel($tableName).'" name="'.$propertyName.'" placeholder="Vyberte" wire:model.blur="'.$propertyName.'" label="{{ __('. $propertyNameStr .") }}\"/>\n";
             } elseif ($propertyType == 'integer') {
-                $content .= "\t\t".'<x-form::input group-class="mb-3" type="number" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="'.$propertyName."\"/>\n";
+                $content .= "\t\t".'<x-form::input group-class="mb-3" type="number" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __('.$propertyNameStr.") }}\"/>\n";
             } elseif ($propertyType == 'boolean') {
-                $content .= "\t\t".'<x-form::checkbox group-class="mb-3" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="'.$propertyName."\"/>\n";
+                $content .= "\t\t".'<x-form::checkbox group-class="mb-3" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __('.$propertyNameStr.") }}\"/>\n";
             } elseif ($propertyType == 'date') {
-                $content .= "\t\t".'<x-form::input group-class="mb-3" type="date" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="'.$propertyName."\"/>\n";
+                $content .= "\t\t".'<x-form::input group-class="mb-3" type="date" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __('.$propertyNameStr.") }}\"/>\n";
             } elseif ($propertyType == 'datetime') {
-                $content .= "\t\t".'<x-form::input group-class="mb-3" type="datetime-local" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="'.$propertyName."\"/>\n";
+                $content .= "\t\t".'<x-form::input group-class="mb-3" type="datetime-local" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __('.$propertyNameStr.") }}\"/>\n";
             } else {
-                $content .= "\t\t".'<x-form::input group-class="mb-3" type="text" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="'.$propertyName."\"/>\n";
+                $content .= "\t\t".'<x-form::input group-class="mb-3" type="text" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __('.$propertyNameStr.") }}\"/>\n";
             }
         }
 
-        $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">@if(\$action == 'update') {{__('boilerplate::ui.save')}} @else {{__('boilerplate::ui.create')}} @endif</x-form::button>\n";
+        $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">@if(\$action == 'update') {{__('Update')}} @else {{__('Create')}} @endif</x-form::button>\n";
         $content .= "\t</x-form::form>\n";
         $content .= '</div>';
 
