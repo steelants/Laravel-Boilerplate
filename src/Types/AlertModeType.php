@@ -10,8 +10,8 @@ class AlertModeType
     public static function getNames()
     {
         return $names = [
-            self::RELOAD  => __('Reload'),
-            self::INSTANT => __('Instant'),
+            self::RELOAD  => 'Reload',
+            self::INSTANT => 'Instant',
         ];
     }
 
@@ -21,7 +21,7 @@ class AlertModeType
         if (isset($names[$type])) {
             return __($names[$type]);
         }
-        return __('NULL');
+        return 'NULL';
     }
 
     public static function getkeys()

@@ -27,7 +27,7 @@ class CrudController extends Controller
         }
 
         return view($this->viewName, [
-            'title'           => __(Str::ucfirst(Str::plural(class_basename($model)))),
+            'title'           => 'boilerplate::ui.' . $model . 's',
             'modal_component' => $model . '.form',
             'page_component'  => $model . '.data-table',
         ]);

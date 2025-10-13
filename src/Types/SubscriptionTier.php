@@ -25,9 +25,9 @@ class SubscriptionTier
     public static function getNames()
     {
         return [
-            self::TIER_1 => __('Tier 1'),
-            self::TIER_2 => __('Tier 2'),
-            self::TIER_3 => __('Tier 3'),
+            self::TIER_1 => __('boilerplate::subscriptions.tier_1.title'),
+            self::TIER_2 => __('boilerplate::subscriptions.tier_2.title'),
+            self::TIER_3 => __('boilerplate::subscriptions.tier_3.title'),
         ];
     }
 

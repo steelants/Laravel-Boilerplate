@@ -10,8 +10,8 @@ class FileType
     public static function getNames()
     {
         return $names = [
-            self::INLINE     => __('Text'),
-            self::ATTACHMENT => __('Attachment'),
+            self::INLINE     => 'Text',
+            self::ATTACHMENT => 'Attachment',
         ];
     }
 
@@ -21,7 +21,7 @@ class FileType
         if (isset($names[$type])) {
             return __($names[$type]);
         }
-        return __('NULL');
+        return 'NULL';
     }
 
     public static function getkeys()

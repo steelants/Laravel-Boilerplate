@@ -36,7 +36,7 @@ class Session extends Model
                     return $matches[1];
                 }
 
-                return __('Unknown');
+                return 'Unknown';
             },
         );
     }
@@ -53,7 +53,7 @@ class Session extends Model
                     return $matches[1];
                 }
 
-                return __('Unknown');
+                return 'Unknown';
             },
         );
     }

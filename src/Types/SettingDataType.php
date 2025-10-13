@@ -32,6 +32,6 @@ class SettingDataType
 
     public static function getType($type)
     {
-        return self::getTypes()[$type] ?? __('NULL');
+        return self::getTypes()[$type] ?? 'NULL';
     }
 }

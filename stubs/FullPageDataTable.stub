@@ -33,17 +33,16 @@ class DataTable extends DataTableComponent
             [
                 'type' => "url",
                 'url' => route('{{action_form}}', ['modelId' => $item['id']]),
-                'text' => __("Edit"),
+                'text' => "edit",
                 'iconClass' => 'fas fa-pen',
             ],
             [
                 'type' => "livewire",
                 'action' => "remove",
                 'parameters' => $item['id'],
-                'text' => __("Remove"),
+                'text' => "Remove",
                 'actionClass' => 'text-danger',
                 'iconClass' => 'fas fa-trash',
-                'confirm' => __('Opravdu smazat?'),
             ]
         ];
     }
