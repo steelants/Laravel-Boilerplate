@@ -13,7 +13,7 @@ class MenuItemLink extends MenuItem
     public function __construct(public string $title, public string $id, public string $route, public string $icon = '', public array $parameters = [], public array $options = [])
     {
         if (!Route::has($route)) {
-            throw new Exception(__("Route with name: :route dont exists!", ['route' =>  $route]), 1);
+            throw new Exception(__("Route with name: $route dont exists!"), 1);
         }
     }
 

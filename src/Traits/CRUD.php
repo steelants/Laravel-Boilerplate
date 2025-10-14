@@ -33,7 +33,7 @@ trait CRUD
         }
 
         if (!class_exists($modelClass)) {
-            throw new ErrorException(__(":$modelName model not found!"));
+            throw new ErrorException(__("$modelName model not found!"));
         }
 
         return str_replace('_', '-', Str::camel($modelName));

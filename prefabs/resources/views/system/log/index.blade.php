@@ -2,7 +2,7 @@
     <div class="container-xl">
         <div class="page-header">
             <h1>{{ __('Logs')}}</h1>
-            <button onclick="confirm('{{ __('Are you shure?') }}') ? window.location.href = '{{ route('system.log.clear') }}' : false" class="btn btn-danger">{{ __('Clear logs') }}</button>
+            <button onclick="confirm('{{ __('Do you really want to clear all logs?') }}') ? window.location.href = '{{ route('system.log.clear') }}' : false" class="btn btn-danger">{{ __('Clear logs') }}</button>
         </div>
 
         <div class="row g-3 mb-4">

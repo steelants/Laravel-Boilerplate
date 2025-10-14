@@ -29,7 +29,7 @@
                             </div> --}}
                             <div class="lh-1">
                                 <div class="fw-semibold">Steelants</div>
-                                <small class="text-body-secondary">{{ __(':number member', ['number' => '1']) }}</small>
+                                <small class="text-body-secondary">{{ __('1 member') }}</small>
                             </div>
                         </a>
                         <a class="dropdown-item" href="#">
@@ -41,7 +41,7 @@
                             </div>
                             <div class="lh-1">
                                 <div class="fw-semibold">Anthill</div>
-                                <small class="text-body-secondary">{{ __(':number members', ['number' => '42']) }}</small>
+                                <small class="text-body-secondary">{{ __('42 members') }}</small>
                             </div>
                         </a>
                     </div>
