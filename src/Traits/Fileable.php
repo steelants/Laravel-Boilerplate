@@ -6,7 +6,6 @@ use App\Models\File;
 use Illuminate\Http\UploadedFile;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use SteelAnts\LaravelBoilerplate\Services\FileService;
-use Illuminate\Support\Str;
 
 trait Fileable
 {
@@ -26,7 +25,8 @@ trait Fileable
         return $this->morphOne(File::class, 'fileable')->latestOfMany();
     }
 
-    public function uploadFile(UploadedFile|TemporaryUploadedFile $file, string $rootPath = "", bool $public = false) : string {
+    public function uploadFile(UploadedFile|TemporaryUploadedFile $file, string $rootPath = "", bool $public = false): string
+    {
         return FileService::uploadFile(owner: $this, file: $file, rootPath: $rootPath, public: $public);
     }
 

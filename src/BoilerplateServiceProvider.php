@@ -17,6 +17,7 @@ use SteelAnts\LaravelBoilerplate\Facades\Menu;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
 use SteelAnts\LaravelBoilerplate\Livewire\File\Gallery;
+use SteelAnts\LaravelBoilerplate\Livewire\Setting\Form;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {
@@ -34,8 +35,8 @@ class BoilerplateServiceProvider extends ServiceProvider
         }
 
 		Event::subscribe(UserEventSubscriber::class);
-
 		Livewire::component('boilerplate.file.gallery', Gallery::class);
+		Livewire::component('boilerplate.setting.form', Form::class);
 
         if ($this->app->runningInConsole()) {
             $this->bootConsole();

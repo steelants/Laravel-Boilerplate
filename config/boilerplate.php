@@ -30,6 +30,7 @@ return [
 		'activity'	   => Activity::class,
 		'setting'	   => Setting::class,
 		'session' 	   => Session::class,
+		'setting' 	   => Setting::class,
 		'subscription' => Subscription::class,
 	],
 
