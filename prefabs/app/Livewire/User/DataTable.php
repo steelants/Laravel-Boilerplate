@@ -27,9 +27,9 @@ class DataTable extends DataTableComponent
     public function headers(): array
     {
         return [
-            'id'    => 'ID',
-            'name'  => 'Name',
-            'email' => 'E-mail',
+            'id'    => __('ID'),
+            'name'  => __('Name'),
+            'email' => __('E-mail'),
         ];
     }
 
@@ -44,7 +44,7 @@ class DataTable extends DataTableComponent
                 'type'        => "livewire",
                 'action'      => "edit",
                 'parameters'  => $item['id'],
-                'text'        => __("Upravit"),
+                'text'        => __("Edit"),
                 'actionClass' => '',
                 'iconClass'   => 'fas fa-pen',
             ],
@@ -55,6 +55,7 @@ class DataTable extends DataTableComponent
                 'text'        => __("Remove"),
                 'actionClass' => 'text-danger',
                 'iconClass'   => 'fas fa-trash',
+                'confirm' => __('Are you sure?'),
             ],
         ];
     }
@@ -66,6 +67,6 @@ class DataTable extends DataTableComponent
 
     public function edit($id)
     {
-        $this->dispatch('openModal', 'user.form', __('Editovat uživatele'), ['user_id' => $id]);
+        $this->dispatch('openModal', 'user.form', __('Edit user'), ['user_id' => $id]);
     }
 }

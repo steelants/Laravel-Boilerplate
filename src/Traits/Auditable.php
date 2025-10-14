@@ -35,7 +35,7 @@ trait Auditable
 	protected static function createdBy($model)
     {
 		$activity = new Activity();
-		$activity->lang_text = __('boilerplate::ui.created', ["model" => class_basename($model) . " " . $model->{self::$nameColumn}]);
+		$activity->lang_text = __('Created ' . class_basename($model) . " " . $model->{self::$nameColumn});
 		$activity->affected()->associate($model);
 		$activity->save();
 	}
@@ -43,7 +43,7 @@ trait Auditable
 	protected static function updatingBy($model)
     {
 		$activity = new Activity();
-		$activity->lang_text = __('boilerplate::ui.updated', ["model" => class_basename($model) . " " . $model->{self::$nameColumn}]);
+		$activity->lang_text = __('Updated ' . class_basename($model) . " " . $model->{self::$nameColumn});
 		$activity->affected()->associate($model);
 		$activity->save();
 	}
@@ -51,7 +51,7 @@ trait Auditable
 	protected static function deletingBy($model)
     {
 		$activity = new Activity();
-        $activity->lang_text = __('boilerplate::ui.deleted', ["model" => class_basename($model) . " " . $model->{self::$nameColumn}]);
+        $activity->lang_text = __('Removed ' . class_basename($model) . " " . $model->{self::$nameColumn});
         $activity->save();
 	}
 }

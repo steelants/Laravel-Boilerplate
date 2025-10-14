@@ -18,7 +18,7 @@ abstract class Type
         if (isset($all[$type])) {
             return __($all[$type]);
         }
-        return 'NULL';
+        return __('NULL');
     }
 
     public static function getkeys()

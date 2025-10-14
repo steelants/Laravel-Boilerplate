@@ -9,7 +9,7 @@ class ActivityService
 	public static function log($text, $data = null)
 	{
 		$activity = new Activity();
-		$activity->lang_text = $text;
+		$activity->lang_text = __($text);
 		$activity->data = $data;
 		$activity->save();
 	}
@@ -17,7 +17,7 @@ class ActivityService
 	public static function logUrl($text = 'Accessed url')
 	{
 		$activity = new Activity();
-		$activity->lang_text = $text;
+		$activity->lang_text = __($text);
 		$activity->data = [
 			'url' => url()->full(),
 		];

@@ -57,11 +57,11 @@ class Form extends Component
             $this->authorize('update', $user);
             $user->update($validatedData);
 
-            $this->dispatch('snackbar', ['message' => __('Uživatel upraven'), 'type' => 'success', 'icon' => 'fas fa-check']);
+            $this->dispatch('snackbar', ['message' => __('User updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
         } else {
             $this->authorize('create', User::class);
             User::create($validatedData);
-            $this->dispatch('snackbar', ['message' => __('boilerplate::ui.create'), 'type' => 'success', 'icon' => 'fas fa-check']);
+            $this->dispatch('snackbar', ['message' => __('User created'), 'type' => 'success', 'icon' => 'fas fa-check']);
         }
 
         $this->dispatch('close-modal');

@@ -29,7 +29,7 @@
                             </div> --}}
                             <div class="lh-1">
                                 <div class="fw-semibold">Steelants</div>
-                                <small class="text-body-secondary">1 member</small>
+                                <small class="text-body-secondary">{{ __('1 member') }}</small>
                             </div>
                         </a>
                         <a class="dropdown-item" href="#">
@@ -41,7 +41,7 @@
                             </div>
                             <div class="lh-1">
                                 <div class="fw-semibold">Anthill</div>
-                                <small class="text-body-secondary">42 members</small>
+                                <small class="text-body-secondary">{{ __('42 members') }}</small>
                             </div>
                         </a>
                     </div>
@@ -65,7 +65,7 @@
                 <div>
                     <div class="text-body-tertiary nav-collapsed-hide d-flex align-items-center small nav-title-toggle py-2 {{ getToggleState('nav-system') == 'open' ? '' : 'collapsed' }}" data-bs-toggle="collapse" data-bs-target="#nav-system">
                         <i class="fas fa-angle-down collapse-icon"></i>
-                        <span class="fw-medium">{{ __('boilerplate::ui.system') }}</span>
+                        <span class="fw-medium">{{ __('System') }}</span>
                     </div>
                     <div class="remember collapse {{ getToggleState('nav-system') == 'open' ? 'show' : '' }}" id="nav-system">
                         <ul class="app-nav nav flex-column">
@@ -118,12 +118,12 @@
 
                     <a class="dropdown-item" href="{{ route('profile.index') }}">
                         <i class="dropdown-ico  fas fa-user"></i>
-                        {{ __('boilerplate::ui.profile') }}
+                        {{ __('Profile') }}
                     </a>
 
                     <label class="dropdown-item">
                         <i class="dropdown-ico fas fa-moon"></i>
-                        <div class="me-auto">{{ __('boilerplate::ui.dark_mode') }}</div>
+                        <div class="me-auto">{{ __('Dark Mode') }}</div>
                         <div class="form-switch lh-1">
                             <input {{ Cookie::get('theme') == 'dark' ? 'checked' : '' }} class="form-check-input me-0" id="datk-theme" onchange="toggleDatkTheme()" type="checkbox">
                         </div>
@@ -131,14 +131,14 @@
 
                     <a class="dropdown-item" href="{{ route('profile.api') }}">
                         <i class="dropdown-ico  fas fa-server"></i>
-                        {{ __('boilerplate::ui.api_tokens') }}
+                        {{ __('Api Tokens') }}
                     </a>
 
                     <hr class="dropdown-divider">
 
                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                         <i class="dropdown-ico  fas fa-sign-out-alt text-danger"></i>
-                        {{ __('boilerplate::ui.logout') }}
+                        {{ __('Logout') }}
                     </a>
 
                     <form action="{{ route('logout') }}" class="d-none" id="logout-form" method="POST">

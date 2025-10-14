@@ -13,7 +13,7 @@ class BackupController extends BaseController
     public function run()
     {
         Backup::dispatchSync();
-        return redirect()->back()->with('success', __('boilerplate::ui.backup-running'));
+        return redirect()->back()->with('success', __('Backup is running'));
     }
 
     public function index()
@@ -69,6 +69,6 @@ class BackupController extends BaseController
             }
         }
 
-        return redirect()->back()->with('success', __('boilerplate::ui.deleted'));
+        return redirect()->back()->with('success', __('Deleted'));
     }
 }

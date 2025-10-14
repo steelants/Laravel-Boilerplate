@@ -38,7 +38,7 @@
         @endif
     </div>
     <div class="dropdown-menu" wire:ignore.self>
-        <input class="dropdown-input" type="text" placeholder="Search..." x-model="search">
+        <input class="dropdown-input" type="text" placeholder="{{ __('Search...') }}" x-model="search">
         <template x-for="option in filteredOptions" :key="option.id">
             <label class="dropdown-item">
                 <input class="form-check-input" type="checkbox" x-bind:checked="isSelectedOption(option)" @change="selectOption(option)">

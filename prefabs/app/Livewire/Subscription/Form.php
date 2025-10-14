@@ -4,7 +4,7 @@ namespace App\Livewire\Subscription;
 
 use SteelAnts\LaravelBoilerplate\Models\Subscription;
 use Livewire\Component;
-use App\Types\SubscriptionTier;
+use SteelAnts\LaravelBoilerplate\Types\SubscriptionTier;
 
 class Form extends Component
 {
@@ -23,7 +23,7 @@ class Form extends Component
         ];
     }
 
-    public function mount($model = null)
+    public function mount(?int $model = null)
     {
         $this->tiers = SubscriptionTier::getNames();
 
@@ -52,7 +52,7 @@ class Form extends Component
         Subscription::create($validatedData);
 
         $this->dispatch('close-modal');
-        $this->dispatch('snackbar', ['message' => __('boilerplate::ui.item-created'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        $this->dispatch('snackbar', ['message' => __('Item successfully created'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
         $this->dispatch('subscriptionRefresh');
 
@@ -70,7 +70,7 @@ class Form extends Component
         }
 
         $this->dispatch('close-modal');
-        $this->dispatch('snackbar', ['message' => __('boilerplate::ui.item-updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        $this->dispatch('snackbar', ['message' => __('Item successfully updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
 
         $this->dispatch('subscriptionRefresh');
 

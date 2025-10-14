@@ -34,10 +34,10 @@ class DataTable extends DataTableComponent
     public function headers(): array
     {
         return [
-            'ip_address'      => "IP Address",
-            'browser_os_name' => "OS Name",
-            'browser_name'    => "Browser",
-            'last_activity'   => "Last Activity",
+            'ip_address'      => __("IP Address"),
+            'browser_os_name' => __("OS Name"),
+            'browser_name'    => __("Browser"),
+            'last_activity'   => __("Last Activity"),
         ];
     }
 
@@ -48,11 +48,10 @@ class DataTable extends DataTableComponent
                 'type'        => "livewire",
                 'action'      => "logout",
                 'parameters'  => $item['id'],
-                'text'        => "Logout",
+                'text'        => __("Logout"),
                 'actionClass' => 'text-danger',
-                'iconClass'   => 'fas fa-trash',
 				'iconClass'   => 'fas fa-trash text-danger',
-                'confirm'     => __('Are you shure') . '?',
+                'confirm' => __('Are you sure?'),
             ],
         ];
     }
