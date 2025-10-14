@@ -2,8 +2,8 @@
 
 namespace SteelAnts\LaravelBoilerplate\Traits;
 
-use App\Models\Setting;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use SteelAnts\LaravelBoilerplate\Models\Setting;
 
 trait HasSettings
 {

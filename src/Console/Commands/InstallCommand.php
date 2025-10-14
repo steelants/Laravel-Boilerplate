@@ -121,7 +121,9 @@ class InstallCommand extends Command
         $laravelSubPath = ('/' . $type);
         $moduleRootPath = realpath($baseDir . $moduleSubPath);
 		$HashFilePath = (storage_path() . DIRECTORY_SEPARATOR . 'boilerplate_install.json');
-		$checkSums = (json_decode(file_get_contents($HashFilePath), true) ?? []);
+        if (File::exists($HashFilePath)) {
+		    $checkSums = (json_decode(file_get_contents($HashFilePath), true) ?? []);
+        }
 
         foreach (File::allFiles($moduleRootPath) as $file) {
             try {
@@ -143,7 +145,7 @@ class InstallCommand extends Command
 					if ($FileWasCustomized) {
 						$message = "The [" . $laravelViewRoot . '/' . $file->getFilename() . "] ".PHP_EOL." file was customized. Do you want to replace it?";
 					}
-					if (!$this->components->confirm($message)) {
+					if (!$this->option('force') && !$this->components->confirm($message)) {
 						continue;
 					}
 				}

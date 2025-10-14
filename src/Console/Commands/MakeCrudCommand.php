@@ -188,11 +188,11 @@ class MakeCrudCommand extends Command
     {
         $arguments['model_camel_case'] = Str::camel($arguments['model']);
         $arguments['model_snake_case'] = Str::snake($arguments['model_camel_case']);
-        $arguments['model_singular'] = Str::of($arguments['model'])->headline()->singular()->lower();
+        $arguments['model_singular'] = Str::of($arguments['model'])->headline()->singular()->lower()->toString();
 
         $headerProperties = '';
         foreach ($arguments['headers'] as $key => $header) {
-            $headerProperties .= "\t\t\t'".$header."' => __('".Str::of($header)->headline()->lower()->ucfirst()."'),\n";
+            $headerProperties .= "\t\t\t'".$header."' => __('".Str::of($header)->headline()->lower()->ucfirst()->toString()."'),\n";
         }
         $arguments['headerProperties'] = rtrim(ltrim($headerProperties, "\t"), "\n");
         unset($arguments['headers']);
@@ -295,7 +295,7 @@ class MakeCrudCommand extends Command
 
         $safeToEditProperties = array_intersect_key($arguments['properties'], array_flip($arguments['safeProperties']));
         foreach ($safeToEditProperties as $propertyName => $propertyType) {
-            $propertyNameStr = Str::of($propertyName)->headline()->lower()->ucfirst();
+            $propertyNameStr = Str::of($propertyName)->headline()->lower()->ucfirst()->toString();
             if (Str::contains($propertyType, 'App\\Models\\')) {
                 $tableName = (new $propertyType())->getTable();
                 $content .= "\t\t".'<x-form::select group-class="mb-3"  :options="$this->'.Str::camel($tableName).'" name="'.$propertyName.'" placeholder="Vyberte" wire:model.blur="'.$propertyName.'" label="{{ __('. $propertyNameStr .") }}\"/>\n";

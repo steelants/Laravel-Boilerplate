@@ -41,12 +41,11 @@ trait CRUD
 
     public function index(Request $request)
     {
-        $model_singular = 
 		$model = Str::kebab($this->loadModel($request));
-
+        
         $options = array_merge([
             'livewireComponents' => $this->getRouteRoot($model, 'form'),
-            'title'              => __('Create :model', ['model' => __(Str::of($this->loadModel($request))->headline()->lower())]),
+            'title'              => __('Create :model', ['model' => __(Str::of($this->loadModel($request))->headline()->lower()->toString())]),
             'static'             => true,
         ], $this->model_component ?? []);
 
@@ -56,7 +55,7 @@ trait CRUD
 
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
 			'layout' 		 => $this->layout ?? config('boilerplate.layouts.default'),
-            'title'          => __(Str::of($this->loadModel($request))->headline()->plural()->lower()->ucfirst()),
+            'title'          => __(Str::of($this->loadModel($request))->headline()->plural()->lower()->ucfirst()->toString()),
             'options'        => $options,
             'page_component' => $this->getRouteRoot($model, 'data-table'),
         ]);

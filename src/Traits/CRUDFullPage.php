@@ -19,7 +19,7 @@ trait CRUDFullPage
 
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
 			'layout'              => $this->layout ?? config('boilerplate.layouts.default'),
-            'title'               => __(Str::of($this->loadModel($request))->headline()->plural()->lower()->ucfirst()),
+            'title'               => __(Str::of($this->loadModel($request))->headline()->plural()->lower()->ucfirst()->toString()),
             'full_page_component' => $this->getRouteRoot($model, 'form'),
             'page_component'      => $this->getRouteRoot($model, 'data-table'),
         ]);
@@ -36,7 +36,7 @@ trait CRUDFullPage
 
         return view(($this->views['form'] ?? 'boilerplate::crud'), [
 			'layout' 		 => $this->layout ?? config('boilerplate.layouts.default'),
-            'title'          => __((empty($modelId) ? 'Create :model' : 'Edit :model'), ['model' => __(Str::of($this->loadModel($request))->headline()->lower())]),
+            'title'          => __((empty($modelId) ? 'Create :model' : 'Edit :model'), ['model' => __(Str::of($this->loadModel($request))->headline()->lower()->toString())]),
             'page_component' => $this->getRouteRoot($model, 'form'),
 			'model_back'     => $this->getRouteRoot($model, 'index'),
 			'data'           => $data,
