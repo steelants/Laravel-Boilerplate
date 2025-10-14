@@ -28,7 +28,7 @@
                             </td>
                             <td class="text-end">
                             @php($backups_slug = explode('_', $backup['fileName'][0])[0])
-                                <a class="btn btn-sm btn-danger" title="{{ __('Remove') }}" href="{{ route('system.backup.delete', ['backup_date' => $backups_slug]) }}" onclick="return confirm('{{ __('Are you shure?') }}')">
+                                <a class="btn btn-sm btn-danger" title="{{ __('Remove') }}" href="{{ route('system.backup.delete', ['backup_date' => $backups_slug]) }}" onclick="return confirm('{{ __('Are you sure?') }}')">
                                     <div class="d-none d-md-none">
                                         {{ __('Remove') }}
                                     </div>

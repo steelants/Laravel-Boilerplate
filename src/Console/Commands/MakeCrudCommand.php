@@ -61,7 +61,7 @@ class MakeCrudCommand extends Command
 
         $fillables = $modelClass->getFillable();
         if ($fillables == []) {
-            $this->components->warn('Please make shure that $fillable variable of model '.$modelClass.' is defined correctly.');
+            $this->components->warn('Please make sure that $fillable variable of model '.$modelClass.' is defined correctly.');
         }
 
         $casts = $modelClass->getCasts();

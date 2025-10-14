@@ -51,7 +51,7 @@ class DataTable extends DataTableComponent
                 'text'        => __("Logout"),
                 'actionClass' => 'text-danger',
 				'iconClass'   => 'fas fa-trash text-danger',
-                'confirm' => __('Are you shure?'),
+                'confirm' => __('Are you sure?'),
             ],
         ];
     }

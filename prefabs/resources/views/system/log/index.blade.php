@@ -41,7 +41,7 @@
                                 <a href='{{ route('system.log.download', ['file' => $item['fileName']]) }}' class="btn btn-secondary">
                                     <i class="fa fa-download"></i>
                                 </a>
-                                <a href='{{ route('system.log.delete', ['file' => $item['fileName']]) }}' onclick="return confirm('{{ __('Are you shure?') }}')" class="btn btn-danger">
+                                <a href='{{ route('system.log.delete', ['file' => $item['fileName']]) }}' onclick="return confirm('{{ __('Are you sure?') }}')" class="btn btn-danger">
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </td>
