@@ -3,10 +3,10 @@
 namespace App\Livewire\Subscription;
 
 use SteelAnts\LaravelBoilerplate\Models\Subscription;
-use App\Types\SubscriptionTier;
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
 use SteelAnts\DataTable\Traits\UseDatabase;
+use SteelAnts\LaravelBoilerplate\Types\SubscriptionTier;
 
 class DataTable extends DataTableComponent
 {
@@ -51,6 +51,6 @@ class DataTable extends DataTableComponent
 
     public function edit($id)
     {
-        $this->dispatch('openModal', 'subscription.form', __('Edit :model', ['model' => __('subscription')]), $id);
+        $this->dispatch('openModal', 'subscription.form', __('Edit subscription'), [$id]);
     }
 }

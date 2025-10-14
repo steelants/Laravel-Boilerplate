@@ -67,6 +67,6 @@ class DataTable extends DataTableComponent
 
     public function edit($id)
     {
-        $this->dispatch('openModal', 'user.form', __('Edit :model', ['model' => __('user')]), ['user_id' => $id]);
+        $this->dispatch('openModal', 'user.form', __('Edit user'), ['user_id' => $id]);
     }
 }

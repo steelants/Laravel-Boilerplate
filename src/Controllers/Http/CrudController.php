@@ -21,7 +21,7 @@ class CrudController extends Controller
         } else {
             $modelName = ucfirst(Str::camel(str_replace('-', '_', $request->route('accountId'))));
             if (!class_exists('App\\Models\\' . $modelName)) {
-                throw new ErrorException(__(":modelName model not found!", ['modelName' => $modelName]));
+                throw new ErrorException(__("$modelName model not found!"));
             }
             $model = $modelName::class;
         }

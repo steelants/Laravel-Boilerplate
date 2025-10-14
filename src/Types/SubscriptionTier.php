@@ -33,6 +33,6 @@ class SubscriptionTier
 
     public static function getName($type)
     {
-        return self::getNames()[$type] ?? 'undefined';
+        return self::getNames()[$type] ?? __('undefined');
     }
 }

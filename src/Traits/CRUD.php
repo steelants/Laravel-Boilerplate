@@ -33,7 +33,7 @@ trait CRUD
         }
 
         if (!class_exists($modelClass)) {
-            throw new ErrorException(__(":modelName model not found!", ['modelName' => $modelName]));
+            throw new ErrorException(__(":$modelName model not found!"));
         }
 
         return str_replace('_', '-', Str::camel($modelName));
@@ -42,10 +42,10 @@ trait CRUD
     public function index(Request $request)
     {
 		$model = Str::kebab($this->loadModel($request));
-        
+
         $options = array_merge([
             'livewireComponents' => $this->getRouteRoot($model, 'form'),
-            'title'              => __('Create :model', ['model' => __(Str::of($this->loadModel($request))->headline()->lower()->toString())]),
+            'title'              => __('Create ' . Str::of($this->loadModel($request))->headline()->lower()->toString()),
             'static'             => true,
         ], $this->model_component ?? []);
 

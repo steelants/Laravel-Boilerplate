@@ -36,7 +36,7 @@ trait CRUDFullPage
 
         return view(($this->views['form'] ?? 'boilerplate::crud'), [
 			'layout' 		 => $this->layout ?? config('boilerplate.layouts.default'),
-            'title'          => __((empty($modelId) ? 'Create :model' : 'Edit :model'), ['model' => __(Str::of($this->loadModel($request))->headline()->lower()->toString())]),
+            'title'          => __((empty($modelId) ? 'Create ' : 'Edit ') . Str::of($this->loadModel($request))->headline()->lower()->toString()),
             'page_component' => $this->getRouteRoot($model, 'form'),
 			'model_back'     => $this->getRouteRoot($model, 'index'),
 			'data'           => $data,

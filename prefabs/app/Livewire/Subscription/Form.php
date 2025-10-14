@@ -4,7 +4,7 @@ namespace App\Livewire\Subscription;
 
 use SteelAnts\LaravelBoilerplate\Models\Subscription;
 use Livewire\Component;
-use App\Types\SubscriptionTier;
+use SteelAnts\LaravelBoilerplate\Types\SubscriptionTier;
 
 class Form extends Component
 {
@@ -23,7 +23,7 @@ class Form extends Component
         ];
     }
 
-    public function mount($model = null)
+    public function mount(?int $model = null)
     {
         $this->tiers = SubscriptionTier::getNames();
 
