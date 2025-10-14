@@ -32,18 +32,18 @@ class DataTable extends DataTableComponent
     {
         if ($this->failed) {
             return [
-                'uuid'      => "UUID",
-                'queue'     => "Queue",
-                'name'      => "Name",
-                'failed_at' => "Failed At",
+                'uuid'      => __("UUID"),
+                'queue'     => __("Queue"),
+                'name'      => __("Name"),
+                'failed_at' => __("Failed At"),
             ];
         }
 
         return [
-            'uuid'         => "UUID",
-            'queue'        => "Queue",
-            'name'         => "Name",
-            'available_at' => "Available At",
+            'uuid'         => __("UUID"),
+            'queue'        => __("Queue"),
+            'name'         => __("Name"),
+            'available_at' => __("Available At"),
         ];
     }
 
@@ -76,7 +76,7 @@ class DataTable extends DataTableComponent
                     'type'        => "livewire",
                     'action'      => "retry",
                     'parameters'  => $item['uuid'],
-                    'text'        => __("ui.retry"),
+                    'text'        => __("Retry"),
                     'actionClass' => '',
                     'iconClass'   => 'fas fa-sync',
                 ],
@@ -88,7 +88,7 @@ class DataTable extends DataTableComponent
                 'type'        => "livewire",
                 'action'      => "stop",
                 'parameters'  => $item['id'],
-                'text'        => __("ui.stop"),
+                'text'        => __("Stop"),
                 'actionClass' => '',
                 'iconClass'   => 'fas fa-stop',
             ],

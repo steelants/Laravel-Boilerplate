@@ -61,6 +61,6 @@ class CacheController extends BaseController
     {
         Cache::flush();
 
-        return redirect()->route('system.cache.index')->with('success', __('boilerplate::ui.cache-cleared'));
+        return redirect()->route('system.cache.index')->with('success', __('Cache logs'));
     }
 }

@@ -111,6 +111,6 @@ class LogController extends BaseController
             }
         }
 
-        return redirect()->route('system.log.index')->with('success', __('boilerplate::ui.jobs-cleared'));
+        return redirect()->route('system.log.index')->with('success', __('Logs cleared!'));
     }
 }

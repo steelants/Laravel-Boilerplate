@@ -3,20 +3,20 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('auth.Verify') }}</div>
+                <div class="card-header">{{ __('Verify') }}</div>
 
                 <div class="card-body">
                     @if (session('resent'))
                         <div class="alert alert-success" role="alert">
-                            {{ __('auth.sendEmail') }}
+                            {{ __('Send email') }}
                         </div>
                     @endif
 
-                    {{ __('auth.checkEmail') }}
-                    {{ __('auth.notReceiveEmail') }},
+                    {{ __('Check email') }}
+                    {{ __('Not receive email') }},
                     <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
                         @csrf
-                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('auth.requestNew') }}</button>.
+                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('Request new') }}</button>.
                     </form>
                 </div>
             </div>

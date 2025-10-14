@@ -21,7 +21,7 @@ class AlertModeType
         if (isset($names[$type])) {
             return __($names[$type]);
         }
-        return 'NULL';
+        return __('NULL');
     }
 
     public static function getkeys()

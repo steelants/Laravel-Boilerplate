@@ -5,7 +5,7 @@
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
             if ($request->is('api/*') || $request->is('local/*')) {
                 return response()->json([
-                    'message' => 'Record not found.'
+                    'message' => __('Record not found.')
                 ], 404);
             }
         });

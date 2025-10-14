@@ -18,8 +18,8 @@ trait CRUDFullPage
 		$model = Str::kebab($this->loadModel($request));
 
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
-			'layout'              => $this->layout ?? config('boilerplate.layouts.default'),
-            'title'               => Lang::has('boilerplate::' . $model . '.plural') ? 'boilerplate::' . $model . '.plural' : $model . '.plural',
+			      'layout'              => $this->layout ?? config('boilerplate.layouts.default'),
+            'title'               => __(Str::of($this->loadModel($request))->headline()->plural()->lower()->ucfirst()->toString()),
             'full_page_component' => $this->getRouteRoot($model, 'form'),
             'page_component'      => $this->getRouteRoot($model, 'data-table'),
         ]);
@@ -36,7 +36,7 @@ trait CRUDFullPage
 
         return view(($this->views['form'] ?? 'boilerplate::crud'), [
 			'layout' 		 => $this->layout ?? config('boilerplate.layouts.default'),
-            'title'          => (Lang::has('boilerplate::' . $model . '.create') || Lang::has('boilerplate::' . $model . '.edit') ? 'boilerplate::' . $model : $model . '.') . (empty($modelId) ? 'create' : 'edit'),
+            'title'          => __((empty($modelId) ? 'Create ' : 'Edit ') . Str::of($this->loadModel($request))->headline()->lower()->toString()),
             'page_component' => $this->getRouteRoot($model, 'form'),
 			'model_back'     => $this->getRouteRoot($model, 'index'),
 			'data'           => $data,

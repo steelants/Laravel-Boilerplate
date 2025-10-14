@@ -1,7 +1,7 @@
 <x-dynamic-component :component="$layout">
     <div class="container-xl">
         <div class="page-header">
-            <h1>{{ __('boilerplate::ui.api') }}</h1>
+            <h1>{{ __('Api') }}</h1>
         </div>
         <div>
             @foreach ($routes as $id => $route)
@@ -28,7 +28,7 @@
                         <b class="badge text-bg-{{ $color }} me-2" style="--bs-bg-opacity: 1;">{{ $route['Method'] }}</b>
                         <b class="position-relative z-2"
                             onclick="copyToClipboard('{{ config('app.url') . $route['Uri'] }}');"
-                            title="{{ __('boilerplate:ui.copy_to_clipboard') }}"
+                            title="{{ __('Copy to clipboard') }}"
                         >
                             <span>{{ $route['Uri'] }}</span>
                             <i class="fa fa-clipboard"></i>
@@ -37,15 +37,15 @@
                     </div>
                     <div class="collapse" id="collapse{{ $id }}">
                         <div class="card card-body mt-2">
-                            <h6>Description</h6>
+                            <h6>{{ __('Description') }}</h6>
                             <pre>{{ $route['Description'] }}</pre>
 
-                            <h6>Parameters</h6>
+                            <h6>{{ __('Parameters') }}</h6>
                             <table class="table table-sm table-bordered">
                                 <thead>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Comment</th>
+                                    <th>{{ __('Name') }}</th>
+                                    <th>{{ __('Type') }}</th>
+                                    <th>{{ __('Comment') }}</th>
                                 </thead>
                                 @foreach ($route['Parameters'] as $parameter)
                                     <tr>
@@ -62,8 +62,8 @@
                                 @endforeach
                             </table>
 
-                            <h6>Returns</h6>
-                            <pre>{{ $route['Returns'] ?? 'NULL' }}</pre>
+                            <h6>{{ __('Returns') }}</h6>
+                            <pre>{{ $route['Returns'] ?? __('NULL') }}</pre>
                         </div>
                     </div>
                 </div>

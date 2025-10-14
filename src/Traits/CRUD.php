@@ -33,7 +33,7 @@ trait CRUD
         }
 
         if (!class_exists($modelClass)) {
-            throw new ErrorException($modelName . " model not found!");
+            throw new ErrorException(__("$modelName model not found!"));
         }
 
         return str_replace('_', '-', Str::camel($modelName));
@@ -45,7 +45,7 @@ trait CRUD
 
         $options = array_merge([
             'livewireComponents' => $this->getRouteRoot($model, 'form'),
-            'title'              => Lang::has('boilerplate::' . $model . '.create') ? __('boilerplate::' . $model . '.create') : __($model . '.create'),
+            'title'              => __('Create ' . Str::of($this->loadModel($request))->headline()->lower()->toString()),
             'static'             => true,
         ], $this->model_component ?? []);
 
@@ -55,7 +55,7 @@ trait CRUD
 
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
 			'layout' 		 => $this->layout ?? config('boilerplate.layouts.default'),
-            'title'          => Lang::has('boilerplate::' . $model . '.plural') ? 'boilerplate::' . $model . '.plural' : $model . '.plural',
+            'title'          => __(Str::of($this->loadModel($request))->headline()->plural()->lower()->ucfirst()->toString()),
             'options'        => $options,
             'page_component' => $this->getRouteRoot($model, 'data-table'),
         ]);
