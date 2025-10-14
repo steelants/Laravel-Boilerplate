@@ -18,7 +18,7 @@ trait CRUDFullPage
 		$model = Str::kebab($this->loadModel($request));
 
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
-			'layout'              => $this->layout ?? config('boilerplate.layouts.default'),
+			      'layout'              => $this->layout ?? config('boilerplate.layouts.default'),
             'title'               => __(Str::of($this->loadModel($request))->headline()->plural()->lower()->ucfirst()->toString()),
             'full_page_component' => $this->getRouteRoot($model, 'form'),
             'page_component'      => $this->getRouteRoot($model, 'data-table'),

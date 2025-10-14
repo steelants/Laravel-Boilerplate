@@ -33,6 +33,10 @@ class GenerateMenus
         ];
 
         $systemRoutes = [
+			       'Settings'        => [
+                'fas fa-cog',
+                'system.setting.index',
+            ],
             'Audit'            => [
                 'fas fa-eye',
                 'system.audit.index',

@@ -22,8 +22,8 @@ class Form extends FormComponent
 
     public string $viewName = 'livewire.job.form';
 
-    protected function rules() 
-    { 
+    protected function rules()
+    {
         $rules = [];
         if (!empty($this->job_parameters) && count($this->job_parameters) > 0) {
             foreach ($this->job_parameters as $name => $data) {
@@ -42,7 +42,7 @@ class Form extends FormComponent
                 }
             }
         }
-        return $rules; 
+        return $rules;
     }
 
     #[Computed()]
@@ -133,35 +133,36 @@ class Form extends FormComponent
 
     public function mount($job = null)
     {
-        parent::mount();
-        $this->job = $job;
+		$this->job = $job;
 
 		$class = '\\App\\Jobs\\' . $job;
         if (!class_exists($class)){
-            $class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' . $job;
+			$class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' . $job;
         }
 
         $reflection = new ReflectionClass($class);
         $this->note = $reflection->getDocComment();
         $params = $reflection->getConstructor()->getParameters();
         foreach ($params as $param) {
-            $typeClass = $param->getType()?->getName();
+			$typeClass = $param->getType()?->getName();
 
             $this->job_parameters[$param->name] = [
-                "type" => $typeClass
+				"type" => $typeClass
             ];
 
             if ($param->isDefaultValueAvailable()) {
-                $this->job_parameters[$param->name]['value'] = $param->getDefaultValue();
+				$this->job_parameters[$param->name]['value'] = $param->getDefaultValue();
             }
         }
+
+		parent::mount();
     }
 
     public function submit(){
         Gate::authorize('is-system-admin');
 
         if (method_exists($this, 'rules')) {
-            $this->validate();                
+            $this->validate();
         }
 
         $class = '\\App\\Jobs\\' . $this->job;

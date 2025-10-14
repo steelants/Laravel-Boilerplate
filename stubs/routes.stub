@@ -14,6 +14,8 @@ Route::prefix('profile')->name('profile.')->middleware(['auth'])->group(function
 });
 
 Route::prefix('system')->name('system.')->middleware(['auth'])->group(function () {
+	Route::get('/settings', [App\Http\Controllers\System\SettingController::class, 'index'])->name('setting.index');
+
 	Route::get('/files', [App\Http\Controllers\System\FileController::class, 'index'])->name('file.index');
 
     Route::get('/audit', [App\Http\Controllers\System\AuditController::class, 'index'])->name('audit.index');
