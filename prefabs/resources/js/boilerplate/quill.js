@@ -89,6 +89,31 @@ function createQuillInstance({
         }
     });
 
+    quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
+        if (node instanceof HTMLElement) {
+            node.style.removeProperty('color');
+            node.style.removeProperty('background');
+            node.style.removeProperty('background-color');
+            node.removeAttribute('color');
+            node.removeAttribute('bgcolor');
+        }
+
+        for (let i = 0; i < delta.ops.length; i++) {
+            const op = delta.ops[i];
+            if (!op.attributes) {
+                continue;
+            }
+
+            delete op.attributes.color;
+            delete op.attributes.background;
+            if (Object.keys(op.attributes).length === 0) {
+                delete op.attributes;
+            }
+        }
+
+        return delta;
+    });
+
     quill.clipboard.dangerouslyPasteHTML(textareaEl.value);
 
     quill.on('text-change', function () {
