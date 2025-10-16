@@ -16,8 +16,8 @@
   background: var(--bs-body-bg);
   max-width: 360px;
   font-size: 0.875rem;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0/0.1), 0 2px 4px -2px rgb(0 0 0/0.1);
-  border: 1px solid var(--bs-secondary-bg);
+  box-shadow: var(--bs-box-shadow);
+  border: 1px solid rgba(128,128,128,.2);
 
   &:not(.snackbar-persist){
     margin-right: -400px;
@@ -25,6 +25,13 @@
     animation: slideSnackbar 3s forwards;
     animation-delay: 0.2s;
   }
+}
+
+@include color-mode(dark) {
+	.snackbar {
+		background: var(--bs-tertiary-bg);
+		border: 1px solid rgba(128,128,128,.3);
+	}
 }
 
 @keyframes slideSnackbar {
