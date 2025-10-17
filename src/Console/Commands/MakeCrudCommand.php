@@ -297,17 +297,17 @@ class MakeCrudCommand extends Command
             $propertyNameStr = Str::of($propertyName)->headline()->lower()->ucfirst()->toString();
             if (Str::contains($propertyType, 'App\\Models\\')) {
                 $tableName = (new $propertyType())->getTable();
-                $content .= "\t\t".'<x-form::select group-class="mb-3"  :options="$this->'.Str::camel($tableName).'" name="'.$propertyName.'" placeholder="Vyberte" wire:model.blur="'.$propertyName.'" label="{{ __('. $propertyNameStr .") }}\"/>\n";
+                $content .= "\t\t".'<x-form::select group-class="mb-3"  :options="$this->'.Str::camel($tableName).'" name="'.$propertyName.'" placeholder="Vyberte" wire:model.blur="'.$propertyName.'" label="{{ __(\''. $propertyNameStr ."') }}\"/>\n";
             } elseif ($propertyType == 'integer') {
-                $content .= "\t\t".'<x-form::input group-class="mb-3" type="number" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __('.$propertyNameStr.") }}\"/>\n";
+                $content .= "\t\t".'<x-form::input group-class="mb-3" type="number" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$propertyNameStr."') }}\"/>\n";
             } elseif ($propertyType == 'boolean') {
-                $content .= "\t\t".'<x-form::checkbox group-class="mb-3" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __('.$propertyNameStr.") }}\"/>\n";
+                $content .= "\t\t".'<x-form::checkbox group-class="mb-3" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$propertyNameStr."') }}\"/>\n";
             } elseif ($propertyType == 'date') {
-                $content .= "\t\t".'<x-form::input group-class="mb-3" type="date" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __('.$propertyNameStr.") }}\"/>\n";
+                $content .= "\t\t".'<x-form::input group-class="mb-3" type="date" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$propertyNameStr."') }}\"/>\n";
             } elseif ($propertyType == 'datetime') {
-                $content .= "\t\t".'<x-form::input group-class="mb-3" type="datetime-local" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __('.$propertyNameStr.") }}\"/>\n";
+                $content .= "\t\t".'<x-form::input group-class="mb-3" type="datetime-local" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$propertyNameStr."') }}\"/>\n";
             } else {
-                $content .= "\t\t".'<x-form::input group-class="mb-3" type="text" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __('.$propertyNameStr.") }}\"/>\n";
+                $content .= "\t\t".'<x-form::input group-class="mb-3" type="text" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$propertyNameStr."') }}\"/>\n";
             }
         }
 
