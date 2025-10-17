@@ -2,7 +2,7 @@
 
 namespace SteelAnts\LaravelBoilerplate\Console\Commands;
 
-use App\Helpers\AbstractHelper;
+use SteelAnts\LaravelBoilerplate\Helpers\AbstractHelper;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
@@ -100,13 +100,12 @@ class MakeCrudCommand extends Command
         $this->ensurePath($folderpath);
         $this->components->info('creating File: '.$modifiedSceletonFilePath);
 
-        $livewireDotPath = Str::remove('App\Livewire', ($namespace));
-        $livewireDotPath = Str::remove('App\Http\Controllers', $livewireDotPath);
-
+        $livewireDotPath = Str::remove('App\\Livewire\\', ($namespace));
         if (!Str::contains($livewireDotPath, $model)) {
             $livewireDotPath .= '\\'.$model;
         }
 
+        $livewireDotPath = Str::remove('App\\Http\\Controllers\\', $livewireDotPath);
         $livewireDotPath = Str::replace(DIRECTORY_SEPARATOR, '.', $livewireDotPath);
         $livewireDotPath = Str::trim($livewireDotPath, '.');
 
