@@ -50,7 +50,7 @@ trait CRUD
         ], $this->model_component ?? []);
 
 		//TODO: Fix if Better implementation is awailable is discoverable dont work if  extension of FormComponent is Extended form Component
-		if (!Livewire::isDiscoverable($options['livewireComponents']) || $this->model_component != []) {
+		if (!Livewire::isDiscoverable($options['livewireComponents']) || (isset($this->model_component ) && $this->model_component != [])) {
 			unset($options['livewireComponents']);
 		}
 
