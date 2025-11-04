@@ -156,7 +156,7 @@ class InstallCommand extends Command
                     }
                 }
 
-				mkdir(dirname($viewFullPath), recursive: true);
+                mkdir(dirname($viewFullPath), recursive: true);
                 copy($stubFullPath, $viewFullPath);
 
                 $checkSums[$laravelViewRoot] = $fileHash;
@@ -241,25 +241,34 @@ class InstallCommand extends Command
 
     protected static function appendSASS()
     {
+        $importFileString = '@import "./boilerplate/boilerplate.scss";';
         $path = resource_path('sass/app.scss');
         if (! File::exists($path)) {
             mkdir(dirname($path), recursive: true);
-            $content = self::boilerplateString('@import "./boilerplate/boilerplate.scss";', 'scss');
+            $content = self::boilerplateString($importFileString, 'scss');
             File::put($path, $content);
         }
 
-        self::appendFile('resources/sass/app.scss', 'scss.stub', '@import "./boilerplate/boilerplate.scss";');
+        $ClassFileContent = file_get_contents($path);
+        if (! str_contains($ClassFileContent, $importFileString)) {
+            self::appendFile('resources/sass/app.scss', 'scss.stub', $importFileString);
+        }
     }
 
     protected static function appendJS()
     {
+        $importFileString = "import './boilerplate/boilerplate.js';";
         $path = resource_path('js/app.js');
         if (! File::exists($path)) {
             mkdir(dirname($path), recursive: true);
-            $content = self::boilerplateString("import './boilerplate/boilerplate.js';", 'js');
+            $content = self::boilerplateString($importFileString, 'js');
             File::put($path, $content);
         }
-        self::appendFile('resources/js/app.js', 'js.stub', "import './bootstrap';");
+
+        $ClassFileContent = file_get_contents($path);
+        if (! str_contains($ClassFileContent, $importFileString)) {
+            self::appendFile('resources/js/app.js', 'js.stub', $importFileString);
+        }
     }
 
     protected static function appendExceptions()
