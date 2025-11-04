@@ -121,6 +121,8 @@ class InstallCommand extends Command
         $laravelSubPath = ('/' . $type);
         $moduleRootPath = realpath($baseDir . $moduleSubPath);
 		$HashFilePath = (storage_path() . DIRECTORY_SEPARATOR . 'boilerplate_install.json');
+		$checkSums = [];
+
         if (File::exists($HashFilePath)) {
 		    $checkSums = (json_decode(file_get_contents($HashFilePath), true) ?? []);
         }
@@ -130,13 +132,17 @@ class InstallCommand extends Command
                 $laravelViewRoot = str_replace($moduleRootPath, $laravelSubPath, $file->getPath());
                 $stubFullPath = ($file->getPath() . "/" . $file->getFilename());
                 $viewFullPath = (base_path($laravelViewRoot) . "/" . $file->getFilename());
-				$fileHash =  hash_file('sha256', $viewFullPath);
+
+				$fileHash  = null;
+				if (file_exists($viewFullPath)) {
+					$fileHash =  hash_file('sha256', $viewFullPath) ?? null;
+				}
 
                 $this->checkDirectory(dirname($viewFullPath));
 
 				//TODO: Verifi hash of file
 				$FileWasCustomized = true;
-				if (isset($checkSums[$viewFullPath]) && $checkSums[$viewFullPath] == $fileHash)	{
+				if (isset($checkSums[$laravelViewRoot]) && $checkSums[$laravelViewRoot] == $fileHash)	{
 					$FileWasCustomized = false;
 				}
 
@@ -151,12 +157,12 @@ class InstallCommand extends Command
 				}
 
                 copy($stubFullPath, $viewFullPath);
-				$checkSums[$viewFullPath] = $fileHash;
+				$checkSums[$laravelViewRoot] = $fileHash;
 				$message = "File: " . $viewFullPath . ' / '. PHP_EOL. " Replace With: ". $stubFullPath;
                 $this->components->info($message);
                 //code...
             } catch (Throwable $th) {
-                $this->components->error($type);
+                $this->components->error($th->getMessage());
             } finally {
 				file_put_contents($HashFilePath, json_encode($checkSums, JSON_PRETTY_PRINT));
 			}
