@@ -138,7 +138,7 @@ class InstallCommand extends Command
                     $fileHash = hash_file('sha256', $viewFullPath) ?? null;
                 }
 
-                $this->checkDirectory(dirname($viewFullPath));
+                self::checkDirectory(dirname($viewFullPath));
 
                 // TODO: Verifi hash of file
                 $FileWasCustomized = true;
@@ -156,7 +156,7 @@ class InstallCommand extends Command
                     }
                 }
 
-                mkdir(dirname($viewFullPath), recursive: true);
+                self::checkDirectory(dirname($viewFullPath));
                 copy($stubFullPath, $viewFullPath);
 
                 $checkSums[$laravelViewRoot] = $fileHash;
@@ -171,7 +171,7 @@ class InstallCommand extends Command
         }
     }
 
-    protected function checkDirectory($directory)
+    protected static function checkDirectory($directory)
     {
         if (! is_dir($directory)) {
             mkdir($directory, 0755, true);
@@ -244,7 +244,7 @@ class InstallCommand extends Command
         $importFileString = '@import "./boilerplate/boilerplate.scss";';
         $path = resource_path('sass/app.scss');
         if (! File::exists($path)) {
-            mkdir(dirname($path), recursive: true);
+            self::checkDirectory(dirname($path));
             $content = self::boilerplateString($importFileString, 'scss');
             File::put($path, $content);
         }
@@ -260,7 +260,7 @@ class InstallCommand extends Command
         $importFileString = "import './boilerplate/boilerplate.js';";
         $path = resource_path('js/app.js');
         if (! File::exists($path)) {
-            mkdir(dirname($path), recursive: true);
+            self::checkDirectory(dirname($path));
             $content = self::boilerplateString($importFileString, 'js');
             File::put($path, $content);
         }
