@@ -1,6 +1,6 @@
 <?php
 
-use App\Types\SettingDataType;
+use SteelAnts\LaravelBoilerplate\Types\SettingDataType;
 
 return [
 	'main' => [ //Slug
