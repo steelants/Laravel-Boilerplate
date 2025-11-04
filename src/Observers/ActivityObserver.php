@@ -2,14 +2,15 @@
 
 namespace SteelAnts\LaravelBoilerplate\Observers;
 
-use App\Models\Activity;
+use Illuminate\Database\Eloquent\Model;
+use SteelAnts\LaravelBoilerplate\Models\Activity;
 
 class ActivityObserver
 {
     /**
      * Handle the Activity "created" event.
      */
-    public function creating(Activity $activity): void
+    public function creating(Activity|Model $activity): void
     {
         if (!app()->runningInConsole()) {
             $activity->ip = $this->getIp();
