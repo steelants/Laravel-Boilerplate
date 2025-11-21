@@ -42,4 +42,8 @@
             $active-border: shade-color($gray-200, $btn-active-border-shade-amount)
         );
     }
+
+	@each $color, $value in $table-variants-dark {
+		@include table-variant($color, $value);
+	}
 }

@@ -9,6 +9,25 @@
 ## Preview
 [boilerplate.steelants.cz](https://boilerplate.steelants.cz)
 
+## Change notes
+### 2.3.0
+Now by default modal will show only livewire that have AllowInModal attribute.
+
+```php
+use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
+
+// only logged in users
+#[AllowInModal()]
+class Form extends Component
+
+#[AllowInModal(asGuest: true)]
+class Form extends Component
+
+// only for users with Gate::allows('is-admin')
+#[AllowInModal(ability: 'is-admin')]
+class Form extends Component
+```
+
 #### Tag project
 ```bash
   git checkout main
@@ -37,7 +56,7 @@
 - Light/dark theme
 - Build on Bootstrap and Livewire
 - Quill editor
-  
+
 ## Install
 
 ```bash
@@ -59,7 +78,7 @@ import './boilerplate/boilerplate.js';
 ```
 > [!NOTE]
 > If you need customize any of included js/scss files, don't change files inside boilerplate folder.
-> Instead create new root file boilerplate.scss/js by copying it from boilerplate folder. By changing paths of imported files you can make your custom verison or keep importing from boilerplate. 
+> Instead create new root file boilerplate.scss/js by copying it from boilerplate folder. By changing paths of imported files you can make your custom verison or keep importing from boilerplate.
 > When you update boilerplate package you will need to check changes only in root files boilerplate.scss/js and update your custom version accordingly.
 
 ## Menu Builder
@@ -178,7 +197,7 @@ php artisan make:crud {model name} --full-page-components
 ### Create CRUD Full Page
 Create components in custome namespace
 ```bash
-php artisan make:crud {model name} --namespace=\\Admin 
+php artisan make:crud {model name} --namespace=\\Admin
 ```
 
 ## CRUD parameters

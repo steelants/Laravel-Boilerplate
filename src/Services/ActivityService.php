@@ -2,7 +2,7 @@
 
 namespace SteelAnts\LaravelBoilerplate\Services;
 
-use App\Models\Activity;
+use SteelAnts\LaravelBoilerplate\Models\Activity;
 
 class ActivityService
 {
