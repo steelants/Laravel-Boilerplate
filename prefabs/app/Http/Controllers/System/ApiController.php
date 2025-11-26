@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionNamedType;
+use ReflectionUnionType;
 
 class ApiController extends Controller
 {
@@ -36,12 +38,25 @@ class ApiController extends Controller
                 $reflectionMethod = $reflectionClass->getMethod($method);
             }
 
+			$type = $reflectionMethod?->getReturnType();
+
+			if ($type === null) {
+				$returns = 'NULL';
+			} elseif ($type instanceof ReflectionUnionType) {
+				$returns = collect($type->getTypes())
+					->pluck('name');
+			} elseif ($type instanceof ReflectionNamedType) {
+				$returns = $type->getName();
+			} else {
+				$returns = 'UNKNOWN';
+			}
+
             $routes[] = [
                 "Method"      => $route->methods()[0],
                 "Uri"         => $route->uri(),
                 "Description" => ($reflectionMethod != null ? $this->phpDocsDescription($reflectionMethod) : ""),
                 "Parameters"  => ($reflectionMethod != null ? $this->phpDocsParameters($reflectionMethod) : []),
-                "Returns"     => ($reflectionMethod != null ? ($reflectionMethod->getReturnType() ? $reflectionMethod->getReturnType()->getName() : "NULL") : "NULL" ),
+                "Returns"     => $returns,
             ];
         }
 
