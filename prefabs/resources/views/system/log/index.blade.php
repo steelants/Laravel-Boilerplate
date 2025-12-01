@@ -38,7 +38,7 @@
                                 {{ $item['humanReadableSize'] }}
                             </td>
                             <td class="text-end">
-                                <a href='{{ route('system.log.download', ['file' => $item['fileName']]) }}' class="btn btn-secondary">
+                                <a href='{{ route('system.log.download', ['file' => $item['fileName']]) }}' class="btn btn-primary">
                                     <i class="fa fa-download"></i>
                                 </a>
                                 <a href='{{ route('system.log.delete', ['file' => $item['fileName']]) }}' onclick="return confirm('{{ __('Are you sure?') }}')" class="btn btn-danger">

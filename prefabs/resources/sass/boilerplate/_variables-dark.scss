@@ -21,3 +21,15 @@ $warning-bg-subtle-dark:            shade-color($warning, 60%) !default;
 $danger-bg-subtle-dark:             shade-color($danger, 60%) !default;
 $light-bg-subtle-dark:              $gray-800 !default;
 $dark-bg-subtle-dark:               $gray-500 !default;
+
+
+$table-variants-dark: (
+  "primary":    $primary-bg-subtle-dark,
+  "secondary":  $secondary-bg-subtle-dark,
+  "success":    $success-bg-subtle-dark,
+  "info":       $info-bg-subtle-dark,
+  "warning":    $warning-bg-subtle-dark,
+  "danger":     $danger-bg-subtle-dark,
+  "light":      $light-bg-subtle-dark,
+  "dark":       $dark-bg-subtle-dark,
+) !default;

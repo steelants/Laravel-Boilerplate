@@ -15,6 +15,10 @@ class LogController extends BaseController
 
         $path = storage_path('logs');
 
+		if (!File::exists($path)) {
+			File::makeDirectory($path);
+		}
+
         foreach (File::allFiles($path) as $file) {
             $items[] = [
                 'fileName'          => $file->getFilename(),
