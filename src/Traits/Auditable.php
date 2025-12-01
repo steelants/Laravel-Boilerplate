@@ -24,7 +24,18 @@ trait Auditable
         });
 
         static::updating(function ($model) {
-            self::updatingBy($model);
+			$collection = collect($model->getDirty());
+			if (method_exists($model, 'auditableColumns')) {
+				$collection = $collection->intersectByKeys(array_flip($model->auditableColumns()));
+			}
+
+			if (method_exists($model, 'auditableIgnored')) {
+				$collection = $collection->except($model->auditableIgnored());
+			}
+
+			if ($collection->count() > 0) {
+            	self::updatingBy($model);
+			}
         });
 
         static::deleting(function ($model) {
