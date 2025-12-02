@@ -10,7 +10,9 @@ use Livewire\WithFileUploads;
 use SteelAnts\LaravelBoilerplate\Models\Setting;
 use SteelAnts\LaravelBoilerplate\Types\SettingDataType;
 use SteelAnts\LivewireForm\Livewire\FormComponent;
+use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
 
+#[AllowInModal('is-system-admin')]
 class Form extends FormComponent
 {
 	use WithFileUploads;

@@ -49,11 +49,8 @@ class AbstractHelper
         $files = [];
 
         foreach ($patterns as $pattern) {
-            Log::info(json_encode($pattern));
             foreach (glob($pattern) as $file) {
-                Log::info(json_encode($file));
                 $contents = file_get_contents($file);
-                Log::info(json_encode($contents));
 
                 if (
                     preg_match('/namespace\s+(.+?);/', $contents, $nsMatch) &&
