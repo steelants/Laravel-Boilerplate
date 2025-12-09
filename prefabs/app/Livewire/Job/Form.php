@@ -11,7 +11,9 @@ use SteelAnts\LivewireForm\Livewire\FormComponent;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
+use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
 
+#[AllowInModal('is-system-admin')]
 class Form extends FormComponent
 {
     public string $job;
