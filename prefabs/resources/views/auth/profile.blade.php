@@ -1,7 +1,7 @@
 <x-layout-app>
     <div class="container-xl">
         <div class="page-header">
-            <h1>{{ __('Profile') }}</h1>
+            <h1 class="hide-mobile">{{ __('Profile') }}</h1>
         </div>
 
         <div class="form-group">
