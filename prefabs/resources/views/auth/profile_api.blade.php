@@ -1,7 +1,7 @@
 <x-layout-app>
     <div class="container-xl">
         <div class="page-header">
-            <h1>{{ __('Api Tokens') }}</h1>
+            <h1 class="hide-mobile">{{ __('Api Tokens') }}</h1>
             <div>
                 @if (session()->has('secret'))
                     <code onclick="copyToClipboard('{{ session()->get('secret') }}');" title="{{ __('Copy to clipboard') }}">

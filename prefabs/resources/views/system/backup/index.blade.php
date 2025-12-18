@@ -1,7 +1,7 @@
 <x-dynamic-component :component="$layout">
     <div class="container-xl">
         <div class="page-header">
-            <h1>{{ __('Backup') }}</h1>
+            <h1 class="hide-mobile">{{ __('Backup') }}</h1>
             <div>
                 <a class="btn btn-primary" href="{{ route('system.backup.run') }}">
 					<i class="fas fa-robot me-2"></i>

@@ -1,11 +1,8 @@
 <x-dynamic-component :component="$layout">
     <div class="container-xl">
         <div class="page-header">
-            <h1>{{ __('Logs')}}</h1>
-            <button onclick="confirm('{{ __('Do you really want to clear all logs?') }}') ? window.location.href = '{{ route('system.log.clear') }}' : false" class="btn btn-danger">
-				<i class="me-2 fas fa-trash"></i>
-				<span>{{ __('Clear logs') }}</span>
-			</button>
+            <h1 class="hide-mobile">{{ __('Logs')}}</h1>
+            <button onclick="confirm('{{ __('Do you really want to clear all logs?') }}') ? window.location.href = '{{ route('system.log.clear') }}' : false" class="btn btn-danger">{{ __('Clear logs') }}</button>
         </div>
 
         <div class="row g-3 mb-4">
@@ -41,7 +38,7 @@
                                 {{ $item['humanReadableSize'] }}
                             </td>
                             <td class="text-end">
-                                <a href='{{ route('system.log.download', ['file' => $item['fileName']]) }}' class="btn btn-secondary">
+                                <a href='{{ route('system.log.download', ['file' => $item['fileName']]) }}' class="btn btn-primary">
                                     <i class="fa fa-download"></i>
                                 </a>
                                 <a href='{{ route('system.log.delete', ['file' => $item['fileName']]) }}' onclick="return confirm('{{ __('Are you sure?') }}')" class="btn btn-danger">
