@@ -1,8 +1,11 @@
 <x-dynamic-component :component="$layout">
     <div class="container-xl">
         <div class="page-header">
-             <h1>{{ __('Cache') }} - {{ $cache_driver }}</h1>
-             <button onclick="confirm('{{ __('Do you really want to clear all data in cache?') }}') ? window.location.href = '{{ route('system.cache.clear') }}' : false" class="btn btn-danger">{{ __('Clear cashes') }}</button>
+			<h1>{{ __('Cache') }} - {{ $cache_driver }}</h1>
+			<button onclick="confirm('{{ __('Do you really want to clear all data in cache?') }}') ? window.location.href = '{{ route('system.cache.clear') }}' : false" class="btn btn-danger">
+				<i class="me-2 fas fa-trash"></i>
+				<span>{{ __('Clear cashes') }}</span>
+			</button>
         </div>
 
         <div class="table-responsive">
@@ -27,7 +30,5 @@
                 </tbody>
             </table>
         </div>
-    </div>
-
     </div>
 </x-dynamic-component>

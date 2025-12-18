@@ -3,7 +3,10 @@
         <div class="page-header">
             <h1>{{ __('Backup') }}</h1>
             <div>
-                <a class="btn btn-primary" href="{{ route('system.backup.run') }}"><i class="fas fa-robot me-2"></i><span>{{ __('Start Backup') }}</span></a>
+                <a class="btn btn-primary" href="{{ route('system.backup.run') }}">
+					<i class="fas fa-robot me-2"></i>
+					<span>{{ __('Start Backup') }}</span>
+				</a>
             </div>
         </div>
         <table class="table">
