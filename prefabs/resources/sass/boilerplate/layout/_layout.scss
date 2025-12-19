@@ -14,7 +14,13 @@ body{
     }
 
     @include mobile(){
-        padding-top: 60px;
+        @if $mobile-has-navbar {
+            padding-top: 60px;
+        }
+
+        @if $mobile-has-tabbar {
+            padding-bottom: 60px;
+        }
     }
 }
 
@@ -33,12 +39,13 @@ body{
 .layout-content .content{
     padding-top: 1rem;
     padding-bottom: 1rem;
-	// TODO fix mobile scroll
-    // min-height: 100%;
-    height: 100%;
+
+    @include desktop(){
+        height: 100%;
+    }
 
     @include mobile(){
-        padding-bottom: 100px;
+        // padding-bottom: 100px;
     }
 }
 

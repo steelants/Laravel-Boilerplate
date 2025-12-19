@@ -2,7 +2,7 @@
     display: none;
 }
 
-@include media-breakpoint-down(lg) {
+@include mobile(){
     .layout-nav-mobile{
         display: block;
         position: fixed;
