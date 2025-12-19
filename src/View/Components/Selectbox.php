@@ -20,7 +20,7 @@ class Selectbox extends Component
         public $label = null,
         public $innerLabel = null,
         public $placeholder = null,
-        public $variant = 'select', // select, pill, tags
+        public $variant = null, // select, pill, tags
         public $autoclose = 'outside',
         public $multiple = false,
         public $searchable = null,
@@ -31,6 +31,8 @@ class Selectbox extends Component
         public $id = '',
         public $required = false,
     ) {
+		$this->variant = $multiple ? 'tags' : 'select';
+
         foreach ($options as $id => $value) {
             if (is_array($value)) {
                 $this->options[] = $value;
