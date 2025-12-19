@@ -8,6 +8,8 @@
     border-radius: 100%;
     font-size: .875rem;
     box-shadow: 0 0 0 2px var(--bs-body-bg);
+	flex-shrink: 0;
+    color: var(--bs-body-color);
 
     img{
         display: block;

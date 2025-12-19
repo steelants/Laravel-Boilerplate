@@ -1,20 +1,16 @@
-.hover-group{
-    .hover-hidden{
-        visibility: visible;
+@include desktop(){
+    .hover-group{
+        .hover-hidden{
+            visibility: visible;
+        }
+    }
 
-        @include mobile(){
+    .hover-group:hover{
+        .hover-hidden{
             visibility: hidden;
         }
     }
-}
 
-.hover-group:hover{
-    .hover-hidden{
-        visibility: hidden;
-    }
-}
-
-@include desktop(){
     .hover-group{
         .hover-visible{
             visibility: hidden;
@@ -31,5 +27,14 @@
         .hover-block{
             display: block;
         }
+    }
+}
+
+.hover{
+    &\:text-body-secondary{
+        color: var(--bs-secondary-color) !important;
+    }
+    &\:text-body-tertiary{
+        color: var(--bs-tertiary-color) !important;
     }
 }

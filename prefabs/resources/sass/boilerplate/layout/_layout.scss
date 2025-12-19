@@ -1,6 +1,7 @@
 body{
     height: 100vh;
     padding-top: env(safe-area-inset-top, 0);
+    cursor: default;
 }
 
 #app{
@@ -12,7 +13,7 @@ body{
         flex-grow: 1;
     }
 
-    @include media-breakpoint-down(lg) {
+    @include mobile(){
         padding-top: 60px;
     }
 }
@@ -36,7 +37,7 @@ body{
     // min-height: 100%;
     height: 100%;
 
-    @include media-breakpoint-down(lg) {
+    @include mobile(){
         padding-bottom: 100px;
     }
 }
@@ -44,7 +45,7 @@ body{
 .navbar-main{
     display: none;
 
-    @include media-breakpoint-down(lg) {
+    @include mobile(){
         display: block;
         height: 60px;
         flex-basis: 60px;
@@ -62,22 +63,27 @@ body{
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
-
-	@include media-breakpoint-down(lg) {
-		margin-bottom: 1rem;
-	}
+    margin-bottom: 1rem;
+    gap: .5rem;
 
     h1{
         margin-bottom: 0;
         font-size: $h2-font-size;
-        padding: .25rem 0;
         font-weight: 700;
+        margin-right: auto;
+
+        @include desktop(){
+            padding: .25rem 0;
+        }
     }
 
     h3{
         margin-bottom: 0;
-        padding: .25rem 0;
         font-weight: 700;
+        margin-right: auto;
+
+        @include desktop(){
+            padding: .25rem 0;
+        }
     }
 }

@@ -1,3 +1,7 @@
+.table-actions{
+    text-align: right;
+}
+
 .table thead th{
     border-top: none;
     border-bottom: none;
@@ -5,6 +9,7 @@
     font-weight: 500;
     color: var(--bs-secondary-color);
     background: var(--bs-tertiary-bg);
+    font-size: .75rem;
 
     &:first-child{
         border-radius: $border-radius 0 0 $border-radius;
@@ -45,11 +50,11 @@
 
 .table-selectable tbody tr:hover td{
     cursor: pointer;
-    background: hsl(220, 20%, 99%);
+    background: var(--bs-tertiary-bg);
 }
 
 .table-selectable tbody tr.selected td{
-    background: #f6f5ff;
+    background: var(--bs-tertiary-bg);
 }
 
 .table-selectable .custom-control{
@@ -59,10 +64,17 @@
 .datatable-head-sort{
     cursor: pointer;
     border-radius: 4px;
-    padding: 4px 6px;
+    padding: 4px 2px 4px 6px;
     margin: -4px -6px;
 
     &:hover{
         background: var(--bs-secondary-bg);
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .table-responsive-md td,
+    .table-responsive-md th{
+        white-space: nowrap;
     }
 }

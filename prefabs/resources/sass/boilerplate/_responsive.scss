@@ -4,9 +4,14 @@
     }
 
     .form-control,
+    .form-select,
     .btn{
         font-size: 1rem;
         line-height: 1.5;
+    }
+
+    .ql-editor{
+        font-size: 1rem;
     }
 
     .nav-link{
@@ -20,11 +25,15 @@
 
     .btn-sq{
         width: 2.5rem;
+
+        &.btn-sm{
+            width: 2.25rem;
+        }
     }
 }
 
 @include desktop(){
-    .hide-dektop{
+    .hide-desktop{
         display: none !important;
     }
 }
