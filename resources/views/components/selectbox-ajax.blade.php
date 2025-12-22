@@ -26,7 +26,7 @@
             @endif
 
             <div class="{{ $selectedGroupClass }}">
-                @if($variant == 'select')
+                @if($variant == 'select' || isset($customSelected))
                     <template x-for="(option, index) in renderedOptions" :key="option.id">
                         @isset($customSelected)
                             {{ $customSelected }}
@@ -39,8 +39,6 @@
                             <span x-text="'+' + (selected.length - pills)"></span>
                         </template>
                     @endif
-                @elseif($variant == 'pill')
-                    <span class="badge text-bg-light" x-text="selectedOptionsText"></span>
                 @elseif($variant == 'tags')
                     <template x-for="option in selectedOptions" :key="option.id">
                         <span class="badge text-bg-light">

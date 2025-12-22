@@ -49,4 +49,8 @@
 	@each $color, $value in $table-variants-dark {
 		@include table-variant($color, $value);
 	}
+
+    .dropdown-menu{
+        --#{$prefix}dropdown-header-color: #{$dropdown-dark-header-color};
+    }
 }

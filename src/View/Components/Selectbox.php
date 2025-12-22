@@ -20,11 +20,11 @@ class Selectbox extends Component
         public $label = null,
         public $innerLabel = null,
         public $placeholder = null,
-        public $variant = null, // select, pill, tags
+        public $variant = null, // select, tags
         public $autoclose = 'outside',
         public $multiple = false,
         public $searchable = null,
-        public $pills = 2,
+        public $pills = 10,
         public $class = 'form-select d-flex align-items-center gap-2',
         public $groupClass = '',
         public $selectedGroupClass = 'd-inline-flex flex-wrap gap-1',
