@@ -9,10 +9,13 @@ $prefix: 'bs-' !default;
 }
 
 @mixin mobile(){
-    @include media-breakpoint-down(md) {
+    @include media-breakpoint-down(lg) {
         @content;
     }
 }
+
+$mobile-has-navbar: true !default;
+$mobile-has-tabbar: false !default;
 
 $enable-container-classes: false !default;
 $container-max-widths: (

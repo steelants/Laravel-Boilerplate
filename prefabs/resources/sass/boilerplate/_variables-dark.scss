@@ -22,6 +22,8 @@ $danger-bg-subtle-dark:             shade-color($danger, 60%) !default;
 $light-bg-subtle-dark:              $gray-800 !default;
 $dark-bg-subtle-dark:               $gray-500 !default;
 
+$link-color-dark: #878dff !default;
+$dropdown-dark-header-color: var(--bs-secondary-color);
 
 $table-variants-dark: (
   "primary":    $primary-bg-subtle-dark,

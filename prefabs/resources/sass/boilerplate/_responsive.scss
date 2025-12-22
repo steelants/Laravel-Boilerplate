@@ -4,9 +4,14 @@
     }
 
     .form-control,
+    .form-select,
     .btn{
         font-size: 1rem;
-        line-height: 1.5;
+        line-height: 1.625rem;
+    }
+
+    .ql-editor{
+        font-size: 1rem;
     }
 
     .nav-link{
@@ -14,17 +19,44 @@
     }
 
     .dropdown-item{
-        line-height: 1.5rem;
+        line-height: 1.625rem;
         padding: .5rem;
     }
 
     .btn-sq{
-        width: 2.5rem;
+        width: 2.625rem;
+
+        &.btn-sm{
+            width: 2.375rem;
+        }
+    }
+
+    .nav-item{
+        font-size: 1rem;
+    }
+
+    .nav-item-with-addons .nav-link-title{
+        padding: .625rem 0;
+    }
+
+    .nav-link-ico{
+        font-size: 1rem;
+    }
+
+    .nav-item-with-addons .nav-link-ico{
+        margin-left: 0.75rem;
+        margin-right: 0.75rem;
+    }
+
+    .nav-item .btn.btn-sq{
+        flex-shrink: 0;
+        --bs-btn-padding-y: .5rem;
+        width: 2.75rem;
     }
 }
 
 @include desktop(){
-    .hide-dektop{
+    .hide-desktop{
         display: none !important;
     }
 }

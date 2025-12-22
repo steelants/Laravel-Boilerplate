@@ -21,7 +21,7 @@
 }
 
 .form-group{
-    margin-bottom: 1rem;
+    margin-bottom: .75rem;
 }
 
 select[multiple]{
@@ -39,4 +39,28 @@ select[multiple]{
 
 .form-switch{
     line-height: 1;
+}
+
+.input-group {
+    flex-wrap: nowrap;
+
+    &:not(.has-validation) {
+        > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating),
+        >.dropdown-toggle:nth-last-child(n + 3) {
+            .form-control,
+            .form-select{
+                @include border-end-radius(0);
+            }
+        }
+    }
+
+    &.has-validation {
+        > :nth-last-child(n + 3):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating),
+        >.dropdown-toggle:nth-last-child(n + 4) {
+            .form-control,
+            .form-select{
+                @include border-end-radius(0);
+            }
+        }
+    }
 }

@@ -9,6 +9,9 @@
     --#{$prefix}dark-bg: #{$gray-200};
     --#{$prefix}dark-bg-rgb: #{to-rgb($gray-200)};
 
+    --bs-btn-hover-bg: #{rgba($gray-800, .6)};
+    --bs-btn-active-bg: #{rgba($gray-800, .7)};
+
     .text-bg-dark {
         color: $gray-800 !important;
     }
@@ -46,4 +49,8 @@
 	@each $color, $value in $table-variants-dark {
 		@include table-variant($color, $value);
 	}
+
+    .dropdown-menu{
+        --#{$prefix}dropdown-header-color: #{$dropdown-dark-header-color};
+    }
 }

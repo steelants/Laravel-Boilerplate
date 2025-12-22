@@ -24,16 +24,17 @@ class MenuItemLink extends MenuItem
 
     public function isActive(): bool
     {
-		$fullUrl = request()->path();
+		$fullUrl = trim((request()->path() . '?'. request()->getQueryString()), '?');
+
 		if (preg_match('/livewire/', $fullUrl)) {
 			$fullUrl = request()->headers->get('referer');
 		}
 
-		if (empty($this->parameters)) {
+		if (empty($this->parameters) && request()->getQueryString() === null) {
 			$data = explode(".", $this->route);
-			return (preg_match("/{$data[0]}/", $fullUrl) && (empty($data[1]) || $data[1] == "index")) || rtrim($fullUrl) == rtrim(route($this->route), '/');
+			return (preg_match("/{$data[0]}/", $fullUrl) && (empty($data[1]) || $data[1] == "index")) || trim($fullUrl) == trim(route($this->route, false), '/');
 		}
 
-		return rtrim($fullUrl) == rtrim(route($this->route, $this->parameters), '/');
+		return (trim($fullUrl) == trim(route($this->route, $this->parameters, false), '/'));
     }
 }
