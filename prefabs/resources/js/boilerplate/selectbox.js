@@ -3,7 +3,7 @@ window.initSelectbox = function($wire, property, options, multiple, pills, selec
         selected = selected || [];
         return {
             search: '',
-            selected: property ? $wire.entangle(property) : selected,
+            selected: property ? $wire.entangle(property).live : selected,
             options: options,
             pills: pills,
             get filteredOptions() {
