@@ -41,7 +41,7 @@ body{
     padding-bottom: 1rem;
 
     @include desktop(){
-        height: 100%;
+        min-height: 100%;
     }
 
     @include mobile(){
