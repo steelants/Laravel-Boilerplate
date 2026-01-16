@@ -30,6 +30,7 @@ class DataTable extends DataTableComponent
             'id'    => __('ID'),
             'name'  => __('Name'),
             'email' => __('E-mail'),
+			'totp_force' => __('Enforce MFA')
         ];
     }
 
@@ -68,5 +69,27 @@ class DataTable extends DataTableComponent
     public function edit($id)
     {
         $this->dispatch('openModal', 'user.form', __('Edit user'), ['user_id' => $id]);
+    }
+
+	   public function renderColumnTotpForce($value, $row)
+    {
+        $button = '';
+        if (! empty($value)) {
+            $button = '<i class="fa fa-check-circle text-success"></i>';
+        } else {
+            $button = '<i class="fa fa-times-circle text-danger"></i>';
+        }
+
+        return '<button class="btn btn-link" wire:click="change('.$row['id'].',\'totp_force\')">'.$button.'</button>';
+    }
+
+    public function change($id, $name)
+    {
+        $user = User::where('id', $id)->first();
+        $data = [
+            $name => ! $user->{$name},
+        ];
+        $user->update($data);
+        $this->dispatch('closeModal');
     }
 }
