@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 use SteelAnts\LaravelBoilerplate\Traits\Auditable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use SteelAnts\LaravelBoilerplate\Models\Session;
 
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
