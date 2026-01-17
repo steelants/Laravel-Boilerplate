@@ -16,7 +16,7 @@ return [
     */
 
 	'system_admins' => explode(',', env('APP_SYSTEM_ADMINS', '')),
-	'system_admins_mail' => explode(',', env('APP_SYSTEM_ADMINS_MAIL', '')),
+	'system_admins_mail' => env('APP_SYSTEM_ADMINS_MAIL', '') ? explode(',', env('APP_SYSTEM_ADMINS_MAIL', '')) : '',
 	'backup' => [
 		'database' 		=> (bool) env('BACKUP_DATABASE', true),
 		'storage' 		=> (bool) env('BACKUP_STORAGE', true),
