@@ -3,90 +3,108 @@
 namespace SteelAnts\LaravelBoilerplate\Support;
 
 use Exception;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Route;
 
 class MenuItemLink extends MenuItem
 {
-	protected string $type = 'route';
+    protected string $type = 'route';
 
     public function __construct(public string $title, public string $id, public string $route, public string $icon = '', public array $parameters = [], public array $options = [])
     {
-        if (!Route::has($route)) {
+        if (! Route::has($route)) {
             throw new Exception(__("Route with name: $route dont exists!"), 1);
         }
     }
 
-	public function debug(): void
+    public function isUse(): bool
+    {
+        $current = $this->resolveActiveRoute();
+
+        if (! $current || ! $currentName = $current->getName()) {
+            return false;
+        }
+
+        return $currentName === $this->route || str_starts_with($currentName, $this->route.'.');
+    }
+
+    public function isActive(): bool
+    {
+        $route = $this->resolveActiveRoute();
+
+        if (! $route || $route->getName() !== $this->route) {
+            return false;
+        }
+
+        foreach ($this->parameters as $key => $value) {
+            if ((string) $route->parameter($key) !== (string) $value) {
+                return false;
+            }
+        }
+
+        $queryParams = $this->resolveQueryParameters();
+
+        if (empty($this->options['query']) && count($queryParams) > 0) {
+            return false;
+        }
+
+        // 4️⃣ pokud menu query má, musí sedět
+        if (! empty($this->options['query'])) {
+            foreach ($this->options['query'] as $key => $value) {
+                if (! array_key_exists($key, $queryParams) || (string) $queryParams[$key] !== (string) $value) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+	protected function resolveActiveRoute(): ?\Illuminate\Routing\Route
 	{
-		$path = trim(request()->path(), '/');
-		$query = request()->getQueryString();
-		$fullUrl = $path . ($query ? '?' . $query : '');
+		$current = Route::current();
 
-		if (str_contains($fullUrl, 'livewire')) {
-			$fullUrl = request()->headers->get('referer');
-		}
+        if (! $current) {
+            return null;
+        }
 
-		$routeParts = explode('.', $this->route);
-		$routeSegment = $routeParts[0];
-		$routeAction  = $routeParts[1] ?? 'index';
-		$routePath = trim(route($this->route, $this->parameters, false), '/');
+        if ($current->getName() !== 'livewire.message') {
+            return $current;
+        }
 
-		dump([
-			'menu_route' => $this->route,
-			'route_segment' => $routeSegment,
-			'route_action' => $routeAction,
-			'current_path' => $path,
-			'query_string' => $query,
-			'full_url' => $fullUrl,
-			'route_path' => $routePath,
-		]);
+        $referer = request()->headers->get('referer');
 
-		$regex = '#/(?:[^/]+/)*' . preg_quote($routeSegment, '#') . '(?:/|$)#';
+        if (! $referer) {
+            return $current;
+        }
 
-		dump([
-			'segment_regex' => $regex,
-			'regex_match' => preg_match($regex, '/' . $path),
-			'is_index' => $routeAction === 'index',
-		]);
-	}
+        try {
+            $matchRequest = HttpRequest::create($referer, 'GET');
 
-	public function isUse(): bool
-	{
-		$current = Route::currentRouteName();
+            return app('router')->getRoutes()->match($matchRequest);
+        } catch (\Throwable) {
+            return $current;
+        }
+    }
 
-		if (!$current) {
-			return false;
-		}
+    protected function resolveQueryParameters(): array
+    {
+        if (Route::currentRouteName() === 'livewire.message') {
+            $referer = request()->headers->get('referer');
 
-		return ($current === $this->route || str_starts_with($current, $this->route . '.'));
-	}
+            if ($referer) {
+                $queryString = parse_url($referer, PHP_URL_QUERY);
 
-  	 public function isActive(): bool
-	{
-		if (Route::currentRouteName() !== $this->route) {
-			return false;
-		}
+                if ($queryString) {
+                    parse_str($queryString, $query);
 
-		foreach ($this->parameters as $key => $value) {
-			if ((string) request()->route($key) !== (string) $value) {
-				return false;
-			}
-		}
+                    return $query;
+                }
 
-		if ( empty($this->options['query']) && request()->query->count() > 0 ) {
-			return false;
-		}
+                return [];
+            }
+        }
 
-		// 4️⃣ pokud menu query má, musí sedět
-		if (!empty($this->options['query'])) {
-			foreach ($this->options['query'] as $key => $value) {
-				if ((string) request()->query($key) !== (string) $value) {
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
+        return request()->query->all();
+    }
 }
