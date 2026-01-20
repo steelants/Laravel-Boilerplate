@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 use SteelAnts\LaravelBoilerplate\Traits\Auditable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use SteelAnts\LaravelBoilerplate\Models\Session;
 
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
@@ -29,6 +30,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+		'totp_force',
     ];
 
     /**
@@ -39,6 +41,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+		'totp_secret',
     ];
 
     /**

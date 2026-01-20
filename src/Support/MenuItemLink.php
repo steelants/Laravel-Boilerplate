@@ -3,38 +3,112 @@
 namespace SteelAnts\LaravelBoilerplate\Support;
 
 use Exception;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Route;
 
 class MenuItemLink extends MenuItem
 {
-	protected string $type = 'route';
+    protected string $type = 'route';
 
     public function __construct(public string $title, public string $id, public string $route, public string $icon = '', public array $parameters = [], public array $options = [])
     {
-        if (!Route::has($route)) {
+        if (! Route::has($route)) {
             throw new Exception(__("Route with name: $route dont exists!"), 1);
         }
     }
 
     public function isUse(): bool
     {
-        return Request::is(trim(route($this->route, $this->parameters, false), '/').'*');
+        $current = $this->resolveActiveRoute();
+
+        if (! $current || ! $currentName = $current->getName()) {
+            return false;
+        }
+
+        return $currentName === $this->route || str_starts_with($currentName, $this->route.'.');
     }
 
     public function isActive(): bool
     {
-		$fullUrl = trim((request()->path() . '?'. request()->getQueryString()), '?');
+        $route = $this->resolveActiveRoute();
 
-		if (preg_match('/livewire/', $fullUrl)) {
-			$fullUrl = request()->headers->get('referer');
-		}
+        if (! $route || $route->getName() !== $this->route) {
+            return false;
+        }
 
-		if (empty($this->parameters) && request()->getQueryString() === null) {
-			$data = explode(".", $this->route);
-			return (preg_match("/{$data[0]}/", $fullUrl) && (empty($data[1]) || $data[1] == "index")) || trim($fullUrl) == trim(route($this->route, false), '/');
-		}
+        foreach ($this->parameters as $key => $value) {
+            if ((string) $route->parameter($key) !== (string) $value) {
+                return false;
+            }
+        }
 
-		return (trim($fullUrl) == trim(route($this->route, $this->parameters, false), '/'));
+        $queryParams = $this->resolveQueryParameters();
+
+        if (empty($this->options['query']) && count($queryParams) > 0) {
+            return false;
+        }
+
+        // 4️⃣ pokud menu query má, musí sedět
+        if (! empty($this->options['query'])) {
+            foreach ($this->options['query'] as $key => $value) {
+                if (! array_key_exists($key, $queryParams) || (string) $queryParams[$key] !== (string) $value) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+	protected function resolveActiveRoute(): ?\Illuminate\Routing\Route
+	{
+		return once(function () {
+			$current = Route::current();
+
+			if (! $current) {
+				return null;
+			}
+
+			if ($current->getName() !== 'livewire.message') {
+				return $current;
+			}
+
+			$referer = request()->headers->get('referer');
+
+			if (! $referer) {
+				return $current;
+			}
+
+			try {
+				$matchRequest = HttpRequest::create($referer, 'GET');
+
+				return app('router')->getRoutes()->match($matchRequest);
+			} catch (\Throwable) {
+				return $current;
+			}
+		});
+	}
+
+    protected function resolveQueryParameters(): array
+    {
+        return once(function () {
+            if (Route::currentRouteName() === 'livewire.message') {
+                $referer = request()->headers->get('referer');
+
+                if ($referer) {
+                    $queryString = parse_url($referer, PHP_URL_QUERY);
+
+                    if ($queryString) {
+                        parse_str($queryString, $query);
+
+                        return $query;
+                    }
+
+                    return [];
+                }
+            }
+
+            return request()->query->all();
+        });
     }
 }

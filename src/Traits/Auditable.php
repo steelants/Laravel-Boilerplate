@@ -2,7 +2,7 @@
 
 namespace SteelAnts\LaravelBoilerplate\Traits;
 
-use App\Models\Activity;
+use SteelAnts\LaravelBoilerplate\Models\Activity;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait Auditable
