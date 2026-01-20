@@ -62,49 +62,53 @@ class MenuItemLink extends MenuItem
 
 	protected function resolveActiveRoute(): ?\Illuminate\Routing\Route
 	{
-		$current = Route::current();
+		return once(function () {
+			$current = Route::current();
 
-        if (! $current) {
-            return null;
-        }
+			if (! $current) {
+				return null;
+			}
 
-        if ($current->getName() !== 'livewire.message') {
-            return $current;
-        }
+			if ($current->getName() !== 'livewire.message') {
+				return $current;
+			}
 
-        $referer = request()->headers->get('referer');
+			$referer = request()->headers->get('referer');
 
-        if (! $referer) {
-            return $current;
-        }
+			if (! $referer) {
+				return $current;
+			}
 
-        try {
-            $matchRequest = HttpRequest::create($referer, 'GET');
+			try {
+				$matchRequest = HttpRequest::create($referer, 'GET');
 
-            return app('router')->getRoutes()->match($matchRequest);
-        } catch (\Throwable) {
-            return $current;
-        }
-    }
+				return app('router')->getRoutes()->match($matchRequest);
+			} catch (\Throwable) {
+				return $current;
+			}
+		});
+	}
 
     protected function resolveQueryParameters(): array
     {
-        if (Route::currentRouteName() === 'livewire.message') {
-            $referer = request()->headers->get('referer');
+        return once(function () {
+            if (Route::currentRouteName() === 'livewire.message') {
+                $referer = request()->headers->get('referer');
 
-            if ($referer) {
-                $queryString = parse_url($referer, PHP_URL_QUERY);
+                if ($referer) {
+                    $queryString = parse_url($referer, PHP_URL_QUERY);
 
-                if ($queryString) {
-                    parse_str($queryString, $query);
+                    if ($queryString) {
+                        parse_str($queryString, $query);
 
-                    return $query;
+                        return $query;
+                    }
+
+                    return [];
                 }
-
-                return [];
             }
-        }
 
-        return request()->query->all();
+            return request()->query->all();
+        });
     }
 }
