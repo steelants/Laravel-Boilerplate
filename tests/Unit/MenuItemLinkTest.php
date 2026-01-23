@@ -103,6 +103,23 @@ class MenuItemLinkTest extends TestCase
         $this->assertFalse($item->isActive());
     }
 
+    public function test_is_active_returns_true_with_matching_query_only(): void
+    {
+        Route::middleware('web')->get('/tasks', fn () => 'ok')->name('tasks.index');
+        $this->refreshRouteLookups();
+
+        $item = new MenuItemLink(
+            'Tasks',
+            'tasks',
+            'tasks.index',
+            options: ['query' => ['milestoe' => 1]]
+        );
+
+        $this->get('/tasks?milestoe=1');
+
+        $this->assertTrue($item->isActive());
+    }
+
     private function refreshRouteLookups(): void
     {
         Route::getRoutes()->refreshNameLookups();
