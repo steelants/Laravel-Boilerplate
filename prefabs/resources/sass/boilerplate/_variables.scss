@@ -44,8 +44,8 @@ $blue:    $tw-blue-500 !default;
 $indigo:  $tw-indigo-500 !default;
 $purple:  $tw-purple-500 !default;
 $pink:    $tw-pink-500 !default;
-$red:     $tw-red-500 !default;
-$orange:  $tw-amber-500 !default;
+$red:     $tw-red-600 !default;
+$orange:  $tw-amber-600 !default;
 $yellow:  $tw-yellow-500 !default;
 $green:   $tw-green-500 !default;
 $teal:    $tw-teal-500 !default;
@@ -210,5 +210,12 @@ $spacers: (
 @for $i from 1 through 20 {
     $spacers : map.merge($spacers, (
         $i : 0.25rem * $i
+    ));
+}
+
+@for $i from 1 through 15 {
+    $tmp: 20 + $i * 4;
+    $spacers : map.merge($spacers, (
+        $tmp : 0.25rem * $tmp
     ));
 }
