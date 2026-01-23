@@ -38,7 +38,7 @@ class MenuItemLink extends MenuItem
 		}
 
 		$route = ($currentName === $this->route || str_starts_with($currentName, $this->route.'.'));
-		$url = (route($currentName, absolute:false) == route($this->route , absolute:false) || str_starts_with(route($currentName, absolute:false), route($this->route , absolute:false)));
+		$url = (route($currentName, absolute:false) === route($this->route , absolute:false) || str_starts_with(route($currentName, absolute:false), route($this->route , absolute:false)));
 
 		return ($route && str_ends_with($route, '.index')) || ($url && route($this->route, absolute:false) != '/');
 	}
@@ -49,7 +49,7 @@ class MenuItemLink extends MenuItem
 		$query = $this->resolveQueryParameters();
 
 		$route = ($current->getName() === $this->route );
-		$url = (route($current->getName(), absolute:false) == route($this->route , absolute:false));
+		$url = (route($current->getName(), absolute:false) === route($this->route , absolute:false));
 
 		if (count($this->parameters) == 0 && count($query) == 0){
 			return ($route || $url);
