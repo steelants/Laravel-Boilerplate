@@ -58,10 +58,9 @@ window.initSelectbox = function($wire, property, options, multiple, pills, selec
 				console.log(this.selectedOptions, this.options);
 			},
             pils: pills,
-            filteredOptions() {
-				return this.options;
-                // if (!this.search.trim()) return this.options;
-                // return this.options.filter(option => option.name.toLowerCase().includes(this.search.toLowerCase()));
+            get filteredOptions() {
+                if (!this.search.trim()) return this.options;
+                return this.options.filter(option => option.name.toLowerCase().includes(this.search.toLowerCase()));
             },
             get selectedOptionsText(){
                 let selected = this.selectedOptions;
