@@ -18,6 +18,8 @@ class MenuItemLink extends MenuItem
 	}
 
 	public function debug(){
+		return false;
+
 		return [
 			'current_url' =>route($this->resolveActiveRoute()->getName(), absolute:false),
 			'url' =>route($this->route , absolute:false),
@@ -32,13 +34,15 @@ class MenuItemLink extends MenuItem
 	public function isUse(): bool
 	{
 		$current = $this->resolveActiveRoute();
+		$query = $this->resolveQueryParameters();
+		$parameters = $this->resolveRouteParameters();
 
 		if (! $current || ! $currentName = $current->getName()) {
 			return false;
 		}
 
-		$route = ($currentName === $this->route || str_starts_with($currentName, $this->route.'.'));
-		$url = (route($currentName, absolute:false) === route($this->route , absolute:false) || str_starts_with(route($currentName, absolute:false), route($this->route , absolute:false)));
+		$route = ($currentName == $this->route || str_starts_with($currentName, $this->route.'.'));
+		$url = (route($currentName, ($query + $parameters), false) == route($this->route, absolute:false) || str_starts_with(route($currentName, ($query + $parameters) , false), route($this->route , absolute:false)));
 
 		return ($route && str_ends_with($route, '.index')) || ($url && route($this->route, absolute:false) != '/');
 	}
@@ -47,9 +51,10 @@ class MenuItemLink extends MenuItem
 	{
 		$current = $this->resolveActiveRoute();
 		$query = $this->resolveQueryParameters();
+		$parameters = $this->resolveRouteParameters();
 
-		$route = ($current->getName() === $this->route );
-		$url = (route($current->getName(), absolute:false) === route($this->route , absolute:false));
+		$route = ($current->getName() == $this->route );
+		$url = (route($current->getName(), ($query + $parameters), absolute:false) == route($this->route , absolute:false));
 
 		if (count($this->parameters) == 0 && count($query) == 0){
 			return ($route || $url);
@@ -91,7 +96,6 @@ class MenuItemLink extends MenuItem
 		});
 	}
 
-
 	protected function resolveQueryParameters(): array
 	{
 		return once(function () {
@@ -112,6 +116,13 @@ class MenuItemLink extends MenuItem
 			}
 
 			return request()->query->all();
+		});
+	}
+
+	protected function resolveRouteParameters(): array
+	{
+		return once(function () {
+			return $this->resolveActiveRoute()->parameters();
 		});
 	}
 }
