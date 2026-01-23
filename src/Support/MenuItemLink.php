@@ -8,57 +8,59 @@ use Illuminate\Support\Facades\Route;
 
 class MenuItemLink extends MenuItem
 {
-    protected string $type = 'route';
+	protected string $type = 'route';
 
-    public function __construct(public string $title, public string $id, public string $route, public string $icon = '', public array $parameters = [], public array $options = [])
-    {
-        if (! Route::has($route)) {
-            throw new Exception(__("Route with name: $route dont exists!"), 1);
-        }
-    }
+	public function __construct(public string $title, public string $id, public string $route, public string $icon = '', public array $parameters = [], public array $options = [])
+	{
+		if (! Route::has($route)) {
+			throw new Exception(__("Route with name: $route dont exists!"), 1);
+		}
+	}
 
-    public function isUse(): bool
-    {
-        $current = $this->resolveActiveRoute();
+	public function debug(){
+		return [
+			'current_url' =>route($this->resolveActiveRoute()->getName(), absolute:false),
+			'url' =>route($this->route , absolute:false),
+			'url_match' => ($this->resolveActiveRoute()->getName() === $this->route || str_starts_with($this->resolveActiveRoute()->getName(), $this->route.'.')),
+			'current_route' =>$this->resolveActiveRoute()->getName(),
+			'route' =>$this->route ,
+			'route_match' => ($this->resolveActiveRoute()->getName() == $this->route || str_starts_with($this->resolveActiveRoute()->getName(),$this->route)),
 
-        if (! $current || ! $currentName = $current->getName()) {
-            return false;
-        }
+		];
+	}
 
-        return $currentName === $this->route || str_starts_with($currentName, $this->route.'.');
-    }
+	public function isUse(): bool
+	{
+		$current = $this->resolveActiveRoute();
 
-    public function isActive(): bool
-    {
-        $route = $this->resolveActiveRoute();
+		if (! $current || ! $currentName = $current->getName()) {
+			return false;
+		}
 
-        if (! $route || $route->getName() !== $this->route) {
-            return false;
-        }
+		$route = ($currentName === $this->route || str_starts_with($currentName, $this->route.'.'));
+		$url = (route($currentName, absolute:false) == route($this->route , absolute:false) || str_starts_with(route($currentName, absolute:false), route($this->route , absolute:false)));
 
-        foreach ($this->parameters as $key => $value) {
-            if ((string) $route->parameter($key) !== (string) $value) {
-                return false;
-            }
-        }
+		return ($route && str_ends_with($route, '.index')) || ($url && route($this->route, absolute:false) != '/');
+	}
 
-        $queryParams = $this->resolveQueryParameters();
+	public function isActive(): bool
+	{
+		$current = $this->resolveActiveRoute();
+		$query = $this->resolveQueryParameters();
 
-        if (empty($this->options['query']) && count($queryParams) > 0) {
-            return false;
-        }
+		$route = ($current->getName() === $this->route );
+		$url = (route($current->getName(), absolute:false) == route($this->route , absolute:false));
 
-        // 4️⃣ pokud menu query má, musí sedět
-        if (! empty($this->options['query'])) {
-            foreach ($this->options['query'] as $key => $value) {
-                if (! array_key_exists($key, $queryParams) || (string) $queryParams[$key] !== (string) $value) {
-                    return false;
-                }
-            }
-        }
+		if (count($this->parameters) == 0 && count($query) == 0){
+			return ($route || $url);
+		}
 
-        return true;
-    }
+		if ($route || $url){
+			return ($query == $this->parameters);
+		}
+
+		return False;
+	}
 
 	protected function resolveActiveRoute(): ?\Illuminate\Routing\Route
 	{
@@ -89,26 +91,27 @@ class MenuItemLink extends MenuItem
 		});
 	}
 
-    protected function resolveQueryParameters(): array
-    {
-        return once(function () {
-            if (Route::currentRouteName() === 'livewire.message') {
-                $referer = request()->headers->get('referer');
 
-                if ($referer) {
-                    $queryString = parse_url($referer, PHP_URL_QUERY);
+	protected function resolveQueryParameters(): array
+	{
+		return once(function () {
+			if (Route::currentRouteName() === 'livewire.message') {
+				$referer = request()->headers->get('referer');
 
-                    if ($queryString) {
-                        parse_str($queryString, $query);
+				if ($referer) {
+					$queryString = parse_url($referer, PHP_URL_QUERY);
 
-                        return $query;
-                    }
+					if ($queryString) {
+						parse_str($queryString, $query);
 
-                    return [];
-                }
-            }
+						return $query;
+					}
 
-            return request()->query->all();
-        });
-    }
+					return [];
+				}
+			}
+
+			return request()->query->all();
+		});
+	}
 }
