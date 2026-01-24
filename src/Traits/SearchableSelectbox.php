@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace SteelAnts\LaravelBoilerplate\Traits;
 
 use Illuminate\Database\Eloquent\Collection;
 
