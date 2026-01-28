@@ -69,11 +69,11 @@ class MenuItemLink extends MenuItem
 			return ($route || $url);
 		}
 
-		if (($route || $url) && (count($this->parameters) == count($query))){
+		if ($route || $url){
 			return ($query == $this->parameters);
 		}
 
-		return ($route || $url);
+		return False;
 	}
 
 	protected function resolveActiveRoute(): ?\Illuminate\Routing\Route
