@@ -63,14 +63,18 @@ class MenuItemLink extends MenuItem
 		$parameters = $this->resolveRouteParameters();
 
 		$route = ($current->getName() == $this->route );
-		$url = (route($current->getName(), ($query + $parameters), absolute:false) == route($this->route, ($query + $parameters), absolute:false));
+		$url = (route($current->getName(), ($query + $parameters), absolute:false) == route($this->route, ($query + $parameters) , absolute:false));
 
 		if (count($this->parameters) == 0 && count($query) == 0){
 			return ($route || $url);
 		}
 
-		if ($route || $url){
+		if ((	$route || $url) && (count($this->parameters) == count($query))){
 			return ($query == $this->parameters);
+		}
+
+		if (($route && $url) && count($query) == 0 && str_contains($current->uri(), '{') && str_contains($current->uri(), '}')){
+			return true;
 		}
 
 		return False;
