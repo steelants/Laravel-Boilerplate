@@ -141,7 +141,8 @@ class MenuItemLink extends MenuItem
         });
     }
 
-	protected function matchUrl(bool $ignoreQuery = false): bool {
+	protected function matchUrl(bool $ignoreQuery = false): bool
+	{
 		$current = $this->resolveActiveRoute();
 		$query = $this->resolveQueryParameters();
 		$parameters = $this->resolveRouteParameters();
@@ -156,10 +157,11 @@ class MenuItemLink extends MenuItem
 			return ($routeCurrentNoQuerry == $routeItemNoQuerry || str_starts_with($routeCurrentNoQuerry, $routeItemNoQuerry));
 		}
 
-		return ($routeCurrent  == $routeItem || str_starts_with(route($currentName, ($query + $parameters), false), $routeItem));
+		return ($routeCurrent == $routeItem || str_starts_with(route($currentName, ($query + $parameters), false), $routeItem));
 	}
 
-	protected function matchRoute(bool $ignoreQuery = false): bool {
+	protected function matchRoute(bool $ignoreQuery = false): bool
+	{
 		$current = $this->resolveActiveRoute();
 		$query = $this->resolveQueryParameters();
 		$parameters = $this->resolveRouteParameters();
