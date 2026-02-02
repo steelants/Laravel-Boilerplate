@@ -3,7 +3,7 @@ window.initSelectboxAjax = function($wire, property, options, multiple, pills, s
         selected = selected || [];
         return {
             search: '',
-            selected: property ? $wire.entangle(property) : selected,
+            selected: property ? $wire.entangle(property).live : selected,
             options: options,
             filteredOptions: options,
             pills: pills,
@@ -152,9 +152,9 @@ window.initSelectboxAjax = function($wire, property, options, multiple, pills, s
 }
 window.scrollToSelectedChild = function(parentElement) {
     if (!parentElement) return;
-    
+
     const selectedChild = parentElement.querySelector(':scope .selected');
-    
+
     if (selectedChild) {
         selectedChild.scrollIntoView({
             behavior: 'instant',

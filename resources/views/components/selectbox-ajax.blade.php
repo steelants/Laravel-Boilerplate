@@ -1,7 +1,7 @@
 <div class="dropdown selectbox {{ $groupClass }}"
     x-data="initSelectboxAjax($wire, @js($property ?? null), @js($options), @js($multiple), @js($pills), null, @js($required))"
 	wire:key="{{ md5(json_encode($options)) }}"
->hello
+>
     @isset($label)
         <label class="form-label">{{ $label }}</label>
     @endisset
@@ -35,8 +35,8 @@
                         @endif
                     </template>
                     @if($multiple)
-                        <template x-if="selected.length > pills">
-                            <span x-text="'+' + (selected.length - pills)"></span>
+                        <template x-if="selectedOptions.length > pills">
+                            <span x-text="'+' + (selectedOptions.length - pills)"></span>
                         </template>
                     @endif
                 @elseif($variant == 'tags')

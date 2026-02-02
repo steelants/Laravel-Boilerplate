@@ -49,10 +49,10 @@ trait CRUD
             'static'             => true,
         ], $this->model_component ?? []);
 
-		//TODO: Fix if Better implementation is awailable is discoverable dont work if  extension of FormComponent is Extended form Component
-		if ((isset($this->model_component ) && $this->model_component != [])) {
-			unset($options['livewireComponents']);
-		}
+		//TODO: Fix if Better implementation is available is discoverable dont work if  extension of FormComponent is Extended form Component
+		// if ((isset($this->model_component ) && $this->model_component != [])) {
+		// 	unset($options['livewireComponents']);
+		// }
 
         return view(($this->views['index'] ?? 'boilerplate::crud'), [
 			'layout' 		 => $this->layout ?? config('boilerplate.layouts.default'),

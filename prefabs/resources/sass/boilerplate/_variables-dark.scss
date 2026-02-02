@@ -1,4 +1,4 @@
-$body-color-dark: $gray-300;
+$body-color-dark: $gray-100;
 $body-bg-dark: #000;
 
 $body-secondary-bg-dark:  $gray-800;
@@ -9,7 +9,7 @@ $secondary-text-emphasis-dark:      tint-color($secondary, 70%) !default;
 $success-text-emphasis-dark:        tint-color($success, 50%) !default;
 $info-text-emphasis-dark:           tint-color($info, 50%) !default;
 $warning-text-emphasis-dark:        tint-color($warning, 50%) !default;
-$danger-text-emphasis-dark:         tint-color($danger, 50%) !default;
+$danger-text-emphasis-dark:         tint-color($danger, 60%) !default;
 $light-text-emphasis-dark:          $gray-300 !default;
 $dark-text-emphasis-dark:           $gray-200 !default;
 

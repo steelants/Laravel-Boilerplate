@@ -25,6 +25,11 @@ class MenuItem
         return $this->items ?? null;
     }
 
+	public function debug()
+    {
+		return [];
+	}
+
 	public function dropdown(): Collection|null
     {
         return $this->dropdown ?? null;

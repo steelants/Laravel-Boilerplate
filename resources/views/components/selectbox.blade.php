@@ -34,8 +34,8 @@
                         @endif
                     </template>
                     @if($multiple)
-                        <template x-if="selected.length > pills">
-                            <span x-text="'+' + (selected.length - pills)"></span>
+                        <template x-if="selectedOptions.length > pills">
+                            <span x-text="'+' + (selectedOptions.length - pills)"></span>
                         </template>
                     @endif
                 @elseif($variant == 'tags')

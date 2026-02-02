@@ -149,7 +149,7 @@ class Backup implements ShouldQueue
 		}
 
 
-		if (!empty(config('boilerplate.system_admins_mail'))) {
+		if (!empty(config('boilerplate.system_admins_mail')) && config('boilerplate.system_admins_mail') != "") {
 			Mail::raw(__('Backup Run successfully'), function ($message) {
 				$message->to(config('boilerplate.system_admins_mail'))->subject(_('Backup Run successfully ') . config('app.name'));
 			});
