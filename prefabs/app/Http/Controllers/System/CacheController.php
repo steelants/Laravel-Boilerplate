@@ -49,11 +49,34 @@ class CacheController extends BaseController
 
         //TODO: ADD SUPPORT FOR MEM CASH AND DB
 
+        // OPcache status
+        $opcache_data = [
+            'loaded' => extension_loaded('opcache'),
+            'enabled' => false,
+            'memory_used' => 0,
+            'memory_free' => 0,
+            'validate_timestamps' => false,
+            'revalidate_freq' => 0,
+        ];
+
+        if ($opcache_data['loaded']) {
+            $opcache_status = opcache_get_status();
+            $opcache_data['enabled'] = $opcache_status !== false;
+
+            if ($opcache_data['enabled']) {
+                $opcache_data['memory_used'] = round($opcache_status['memory_usage']['used_memory'] / 1024 / 1024, 2);
+                $opcache_data['memory_free'] = round($opcache_status['memory_usage']['free_memory'] / 1024 / 1024, 2);
+            }
+
+            $opcache_data['validate_timestamps'] = (bool) ini_get('opcache.validate_timestamps');
+            $opcache_data['revalidate_freq'] = (int) ini_get('opcache.revalidate_freq');
+        }
+
         return view('system.cache.index', [
-			'layout' => config('boilerplate.layouts.system'),
+            'layout'       => config('boilerplate.layouts.system'),
             'cache_items'  => $cache_items,
             'cache_driver' => $cache_driver,
-
+            'opcache'      => $opcache_data,
         ]);
     }
 
