@@ -51,7 +51,7 @@ class CacheController extends BaseController
 
         // OPcache status
         $opcache_data = [
-            'loaded' => extension_loaded('opcache'),
+			'loaded' => extension_loaded('opcache') || extension_loaded('Zend OPcache') || function_exists('opcache_get_status'),
             'enabled' => false,
             'memory_used' => 0,
             'memory_free' => 0,
