@@ -1,7 +1,7 @@
 <x-dynamic-component :component="$layout">
     <div class="container-xl">
         <div class="page-header">
-            <h1>{{ __('Api') }}</h1>
+            <h1 class="hide-mobile">{{ __('Api') }}</h1>
         </div>
         <div>
             @foreach ($routes as $id => $route)

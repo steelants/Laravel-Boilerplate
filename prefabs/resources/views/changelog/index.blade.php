@@ -1,7 +1,7 @@
 <x-layout-app>
     <div class="container-xl">
         <div class="page-header">
-            <h1>{{ __('Changelog') }}</h1>
+            <h1 class="hide-mobile">{{ __('Changelog') }}</h1>
         </div>
 
         {!! $content !!}

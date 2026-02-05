@@ -1,6 +1,6 @@
 .snackbar-container {
   position: fixed;
-  top: 65px;
+  bottom: 2rem;
   right: 2rem;
   height: auto;
   // display: flex;
@@ -8,6 +8,10 @@
   // justify-content: center;
   // flex-direction: column;
   z-index: 200;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  align-items: end;
 }
 
 .snackbar {
@@ -16,8 +20,9 @@
   background: var(--bs-body-bg);
   max-width: 360px;
   font-size: 0.875rem;
-  box-shadow: var(--bs-box-shadow);
+  box-shadow: var(--bs-dropdown-box-shadow);
   border: 1px solid rgba(128,128,128,.2);
+  margin-bottom: 0;
 
   &:not(.snackbar-persist){
     margin-right: -400px;
@@ -29,8 +34,8 @@
 
 @include color-mode(dark) {
 	.snackbar {
-		background: var(--bs-tertiary-bg);
-		border: 1px solid rgba(128,128,128,.3);
+        --bs-dropdown-border-color: rgba(115, 115, 115, 0.25);
+        background-color: #0f0f0f;
 	}
 }
 
@@ -54,7 +59,6 @@
 
 .alert-content {
   display: flex;
-  align-items: baseline;
   padding-right: 1rem;
 }
 

@@ -1,13 +1,14 @@
 <div class="dropdown selectbox {{ $groupClass }}"
-    x-data="initSelectbox($wire, @js($property ?? null), @js($options), @js($multiple), @js($pills), null, @js($required))"
+    x-data="initSelectboxAjax($wire, @js($property ?? null), @js($options), @js($multiple), @js($pills), null, @js($required))"
 	wire:key="{{ md5(json_encode($options)) }}"
 >
     @isset($label)
         <label class="form-label">{{ $label }}</label>
     @endisset
     <div class="{{ $class }}" {{ $attributes }}
-        @click="openDropdownAlpine($el)"
+        @click="toggleDropdown"
         data-toggle="custom"
+        x-ref="el"
         data-bs-auto-close="{{ $autoclose }}"
         wire:ignore.self
     >
@@ -57,14 +58,15 @@
     </div>
     <div class="dropdown-menu" tabindex="-1" wire:ignore.self>
         @if($searchable)
-            <input class="dropdown-input" type="text" placeholder="{{ __('Search') }}..." x-model="search">
+            <input class="dropdown-input" type="text" placeholder="{{ __('Search') }}..." x-model="search" x-ref="search" x-on:input.debounce="searchOptions(@js($searchable))">
         @endif
-		<div class="dropdown-items">
+		<div class="dropdown-items" x-ref="items">
 			<template x-for="(option, index) in filteredOptions" :key="option.id">
 				@isset($optionTemplate)
 					{{ $optionTemplate }}
 				@else
 					<div class="dropdown-item"
+                        :class="isSelectedOption(option) ? 'selected' : ''"
 						:tabindex="index"
 						@click="selectOption(option)"
 						@keyup.enter="selectOption(option)"

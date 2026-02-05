@@ -1,7 +1,7 @@
 <x-dynamic-component :component="$layout">
     <div class="container-xl">
         <div class="page-header">
-            <h1>{{ __('Logs')}}</h1>
+            <h1 class="hide-mobile">{{ __('Logs')}}</h1>
             <button onclick="confirm('{{ __('Do you really want to clear all logs?') }}') ? window.location.href = '{{ route('system.log.clear') }}' : false" class="btn btn-danger">{{ __('Clear logs') }}</button>
         </div>
 

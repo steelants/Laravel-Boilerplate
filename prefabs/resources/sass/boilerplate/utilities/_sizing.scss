@@ -2,8 +2,83 @@
 	.w-#{$i}{
 		width: $value;
 	}
+	.min-w-#{$i}{
+		min-width: $value;
+	}
 
 	.h-#{$i}{
 		height: $value;
 	}
+
+	.min-h-#{$i}{
+		min-height: $value;
+	}
+}
+
+.w-xs{
+    width: 20rem;
+}
+.w-sm{
+    width: 24rem;
+}
+.w-md{
+    width: 28rem;
+}
+.w-lg{
+    width: 32rem;
+}
+.w-xl{
+    width: 36rem;
+}
+.w-2xl{
+    width: 42rem;
+}
+.w-3xl{
+    width: 48rem;
+}
+.w-4xl{
+    width: 56rem;
+}
+.w-5xl{
+    width: 64rem;
+}
+.w-6xl{
+    width: 72rem;
+}
+.w-7xl{
+    width: 80rem;
+}
+
+.max-w-xs{
+    max-width: 20rem;
+}
+.max-w-sm{
+    max-width: 24rem;
+}
+.max-w-md{
+    max-width: 28rem;
+}
+.max-w-lg{
+    max-width: 32rem;
+}
+.max-w-xl{
+    max-width: 36rem;
+}
+.max-w-2xl{
+    max-width: 42rem;
+}
+.max-w-3xl{
+    max-width: 48rem;
+}
+.max-w-4xl{
+    max-width: 56rem;
+}
+.max-w-5xl{
+    max-width: 64rem;
+}
+.max-w-6xl{
+    max-width: 72rem;
+}
+.max-w-7xl{
+    max-width: 80rem;
 }

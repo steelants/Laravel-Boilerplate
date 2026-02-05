@@ -2,7 +2,10 @@
 	<div class="container-xl">
 		<div class="page-header">
 			<h1>{{ __("Jobs") }}</h1>
-			<button class="btn btn-danger" onclick="confirm('{{ __('Do you really want to clear all jobs?') }}') ? window.location.href = '{{ route('system.jobs.clear') }}' : false">{{ __("Clear jobs") }}</button>
+			<button class="btn btn-danger" onclick="confirm('{{ __('Do you really want to clear all jobs?') }}') ? window.location.href = '{{ route('system.jobs.clear') }}' : false">
+				<i class="me-2 fas fa-trash"></i>
+				<span>{{ __('Clear jobs') }}</span>
+			</button>
 		</div>
 
 		<h5>{{ __('Start job') }}</h5>

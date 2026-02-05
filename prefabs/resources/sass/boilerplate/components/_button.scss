@@ -1,3 +1,14 @@
+.btn{
+	--bs-btn-disabled-border-color: transparent;
+
+    .fa, .fas, .far, .fal, .fad, .fab,
+    .bi{
+        width: 1rem;
+        height: 1rem;
+        line-height: 1rem;
+    }
+}
+
 .btn-facebook{
     color: white;
     background: #4267B2;
