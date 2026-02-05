@@ -54,7 +54,7 @@ window.initSelectbox = function($wire, property, options, multiple, pills, selec
             selected: property ? $wire.entangle(property).live : selected,
             options: options,
 			async searchOptions() {
-				this.options = await $wire.getOptions(this.search);
+				this.options = await $wire.call(searchable, this.search);
 				console.log(this.selectedOptions, this.options);
 			},
             pils: pills,

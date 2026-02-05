@@ -89,7 +89,7 @@ class Backup implements ShouldQueue
 					}
 
 					$backupFile = $db_backup_path . '/' . $dbName . '_' . $type . '_' . date("Y-m-d", time()) . '.sql';
-					$command = "mysqldump --skip-comments " . $parameters . " -h " . $dbHost . " -u " . $dbUserName . " -p" . $dbPassword . " " . $dbName . " -r $backupFile 2>&1";
+					$command = "mysqldump --skip-ssl --skip-comments " . $parameters . " -h " . $dbHost . " -u " . $dbUserName . " -p" . $dbPassword . " " . $dbName . " -r $backupFile 2>&1";
 					exec($command, $output);
 					Log::info('Backup ' . $dbName . ' db ' . $type);
 					Log::Debug($output);

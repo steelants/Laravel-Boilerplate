@@ -231,7 +231,7 @@ Only thing you need to change is to create renderless function and call searchab
 	#[Renderless]
 	public function getOptions($search = '')
 	{
-		$this->searchableSelectbox($search, User::class, $this->user_id)->toArray();
+		return $this->searchableSelectbox($search, User::class, $this->user_id)->toArray();
 	}
 ```
 
