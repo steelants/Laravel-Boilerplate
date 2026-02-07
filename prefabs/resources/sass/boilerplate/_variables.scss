@@ -214,8 +214,8 @@ $spacers: (
     ));
 }
 
-@for $i from 1 through 15 {
-    $tmp: 20 + $i * 4;
+@for $i from 1 through 30 {
+    $tmp: 20 + $i * 2;
     $spacers : map.merge($spacers, (
         $tmp : 0.25rem * $tmp
     ));
