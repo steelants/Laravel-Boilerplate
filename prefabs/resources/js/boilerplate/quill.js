@@ -37,6 +37,17 @@ const toolbarOptions = [
 ];
 
 function buildMentionSource(mentions = [], tags = []) {
+    const normalizeForSearch = (value) => {
+        if (!value) {
+            return '';
+        }
+
+        return value
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase();
+    };
+
     return function (searchTerm, renderList, mentionChar) {
         const values = mentionChar === '@' ? mentions : tags;
 
@@ -45,9 +56,10 @@ function buildMentionSource(mentions = [], tags = []) {
             return;
         }
 
+        const normalizedSearchTerm = normalizeForSearch(searchTerm);
         const matches = [];
         for (let i = 0; i < values.length; i++) {
-            if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) {
+            if (~normalizeForSearch(values[i].value).indexOf(normalizedSearchTerm)) {
                 matches.push(values[i]);
             }
         }
@@ -66,6 +78,7 @@ function createQuillInstance({
 }) {
     const quill = new Quill(editorEl, {
         theme: 'snow',
+        readOnly: true,
         modules: {
             table: true,
             tableUI: true,
@@ -114,7 +127,9 @@ function createQuillInstance({
         return delta;
     });
 
-    quill.clipboard.dangerouslyPasteHTML(textareaEl.value);
+    if(textareaEl.value){
+        quill.clipboard.dangerouslyPasteHTML(textareaEl.value);
+    }
 
     quill.on('text-change', function () {
         const value = quill.root.innerHTML;
@@ -133,6 +148,8 @@ function createQuillInstance({
     }
 
     editorEl.classList.add('ready');
+
+    quill.enable();
 
     if (containerEl) {
         const loading = containerEl.querySelector('.quill-loading');

@@ -9,10 +9,13 @@ $prefix: 'bs-' !default;
 }
 
 @mixin mobile(){
-    @include media-breakpoint-down(md) {
+    @include media-breakpoint-down(lg) {
         @content;
     }
 }
+
+$mobile-has-navbar: true !default;
+$mobile-has-tabbar: false !default;
 
 $enable-container-classes: false !default;
 $container-max-widths: (
@@ -41,8 +44,8 @@ $blue:    $tw-blue-500 !default;
 $indigo:  $tw-indigo-500 !default;
 $purple:  $tw-purple-500 !default;
 $pink:    $tw-pink-500 !default;
-$red:     $tw-red-500 !default;
-$orange:  $tw-amber-500 !default;
+$red:     $tw-red-600 !default;
+$orange:  $tw-amber-600 !default;
 $yellow:  $tw-yellow-500 !default;
 $green:   $tw-green-500 !default;
 $teal:    $tw-teal-500 !default;
@@ -199,6 +202,7 @@ $list-group-border-color: var(--bs-secondary-bg) !default;
 $list-group-bg: transparent !default;
 
 $enable-negative-margins: true !default;
+
 $spacer: 1rem !default;
 $spacers: (
   0: 0,
@@ -209,3 +213,17 @@ $spacers: (
         $i : 0.25rem * $i
     ));
 }
+
+@for $i from 1 through 30 {
+    $tmp: 20 + $i * 2;
+    $spacers : map.merge($spacers, (
+        $tmp : 0.25rem * $tmp
+    ));
+}
+
+$modal-content-border-width: 1px !default;
+$modal-content-border-color: rgba(115, 115, 115, .25) !default;
+$modal-header-border-width: 0 !default;
+$modal-footer-border-width: 0 !default;
+$modal-inner-padding: $spacer !default;
+$modal-header-padding: $modal-inner-padding $modal-inner-padding 0 $modal-inner-padding !default;

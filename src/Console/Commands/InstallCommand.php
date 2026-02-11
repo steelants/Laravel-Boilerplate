@@ -98,6 +98,8 @@ class InstallCommand extends Command
         $packages['dependencies']['quill-magic-url'] = '^4.2.0';
         $packages['dependencies']['quill-mention'] = '^6.0.2';
         $packages['dependencies']['quill-table-ui'] = '^1.0.7';
+        $packages['devDependencies']['postcss'] = '^8.5.6';
+        $packages['devDependencies']['postcss-hover-media-feature'] = '^1.0.2';
 
         file_put_contents(base_path('package.json'), json_encode($packages, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).PHP_EOL);
     }

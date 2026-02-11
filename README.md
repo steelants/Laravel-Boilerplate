@@ -218,6 +218,23 @@ public function __construct()
 }
 ```
 
+## SelectboxAjax (WIP)
+When you have selectbox with more than 100 options, it's recommended to use dynamic search with livewire (for now only available in selextbox-ajax).
+Alpine will then call method speicified in searchagble parameter.
+```html
+<x-selectbox-ajax :options="$this->getOptions()" searchable="getOptions" property="user_ids" multiple/>
+```
+Only thing you need to change is to create renderless function and call searchableSelectbox method that will handle everything.
+```php
+	use SearchableSelectbox;
+
+	#[Renderless]
+	public function getOptions($search = '')
+	{
+		return $this->searchableSelectbox($search, User::class, $this->user_id)->toArray();
+	}
+```
+
 ## Contributors
 <a href="https://github.com/steelants/Laravel-Boilerplate/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=steelants/Laravel-Boilerplate" />

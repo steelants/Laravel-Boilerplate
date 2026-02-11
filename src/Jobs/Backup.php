@@ -89,7 +89,7 @@ class Backup implements ShouldQueue
 					}
 
 					$backupFile = $db_backup_path . '/' . $dbName . '_' . $type . '_' . date("Y-m-d", time()) . '.sql';
-					$command = "mysqldump --skip-comments " . $parameters . " -h " . $dbHost . " -u " . $dbUserName . " -p" . $dbPassword . " " . $dbName . " -r $backupFile 2>&1";
+					$command = "mysqldump --skip-ssl --skip-comments " . $parameters . " -h " . $dbHost . " -u " . $dbUserName . " -p" . $dbPassword . " " . $dbName . " -r $backupFile 2>&1";
 					exec($command, $output);
 					Log::info('Backup ' . $dbName . ' db ' . $type);
 					Log::Debug($output);
@@ -149,9 +149,9 @@ class Backup implements ShouldQueue
 		}
 
 
-		if (!empty(config('boilerplate.system_admins_mail'))) {
+		if (!empty(config('boilerplate.system_admins_mail')) && config('boilerplate.system_admins_mail') != "") {
 			Mail::raw(__('Backup Run successfully'), function ($message) {
-				$message->to(config('boilerplate.system_admins_mail'))->subject(_('Backup Run successfully ') . config('app.name'));
+				$message->to(config('boilerplate.system_admins_mail'))->subject(__('Backup Run successfully ') . config('app.name'));
 			});
 			Log::info('Sending Notification');
 		}

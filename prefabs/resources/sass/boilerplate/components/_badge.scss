@@ -27,6 +27,7 @@
     border-bottom-right-radius: var(--bs-badge-border-radius);
     background-color: inherit;
     opacity: .5;
+    height: 100%;
 
     &:hover{
         opacity: 1;
@@ -36,4 +37,13 @@
     &>*{
         display: block;
     }
+}
+
+.mention {
+    @extend .badge;
+    display: inline-block;
+    color: var(--bs-body-color);
+    background: var(--bs-secondary-bg);
+    margin-right: 2px;
+    user-select: all;
 }

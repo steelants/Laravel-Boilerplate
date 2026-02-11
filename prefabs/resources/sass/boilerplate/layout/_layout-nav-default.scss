@@ -1,3 +1,7 @@
+.nav{
+    gap: 2px;
+}
+
 .layout-nav,
 .layout-subnav{
     width: 15rem;
@@ -13,7 +17,7 @@
 
     @include desktop(){
         &.nav-collapsed{
-            width: 3.25rem;
+            width: 3.5rem;
         }
     }
 }
@@ -23,11 +27,19 @@
         display: none;
         z-index: 99;
         height: 100%;
-        max-height: calc(100vh - 60px);
         border: none;
-
         position: fixed;
-        top: 60px;
+
+        @if $mobile-has-navbar OR $mobile-has-tabbar {
+            max-height: calc(100vh - 60px);
+        } @else {
+            max-height: 100vh;
+        }
+
+        @if $mobile-has-navbar {
+            top: 60px;
+        }
+
         width: 100%;
     }
 }
@@ -37,13 +49,17 @@
         display: none;
         z-index: 99;
         height: 100%;
-        max-height: calc(100vh - 60px);
         border: none;
-
         position: fixed;
         top: calc(60px + 3rem);
         width: 100%;
         max-width: 100%;
+
+        @if $mobile-has-navbar OR $mobile-has-tabbar {
+            max-height: calc(100vh - 60px);
+        } @else {
+            max-height: 100vh;
+        }
 
         &.open{
             display: flex;
@@ -55,7 +71,7 @@
     .layout-nav.layout-nav-open{
         display: flex !important;
     }
-    .layout-nav-subnav.open{
+    .layout-subnav.open{
         display: block !important;
     }
 }

@@ -12,4 +12,6 @@ import $ from 'jquery';
 window.$ = window.jQuery = $;
 
 import * as bootstrap from 'bootstrap';
+bootstrap.Dropdown.Default.boundary = 'body';
+bootstrap.Dropdown.Default.popperConfig = { strategy: 'fixed' };
 window.bootstrap = bootstrap;

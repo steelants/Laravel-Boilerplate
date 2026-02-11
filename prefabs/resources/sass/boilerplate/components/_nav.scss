@@ -22,8 +22,8 @@
     }
 
     &+.dropdown-menu{
-        width: 100%;
-        max-width: 100%;
+        // width: 100%;
+        // max-width: 100%;
     }
 
     .nav-collapsed &{
@@ -218,7 +218,7 @@
 
 @include desktop(){
     .nav-collapsed{
-        .nav-link{
+        .nav-item:not(.nav-item-with-addons) .nav-link{
             width: 2.5rem;
             position: relative;
             padding: .625rem;
@@ -250,6 +250,13 @@
 
         .nav-item-with-addons .nav-link-ico{
             margin: 0;
+        }
+
+        .nav-item-with-addons .nav-link a{
+            width: 2.5rem;
+            position: relative;
+            padding: .625rem;
+            flex-shrink: 0;
         }
     }
 
