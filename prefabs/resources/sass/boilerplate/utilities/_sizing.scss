@@ -19,6 +19,13 @@
 	.max-h-#{$i}{
 		max-height: $value !important;
 	}
+    .basis-#{$i}{
+        flex-basis: $value !important;
+    }
+}
+
+.h-dvh{
+    height: 100dvh;
 }
 
 $percentages: (
