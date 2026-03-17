@@ -1,17 +1,39 @@
 @each $i, $value in $spacers{
 	.w-#{$i}{
-		width: $value;
+		width: $value !important;
 	}
 	.min-w-#{$i}{
-		min-width: $value;
+		min-width: $value !important;
+	}
+	.max-w-#{$i}{
+		max-width: $value !important;
 	}
 
 	.h-#{$i}{
-		height: $value;
+		height: $value !important;
 	}
 
 	.min-h-#{$i}{
-		min-height: $value;
+		min-height: $value !important;
+	}
+	.max-h-#{$i}{
+		max-height: $value !important;
+	}
+}
+
+$percentages: (
+  25: 25%,
+  50: 50%,
+  75: 75%,
+  100: 100%,
+) !default;
+
+@each $i, $value in $percentages{
+	.w-#{$i}p{
+		width: $value !important;
+	}
+	.h-#{$i}p{
+		width: $value !important;
 	}
 }
 

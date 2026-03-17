@@ -11,8 +11,4 @@ class SubscriptionController extends BaseController
 {
 	use CRUD, SystemPage;
 	public string $model = Subscription::class;
-
-	public function __construct() {
-		$this->layout = config('boilerplate.layouts.system');
-	}
 }

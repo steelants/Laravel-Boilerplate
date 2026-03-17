@@ -14,7 +14,7 @@ window.initSelectboxAjax = function($wire, property, options, multiple, pills, s
                 }
 
                 if(typeof searchable == 'string'){
-                    this.filteredOptions = await $wire.getOptions(this.search);
+                    this.filteredOptions = await $wire.call(searchable, this.search);
 
                     this.options = Array.from([...this.options, ...this.filteredOptions]
                         .reduce((m, o) => m.set(o.id, o), new Map)
@@ -93,7 +93,7 @@ window.initSelectboxAjax = function($wire, property, options, multiple, pills, s
                 }
 
                 if(typeof searchable == 'string'){
-                    this.filteredOptions = await $wire.getOptions(this.search);
+                    this.filteredOptions = await $wire.call(searchable, this.search);
 
                     this.options = Array.from([...this.options, ...this.filteredOptions]
                         .reduce((m, o) => m.set(o.id, o), new Map)
