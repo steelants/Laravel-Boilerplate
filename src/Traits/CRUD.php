@@ -16,6 +16,7 @@ trait CRUD
 
 	// public string $layout = "layout-app";
 	public array $data = [];
+    public $headerButtons = null;
 
 	public function getRouteRoot(string $model, string $route): string
     {
@@ -47,6 +48,7 @@ trait CRUD
             'livewireComponents' => $this->getRouteRoot($model, 'form'),
             'title'              => __('Create ' . Str::of($this->loadModel($request))->headline()->lower()->toString()),
             'static'             => true,
+            'headerButtons' => $this->headerButtons ?? null,
         ], $this->model_component ?? []);
 
 		//TODO: Fix if Better implementation is available is discoverable dont work if  extension of FormComponent is Extended form Component

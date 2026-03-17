@@ -140,13 +140,22 @@ class Form extends FormComponent
 		$class = '\\App\\Jobs\\' . $job;
         if (!class_exists($class)){
 			$class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' . $job;
+			if (!class_exists($class)){
+				$class = '\\SteelAnts\\LaravelBoilerplate\\Dashboard\\Jobs\\' .  $this->job;
+			}
         }
 
         $reflection = new ReflectionClass($class);
         $this->note = $reflection->getDocComment();
         $params = $reflection->getConstructor()->getParameters();
         foreach ($params as $param) {
-			$typeClass = $param->getType()?->getName();
+            $type = $param->getType();
+            if ($type instanceof \ReflectionUnionType) {
+                $nonString = array_filter($type->getTypes(), fn($t) => $t->getName() !== 'string');
+                $typeClass = !empty($nonString) ? reset($nonString)->getName() : $type->getTypes()[0]->getName();
+            } else {
+                $typeClass = $type?->getName();
+            }
 
             $this->job_parameters[$param->name] = [
 				"type" => $typeClass
@@ -170,6 +179,9 @@ class Form extends FormComponent
         $class = '\\App\\Jobs\\' . $this->job;
         if (!class_exists($class)){
             $class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' .  $this->job;
+			if (!class_exists($class)){
+				$class = '\\SteelAnts\\LaravelBoilerplate\\Dashboard\\Jobs\\' .  $this->job;
+			}
         }
 
         if (!empty($this->job_parameters) && count($this->job_parameters) > 0) {

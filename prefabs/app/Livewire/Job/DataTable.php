@@ -72,6 +72,14 @@ class DataTable extends DataTableComponent
     {
         if ($this->failed) {
             return [
+				[
+                    'type'        => "livewire",
+                    'action'      => "trace",
+                    'parameters'  => $item['uuid'],
+                    'text'        => __("Trace"),
+                    'actionClass' => '',
+                    'iconClass'   => 'fas fa-bug',
+                ],
                 [
                     'type'        => "livewire",
                     'action'      => "retry",
@@ -101,7 +109,13 @@ class DataTable extends DataTableComponent
         Job::find($job_id)->delete();
     }
 
-    public function retry($job_uuid)
+    public function trace($job_uuid)
+    {
+		#Gate::authorize('is-admin');
+		$this->dispatch('openModal', 'job.trace', __('Trace'), ['job_uuid' => $job_uuid]);
+    }
+
+	public function retry($job_uuid)
     {
 		#Gate::authorize('is-admin');
         Artisan::call('queue:retry', ['id' => [$job_uuid]]);
