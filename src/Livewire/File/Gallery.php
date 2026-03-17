@@ -111,7 +111,7 @@ class Gallery extends Component
         return view('boilerplate::livewire.file.gallery');
     }
 
-    private function refreshFiles()
+    protected function refreshFiles()
     {
 		if (!empty($this->model)) {
 			$files = $this->model->refresh()->files()->get();

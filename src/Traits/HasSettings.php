@@ -9,7 +9,7 @@ trait HasSettings
 {
     public function settings(): MorphMany
     {
-        return $this->morphMany(Setting::class, 'settable');
+        return $this->morphMany(config('boilerplate.models.setting', Setting::class), 'settable');
     }
 
 	public function getSettings($key, $default = null)
