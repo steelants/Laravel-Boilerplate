@@ -38,13 +38,6 @@ class BoilerplateServiceProvider extends ServiceProvider
 		Livewire::component('boilerplate.file.gallery', Gallery::class);
 		Livewire::component('boilerplate.setting.form', Form::class);
 
-        Blade::directive('attrs', function ($expression) {
-            return "<?php
-                \$__bag = new \\Illuminate\\View\\ComponentAttributeBag({$expression} ?? []);
-                echo \$__bag->isNotEmpty() ? e(\$__bag) : '';
-            ?>";
-        });
-
         if ($this->app->runningInConsole()) {
             $this->bootConsole();
         }

@@ -14,12 +14,12 @@ trait HasSettings
 
 	public function getSettings($key, $default = null)
     {
-         $value = $this->settings()->where('index', $key)->get();
-        if (empty($value)){
+        $value = $this->settings()->where('index', $key)->get();
+        if ($value->isEmpty()) {
             return $default;
         }
 
-        if (count($value) == 1){
+        if ($value->count() == 1){
             return $value->first()->value;
         }
 
