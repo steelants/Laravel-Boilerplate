@@ -5,7 +5,9 @@ namespace App\Livewire\User;
 use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
 
+#[AllowInModal('is-system-admin')]
 class Form extends Component
 {
     public $user_id;

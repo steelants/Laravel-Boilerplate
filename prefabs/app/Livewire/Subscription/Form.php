@@ -5,7 +5,9 @@ namespace App\Livewire\Subscription;
 use SteelAnts\LaravelBoilerplate\Models\Subscription;
 use Livewire\Component;
 use SteelAnts\LaravelBoilerplate\Types\SubscriptionTier;
+use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
 
+#[AllowInModal('is-system-admin')]
 class Form extends Component
 {
     public $model;
