@@ -15,11 +15,12 @@ use Laravel\Sanctum\HasApiTokens;
 use SteelAnts\LaravelBoilerplate\Traits\Auditable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use SteelAnts\LaravelBoilerplate\Models\Session;
+use SteelAnts\LaravelBoilerplate\Traits\SupportSystemAdmins;
 
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens, Auditable, HasSettings;
+    use HasFactory, Notifiable, HasApiTokens, Auditable, HasSettings, SupportSystemAdmins;
 
     /**
      * The attributes that are mass assignable.
@@ -55,13 +56,6 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
         ];
-    }
-
-    protected function isSystemAdmin(): Attribute
-    {
-        return Attribute::make(
-            get: fn() => in_array($this->id, config('boilerplate.system_admins')),
-        )->shouldCache();
     }
 
     protected function limitationSetting(): Attribute
