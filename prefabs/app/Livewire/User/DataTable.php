@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Gate;
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use SteelAnts\DataTable\Traits\UseDatabase;
+use SteelAnts\DataTable\Traits\UseDatabaseEloquent;
 use SteelAnts\LaravelBoilerplate\Traits\HasUsersPerPage;
 
 class DataTable extends DataTableComponent
 {
     use HasUsersPerPage;
-    use UseDatabase;
+	use UseDatabaseEloquent;
 
     public $listeners = ['userAdded' => '$refresh'];
 
@@ -72,6 +73,14 @@ class DataTable extends DataTableComponent
         ];
     }
 
+	public function renderColumnName(mixed $value, $row): string
+    {
+        if (!$row->isSystemAdmin) {
+            return e($value);
+        }
+
+        return e($value) . ' <span class="badge text-bg-danger ms-1">' . __('System Admin') . '</span>';
+    }
     public function renderColumnTotpForce($value, $row): string
     {
         $button = !empty($value)
