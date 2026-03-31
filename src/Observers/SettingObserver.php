@@ -2,8 +2,8 @@
 
 namespace SteelAnts\LaravelBoilerplate\Observers;
 
-use App\Types\SettingDataType;
 use Carbon\Carbon;
+use SteelAnts\LaravelBoilerplate\Types\SettingDataType;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use SteelAnts\LaravelBoilerplate\Models\File as ModelsFile;
