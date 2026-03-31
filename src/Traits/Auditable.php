@@ -44,7 +44,7 @@ trait Auditable
 			array_merge(
 				method_exists($model, 'auditableIgnored') ? $model->auditableIgnored() : [],
 				$model->getHidden(),
-				$explicit ? $dirty->keys()->diff($explicit)->all() : []
+				($explicit ? $dirty->keys()->diff($explicit)->all() : [])
 			),
 			$explicit
 		);
