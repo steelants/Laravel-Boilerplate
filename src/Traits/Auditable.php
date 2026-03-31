@@ -4,6 +4,7 @@ namespace SteelAnts\LaravelBoilerplate\Traits;
 
 use SteelAnts\LaravelBoilerplate\Models\Activity;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
 
 trait Auditable
 {
@@ -19,21 +20,13 @@ trait Auditable
         if (app()->runningInConsole()) {
             return;
         }
+
         static::created(function ($model) {
             self::createdBy($model);
         });
 
         static::updating(function ($model) {
-			$collection = collect($model->getDirty());
-			if (method_exists($model, 'auditableColumns')) {
-				$collection = $collection->intersectByKeys(array_flip($model->auditableColumns()));
-			}
-
-			if (method_exists($model, 'auditableIgnored')) {
-				$collection = $collection->except($model->auditableIgnored());
-			}
-
-			if ($collection->count() > 0) {
+			if (self::filterAuditableColumns($model)->isNotEmpty()) {
             	self::updatingBy($model);
 			}
         });
@@ -42,6 +35,22 @@ trait Auditable
             self::deletingBy($model);
         });
     }
+
+	protected static function filterAuditableColumns($model): Collection
+	{
+		$dirty = collect($model->getDirty());
+		$explicit = method_exists($model, 'auditableColumns') ? $model->auditableColumns() : [];
+		$ignored = array_diff(
+			array_merge(
+				method_exists($model, 'auditableIgnored') ? $model->auditableIgnored() : [],
+				$model->getHidden(),
+				$explicit ? $dirty->keys()->diff($explicit)->all() : []
+			),
+			$explicit
+		);
+
+		return $dirty->except($ignored);
+	}
 
 	protected static function createdBy($model)
     {
