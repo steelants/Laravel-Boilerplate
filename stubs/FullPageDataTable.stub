@@ -11,7 +11,7 @@ class DataTable extends DataTableComponent
     use UseDatabase;
 
     public $listeners = [
-        '{{model_camel_case}}Added' => '$refresh',
+        '{{model_camel_case}}Saved' => '$refresh',
         'closeModal' => '$refresh',
     ];
 

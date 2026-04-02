@@ -34,13 +34,48 @@ php artisan make:crud {Model}
     [--namespace=/]          # Sub-namespace for controller and Livewire components
     [--force]                # Overwrite existing files
     [--full-page-components] # Generate form as a full-page Livewire component
+    [--advanced]             # Generate a fully customizable Form with individual properties and blade
+    [--tests]                # Generate a Pest feature test file for the CRUD
 ```
 
 ### What it generates
 - `App\Http\Controllers\{Namespace}\{Model}Controller` — uses `CRUD` or `CRUDFullPage` trait
-- `App\Livewire\{Namespace}\{Model}\Form` — Livewire form component
+- `App\Livewire\{Namespace}\{Model}\Form` — Livewire form component (see modes below)
 - `App\Livewire\{Namespace}\{Model}\DataTable` — Livewire data table component
-- Routes (resource-style)
+- Routes (appended to `routes/web.php`)
+- `tests/Feature/{Namespace}/{Model}CrudTest.php` — Pest feature test (only with `--tests`)
+
+### Form modes
+
+**Default (no flag)** — minimal boilerplate, powered by `steelants/livewire-form`:
+```php
+class Form extends FormComponent
+{
+    use HasModel;
+    public $modelClass = Post::class;
+    // only rules() and labels() needed — mount/store/update handled automatically
+}
+```
+- `$properties` array stores all field values
+- Validation rules use `properties.field_name` prefix
+- `HasModel::submit()` handles create vs. update automatically
+- `HasModel::getOptions()` auto-resolves select options for `_id` relation fields
+- Blade loops over `$this->fields` using `<x-form-components::field>`
+
+**`--advanced`** — fully explicit, easy to customize:
+```php
+class Form extends Component
+{
+    public $model;
+    public string $name;
+    public string $action = 'store';
+    // mount(), store(), update(), render() all generated explicitly
+}
+```
+- Individual public properties per fillable field
+- Explicit `mount($modelId)`, `store()`, `update()` methods
+- Custom Blade with per-field `<x-form::input>`, `<x-form::select>`, etc.
+- Use when you need direct access to properties or non-standard form logic
 
 ### Controller traits
 
@@ -69,6 +104,19 @@ class PostController extends Controller
     // adds form() method that renders a separate full-page view
 }
 ```
+
+### Generated Pest test (`--tests`)
+
+File: `tests/Feature/{Namespace}/{Model}CrudTest.php`
+
+Covers:
+- `guest is redirected from index` — unauthenticated GET → 302 to login
+- `authenticated user can view index` — authenticated GET → 200
+- `authenticated user can create {model}` — Livewire `Form::class`, `call('store')`, `assertDatabaseHas`
+- `authenticated user can update {model}` — mounts `Form` with `['modelId' => $record->id]`
+- `authenticated user can delete {model}` — Livewire `DataTable::class`, `call('remove', $id)`, `assertDatabaseMissing`
+
+Test values are auto-generated from model casts (`string` → `'test string'`, `integer` → `1`, `boolean` → `false`, `date` → `'2024-01-01'`). Fields ending in `_id` get a `// TODO` comment — replace with the related factory.
 
 ---
 
