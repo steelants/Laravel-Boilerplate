@@ -2,10 +2,10 @@
 
 namespace App\Livewire\Job;
 
-use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
+use SteelAnts\DataTable\Livewire\DataTableComponent;
 use SteelAnts\DataTable\Traits\UseDatabase;
 use SteelAnts\LaravelBoilerplate\Models\FailedJob;
 use SteelAnts\LaravelBoilerplate\Models\Job;
@@ -15,36 +15,19 @@ class DataTable extends DataTableComponent
     use UseDatabase;
 
     public bool $failed = false;
-	public $listeners = [
-		'jobAdded'   => '$refresh',
-		'closeModal' => '$refresh',
-	];
+
+    public $listeners = [
+        'jobAdded'   => '$refresh',
+        'closeModal' => '$refresh',
+    ];
 
     public function query(): Builder
     {
         if ($this->failed) {
             return FailedJob::query();
         }
+
         return Job::query();
-    }
-
-    public function headers(): array
-    {
-        if ($this->failed) {
-            return [
-                'uuid'      => __("UUID"),
-                'queue'     => __("Queue"),
-                'name'      => __("Name"),
-                'failed_at' => __("Failed At"),
-            ];
-        }
-
-        return [
-            'uuid'         => __("UUID"),
-            'queue'        => __("Queue"),
-            'name'         => __("Name"),
-            'available_at' => __("Available At"),
-        ];
     }
 
     public function row(Job|FailedJob $row): array
@@ -54,29 +37,56 @@ class DataTable extends DataTableComponent
                 'id'        => $row->id,
                 'uuid'      => $row->payload['uuid'],
                 'name'      => $row->payload['displayName'],
+                'queue'     => '[' . $row->connection . '] ' . $row->queue,
                 'failed_at' => $row->failed_at,
-                'queue'     => '['. $row->connection.'] ' . $row->queue,
             ];
         }
 
         return [
             'id'           => $row->id,
             'uuid'         => $row->payload['uuid'],
-            'name'        => $row->payload['displayName'],
+            'name'         => $row->payload['displayName'],
+            'queue'        => '[' . $row->connection . '] ' . $row->queue,
             'available_at' => $row->available_at,
-            'queue'        =>  '['. $row->connection.'] ' . $row->queue,
         ];
     }
 
-    public function actions($item)
+    public function headers(): array
+    {
+        if ($this->failed) {
+            return [
+                'uuid'      => __('UUID'),
+                'queue'     => __('Queue'),
+                'name'      => __('Name'),
+                'failed_at' => __('Failed At'),
+            ];
+        }
+
+        return [
+            'uuid'         => __('UUID'),
+            'queue'        => __('Queue'),
+            'name'         => __('Name'),
+            'available_at' => __('Available At'),
+        ];
+    }
+
+    public function actions($item): array
     {
         if ($this->failed) {
             return [
                 [
-                    'type'        => "livewire",
-                    'action'      => "retry",
+                    'type'        => 'livewire',
+                    'action'      => 'trace',
                     'parameters'  => $item['uuid'],
-                    'text'        => __("Retry"),
+                    'text'        => __('Trace'),
+                    'actionClass' => '',
+                    'iconClass'   => 'fas fa-bug',
+                ],
+                [
+                    'type'        => 'livewire',
+                    'action'      => 'retry',
+                    'parameters'  => $item['uuid'],
+                    'text'        => __('Retry'),
                     'actionClass' => '',
                     'iconClass'   => 'fas fa-sync',
                 ],
@@ -85,25 +95,52 @@ class DataTable extends DataTableComponent
 
         return [
             [
-                'type'        => "livewire",
-                'action'      => "stop",
+                'type'        => 'livewire',
+                'action'      => 'runNow',
                 'parameters'  => $item['id'],
-                'text'        => __("Stop"),
+                'text'        => __('Run now'),
                 'actionClass' => '',
-                'iconClass'   => 'fas fa-stop',
+                'iconClass'   => 'fas fa-play',
+            ],
+            [
+                'type'        => 'livewire',
+                'action'      => 'stop',
+                'parameters'  => $item['id'],
+                'text'        => __('Delete'),
+                'actionClass' => '',
+                'iconClass'   => 'fas fa-trash',
             ],
         ];
     }
 
+    public function runNow(int $jobId): void
+    {
+        Gate::authorize('is-system-admin');
+        $job = Job::find($jobId);
+        if (!$job) {
+            return;
+        }
+
+        $command = unserialize($job->payload['data']['command']);
+        app()->call([$command, 'handle']);
+        $job->delete();
+    }
+
     public function stop($job_id)
     {
-		#Gate::authorize('is-admin');
+        Gate::authorize('is-system-admin');
         Job::find($job_id)->delete();
+    }
+
+    public function trace($job_uuid)
+    {
+        Gate::authorize('is-system-admin');
+        $this->dispatch('openModal', 'job.trace', __('Trace'), ['job_uuid' => $job_uuid]);
     }
 
     public function retry($job_uuid)
     {
-		#Gate::authorize('is-admin');
+        Gate::authorize('is-system-admin');
         Artisan::call('queue:retry', ['id' => [$job_uuid]]);
     }
 }

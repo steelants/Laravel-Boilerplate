@@ -2,79 +2,101 @@
 
 namespace App\Livewire\Subscription;
 
+use Illuminate\Support\Facades\Gate;
+use Livewire\Attributes\Computed;
 use SteelAnts\LaravelBoilerplate\Models\Subscription;
-use Livewire\Component;
 use SteelAnts\LaravelBoilerplate\Types\SubscriptionTier;
+use SteelAnts\LivewireForm\Livewire\FormComponent;
+use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
 
-class Form extends Component
+#[AllowInModal('is-system-admin')]
+class Form extends FormComponent
 {
     public $model;
-    public $tier;
-    public $valid_to;
-
-    public $tiers;
-    public $action = 'store';
 
     protected function rules()
     {
         return [
-            'tier'     => 'required|integer|min:1',
-            'valid_to' => 'required|date',
+            'properties.tier'     => 'required|integer|min:1',
+            'properties.valid_to' => 'required|date',
         ];
+    }
+
+    #[Computed()]
+    public function fields()
+    {
+        return ['tier', 'valid_to'];
+    }
+
+    public function properties()
+    {
+        if (!empty($this->model)) {
+            $sub = Subscription::find($this->model);
+            return [
+                'tier'     => $sub->tier,
+                'valid_to' => $sub->valid_to->format('Y-m-d'),
+            ];
+        }
+
+        return [
+            'tier'     => '',
+            'valid_to' => '',
+        ];
+    }
+
+    #[Computed()]
+    public function types()
+    {
+        return [
+            'tier'     => 'select',
+            'valid_to' => 'date',
+        ];
+    }
+
+    #[Computed()]
+    public function labels()
+    {
+        return [
+            'tier'     => __('Tier'),
+            'valid_to' => __('Valid To'),
+        ];
+    }
+
+    public function tier_options(): array
+    {
+        return SubscriptionTier::getNames();
     }
 
     public function mount(?int $model = null)
     {
-        $this->tiers = SubscriptionTier::getNames();
-
         if (!empty($model)) {
-            $sub = Subscription::find($model);
-            if (empty($sub)) {
-                return;
-            }
-
             $this->model = $model;
-            $this->tier = $sub->tier;
-            $this->valid_to = $sub->valid_to->format('Y-m-d');
-            $this->action = 'update';
-        }
-    }
-
-    public function render()
-    {
-        return view('livewire.subscription.form');
-    }
-
-    public function store()
-    {
-        $validatedData = $this->validate();
-
-        Subscription::create($validatedData);
-
-        $this->dispatch('close-modal');
-        $this->dispatch('snackbar', ['message' => __('Item successfully created'), 'type' => 'success', 'icon' => 'fas fa-check']);
-
-        $this->dispatch('subscriptionRefresh');
-
-        $this->reset('tier');
-        $this->reset('valid_to');
-    }
-
-    public function update()
-    {
-        $validatedData = $this->validate();
-
-        $sub = Subscription::find($this->model);
-        if (!empty($sub)) {
-            $sub->update($validatedData);
         }
 
+        parent::mount();
+    }
+
+    public function submit(): bool
+    {
+        Gate::authorize('is-system-admin');
+
+        if (!empty($this->model)) {
+            $sub = Subscription::find($this->model);
+            if (!empty($sub)) {
+                $sub->update($this->properties);
+            }
+            $this->dispatch('snackbar', ['message' => __('Item successfully updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        } else {
+            Subscription::create($this->properties);
+            $this->dispatch('snackbar', ['message' => __('Item successfully created'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        }
+
+        return true;
+    }
+
+    public function onSuccess()
+    {
         $this->dispatch('close-modal');
-        $this->dispatch('snackbar', ['message' => __('Item successfully updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
-
         $this->dispatch('subscriptionRefresh');
-
-        $this->reset('tier');
-        $this->reset('valid_to');
     }
 }

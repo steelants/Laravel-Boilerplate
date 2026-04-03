@@ -2,10 +2,10 @@
 
 namespace App\Livewire\Subscription;
 
-use SteelAnts\LaravelBoilerplate\Models\Subscription;
-use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
+use SteelAnts\DataTable\Livewire\DataTableComponent;
 use SteelAnts\DataTable\Traits\UseDatabase;
+use SteelAnts\LaravelBoilerplate\Models\Subscription;
 use SteelAnts\LaravelBoilerplate\Types\SubscriptionTier;
 
 class DataTable extends DataTableComponent
@@ -31,20 +31,20 @@ class DataTable extends DataTableComponent
     public function headers(): array
     {
         return [
-            "id" => __('ID'),
-            "tier" => __('Tier'),
-            "valid_to" => __('Valid to'),
+            'id'       => __('ID'),
+            'tier'     => __('Tier'),
+            'valid_to' => __('Valid to'),
         ];
     }
 
-    public function actions($item)
+    public function actions($item): array
     {
         return [
             [
                 'type'       => "livewire",
                 'action'     => "edit",
-                'text'       => "edit",
                 'parameters' => $item['id'],
+                'text'       => __("Edit"),
             ],
         ];
     }

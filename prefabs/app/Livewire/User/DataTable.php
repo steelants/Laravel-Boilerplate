@@ -3,15 +3,17 @@
 namespace App\Livewire\User;
 
 use App\Models\User;
-use SteelAnts\DataTable\Livewire\DataTableComponent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Gate;
+use SteelAnts\DataTable\Livewire\DataTableComponent;
 use SteelAnts\DataTable\Traits\UseDatabase;
+use SteelAnts\DataTable\Traits\UseDatabaseEloquent;
 use SteelAnts\LaravelBoilerplate\Traits\HasUsersPerPage;
 
 class DataTable extends DataTableComponent
 {
     use HasUsersPerPage;
-    use UseDatabase;
+	use UseDatabaseEloquent;
 
     public $listeners = ['userAdded' => '$refresh'];
 
@@ -24,19 +26,29 @@ class DataTable extends DataTableComponent
         return User::query();
     }
 
-    public function headers(): array
+    public function row($row): array
     {
         return [
-            'id'    => __('ID'),
-            'name'  => __('Name'),
-            'email' => __('E-mail'),
-			'totp_force' => __('Enforce MFA')
+            'id'         => $row->id,
+            'name'       => $row->name,
+            'email'      => $row->email,
+            'totp_force' => $row->totp_force,
         ];
     }
 
-    public function actions($item)
+    public function headers(): array
     {
-        if ($item['id'] == auth()->user()->id) {
+        return [
+            'id'         => __('ID'),
+            'name'       => __('Name'),
+            'email'      => __('E-mail'),
+            'totp_force' => __('Enforce MFA'),
+        ];
+    }
+
+    public function actions($item): array
+    {
+        if ($item['id'] == auth()->user()->id && !Gate::allows('is-system-admin')) {
             return [];
         }
 
@@ -56,14 +68,26 @@ class DataTable extends DataTableComponent
                 'text'        => __("Remove"),
                 'actionClass' => 'text-danger',
                 'iconClass'   => 'fas fa-trash',
-                'confirm' => __('Are you sure?'),
+                'confirm'     => __('Are you sure?'),
             ],
         ];
     }
 
-    public function remove($user_id)
+	public function renderColumnName(mixed $value, $row): string
     {
-        User::find($user_id)->delete();
+        if (!$row->isSystemAdmin) {
+            return e($value);
+        }
+
+        return e($value) . ' <span class="badge text-bg-danger ms-1">' . __('System Admin') . '</span>';
+    }
+    public function renderColumnTotpForce($value, $row): string
+    {
+        $button = !empty($value)
+            ? '<i class="fa fa-check-circle text-success"></i>'
+            : '<i class="fa fa-times-circle text-danger"></i>';
+
+        return '<button class="btn btn-link" wire:click="change(' . $row['id'] . ',\'totp_force\')">' . $button . '</button>';
     }
 
     public function edit($id)
@@ -71,25 +95,17 @@ class DataTable extends DataTableComponent
         $this->dispatch('openModal', 'user.form', __('Edit user'), ['user_id' => $id]);
     }
 
-	   public function renderColumnTotpForce($value, $row)
+    public function remove($user_id)
     {
-        $button = '';
-        if (! empty($value)) {
-            $button = '<i class="fa fa-check-circle text-success"></i>';
-        } else {
-            $button = '<i class="fa fa-times-circle text-danger"></i>';
-        }
-
-        return '<button class="btn btn-link" wire:click="change('.$row['id'].',\'totp_force\')">'.$button.'</button>';
+        Gate::authorize('is-system-admin');
+        User::find($user_id)->delete();
     }
 
     public function change($id, $name)
     {
+        Gate::authorize('is-system-admin');
         $user = User::where('id', $id)->first();
-        $data = [
-            $name => ! $user->{$name},
-        ];
-        $user->update($data);
+        $user->update([$name => !$user->{$name}]);
         $this->dispatch('closeModal');
     }
 }

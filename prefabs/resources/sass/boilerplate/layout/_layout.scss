@@ -1,16 +1,14 @@
 body{
-    height: 100vh;
-    padding-top: env(safe-area-inset-top, 0);
+    @include desktop(){
+        height: 100vh;
+        padding-top: env(safe-area-inset-top, 0);
+    }
     cursor: default;
 }
 
 #app{
-    height: 100%;
-    // display: flex;
-    // flex-direction: column;
-
-    & > .layout{
-        flex-grow: 1;
+    @include desktop(){
+        height: 100%;
     }
 
     @include mobile(){
@@ -25,15 +23,19 @@ body{
 }
 
 .layout{
-    display: flex;
-    height: 100%;
     position: relative;
+    @include desktop(){
+        display: flex;
+        height: 100%;
+    }
 }
 
 .layout-content{
-    flex-grow: 1;
-    max-height: 100%;
-    overflow: auto;
+    @include desktop(){
+        flex-grow: 1;
+        max-height: 100%;
+        overflow: auto;
+    }
 }
 
 .layout-content .content{

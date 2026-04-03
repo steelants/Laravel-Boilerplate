@@ -2,75 +2,109 @@
 
 namespace App\Livewire\User;
 
-use Livewire\Component;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\Computed;
+use SteelAnts\LivewireForm\Livewire\FormComponent;
+use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
 
-class Form extends Component
+#[AllowInModal('is-system-admin')]
+class Form extends FormComponent
 {
     public $user_id;
-
-    public string $name = '';
-    public string $email = '';
-    public string $password = '';
-    public string $password_confirmation = '';
 
     protected function rules()
     {
         return [
-            'name'     => 'required|max:255',
-            'email'    => 'required|string|email|max:255|unique:users,email' . (!empty($this->user_id) ? "," . $this->user_id : ""),
-            'password' => (empty($this->user_id) ? 'required' : 'sometimes').'|string|min:8|max:255|confirmed',
+            'properties.name'     => 'required|max:255',
+            'properties.email'    => 'required|string|email|max:255|unique:users,email' . (!empty($this->user_id) ? ',' . $this->user_id : ''),
+            'properties.password' => (empty($this->user_id) ? 'required' : 'sometimes') . '|string|min:8|max:255|confirmed',
+        ];
+    }
+
+    #[Computed()]
+    public function fields()
+    {
+        return ['name', 'email', 'password', 'password_confirmation'];
+    }
+
+    public function properties()
+    {
+        if (!empty($this->user_id)) {
+            $user = User::find($this->user_id);
+            return [
+                'name'                  => $user->name,
+                'email'                 => $user->email,
+                'password'              => '',
+                'password_confirmation' => '',
+            ];
+        }
+
+        return [
+            'name'                  => '',
+            'email'                 => '',
+            'password'              => '',
+            'password_confirmation' => '',
+        ];
+    }
+
+    #[Computed()]
+    public function types()
+    {
+        return [
+            'password'              => 'password',
+            'password_confirmation' => 'password',
+        ];
+    }
+
+    #[Computed()]
+    public function labels()
+    {
+        return [
+            'name'                  => __('Name'),
+            'email'                 => __('Email'),
+            'password'              => __('Password'),
+            'password_confirmation' => __('Confirm Password'),
         ];
     }
 
     public function mount($user_id = null)
     {
         $this->user_id = $user_id;
-
-        if (!empty($this->user_id)) {
-            $user = User::find($this->user_id);
-            $this->name = $user->name;
-            $this->email = $user->email;
-        }
+        parent::mount();
     }
 
-    public function render()
+    public function submit(): bool
     {
-        return view('livewire.user.form');
-    }
+        Gate::authorize('is-system-admin');
 
-    public function store()
-    {
-        $this->authorize('create', User::class);
+        $data = $this->properties;
+        unset($data['password_confirmation']);
 
-        $validatedData = $this->validate();
-
-        if (!empty($validatedData['password'])) {
-            $validatedData['password'] = Hash::make($validatedData['password']);
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
         } else {
-            unset($validatedData['password']);
+            unset($data['password']);
         }
 
         if (!empty($this->user_id)) {
             $user = User::find($this->user_id);
             $this->authorize('update', $user);
-            $user->update($validatedData);
-
+            $user->update($data);
             $this->dispatch('snackbar', ['message' => __('User updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
         } else {
             $this->authorize('create', User::class);
-            User::create($validatedData);
+            User::create($data);
             $this->dispatch('snackbar', ['message' => __('User created'), 'type' => 'success', 'icon' => 'fas fa-check']);
         }
 
+        return true;
+    }
+
+    public function onSuccess()
+    {
         $this->dispatch('close-modal');
         $this->dispatch('userAdded');
-
-        $this->reset('user_id');
-        $this->reset('name');
-        $this->reset('email');
-        $this->reset('password');
-        $this->reset('password_confirmation');
     }
 }
