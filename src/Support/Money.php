@@ -9,6 +9,8 @@ final class Money implements \JsonSerializable
 {
     protected string $amount;
 
+    protected static bool $defaultDynamicPrecision = false;
+
     public function __construct(string|int|float|Money $amount, protected int $scale = 6)
     {
         if ($amount instanceof self) {
@@ -75,9 +77,40 @@ final class Money implements \JsonSerializable
         return (float) $this->amount;
     }
 
-    public function format(int $precision = 2, string $currency = 'CZK'): string
+    public function format(int $precision = 2, ?bool $dynamicPrecision = null, string $currency = 'CZK'): string
     {
-        return Number::currency($this->toFloat(), $currency, config('app.locale'), $precision);
+        $useDynamic = $dynamicPrecision ?? static::$defaultDynamicPrecision;
+        $finalPrecision = ($useDynamic && ! $this->hasCents()) ? 0 : $precision;
+
+        return Number::currency($this->toFloat(), $currency, config('app.locale'), $finalPrecision);
+    }
+
+    private function hasCents(): bool
+    {
+        if (! str_contains($this->amount, '.')) {
+            return false;
+        }
+
+        $decPart = rtrim(explode('.', $this->amount, 2)[1], '0');
+
+        return (int) substr($decPart, 0, 2) > 0;
+    }
+
+    public static function useDynamicPrecision(bool $value): void
+    {
+        static::$defaultDynamicPrecision = $value;
+    }
+
+    public static function withDynamicScale(callable $callback): mixed
+    {
+        $original = static::$defaultDynamicPrecision;
+        static::$defaultDynamicPrecision = true;
+
+        try {
+            return $callback();
+        } finally {
+            static::$defaultDynamicPrecision = $original;
+        }
     }
 
     public function round(int $precision = 0): static
@@ -117,6 +150,21 @@ final class Money implements \JsonSerializable
     public function lte(Money $other): bool
     {
         return bccomp($this->amount, $other->amount, $this->scale) <= 0;
+    }
+
+    public function isPositive(): bool
+    {
+        return bccomp($this->amount, '0', $this->scale) > 0;
+    }
+
+    public function isNegative(): bool
+    {
+        return bccomp($this->amount, '0', $this->scale) < 0;
+    }
+
+    public function isZero(): bool
+    {
+        return bccomp($this->amount, '0', 2) === 0;
     }
 
     public function __toString(): string
