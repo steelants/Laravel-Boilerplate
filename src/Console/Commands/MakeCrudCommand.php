@@ -14,7 +14,9 @@ class MakeCrudCommand extends Command
     protected $signature = 'make:crud {model}
                             {--namespace=/ : Overwrite existing files by default}
                             {--force : Overwrite existing files by default}
-							{--full-page-components : Make form full page}'; // {--view : Generate controller and blade files}
+							{--full-page-components : Make form full page}
+							{--advanced : Generate a fully customizable Form with individual properties and blade instead of FormComponent}
+							{--tests : Generate a Pest feature test for the CRUD}';
 
     protected $description = 'Creates CRUD for specified Command';
 
@@ -85,6 +87,10 @@ class MakeCrudCommand extends Command
         $this->makeClassFile($namespacesAbsolut['livewire'], AbstractHelper::namespaceToPath($namespacesAbsolut['livewire']), 'Form.php', $model, $properties, $safeProperties);
         $this->makeClassFile($namespacesAbsolut['livewire'], AbstractHelper::namespaceToPath($namespacesAbsolut['livewire']), 'DataTable.php', $model, $properties, $safeProperties);
         $this->makeClassFile($namespacesAbsolut['controller'], AbstractHelper::namespaceToPath($namespacesAbsolut['controller']), (Str::trim($model, "\\").'Controller.php'), $model, $properties, $safeProperties);
+
+        if ($this->option('tests')) {
+            $this->makeTestFile($model, $modelClass, $namespacesAbsolut['livewire'], $properties, $safeProperties);
+        }
     }
 
     private function makeClassFile(string $namespace, string $path, string $fileName, string $model, array $properties, array $safeProperties)
@@ -120,7 +126,7 @@ class MakeCrudCommand extends Command
             Artisan::call('make:livewire '.$livewireDotPath.'.Form --force');
 
             $viewName = 'livewire.'.Str::replace('.index', '.form', $route);
-            $formClassContent = $this->getFormClassSkeleton([
+            $skeletonArgs = [
                 'namespace'      => $namespace,
                 'model'          => $model,
                 'view'           => $viewName,
@@ -128,20 +134,22 @@ class MakeCrudCommand extends Command
                 'safeProperties' => $safeProperties,
                 'action_back'    => $this->option('full-page-components') ? '$this->redirectRoute(\''.$route.'\');' : '',
                 'isModal'        => $this->option('full-page-components') ? 'false' : 'true',
-            ]);
+            ];
+
+            $formClassContent = $this->option('advanced')
+                ? $this->getAdvancedFormClassSkeleton($skeletonArgs)
+                : $this->getFormClassSkeleton($skeletonArgs);
 
             $bladePathFile = explode((DIRECTORY_SEPARATOR . 'app'), (str_replace((DIRECTORY_SEPARATOR.$fileName), '', $modifiedSceletonFilePath)))[0];
             $bladePathFile = ($bladePathFile.DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.Str::replace('.', DIRECTORY_SEPARATOR, $viewName).'.blade.php');
 
             file_put_contents($modifiedSceletonFilePath, $formClassContent);
 
-            $modalBladeContent = $this->getFormBladeSkeleton([
-                'model'          => $model,
-                'properties'     => $properties,
-                'safeProperties' => $safeProperties,
-            ]);
+            $bladeContent = $this->option('advanced')
+                ? $this->getAdvancedFormBladeSkeleton(['model' => $model, 'properties' => $properties, 'safeProperties' => $safeProperties])
+                : $this->getFormBladeSkeleton([]);
 
-            file_put_contents($bladePathFile, $modalBladeContent);
+            file_put_contents($bladePathFile, $bladeContent);
         } elseif ($fileName == 'DataTable.php') {
             $datatableClassContent = $this->getDataTableClassSkeleton([
                 'namespace'   => $namespace,
@@ -183,6 +191,71 @@ class MakeCrudCommand extends Command
         }
     }
 
+    private function makeTestFile(string $model, object $modelClass, string $livewireNamespace, array $properties, array $safeProperties): void
+    {
+        $subNamespace = $this->option('namespace') !== '/' ? Str::trim($this->option('namespace'), '/\\') : '';
+
+        $testDir = base_path('tests/Feature' . ($subNamespace ? '/' . $subNamespace : ''));
+        $this->ensurePath($testDir);
+        $testFilePath = $testDir . '/' . $model . 'CrudTest.php';
+
+        if (file_exists($testFilePath) && ! $this->option('force')) {
+            if (! $this->components->confirm('The [' . $testFilePath . '] test already exists. Do you want to replace it?')) {
+                return;
+            }
+        }
+
+        // Compute route prefix (same logic as makeClassFile)
+        $livewireDotPath = Str::remove('App\\Livewire\\', $livewireNamespace);
+        $livewireDotPath = Str::replace('\\', '.', $livewireDotPath);
+        $livewireDotPath = Str::trim($livewireDotPath, '.');
+        foreach (explode('.', $livewireDotPath) as $part) {
+            $livewireDotPath = Str::replace($part, Str::kebab($part), $livewireDotPath);
+        }
+
+        $safeToEditProperties = array_intersect_key($properties, array_flip($safeProperties));
+
+        $testProperties = '';
+        $assertDb = '';
+        foreach ($safeToEditProperties as $propertyName => $propertyType) {
+            $value = match (true) {
+                Str::contains($propertyType, 'App\\Models\\') => '1, // TODO: use ' . Str::afterLast($propertyType, '\\') . '::factory()->create()->id',
+                $propertyType === 'boolean'                   => 'false',
+                $propertyType === 'integer'                   => '1',
+                $propertyType === 'date'                      => "'2024-01-01'",
+                in_array($propertyType, ['datetime', 'timestamp']) => "'2024-01-01 00:00:00'",
+                default                                       => "'test string'",
+            };
+            $testProperties .= "\t\t\t'" . $propertyName . "' => " . $value . ",\n";
+
+            if (empty($assertDb) && ! Str::contains($propertyType, 'App\\Models\\') && $propertyType === 'string') {
+                $assertDb = "\t\t'" . $propertyName . "' => 'test string',";
+            }
+        }
+
+        $arguments = [
+            'model'                  => $model,
+            'model_snake'            => Str::snake(Str::camel($model)),
+            'model_singular'         => Str::of($model)->headline()->singular()->lower()->toString(),
+            'namespace_suffix'       => $subNamespace ? '\\' . Str::replace('/', '\\', $subNamespace) : '',
+            'route_index'            => $livewireDotPath . '.index',
+            'livewire_form_class'    => $livewireNamespace . '\\Form',
+            'livewire_datatable_class' => $livewireNamespace . '\\DataTable',
+            'table'                  => $modelClass->getTable(),
+            'test_properties'        => rtrim(ltrim($testProperties, "\t"), "\n"),
+            'assert_db'              => $assertDb ?: "\t\t// TODO: add assertion",
+        ];
+
+        $stubPath = realpath($this->getPackageBasePath() . '/stubs/CrudTest.stub');
+        $fileContent = file_get_contents($stubPath);
+        foreach ($arguments as $key => $value) {
+            $fileContent = str_replace('{{' . $key . '}}', $value, $fileContent);
+        }
+
+        file_put_contents($testFilePath, $fileContent);
+        $this->components->info('Creating test: ' . $testFilePath);
+    }
+
     private function getDataTableClassSkeleton(array $arguments)
     {
         $arguments['model_camel_case'] = Str::camel($arguments['model']);
@@ -216,55 +289,28 @@ class MakeCrudCommand extends Command
         $arguments['model_camel_case'] = Str::camel($arguments['model']);
         $arguments['model_snake_case'] = Str::snake($arguments['model_camel_case'], '-');
 
-        $arguments['uses'] = '';
-        $arguments['modelFunctions'] = '';
-        $propertiesString = '';
         $validationRules = '';
-        $loadProperties = '';
+        $labels = '';
 
         $safeToEditProperties = array_intersect_key($arguments['properties'], array_flip($arguments['safeProperties']));
         foreach ($safeToEditProperties as $propertyName => $propertyType) {
-            $rule = 'required|'.$propertyType;
-            $publicType = $propertyType;
+            $label = Str::of($propertyName)->headline()->lower()->ucfirst()->toString();
+
             if (Str::contains($propertyType, 'App\\Models\\')) {
                 $tableName = (new $propertyType())->getTable();
                 $rule = 'required|exists:'.$tableName.',id';
-                $publicType = '';
-
-                $stubFilePath = ('/stubs/ModelForm.stub');
-                $moduleRootPath = realpath($this->getPackageBasePath().$stubFilePath);
-                $fileContent = file_get_contents($moduleRootPath, true);
-                $modelArguments = [
-                    'model_camel_case_plural' => Str::camel($tableName),
-                    'model'                   => Str::afterLast($propertyType, 'Models\\'),
-                ];
-                foreach ($modelArguments as $ArgumentName => $ArgumentValue) {
-                    if (gettype($ArgumentValue) != 'string') {
-                        continue;
-                    }
-
-                    $fileContent = str_replace('{{'.$ArgumentName.'}}', $ArgumentValue, $fileContent);
-                }
-                $arguments['modelFunctions'] .= $fileContent;
-                $arguments['uses'] .= 'use Livewire\Attributes\Computed;'."\n";
-                $arguments['uses'] .= 'use '.$propertyType.';'."\n";
-            } elseif ($propertyType == 'boolean') {
-                $publicType = 'int';
-                $rule = 'nullable|'.$propertyType;
-            } elseif ($propertyType == 'date') {
-                $publicType = '';
-            } elseif ($propertyType == 'datetime') {
-                $publicType = '';
+            } elseif ($propertyType === 'boolean') {
+                $rule = 'nullable|boolean';
+            } else {
+                $rule = 'required|'.$propertyType;
             }
 
-            $propertiesString .= "\tpublic ".$publicType.' $'.$propertyName.";\n";
-            $validationRules .= "\t\t\t'".$propertyName."' => '".$rule."',\n";
-            $loadProperties .= "\t\t\t\$this->".$propertyName.' = $'.$arguments['model_camel_case'].'->'.$propertyName.";\n";
+            $validationRules .= "\t\t\t'properties.".$propertyName."' => '".$rule."',\n";
+            $labels .= "\t\t\t'".$propertyName."' => __('".$label."'),\n";
         }
 
-        $arguments['propertiesString'] = rtrim(ltrim($propertiesString, "\t"), "\n");
         $arguments['validationRules'] = rtrim(ltrim($validationRules, "\t"), "\n");
-        $arguments['loadProperties'] = rtrim(ltrim($loadProperties, "\t"), "\n");
+        $arguments['labels'] = rtrim(ltrim($labels, "\t"), "\n");
 
         unset($arguments['properties']);
 
@@ -283,31 +329,126 @@ class MakeCrudCommand extends Command
         return $fileContent;
     }
 
-    private function getFormBladeSkeleton($arguments)
+    private function getFormBladeSkeleton($arguments): string
+    {
+        return <<<'BLADE'
+<div>
+    <x-form::form wire:submit.prevent="store">
+        @foreach ($this->fields as $field)
+            @php($method = 'renderField' . ucfirst(\Illuminate\Support\Str::camel(str_replace('.', '_', $field))))
+            @if (method_exists($this, $method))
+                {!! $this->{$method}() !!}
+            @else
+                <x-form-components::field
+                    :field="'properties.'.$field"
+                    :label="$this->labels[$field] ?? $field"
+                    :help="$this->helps[$field] ?? null"
+                    :type="$this->types[$field] ?? null"
+                    :options="$this->options[$field] ?? null"
+                />
+            @endif
+        @endforeach
+        <x-form::button class="btn-primary" type="submit">
+            {{ !empty($this->modelId) ? __('Update') : __('Create') }}
+        </x-form::button>
+    </x-form::form>
+</div>
+BLADE;
+    }
+
+    private function getAdvancedFormClassSkeleton(array $arguments): string
+    {
+        $arguments['model_camel_case'] = Str::camel($arguments['model']);
+        $arguments['model_snake_case'] = Str::snake($arguments['model_camel_case'], '-');
+
+        $arguments['uses'] = '';
+        $arguments['modelFunctions'] = '';
+        $propertiesString = '';
+        $validationRules = '';
+        $loadProperties = '';
+
+        $safeToEditProperties = array_intersect_key($arguments['properties'], array_flip($arguments['safeProperties']));
+        foreach ($safeToEditProperties as $propertyName => $propertyType) {
+            $publicType = $propertyType;
+
+            if (Str::contains($propertyType, 'App\\Models\\')) {
+                $tableName = (new $propertyType())->getTable();
+                $rule = 'required|exists:'.$tableName.',id';
+                $publicType = '';
+
+                $stubFilePath = ('/stubs/ModelForm.stub');
+                $moduleRootPath = realpath($this->getPackageBasePath().$stubFilePath);
+                $fileContent = file_get_contents($moduleRootPath, true);
+                $modelArguments = [
+                    'model_camel_case_plural' => Str::camel($tableName),
+                    'model'                   => Str::afterLast($propertyType, 'Models\\'),
+                ];
+                foreach ($modelArguments as $key => $value) {
+                    $fileContent = str_replace('{{'.$key.'}}', $value, $fileContent);
+                }
+                $arguments['modelFunctions'] .= $fileContent;
+                $arguments['uses'] .= 'use Livewire\Attributes\Computed;'."\n";
+                $arguments['uses'] .= 'use '.$propertyType.';'."\n";
+            } elseif ($propertyType === 'boolean') {
+                $publicType = 'int';
+                $rule = 'nullable|boolean';
+            } elseif (in_array($propertyType, ['date', 'datetime'])) {
+                $publicType = '';
+                $rule = 'required|'.$propertyType;
+            } else {
+                $rule = 'required|'.$propertyType;
+            }
+
+            $propertiesString .= "\tpublic ".$publicType.' $'.$propertyName.";\n";
+            $validationRules  .= "\t\t\t'".$propertyName."' => '".$rule."',\n";
+            $loadProperties   .= "\t\t\t\$this->".$propertyName.' = $'.$arguments['model_camel_case'].'->'.$propertyName.";\n";
+        }
+
+        $arguments['propertiesString'] = rtrim(ltrim($propertiesString, "\t"), "\n");
+        $arguments['validationRules']  = rtrim(ltrim($validationRules, "\t"), "\n");
+        $arguments['loadProperties']   = rtrim(ltrim($loadProperties, "\t"), "\n");
+
+        unset($arguments['properties']);
+
+        $stubFilePath = '/stubs/FormAdvanced.stub';
+        $moduleRootPath = realpath($this->getPackageBasePath().$stubFilePath);
+
+        $fileContent = file_get_contents($moduleRootPath, true);
+        foreach ($arguments as $key => $value) {
+            if (gettype($value) !== 'string') {
+                continue;
+            }
+            $fileContent = str_replace('{{'.$key.'}}', $value, $fileContent);
+        }
+
+        return $fileContent;
+    }
+
+    private function getAdvancedFormBladeSkeleton(array $arguments): string
     {
         $modelName = $arguments['model'];
         $className = 'App\\Models\\'.$modelName;
         $model = new $className();
 
         $content = "<div>\n";
-        $content .= "\t<x-form::form wire:submit.prevent=\"{{\$action}}\">\n";
+        $content .= "\t<x-form::form wire:submit.prevent=\"{{ \$action }}\">\n";
 
         $safeToEditProperties = array_intersect_key($arguments['properties'], array_flip($arguments['safeProperties']));
         foreach ($safeToEditProperties as $propertyName => $propertyType) {
-            $propertyNameStr = Str::of($propertyName)->headline()->lower()->ucfirst()->toString();
+            $label = Str::of($propertyName)->headline()->lower()->ucfirst()->toString();
             if (Str::contains($propertyType, 'App\\Models\\')) {
                 $tableName = (new $propertyType())->getTable();
-                $content .= "\t\t".'<x-form::select group-class="mb-3"  :options="$this->'.Str::camel($tableName).'" name="'.$propertyName.'" placeholder="Vyberte" wire:model.blur="'.$propertyName.'" label="{{ __(\''. $propertyNameStr ."') }}\"/>\n";
-            } elseif ($propertyType == 'integer') {
-                $content .= "\t\t".'<x-form::input group-class="mb-3" type="number" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$propertyNameStr."') }}\"/>\n";
-            } elseif ($propertyType == 'boolean') {
-                $content .= "\t\t".'<x-form::checkbox group-class="mb-3" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$propertyNameStr."') }}\"/>\n";
-            } elseif ($propertyType == 'date') {
-                $content .= "\t\t".'<x-form::input group-class="mb-3" type="date" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$propertyNameStr."') }}\"/>\n";
-            } elseif ($propertyType == 'datetime') {
-                $content .= "\t\t".'<x-form::input group-class="mb-3" type="datetime-local" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$propertyNameStr."') }}\"/>\n";
+                $content .= "\t\t".'<x-form::select group-class="mb-3" :options="$this->'.Str::camel($tableName).'" name="'.$propertyName.'" placeholder="Vyberte" wire:model.blur="'.$propertyName.'" label="{{ __(\''. $label ."') }}\"/>\n";
+            } elseif ($propertyType === 'integer') {
+                $content .= "\t\t".'<x-form::input group-class="mb-3" type="number" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$label."') }}\"/>\n";
+            } elseif ($propertyType === 'boolean') {
+                $content .= "\t\t".'<x-form::checkbox group-class="mb-3" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$label."') }}\"/>\n";
+            } elseif ($propertyType === 'date') {
+                $content .= "\t\t".'<x-form::input group-class="mb-3" type="date" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$label."') }}\"/>\n";
+            } elseif ($propertyType === 'datetime') {
+                $content .= "\t\t".'<x-form::input group-class="mb-3" type="datetime-local" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$label."') }}\"/>\n";
             } else {
-                $content .= "\t\t".'<x-form::input group-class="mb-3" type="text" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$propertyNameStr."') }}\"/>\n";
+                $content .= "\t\t".'<x-form::input group-class="mb-3" type="text" wire:model="'.$propertyName.'" id="'.$propertyName.'" label="{{ __(\''.$label."') }}\"/>\n";
             }
         }
 
