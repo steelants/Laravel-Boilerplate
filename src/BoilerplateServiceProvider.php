@@ -18,6 +18,9 @@ use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
 use SteelAnts\LaravelBoilerplate\Livewire\File\Gallery;
 use SteelAnts\LaravelBoilerplate\Livewire\Setting\Form;
+use \SteelAnts\LaravelBoilerplate\Traits\AuditableDetailed;
+use \SteelAnts\LaravelBoilerplate\Traits\Auditable;
+use \SteelAnts\LaravelBoilerplate\Traits\SupportSystemAdmins;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {
@@ -34,14 +37,43 @@ class BoilerplateServiceProvider extends ServiceProvider
             $router->pushMiddlewareToGroup('web', GenerateMenus::class);
         }
 
-		Event::subscribe(UserEventSubscriber::class);
+		$userClass = config('auth.providers.users.model');
+		if ($userClass && $this->classHasAnyTrait($userClass, [Auditable::class, AuditableDetailed::class])) {
+			Event::subscribe(UserEventSubscriber::class);
+		}
+
 		Livewire::component('boilerplate.file.gallery', Gallery::class);
 		Livewire::component('boilerplate.setting.form', Form::class);
+
+		Gate::define('is-system-admin', function ($user) {
+            if ($this->classHasAnyTrait(get_class($user), [SupportSystemAdmins::class])) {
+                return (bool) $user->isSystemAdmin;
+            }
+
+            return in_array($user->id, config('boilerplate.system_admins', []));
+        });
 
         if ($this->app->runningInConsole()) {
             $this->bootConsole();
         }
     }
+
+	private function classHasAnyTrait(string $class, array $traits): bool
+	{
+		if (!class_exists($class)) {
+			return false;
+		}
+
+		$usedTraits = class_uses_recursive($class);
+
+		foreach ($traits as $trait) {
+			if (isset($usedTraits[$trait])) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public function bootConsole()
     {
