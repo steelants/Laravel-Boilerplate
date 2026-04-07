@@ -147,7 +147,8 @@ class Form extends FormComponent
 
         $reflection = new ReflectionClass($class);
         $this->note = $reflection->getDocComment();
-        $params = $reflection->getConstructor()->getParameters();
+        $params = $reflection->getConstructor()?->getParameters() ?? [];
+
         foreach ($params as $param) {
             $type = $param->getType();
             if ($type instanceof \ReflectionUnionType) {
