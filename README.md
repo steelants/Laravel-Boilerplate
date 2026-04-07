@@ -179,26 +179,52 @@ php artisan install:boilerplate --force
 ```
 
 ## CRUD
-### Create CRUD
-Create default files in model livewire
+
+The `make:crud` command scaffolds a full CRUD resource: a controller, a Livewire DataTable, a Livewire Form, and optionally routes and tests.
+
+### Basic usage
+Generates a Form component based on `FormComponent` + `HasModel` from `steelants/livewire-form`. Fields and options are resolved automatically from model fillables and casts — no manual property declarations needed.
 ```bash
 php artisan make:crud {model name}
 ```
-### Create CRUD Forced
-Create default files in model livewire with ovewrite
+
+### Advanced mode
+Generates a fully customizable Form with individual public properties, a manual `mount()`, separate `store()` / `update()` methods, and a per-field Blade template. Use this when you need fine-grained control over the form.
 ```bash
-php artisan make:crud {model name} --force
+php artisan make:crud {model name} --advanced
 ```
-### Create CRUD Full Page
-Create default files in livewire with create and edit as full page
+
+### Full page components
+Creates form as a standalone full-page route instead of a modal.
 ```bash
 php artisan make:crud {model name} --full-page-components
 ```
-### Create CRUD Full Page
-Create components in custome namespace
+
+### Custom namespace
+Places generated components under a sub-namespace (e.g. `App\Livewire\Admin\Post`).
 ```bash
 php artisan make:crud {model name} --namespace=\\Admin
 ```
+
+### With Pest tests
+Generates a `tests/Feature/{Model}CrudTest.php` with tests for guest redirect, index access, create, update and delete.
+```bash
+php artisan make:crud {model name} --tests
+```
+
+### Overwrite existing files
+```bash
+php artisan make:crud {model name} --force
+```
+
+### Options summary
+| Option | Description |
+|--------|-------------|
+| `--advanced` | Individual properties + custom blade (fully customizable) |
+| `--full-page-components` | Form as a full-page route instead of modal |
+| `--namespace=\\Admin` | Custom sub-namespace for generated components |
+| `--tests` | Generate a Pest feature test file |
+| `--force` | Overwrite existing files without confirmation |
 
 ## CRUD parameters
 ### Add prefix in TestController
