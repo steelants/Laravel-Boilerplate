@@ -23,10 +23,10 @@ class DataTable extends DataTableComponent
     public function headers(): array
     {
         return [
-            'ip_address'       => __('IP Address'),
+            'ip_address'      => __('IP Address'),
             'browser_os_name' => __('OS Name'),
-            'browser_name'     => __('Browser'),
-            'last_activity'    => __('Last Activity'),
+            'browser_name'    => __('Browser'),
+            'last_activity'   => __('Last Activity'),
         ];
     }
 

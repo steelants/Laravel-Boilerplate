@@ -4,8 +4,8 @@ namespace SteelAnts\LaravelBoilerplate\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\View\Component;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\Component;
 use SteelAnts\LaravelBoilerplate\Facades\Alert;
 use SteelAnts\LaravelBoilerplate\Support\AlertItem;
 use SteelAnts\LaravelBoilerplate\Types\AlertModeType;
@@ -44,7 +44,6 @@ class Alerts extends Component
 
         $this->alerts = array_merge($this->alerts, Alert::get(AlertModeType::INSTANT));
         $this->alerts = array_merge($this->alerts, Alert::get(AlertModeType::RELOAD));
-
 
         Session::forget('alerts-' . AlertModeType::RELOAD);
         Session::forget('alerts-' . AlertModeType::INSTANT);

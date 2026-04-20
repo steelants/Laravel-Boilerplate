@@ -1,6 +1,6 @@
-# Alert / Snackbar
+# Alert
 
-Fluent helper for dispatching snackbar notifications. Works transparently in both Livewire and standard HTTP contexts — no need to call `$this->dispatch('snackbar', [...])` manually.
+Fluent helper for dispatching alert notifications. Supports two display styles — **snackbar** (floating, default) and **inline** (Bootstrap alert rendered in the page flow). Works transparently in both Livewire and standard HTTP contexts.
 
 ## Basic usage
 
@@ -45,6 +45,21 @@ alert()->success('Deployed!', 'fas fa-rocket')->now();
 alert()->success('Deployed!')->icon('fas fa-rocket')->now();
 ```
 
+## Display style — snackbar vs inline
+
+By default alerts appear as a **snackbar** (floating, auto-dismiss). Use `->inline()` to render as a full Bootstrap alert in the page flow instead — useful for CRUD form feedback.
+
+```php
+// Snackbar (default)
+alert()->success('Saved!')->now();
+
+// Inline Bootstrap alert
+alert()->success('Saved!')->inline()->now();
+alert()->error('Validation failed')->inline()->reload();
+```
+
+The `<x-boilerplate::alerts />` component renders both styles: inline alerts appear at the component's position in the DOM, snackbars are appended to the floating `.snackbar-container`.
+
 ## Persist (do not auto-close)
 
 ```php
@@ -63,7 +78,7 @@ In a non-Livewire request, `->now()` stores the alert in session (`Session::now`
 
 ## Livewire context
 
-In a Livewire request (`X-Livewire` header present), `->now()` queues the alert internally. After the action completes, `AlertDispatcherHook` picks it up and dispatches it via `$component->dispatch('snackbar', [...])`, which fires a browser `CustomEvent` caught by the global JS listener.
+In a Livewire request (`X-Livewire` header present), `->now()` queues the alert internally. After the action completes, `AlertDispatcherHook` picks it up and dispatches it via `$component->dispatch('alert', [...])`, which triggers a re-render of `<x-boilerplate::alerts />`.
 
 No extra setup is needed — the hook is registered automatically by `BoilerplateServiceProvider`.
 
