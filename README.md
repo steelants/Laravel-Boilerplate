@@ -9,24 +9,9 @@
 ## Preview
 [boilerplate.steelants.cz](https://boilerplate.steelants.cz)
 
-## Change notes
-### 2.3.0
-Now by default modal will show only livewire that have AllowInModal attribute.
-
-```php
-use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
-
-// only logged in users
-#[AllowInModal()]
-class Form extends Component
-
-#[AllowInModal(asGuest: true)]
-class Form extends Component
-
-// only for users with Gate::allows('is-admin')
-#[AllowInModal(ability: 'is-admin')]
-class Form extends Component
-```
+## Upgrade Guide
+- [v2.3 → v2.4](.docs/upgrade/upgrade-2_5.md)
+- [v2.2 → v2.3](.docs/upgrade/upgrade-2_3.md)
 
 #### Tag project
 ```bash

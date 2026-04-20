@@ -4,9 +4,13 @@ namespace SteelAnts\LaravelBoilerplate;
 
 use App\Http\Middleware\GenerateMenus;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;
@@ -19,6 +23,7 @@ use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
 use SteelAnts\LaravelBoilerplate\Livewire\File\Gallery;
 use SteelAnts\LaravelBoilerplate\Livewire\Setting\Form;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use \SteelAnts\LaravelBoilerplate\Traits\AuditableDetailed;
 use \SteelAnts\LaravelBoilerplate\Traits\Auditable;
 use \SteelAnts\LaravelBoilerplate\Traits\SupportSystemAdmins;
@@ -37,6 +42,20 @@ class BoilerplateServiceProvider extends ServiceProvider
 			$router = $this->app['router'];
             $router->pushMiddlewareToGroup('web', GenerateMenus::class);
         }
+
+        if (class_exists('App\Http\Middleware\IsSystemAdmin')) {
+            Route::aliasMiddleware('is-system-admin', \App\Http\Middleware\IsSystemAdmin::class);
+        }
+
+        EncryptCookies::except(['theme', 'layout-nav', 'toggleState', 'tabState']);
+
+        $this->app->make(ExceptionHandler::class)->renderable(
+            function (NotFoundHttpException $e, Request $request) {
+                if ($request->is('api/*') || $request->is('local/*')) {
+                    return response()->json(['message' => __('Record not found.')], 404);
+                }
+            }
+        );
 
 		$userClass = config('auth.providers.users.model');
 		if ($userClass && $this->classHasAnyTrait($userClass, [Auditable::class, AuditableDetailed::class])) {
