@@ -9,7 +9,7 @@ use RecursiveIteratorIterator;
 
 class LivewireHelper
 {
-	public static function registerLivewire($livewirePath = (__DIR__ . '/Livewire'), $namespace = '\\SteelAnts\\LaravelBoilerplate\\', $prefix)
+    public static function registerLivewire($livewirePath, $namespace, $prefix)
     {
         if (is_dir($livewirePath)) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($livewirePath));
@@ -19,7 +19,7 @@ class LivewireHelper
                     $classPath = str_replace('.php', '', $relativePath);
                     $classNamespace = $namespace . str_replace(DIRECTORY_SEPARATOR, '\\', $classPath);
                     $componentName = Str::of($classPath)->replace(DIRECTORY_SEPARATOR, '.')->kebab()->replace('.-', '.')->value;
-                    Livewire::component((Str::trim($prefix, '.') . '.'. $componentName), $classNamespace);
+                    Livewire::component((Str::trim($prefix, '.') . '.' . $componentName), $classNamespace);
                 }
             }
         }

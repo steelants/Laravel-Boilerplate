@@ -12,18 +12,20 @@ if (!function_exists('getToggleState')) {
         }
 
         $cookie = json_decode($cookie, true);
+
         return $cookie[$name] ?? '';
     }
 }
 
-if (! function_exists('settings')) {
-    function settings($key, $default = null) {
+if (!function_exists('settings')) {
+    function settings($key, $default = null)
+    {
         $value = Setting::whereNull('settable_id')->whereNull('settable_type')->where('index', $key)->get();
-        if (empty($value)){
+        if (empty($value)) {
             return $default;
         }
 
-        if (count($value) == 1){
+        if (count($value) == 1) {
             return $value->first()->value;
         }
 

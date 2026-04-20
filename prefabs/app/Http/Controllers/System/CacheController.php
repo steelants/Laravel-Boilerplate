@@ -5,17 +5,17 @@ namespace App\Http\Controllers\System;
 use App\Http\Controllers\BaseController;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class CacheController extends BaseController
 {
     public function index()
     {
-         /*Cache::put('test', 'test');
-         Cache::remember('users', 200, function () {
-             return DB::table('users')->get();
-         });*/
+        /*Cache::put('test', 'test');
+        Cache::remember('users', 200, function () {
+            return DB::table('users')->get();
+        });*/
         $cache_driver = config('cache.default');
 
         $cache_items = [];
@@ -24,7 +24,7 @@ class CacheController extends BaseController
             $redisConnection = $storage->connection();
             foreach ($redisConnection->command('keys', ['*']) as $full_key) {
                 $cache_items[] = [
-                    'key'       => str_replace($storage->getPrefix(), "", $full_key),
+                    'key'       => str_replace($storage->getPrefix(), '', $full_key),
                     'expire_at' => null,
                 ];
             }
@@ -38,7 +38,7 @@ class CacheController extends BaseController
                 ];
             }
         } elseif ($cache_driver == 'database') {
-            $items = DB::select("SELECT * FROM ".config('cache.stores.database.table').";");
+            $items = DB::select('SELECT * FROM ' . config('cache.stores.database.table') . ';');
             foreach ($items as $item) {
                 $cache_items[] = [
                     'key'       => $item->key,
@@ -47,16 +47,16 @@ class CacheController extends BaseController
             }
         }
 
-        //TODO: ADD SUPPORT FOR MEM CASH AND DB
+        // TODO: ADD SUPPORT FOR MEM CASH AND DB
 
         // OPcache status
         $opcache_data = [
-			'loaded' => extension_loaded('opcache') || extension_loaded('Zend OPcache') || function_exists('opcache_get_status'),
-            'enabled' => false,
-            'memory_used' => 0,
-            'memory_free' => 0,
+            'loaded'              => extension_loaded('opcache') || extension_loaded('Zend OPcache') || function_exists('opcache_get_status'),
+            'enabled'             => false,
+            'memory_used'         => 0,
+            'memory_free'         => 0,
             'validate_timestamps' => false,
-            'revalidate_freq' => 0,
+            'revalidate_freq'     => 0,
         ];
 
         if ($opcache_data['loaded']) {

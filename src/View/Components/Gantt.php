@@ -10,11 +10,17 @@ use Illuminate\View\Component;
 class Gantt extends Component
 {
     public $steps;
+
     public $dateFrom;
+
     public $dateTo;
+
     public $scale;
+
     public $rows = [];
+
     public $stepWidth = 30;
+
     public $secondsPerStep = 30;
 
     /**
@@ -32,14 +38,14 @@ class Gantt extends Component
         $this->dateTo = Carbon::parseFromLocale($dateTo)->format('Y-m-d 23:59:59');
 
         $this->stepWidth = match ($scale) {
-            'day' => 30,
-            'week' => 40,
+            'day'   => 30,
+            'week'  => 40,
             'month' => 20,
         };
 
         $this->secondsPerStep = match ($scale) {
-            'day' => 60 * 60,
-            'week' => 24 * 60 * 60,
+            'day'   => 60 * 60,
+            'week'  => 24 * 60 * 60,
             'month' => 24 * 60 * 60,
         };
 
@@ -69,7 +75,7 @@ class Gantt extends Component
                     'isActive'   => date('Y-m-d H') == date('Y-m-d H', $currentDate),
                 ];
             }
-        } else if ($this->scale == 'week') {
+        } elseif ($this->scale == 'week') {
             for ($currentDate = strtotime($this->dateFrom); $currentDate <= strtotime($this->dateTo); $currentDate += $this->secondsPerStep) {
                 $group = date('Y-W', $currentDate);
                 $steps[$group][] = [
@@ -78,7 +84,7 @@ class Gantt extends Component
                     'isActive'   => date('Y-m-d') == date('Y-m-d', $currentDate),
                 ];
             }
-        } else if ($this->scale == 'month') {
+        } elseif ($this->scale == 'month') {
             for ($currentDate = strtotime($this->dateFrom); $currentDate <= strtotime($this->dateTo); $currentDate += $this->secondsPerStep) {
                 $group = date('Y-m', $currentDate);
                 $steps[$group][] = [

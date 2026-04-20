@@ -57,7 +57,7 @@ class InstallCommand extends Command
         }
 
         // Save progress and pause before touching customized files
-        if (! empty($prompted)) {
+        if (!empty($prompted)) {
             $this->saveManifest($hashFilePath, $manifest);
             $this->components->warn('Safe files installed. Please commit your changes before continuing.');
             $this->newLine();
@@ -74,7 +74,7 @@ class InstallCommand extends Command
             }
         }
 
-        if (! $this->option('views-only')) {
+        if (!$this->option('views-only')) {
             $this->components->info('Installing Boilerplate Scaffolding');
 
             self::updatePackagesJson();
@@ -85,7 +85,7 @@ class InstallCommand extends Command
             self::appendRoutes();
             $this->cleanupLegacyBootstrap();
 
-            if (! $this->option('no-migration')) {
+            if (!$this->option('no-migration')) {
                 $this->components->warn('Running Migrations');
                 Artisan::call('migrate');
             }
@@ -105,15 +105,15 @@ class InstallCommand extends Command
 
     private function loadManifest(string $path): array
     {
-        if (! File::exists($path)) {
+        if (!File::exists($path)) {
             return ['_meta' => [], 'files' => []];
         }
 
         $data = json_decode(File::get($path), true) ?? [];
 
         // Migrate old flat format (keys without _meta / files wrapper)
-        if (! isset($data['files'])) {
-            $files = array_filter($data, fn($k) => ! str_starts_with($k, '_'), ARRAY_FILTER_USE_KEY);
+        if (!isset($data['files'])) {
+            $files = array_filter($data, fn ($k) => !str_starts_with($k, '_'), ARRAY_FILTER_USE_KEY);
             $data = ['_meta' => [], 'files' => $files];
         }
 
@@ -170,7 +170,7 @@ class InstallCommand extends Command
 
     protected static function updatePackagesJson()
     {
-        if (! file_exists(base_path('package.json'))) {
+        if (!file_exists(base_path('package.json'))) {
             return;
         }
 
@@ -196,7 +196,7 @@ class InstallCommand extends Command
 
     protected static function removeNodeModules()
     {
-        if (! file_exists(base_path('node_modules'))) {
+        if (!file_exists(base_path('node_modules'))) {
             return;
         }
 
@@ -208,7 +208,7 @@ class InstallCommand extends Command
 
     protected static function checkDirectory($directory)
     {
-        if (! is_dir($directory)) {
+        if (!is_dir($directory)) {
             mkdir($directory, 0755, true);
         }
     }
@@ -278,14 +278,14 @@ class InstallCommand extends Command
     {
         $importFileString = '@import "./boilerplate/boilerplate.scss";';
         $path = resource_path('sass/app.scss');
-        if (! File::exists($path)) {
+        if (!File::exists($path)) {
             self::checkDirectory(dirname($path));
             $content = self::boilerplateString($importFileString, 'scss');
             File::put($path, $content);
         }
 
         $ClassFileContent = file_get_contents($path);
-        if (! str_contains($ClassFileContent, $importFileString)) {
+        if (!str_contains($ClassFileContent, $importFileString)) {
             self::appendFile('resources/sass/app.scss', 'scss.stub', $importFileString);
         }
     }
@@ -294,14 +294,14 @@ class InstallCommand extends Command
     {
         $importFileString = "import './boilerplate/boilerplate.js';";
         $path = resource_path('js/app.js');
-        if (! File::exists($path)) {
+        if (!File::exists($path)) {
             self::checkDirectory(dirname($path));
             $content = self::boilerplateString($importFileString, 'js');
             File::put($path, $content);
         }
 
         $ClassFileContent = file_get_contents($path);
-        if (! str_contains($ClassFileContent, $importFileString)) {
+        if (!str_contains($ClassFileContent, $importFileString)) {
             self::appendFile('resources/js/app.js', 'js.stub', $importFileString);
         }
     }

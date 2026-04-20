@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->string('ip')->nullable();
-            $table->foreignId("user_id")->nullable();
-            $table->foreign("user_id")->references("id")->on("users")->constrained();
+            $table->foreignId('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->constrained();
             $table->nullableMorphs('affected');
             $table->string('lang_text')->nullable();
             $table->json('data')->nullable();
-            $table->timestamp("created_at");
+            $table->timestamp('created_at');
         });
     }
 

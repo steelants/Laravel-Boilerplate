@@ -33,6 +33,7 @@ class Form extends FormComponent
     {
         if (!empty($this->user_id)) {
             $user = User::find($this->user_id);
+
             return [
                 'name'                  => $user->name,
                 'email'                 => $user->email,

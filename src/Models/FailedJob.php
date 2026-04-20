@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FailedJob extends Model
 {
-	protected $casts = [
+    protected $casts = [
         'payload'   => AsCollection::class,
-		'failed_at' => 'datetime',
+        'failed_at' => 'datetime',
     ];
 }

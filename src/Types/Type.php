@@ -9,6 +9,7 @@ abstract class Type
     public static function getNames()
     {
         $all = static::getAll();
+
         return array_map(fn ($val) => __($val), $all);
     }
 
@@ -18,6 +19,7 @@ abstract class Type
         if (isset($all[$type])) {
             return __($all[$type]);
         }
+
         return __('NULL');
     }
 

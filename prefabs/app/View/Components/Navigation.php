@@ -2,7 +2,6 @@
 
 namespace App\View\Components;
 
-use App\Menus\MainMenu;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -13,9 +12,7 @@ class Navigation extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * Get the view / contents that represent the component.
@@ -23,7 +20,7 @@ class Navigation extends Component
     public function render(): View|Closure|string
     {
         return view('components.navigation', [
-            'mainMenuItems' => Menu::get('main-menu')?->items() ?? [],
+            'mainMenuItems'   => Menu::get('main-menu')?->items() ?? [],
             'systemMenuItems' => Menu::get('system-menu')?->items() ?? [],
         ]);
     }

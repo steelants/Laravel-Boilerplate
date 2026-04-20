@@ -12,13 +12,16 @@ class DataTable extends DataTableComponent
     use UseDatabase;
 
     public bool $paginated = true;
+
     public int $itemsPerPage = 100;
+
     public string $sortBy = 'created_at';
+
     public string $sortDirection = 'asc';
 
     public function query(): Builder
     {
-        return Activity::with(["affected", "actor"]);
+        return Activity::with(['affected', 'actor']);
     }
 
     public function row($row): array
@@ -40,11 +43,11 @@ class DataTable extends DataTableComponent
     public function headers(): array
     {
         return [
-            'created_at'  => __("Created"),
-            'ip_address'  => __("IP Address"),
-            'note'        => __("Note"),
-            'actor_id'    => __("Author"),
-            'affected_id' => __("Model"),
+            'created_at'  => __('Created'),
+            'ip_address'  => __('IP Address'),
+            'note'        => __('Note'),
+            'actor_id'    => __('Author'),
+            'affected_id' => __('Model'),
         ];
     }
 }

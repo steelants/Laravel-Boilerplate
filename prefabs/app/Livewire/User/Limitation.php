@@ -10,6 +10,7 @@ use Livewire\Component;
 class Limitation extends Component
 {
     public $user;
+
     public $limitation = 10;
 
     protected function rules()
@@ -41,9 +42,9 @@ class Limitation extends Component
     {
         $validatedData = $this->validate();
         $this->user->settings()->updateOrCreate(
-            ['index' => "limitation.items_per_page"],
+            ['index' => 'limitation.items_per_page'],
             [
-                'value' => $validatedData["limitation"],
+                'value' => $validatedData['limitation'],
                 'type'  => SettingDataType::INT,
             ],
         );

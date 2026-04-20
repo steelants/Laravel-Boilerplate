@@ -41,10 +41,10 @@ class DataTable extends DataTableComponent
     {
         return [
             [
-                'type'       => "livewire",
-                'action'     => "edit",
+                'type'       => 'livewire',
+                'action'     => 'edit',
                 'parameters' => $item['id'],
-                'text'       => __("Edit"),
+                'text'       => __('Edit'),
             ],
         ];
     }

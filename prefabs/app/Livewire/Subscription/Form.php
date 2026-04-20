@@ -32,6 +32,7 @@ class Form extends FormComponent
     {
         if (!empty($this->model)) {
             $sub = Subscription::find($this->model);
+
             return [
                 'tier'     => $sub->tier,
                 'valid_to' => $sub->valid_to->format('Y-m-d'),

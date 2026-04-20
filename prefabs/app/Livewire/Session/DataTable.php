@@ -11,11 +11,12 @@ class DataTable extends DataTableComponent
     use UseDatabase;
 
     public bool $paginated = false;
+
     public bool $sortable = false;
 
     public function query(): Builder
     {
-        return request()->user()->sessions()->orderByDesc("last_activity")->getQuery();
+        return request()->user()->sessions()->orderByDesc('last_activity')->getQuery();
     }
 
     public function row($row): array
@@ -32,10 +33,10 @@ class DataTable extends DataTableComponent
     public function headers(): array
     {
         return [
-            'ip_address'      => __("IP Address"),
-            'browser_os_name' => __("OS Name"),
-            'browser_name'    => __("Browser"),
-            'last_activity'   => __("Last Activity"),
+            'ip_address'      => __('IP Address'),
+            'browser_os_name' => __('OS Name'),
+            'browser_name'    => __('Browser'),
+            'last_activity'   => __('Last Activity'),
         ];
     }
 
@@ -43,10 +44,10 @@ class DataTable extends DataTableComponent
     {
         return [
             [
-                'type'        => "livewire",
-                'action'      => "logout",
+                'type'        => 'livewire',
+                'action'      => 'logout',
                 'parameters'  => $item['id'],
-                'text'        => __("Logout"),
+                'text'        => __('Logout'),
                 'actionClass' => 'text-danger',
                 'iconClass'   => 'fas fa-trash text-danger',
                 'confirm'     => __('Are you sure?'),
@@ -57,6 +58,7 @@ class DataTable extends DataTableComponent
     public function logout($session_id)
     {
         request()->user()->sessions()->find($session_id)->delete();
+
         return redirect(request()->header('Referer'));
     }
 }

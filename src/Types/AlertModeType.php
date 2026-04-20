@@ -4,8 +4,9 @@ namespace SteelAnts\LaravelBoilerplate\Types;
 
 class AlertModeType
 {
-    const RELOAD = 0; //is viewed once after reload page
-    const INSTANT = 1; //is viewed instant thanks to livewire
+    const RELOAD = 0; // is viewed once after reload page
+
+    const INSTANT = 1; // is viewed instant thanks to livewire
 
     public static function getNames()
     {
@@ -21,6 +22,7 @@ class AlertModeType
         if (isset($names[$type])) {
             return __($names[$type]);
         }
+
         return __('NULL');
     }
 

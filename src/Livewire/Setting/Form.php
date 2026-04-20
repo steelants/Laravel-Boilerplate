@@ -15,181 +15,184 @@ use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
 #[AllowInModal('is-system-admin')]
 class Form extends FormComponent
 {
-	use WithFileUploads;
+    use WithFileUploads;
 
-	public $owner = null;
+    public $owner = null;
 
-	public string $key;
-	public array $rules = [];
-	public array $settings_parameters = [];
-	//TODO: Setting Field Load only once
-	//TODO: add Help
+    public string $key;
 
-	public function rules()
-	{
-		return $this->rules;
-	}
+    public array $rules = [];
 
-	public function mount()
-	{
-		$this->settings_parameters = Arr::get(config('setting_field'), $this->key);
+    public array $settings_parameters = [];
+    // TODO: Setting Field Load only once
+    // TODO: add Help
 
-		if (!is_array($this->settings_parameters)) {
-			throw new \Exception("Only array value can be specified in \$key");
-		}
+    public function rules()
+    {
+        return $this->rules;
+    }
 
-		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
-			foreach ($this->settings_parameters as $key => $field) {
-				if (!isset($field['type'])) {
-					throw new \Exception("Only array value can be specified in \$key");
-				}
+    public function mount()
+    {
+        $this->settings_parameters = Arr::get(config('setting_field'), $this->key);
 
-				$this->rules['properties.'.$key] = $field['rules'];
-			}
-		}
+        if (!is_array($this->settings_parameters)) {
+            throw new \Exception('Only array value can be specified in $key');
+        }
 
-		parent::mount();
-	}
+        if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
+            foreach ($this->settings_parameters as $key => $field) {
+                if (!isset($field['type'])) {
+                    throw new \Exception('Only array value can be specified in $key');
+                }
 
-	public function properties()
-	{
-		$properties = [];
+                $this->rules['properties.' . $key] = $field['rules'];
+            }
+        }
 
-		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
-			foreach ($this->settings_parameters as $key => $data) {
-				if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
-					$properties[$key] = match ($data['type']) {
-						SettingDataType::INT  => $data['value'] ?? 0,
-						SettingDataType::BOOL => $data['value'] ?? false,
-						default => $data['value'] ?? "",
-					};
-				} else {
-					$properties[$key] = $data['value'] ?? ($data['type'])::select('id')->first()->id;
-				}
+        parent::mount();
+    }
 
-				if (!empty($this->owner)) {
-					$properties[$key] =  $this->owner->getSettings(implode('.', [$this->key, $key]), $properties[$key]);
-				} else {
-					$properties[$key] = settings(implode('.', [$this->key, $key]), $properties[$key]);
-				}
-			}
-		}
+    public function properties()
+    {
+        $properties = [];
 
-		return $properties;
-	}
+        if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
+            foreach ($this->settings_parameters as $key => $data) {
+                if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
+                    $properties[$key] = match ($data['type']) {
+                        SettingDataType::INT  => $data['value'] ?? 0,
+                        SettingDataType::BOOL => $data['value'] ?? false,
+                        default               => $data['value'] ?? '',
+                    };
+                } else {
+                    $properties[$key] = $data['value'] ?? ($data['type'])::select('id')->first()->id;
+                }
 
-	#[Computed()]
-	public function fields()
-	{
-		$fields = [];
+                if (!empty($this->owner)) {
+                    $properties[$key] = $this->owner->getSettings(implode('.', [$this->key, $key]), $properties[$key]);
+                } else {
+                    $properties[$key] = settings(implode('.', [$this->key, $key]), $properties[$key]);
+                }
+            }
+        }
 
-		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
-			foreach ($this->settings_parameters as $key => $data) {
-				$fields[] = $key;
-			}
-		}
+        return $properties;
+    }
 
-		return $fields;
-	}
+    #[Computed()]
+    public function fields()
+    {
+        $fields = [];
 
-	#[Computed()]
-	public function types()
-	{
-		$types = [];
+        if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
+            foreach ($this->settings_parameters as $key => $data) {
+                $fields[] = $key;
+            }
+        }
 
-		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
-			foreach ($this->settings_parameters as $key => $data) {
-				if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
-					$types[$key] = match ($data['type']) {
-						SettingDataType::INT => 'int',
-						SettingDataType::BOOL => 'checkbox',
-						default => 'string',
-					};
-				}
-			}
-		}
+        return $fields;
+    }
 
-		return $types;
-	}
+    #[Computed()]
+    public function types()
+    {
+        $types = [];
 
-	#[Computed()]
-	public function labels()
-	{
-		$labels = [];
+        if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
+            foreach ($this->settings_parameters as $key => $data) {
+                if (!class_exists($data['type']) || !is_subclass_of($data['type'], Model::class)) {
+                    $types[$key] = match ($data['type']) {
+                        SettingDataType::INT  => 'int',
+                        SettingDataType::BOOL => 'checkbox',
+                        default               => 'string',
+                    };
+                }
+            }
+        }
 
-		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
-			foreach ($this->settings_parameters as $key => $data) {
-				$labels[$key] = Str::title($key);
-			}
-		}
+        return $types;
+    }
 
-		return $labels;
-	}
+    #[Computed()]
+    public function labels()
+    {
+        $labels = [];
 
-	#[Computed()]
-	public function helps()
-	{
-		$helps = [];
+        if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
+            foreach ($this->settings_parameters as $key => $data) {
+                $labels[$key] = Str::title($key);
+            }
+        }
 
-		if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
-			foreach ($this->settings_parameters as $key => $data) {
-				if (isset($data['help']) && !empty($data['help'])) {
-					$helps[$key] = $data['help'];
-				}
-			}
-		}
+        return $labels;
+    }
 
-		return $helps;
-	}
+    #[Computed()]
+    public function helps()
+    {
+        $helps = [];
 
-	public function getOptions($field, $options = []): array
-	{
-		$parameter = $this->settings_parameters[$field] ?? null;
+        if (!empty($this->settings_parameters) && count($this->settings_parameters) > 0) {
+            foreach ($this->settings_parameters as $key => $data) {
+                if (isset($data['help']) && !empty($data['help'])) {
+                    $helps[$key] = $data['help'];
+                }
+            }
+        }
 
-		if ( empty($parameter) || !class_exists($parameter['type']) || !is_subclass_of($parameter['type'], \Illuminate\Database\Eloquent\Model::class) ) {
-			return [];
-		}
+        return $helps;
+    }
 
-		return ($parameter['type'])::limit(1000)->pluck('name', 'id')->toArray();
-	}
+    public function getOptions($field, $options = []): array
+    {
+        $parameter = $this->settings_parameters[$field] ?? null;
 
-	protected function resolvePersistedType(string $key): string|int
-	{
-		if (isset($this->settings_parameters[$key]['type'])) {
-			return $this->settings_parameters[$key]['type'];
-		}
+        if (empty($parameter) || !class_exists($parameter['type']) || !is_subclass_of($parameter['type'], \Illuminate\Database\Eloquent\Model::class)) {
+            return [];
+        }
 
-		return SettingDataType::STRING;
-	}
+        return ($parameter['type'])::limit(1000)->pluck('name', 'id')->toArray();
+    }
 
-	public function submit(){
-		if (method_exists($this, 'rules')) {
-			$this->validate();
-		}
+    protected function resolvePersistedType(string $key): string|int
+    {
+        if (isset($this->settings_parameters[$key]['type'])) {
+            return $this->settings_parameters[$key]['type'];
+        }
 
-		foreach ($this->properties as $key => $value) {
-			$dbKey = $this->key.'.'.$key;
-			$type = $this->resolvePersistedType($key);
-			if (!empty($this->owner)) {
-				$this->owner->settings()->updateOrCreate(
-					['index' => $dbKey],
-					[
-						'value' => $value ?? '',
-						'type'  => $type,
-					],
-				);
-			} else {
-				Setting::updateOrCreate(
-					['index' => $dbKey],
-					[
-						'value' => $value ?? '',
-						'type'  => $type,
-					],
-				);
-			}
-		}
+        return SettingDataType::STRING;
+    }
 
-		$this->dispatch('snackbar', ['message' =>  __('Setting Saved'), 'type' => 'success', 'icon' => 'fas fa-check']);
-		$this->dispatch('closeModal');
-	}
+    public function submit()
+    {
+        if (method_exists($this, 'rules')) {
+            $this->validate();
+        }
+
+        foreach ($this->properties as $key => $value) {
+            $dbKey = $this->key . '.' . $key;
+            $type = $this->resolvePersistedType($key);
+            if (!empty($this->owner)) {
+                $this->owner->settings()->updateOrCreate(
+                    ['index' => $dbKey],
+                    [
+                        'value' => $value ?? '',
+                        'type'  => $type,
+                    ],
+                );
+            } else {
+                Setting::updateOrCreate(
+                    ['index' => $dbKey],
+                    [
+                        'value' => $value ?? '',
+                        'type'  => $type,
+                    ],
+                );
+            }
+        }
+
+        $this->dispatch('snackbar', ['message' => __('Setting Saved'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        $this->dispatch('closeModal');
+    }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\System;
 
-use SteelAnts\LaravelBoilerplate\Helpers\SizeHelper;
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use SteelAnts\LaravelBoilerplate\Helpers\SizeHelper;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 
 class BackupController extends BaseController
@@ -13,6 +13,7 @@ class BackupController extends BaseController
     public function run()
     {
         Backup::dispatchSync();
+
         return redirect()->back()->with('success', __('Backup is running'));
     }
 
@@ -22,11 +23,11 @@ class BackupController extends BaseController
         $path = storage_path('backups');
 
         if (file_exists($path)) {
-            foreach (File::allFiles($path. "/") as $file) {
-                if (!Str::endsWith($file->getFilename(), ".zip")) {
+            foreach (File::allFiles($path . '/') as $file) {
+                if (!Str::endsWith($file->getFilename(), '.zip')) {
                     continue;
                 }
-                $date = explode("_", str_replace(".zip", "", $file->getFilename()))[0];
+                $date = explode('_', str_replace('.zip', '', $file->getFilename()))[0];
                 if (empty($backups[$date]['fileSize'])) {
                     $backups[$date]['fileSize'] = $file->getSize();
                 } else {
@@ -40,10 +41,10 @@ class BackupController extends BaseController
             }
         }
 
-		return view('system.backup.index', [
-			'layout' => config('boilerplate.layouts.system'),
-			'backups' => $backups
-		]);
+        return view('system.backup.index', [
+            'layout'  => config('boilerplate.layouts.system'),
+            'backups' => $backups,
+        ]);
     }
 
     public function download($file_name = null)
