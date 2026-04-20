@@ -6,6 +6,7 @@ use App\Http\Middleware\GenerateMenus;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;

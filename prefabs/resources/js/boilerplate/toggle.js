@@ -20,7 +20,6 @@ window.addEventListener('show.bs.collapse', function(e){
     updateToggler(e.target, 'open');
 });
 
-
 window.initTabState = function(){
     window.tabState = JSON.parse(getCookie('tabState') ?? '{}');
 }

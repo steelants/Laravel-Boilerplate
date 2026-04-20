@@ -244,6 +244,20 @@ public function __construct()
 }
 ```
 
+## Tab Group
+
+```blade
+<x-boilerplate::tab.group default="profile" remember="myTabs" variant="tabs">
+    <x-boilerplate::tab.tab name="profile">Profile</x-boilerplate::tab.tab>
+    <x-boilerplate::tab.tab name="account">Account</x-boilerplate::tab.tab>
+    <x-boilerplate::tab.tab name="billing" :disabled="true">Billing</x-boilerplate::tab.tab>
+
+    <x-boilerplate::tab.panel name="profile">Profile content</x-boilerplate::tab.panel>
+    <x-boilerplate::tab.panel name="account">Account content</x-boilerplate::tab.panel>
+    <x-boilerplate::tab.panel name="billing">Billing content</x-boilerplate::tab.panel>
+</x-boilerplate::tab.group>
+```
+
 ## SelectboxAjax (WIP)
 When you have selectbox with more than 100 options, it's recommended to use dynamic search with livewire (for now only available in selextbox-ajax).
 Alpine will then call method speicified in searchagble parameter.

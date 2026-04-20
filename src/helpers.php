@@ -30,3 +30,17 @@ if (! function_exists('settings')) {
         return $value->pluck('value', 'index')->toArray();
     }
 }
+
+if (!function_exists('getTabState')) {
+    function getTabState(string $groupId): string
+    {
+        $cookie = Cookie::get('tabState');
+        if ($cookie === null) {
+            return '';
+        }
+
+        $cookie = json_decode($cookie, true);
+
+        return $cookie[$groupId] ?? '';
+    }
+}
