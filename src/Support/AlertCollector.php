@@ -7,7 +7,7 @@ use SteelAnts\LaravelBoilerplate\Types\AlertModeType;
 
 class AlertCollector
 {
-    protected array $pending = [];
+    protected static array $pending = [];
 
     public function add(string $type, string $text, string $icon = '', int $mode = AlertModeType::RELOAD, bool $persist = false): void
     {
@@ -25,20 +25,18 @@ class AlertCollector
         $alerts = Session::get('alerts-' . $mode, []);
         $alerts[] = $item;
 
-        $mode === AlertModeType::RELOAD
-            ? Session::flash('alerts-' . $mode, $alerts)
-            : Session::now('alerts-' . $mode, $alerts);
+        $mode === AlertModeType::RELOAD ? Session::flash('alerts-' . $mode, $alerts) : Session::now('alerts-' . $mode, $alerts);
     }
 
     public function addPending(AlertItem $item): void
     {
-        $this->pending[] = $item;
+        static::$pending[] = $item;
     }
 
     public function takePending(): array
     {
-        $pending = $this->pending;
-        $this->pending = [];
+        $pending = static::$pending;
+        static::$pending = [];
 
         return $pending;
     }

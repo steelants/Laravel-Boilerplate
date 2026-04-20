@@ -143,6 +143,7 @@ persist - pokud je true, zůstává notifikace aktivní dokud ji neodklikne uži
 | [Selectbox](.docs/components/selectbox.md) | `<x-boilerplate::selectbox>` | Alpine.js select with tags mode and multi-select |
 | [Selectbox Ajax](.docs/components/selectbox.md#selectbox-ajax) | `<x-boilerplate::selectbox-ajax>` | Selectbox with server-side Livewire search |
 | [Searchbox](.docs/components/searchbox.md) | `<x-boilerplate::searchbox>` | Client-side filtered dropdown search |
+| [Alert](.docs/components/alert.md) | `alert()->success()->now()` | Snackbar notifications for Livewire and HTTP contexts |
 
 ## [Development](.docs/development.md)
 

@@ -80,7 +80,7 @@ class Gallery extends Component
         }
 
         try {
-            $validatedData = $this->validateOnly('files_replacements');
+            $this->validateOnly('files_replacements');
             if (!empty($this->model)) {
                 $this->model->replaceFile($fileModel, $file);
             } else {
@@ -101,6 +101,7 @@ class Gallery extends Component
     {
         $file->delete();
         $this->refreshFiles();
+        alert()->success(__('File removed'))->now();
     }
 
     public function replace(File $file)

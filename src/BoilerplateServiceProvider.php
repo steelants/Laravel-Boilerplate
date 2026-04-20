@@ -64,8 +64,6 @@ class BoilerplateServiceProvider extends ServiceProvider
             Event::subscribe(UserEventSubscriber::class);
         }
 
-        Livewire::componentHook(AlertDispatcherHook::class);
-
         Livewire::component('boilerplate.file.gallery', Gallery::class);
         Livewire::component('boilerplate.setting.form', Form::class);
 
@@ -141,6 +139,8 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->app->singleton(AlertCollector::class);
         $this->app->alias('Menu', Menu::class);
         $this->app->alias('Alert', Alert::class);
+
+        Livewire::componentHook(AlertDispatcherHook::class);
 
         $this->mergeConfigFrom(
             __DIR__ . '/../config/boilerplate.php',

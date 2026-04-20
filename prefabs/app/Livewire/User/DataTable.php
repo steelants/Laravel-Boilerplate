@@ -101,6 +101,7 @@ class DataTable extends DataTableComponent
     {
         Gate::authorize('is-system-admin');
         User::find($user_id)->delete();
+        alert()->success(__('User removed'))->now();
     }
 
     public function change($id, $name)
@@ -108,6 +109,7 @@ class DataTable extends DataTableComponent
         Gate::authorize('is-system-admin');
         $user = User::where('id', $id)->first();
         $user->update([$name => !$user->{$name}]);
+        alert()->success(__('Updated'))->now();
         $this->dispatch('closeModal');
     }
 }

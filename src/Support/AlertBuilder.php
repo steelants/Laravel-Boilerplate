@@ -27,22 +27,22 @@ class AlertBuilder
         return $this;
     }
 
-    public function success(string $text, string $icon = ''): static
+    public function success(string $text, string $icon = 'fas fa-check'): static
     {
         return $this->type('success', $text, $icon);
     }
 
-    public function error(string $text, string $icon = ''): static
+    public function error(string $text, string $icon = 'fas fa-times'): static
     {
         return $this->type('error', $text, $icon);
     }
 
-    public function warning(string $text, string $icon = ''): static
+    public function warning(string $text, string $icon = 'fas fa-exclamation-triangle'): static
     {
         return $this->type('warning', $text, $icon);
     }
 
-    public function info(string $text, string $icon = ''): static
+    public function info(string $text, string $icon = 'fas fa-info-circle'): static
     {
         return $this->type('info', $text, $icon);
     }

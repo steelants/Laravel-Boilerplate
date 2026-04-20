@@ -24,7 +24,7 @@ class DataTable extends DataTableComponent
     {
         return [
             'ip_address'       => __('IP Address'),
-            'browser_o_s_name' => __('OS Name'),
+            'browser_os_name' => __('OS Name'),
             'browser_name'     => __('Browser'),
             'last_activity'    => __('Last Activity'),
         ];
@@ -55,6 +55,7 @@ class DataTable extends DataTableComponent
     public function logout($session_id)
     {
         request()->user()->sessions()->find($session_id)->delete();
+        alert()->success(__('Session logged out'))->reload();
 
         return redirect(request()->header('Referer'));
     }

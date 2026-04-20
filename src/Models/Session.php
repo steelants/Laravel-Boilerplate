@@ -45,7 +45,7 @@ class Session extends Model
         );
     }
 
-    protected function browserOSName(): Attribute
+    protected function browserOsName(): Attribute
     {
         return Attribute::make(
             get: function () {
