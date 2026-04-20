@@ -2,6 +2,8 @@
 			'theme',
 			'layout-nav',
 			'toggleState',
+			'tabState',
+
 		]);
 		$middleware->alias([
             'is-system-admin' => IsSystemAdmin::class,
