@@ -20,6 +20,7 @@
 				</a>
 			@endif
 		</div>
+		<x-boilerplate::alerts />
 		@livewire($page_component, (isset($data) ? $data : []), key($page_component))
 	</div>
 </x-dynamic-component>
