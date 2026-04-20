@@ -14,6 +14,8 @@ class AlertBuilder
 
     protected bool $shouldPersist = false;
 
+    protected string $display = 'snackbar';
+
     public function type(string $type = 'info', string $text = '', string $icon = ''): static
     {
         $this->type = $type;
@@ -61,10 +63,17 @@ class AlertBuilder
         return $this;
     }
 
+    public function inline(): static
+    {
+        $this->display = 'inline';
+
+        return $this;
+    }
+
     public function now(): void
     {
         $collector = app(AlertCollector::class);
-        $item = new AlertItem($this->type, $this->text, $this->icon, $this->shouldPersist);
+        $item = new AlertItem($this->type, $this->text, $this->icon, $this->shouldPersist, [], $this->display);
 
         if (request()->hasHeader('X-Livewire')) {
             $collector->addPending($item);
@@ -76,7 +85,7 @@ class AlertBuilder
     public function reload(): void
     {
         app(AlertCollector::class)->addItem(
-            new AlertItem($this->type, $this->text, $this->icon, $this->shouldPersist),
+            new AlertItem($this->type, $this->text, $this->icon, $this->shouldPersist, [], $this->display),
             AlertModeType::RELOAD
         );
     }

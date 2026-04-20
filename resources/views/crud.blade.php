@@ -3,18 +3,18 @@
 		<div class="page-header">
 			<h1>{{ $title }}</h1>
 			@if(!empty($model_back))
-				<a class="btn btn-secondary" href="{{ route($model_back) }}">
-					<i class="me-2 fas fa-arrow-left"></i><span>{{ __('Back') }}</span>
-				</a>
-			@endif
-			@if(isset($options['headerButtons']))
+			<a class="btn btn-secondary" href="{{ route($model_back) }}">
+				<i class="me-2 fas fa-arrow-left"></i><span>{{ __('Back') }}</span>
+			</a>
+				@endif
+				@if(isset($options['headerButtons']))
 				{!! $options['headerButtons'] !!}
-			@endif
-			@if(isset($options['livewireComponents']))
+				@endif
+				@if(isset($options['livewireComponents']))
 				<button class="btn btn-primary" onclick="Livewire.dispatch('openModal', {{ json_encode($options) }})">
 					<i class="me-2 fas fa-plus"></i><span>{{ __('Add') }}</span>
 				</button>
-			@elseif(isset($full_page_component))
+				@elseif(isset($full_page_component))
 				<a class="btn btn-primary" href="{{ route($full_page_component) }}">
 					<i class="me-2 fas fa-plus"></i><span>{{ __('Add') }}</span>
 				</a>
