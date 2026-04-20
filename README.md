@@ -1,7 +1,5 @@
 # Laravel-Boilerplate
 
-#### Currently WIP
-
 ### Created by: [SteelAnts s.r.o.](https://www.steelants.cz/)
 
 [![Total Downloads](https://img.shields.io/packagist/dt/steelants/laravel-boilerplate.svg?style=flat-square)](https://packagist.org/packages/steelants/laravel-boilerplate)
@@ -125,140 +123,28 @@ Menu::make('main-menu', function ($menu) {
 icon - využívá defaultní ikonu dle typu, pokud není nastavena
 persist - pokud je true, zůstává notifikace aktivní dokud ji neodklikne uživatel nebo neprovede redirect.
 
+## Commands
 
-## Development
+| Command | Description |
+|---------|-------------|
+| [install:boilerplate](.docs/commands/install-boilerplate.md) | Install or update boilerplate scaffolding into the project |
+| [make:crud](.docs/commands/make-crud.md) | Scaffold a full CRUD resource (DataTable, Form, controller, routes, tests) |
+| [make:basic-tests](.docs/commands/make-basic-tests.md) | Generate basic route coverage tests |
+| [job:dispatch](.docs/commands/job-dispatch.md) | Dispatch a job by class name |
 
-1. Create subfolder `/packages` at root of your laravel project
+## Components
 
-2. clone repository to sub folder `/packages` (you need to be positioned at root of your laravel project in your terminal)
-```bash
-git clone https://github.com/steelants/Laravel-Boilerplate.git ./packages/Laravel-Boilerplate
-```
+| Component | Tag | Description |
+|-----------|-----|-------------|
+| [Tab Group](.docs/components/tab.md) | `<x-boilerplate::tab.group>` | Bootstrap tabs with Alpine.js state and cookie persistence |
+| [Breadcrumb](.docs/components/breadcrumb.md) | `<x-boilerplate::breadcrumb>` | Bootstrap breadcrumb from associative array |
+| [Gantt](.docs/components/gantt.md) | `<x-boilerplate::gantt>` | Horizontal Gantt chart with day/week/month scale |
+| [Pie Graph](.docs/components/pie-graph.md) | `<x-boilerplate::pie-graph>` | Chart.js pie chart |
+| [Selectbox](.docs/components/selectbox.md) | `<x-boilerplate::selectbox>` | Alpine.js select with tags mode and multi-select |
+| [Selectbox Ajax](.docs/components/selectbox.md#selectbox-ajax) | `<x-boilerplate::selectbox-ajax>` | Selectbox with server-side Livewire search |
+| [Searchbox](.docs/components/searchbox.md) | `<x-boilerplate::searchbox>` | Client-side filtered dropdown search |
 
-3. edit composer.json file
-```json
-"autoload": {
-	"psr-4": {
-		"SteelAnts\\LaravelBoilerplate\\": "packages/Laravel-Boilerplate/src/"
-	}
-}
-```
-
-4. Add provider to `bootstrap/providers.php`
-```php
-return [
-	...
-	SteelAnts\LaravelBoilerplate\BoilerplateServiceProvider::class,
-	...
-];
-```
-
-5. use commands to aplicate changes
-```bash
-composer dump-autoload
-```
-
-6. aplicate packages changes - before this you need have auth package
-```bash
-php artisan install:boilerplate --force
-```
-
-## CRUD
-
-The `make:crud` command scaffolds a full CRUD resource: a controller, a Livewire DataTable, a Livewire Form, and optionally routes and tests.
-
-### Basic usage
-Generates a Form component based on `FormComponent` + `HasModel` from `steelants/livewire-form`. Fields and options are resolved automatically from model fillables and casts — no manual property declarations needed.
-```bash
-php artisan make:crud {model name}
-```
-
-### Advanced mode
-Generates a fully customizable Form with individual public properties, a manual `mount()`, separate `store()` / `update()` methods, and a per-field Blade template. Use this when you need fine-grained control over the form.
-```bash
-php artisan make:crud {model name} --advanced
-```
-
-### Full page components
-Creates form as a standalone full-page route instead of a modal.
-```bash
-php artisan make:crud {model name} --full-page-components
-```
-
-### Custom namespace
-Places generated components under a sub-namespace (e.g. `App\Livewire\Admin\Post`).
-```bash
-php artisan make:crud {model name} --namespace=\\Admin
-```
-
-### With Pest tests
-Generates a `tests/Feature/{Model}CrudTest.php` with tests for guest redirect, index access, create, update and delete.
-```bash
-php artisan make:crud {model name} --tests
-```
-
-### Overwrite existing files
-```bash
-php artisan make:crud {model name} --force
-```
-
-### Options summary
-| Option | Description |
-|--------|-------------|
-| `--advanced` | Individual properties + custom blade (fully customizable) |
-| `--full-page-components` | Form as a full-page route instead of modal |
-| `--namespace=\\Admin` | Custom sub-namespace for generated components |
-| `--tests` | Generate a Pest feature test file |
-| `--force` | Overwrite existing files without confirmation |
-
-## CRUD parameters
-### Add prefix in TestController
-Give you for example "admin.test.datatable"
-```php
-public string $prefix = "admin.";
-```
-
-### Add model options in TestController
-Give to add modal size parameter
-```php
-public function __construct()
-{
-	$this->model_component = [
-		'size' => 'lg',
-	];
-}
-```
-
-## Tab Group
-
-```blade
-<x-boilerplate::tab.group default="profile" remember="myTabs" variant="tabs">
-    <x-boilerplate::tab.tab name="profile">Profile</x-boilerplate::tab.tab>
-    <x-boilerplate::tab.tab name="account">Account</x-boilerplate::tab.tab>
-    <x-boilerplate::tab.tab name="billing" :disabled="true">Billing</x-boilerplate::tab.tab>
-
-    <x-boilerplate::tab.panel name="profile">Profile content</x-boilerplate::tab.panel>
-    <x-boilerplate::tab.panel name="account">Account content</x-boilerplate::tab.panel>
-    <x-boilerplate::tab.panel name="billing">Billing content</x-boilerplate::tab.panel>
-</x-boilerplate::tab.group>
-```
-
-## SelectboxAjax (WIP)
-When you have selectbox with more than 100 options, it's recommended to use dynamic search with livewire (for now only available in selextbox-ajax).
-Alpine will then call method speicified in searchagble parameter.
-```html
-<x-selectbox-ajax :options="$this->getOptions()" searchable="getOptions" property="user_ids" multiple/>
-```
-Only thing you need to change is to create renderless function and call searchableSelectbox method that will handle everything.
-```php
-	use SearchableSelectbox;
-
-	#[Renderless]
-	public function getOptions($search = '')
-	{
-		return $this->searchableSelectbox($search, User::class, $this->user_id)->toArray();
-	}
-```
+## [Development](.docs/development.md)
 
 ## Contributors
 <a href="https://github.com/steelants/Laravel-Boilerplate/graphs/contributors">
