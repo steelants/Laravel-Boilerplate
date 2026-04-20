@@ -19,9 +19,11 @@ use SteelAnts\LaravelBoilerplate\Console\Commands\MakeBasicTestsCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
 use SteelAnts\LaravelBoilerplate\Facades\Alert;
 use SteelAnts\LaravelBoilerplate\Facades\Menu;
+use SteelAnts\LaravelBoilerplate\Support\AlertCollector;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
 use SteelAnts\LaravelBoilerplate\Livewire\File\Gallery;
+use SteelAnts\LaravelBoilerplate\Livewire\Hooks\AlertDispatcherHook;
 use SteelAnts\LaravelBoilerplate\Livewire\Setting\Form;
 use SteelAnts\LaravelBoilerplate\Traits\Auditable;
 use SteelAnts\LaravelBoilerplate\Traits\AuditableDetailed;
@@ -49,18 +51,20 @@ class BoilerplateServiceProvider extends ServiceProvider
 
         EncryptCookies::except(['theme', 'layout-nav', 'toggleState', 'tabState']);
 
-        $this->app->make(ExceptionHandler::class)->renderable(
-            function (NotFoundHttpException $e, Request $request) {
-                if ($request->is('api/*') || $request->is('local/*')) {
-                    return response()->json(['message' => __('Record not found.')], 404);
-                }
+        /** @var \Illuminate\Foundation\Exceptions\Handler $handler */
+        $handler = $this->app->make(ExceptionHandler::class);
+        $handler->renderable(function (NotFoundHttpException $e, Request $request) {
+            if ($request->is('api/*') || $request->is('local/*')) {
+                return response()->json(['message' => __('Record not found.')], 404);
             }
-        );
+        });
 
         $userClass = config('auth.providers.users.model');
         if ($userClass && $this->classHasAnyTrait($userClass, [Auditable::class, AuditableDetailed::class])) {
             Event::subscribe(UserEventSubscriber::class);
         }
+
+        Livewire::componentHook(AlertDispatcherHook::class);
 
         Livewire::component('boilerplate.file.gallery', Gallery::class);
         Livewire::component('boilerplate.setting.form', Form::class);
@@ -134,6 +138,7 @@ class BoilerplateServiceProvider extends ServiceProvider
 
     public function register()
     {
+        $this->app->singleton(AlertCollector::class);
         $this->app->alias('Menu', Menu::class);
         $this->app->alias('Alert', Alert::class);
 

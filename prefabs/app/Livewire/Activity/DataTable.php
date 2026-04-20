@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use SteelAnts\DataTable\Traits\UseDatabase;
 use SteelAnts\LaravelBoilerplate\Models\Activity;
+use SteelAnts\LaravelBoilerplate\RenderCasts\FormatDateTime;
 
 class DataTable extends DataTableComponent
 {
@@ -48,6 +49,13 @@ class DataTable extends DataTableComponent
             'note'        => __('Note'),
             'actor_id'    => __('Author'),
             'affected_id' => __('Model'),
+        ];
+    }
+
+    public function renderCasts(): array
+    {
+        return [
+            'created_at' => FormatDateTime::class,
         ];
     }
 }

@@ -7,18 +7,43 @@ use SteelAnts\LaravelBoilerplate\Types\AlertModeType;
 
 class AlertCollector
 {
-    public function add(string $type, string $text, string $icon = '', int $mode = AlertModeType::RELOAD, bool $persist = false)
+    protected array $pending = [];
+
+    public function add(string $type, string $text, string $icon = '', int $mode = AlertModeType::RELOAD, bool $persist = false): void
     {
-        $alerts = Session::get('alerts-' . $mode, []);
-        $alerts[] = new AlertItem(type: $type, text: $text, icon: $icon, persist: $persist);
-        if ($mode == AlertModeType::RELOAD) {
-            Session::flash('alerts-' . $mode, $alerts);
-        } elseif ($mode == AlertModeType::INSTANT) {
-            Session::now('alerts-' . $mode, $alerts);
+        $item = new AlertItem(type: $type, text: $text, icon: $icon, persist: $persist);
+
+        if ($mode === AlertModeType::INSTANT && request()->hasHeader('X-Livewire')) {
+            $this->addPending($item);
+        } else {
+            $this->addItem($item, $mode);
         }
     }
 
-    public function get(int $mode = AlertModeType::RELOAD)
+    public function addItem(AlertItem $item, int $mode): void
+    {
+        $alerts = Session::get('alerts-' . $mode, []);
+        $alerts[] = $item;
+
+        $mode === AlertModeType::RELOAD
+            ? Session::flash('alerts-' . $mode, $alerts)
+            : Session::now('alerts-' . $mode, $alerts);
+    }
+
+    public function addPending(AlertItem $item): void
+    {
+        $this->pending[] = $item;
+    }
+
+    public function takePending(): array
+    {
+        $pending = $this->pending;
+        $this->pending = [];
+
+        return $pending;
+    }
+
+    public function get(int $mode = AlertModeType::RELOAD): array
     {
         return Session::get('alerts-' . $mode, []);
     }

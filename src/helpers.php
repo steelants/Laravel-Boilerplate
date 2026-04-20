@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Cookie;
 use SteelAnts\LaravelBoilerplate\Models\Setting;
+use SteelAnts\LaravelBoilerplate\Support\AlertBuilder;
 
 if (!function_exists('getToggleState')) {
     function getToggleState($name)
@@ -30,6 +31,18 @@ if (!function_exists('settings')) {
         }
 
         return $value->pluck('value', 'index')->toArray();
+    }
+}
+
+if (!function_exists('alert')) {
+    function alert(?string $type = null, string $text = '', ?string $icon = null): AlertBuilder
+    {
+        $builder = app(AlertBuilder::class);
+        if ($type !== null) {
+            $builder->type($type, $text, $icon ?? '');
+        }
+
+        return $builder;
     }
 }
 

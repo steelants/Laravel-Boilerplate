@@ -93,11 +93,11 @@ class Form extends FormComponent
             $user = User::find($this->user_id);
             $this->authorize('update', $user);
             $user->update($data);
-            $this->dispatch('snackbar', ['message' => __('User updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
+            alert()->success(__('User updated'))->now();
         } else {
             $this->authorize('create', User::class);
             User::create($data);
-            $this->dispatch('snackbar', ['message' => __('User created'), 'type' => 'success', 'icon' => 'fas fa-check']);
+            alert()->success(__('User created'))->now();
         }
 
         return true;

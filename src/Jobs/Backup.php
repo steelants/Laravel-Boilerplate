@@ -10,7 +10,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use SteelAnts\LaravelBoilerplate\Attributes\AllowManualRun;
 
+#[AllowManualRun()]
 class Backup implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;

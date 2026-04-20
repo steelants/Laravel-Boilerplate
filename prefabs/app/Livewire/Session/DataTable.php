@@ -5,6 +5,7 @@ namespace App\Livewire\Session;
 use Illuminate\Database\Eloquent\Builder;
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use SteelAnts\DataTable\Traits\UseDatabase;
+use SteelAnts\LaravelBoilerplate\RenderCasts\FormatDateTime;
 
 class DataTable extends DataTableComponent
 {
@@ -19,24 +20,20 @@ class DataTable extends DataTableComponent
         return request()->user()->sessions()->orderByDesc('last_activity')->getQuery();
     }
 
-    public function row($row): array
-    {
-        return [
-            'id'              => $row->id,
-            'ip_address'      => $row->ip_address,
-            'browser_os_name' => $row->browser_o_s_name,
-            'browser_name'    => $row->browser_name,
-            'last_activity'   => $row->last_activity->format('d. m. Y H:m'),
-        ];
-    }
-
     public function headers(): array
     {
         return [
-            'ip_address'      => __('IP Address'),
-            'browser_os_name' => __('OS Name'),
-            'browser_name'    => __('Browser'),
-            'last_activity'   => __('Last Activity'),
+            'ip_address'       => __('IP Address'),
+            'browser_o_s_name' => __('OS Name'),
+            'browser_name'     => __('Browser'),
+            'last_activity'    => __('Last Activity'),
+        ];
+    }
+
+    public function renderCasts(): array
+    {
+        return [
+            'last_activity' => FormatDateTime::class,
         ];
     }
 

@@ -64,6 +64,39 @@ Safe files are copied first. If any customized files are detected, you are promp
 
 ---
 
+### Fluent alert API
+
+Alerts can now be dispatched using the `alert()` helper instead of calling `$this->dispatch('snackbar', [...])` directly in Livewire components.
+
+**Before:**
+```php
+$this->dispatch('snackbar', ['message' => __('Saved'), 'type' => 'success', 'icon' => 'fas fa-check']);
+```
+
+**After:**
+```php
+alert()->success(__('Saved'))->now();
+```
+
+The helper works transparently in both Livewire and standard HTTP contexts:
+
+- Inside a Livewire request (`X-Livewire` header) — alert is dispatched via `$this->component->dispatch('snackbar', ...)` through `AlertDispatcherHook`
+- Inside a regular HTTP request — alert is stored in session and rendered by the `<x-boilerplate::alerts>` component
+
+`Alert::add(AlertModeType::INSTANT)` also works automatically in Livewire context via the same hook.
+
+**Available methods:**
+```php
+alert()->success('Saved!')->now();          // success, show immediately
+alert()->error('Failed!')->reload();        // error, show after redirect
+alert()->warning('Check input')->now();
+alert()->info('Note')->now();
+alert('success', 'Saved!')->now();          // shorthand with helper args
+alert()->success('Saved!')->persist()->now(); // won't auto-close
+```
+
+---
+
 ### Removed stubs
 
 The following stubs have been deleted as their functionality moved to the ServiceProvider:

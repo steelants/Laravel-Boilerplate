@@ -192,7 +192,7 @@ class Form extends FormComponent
             }
         }
 
-        $this->dispatch('snackbar', ['message' => __('Setting Saved'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        alert()->success(__('Setting Saved'))->now();
         $this->dispatch('closeModal');
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use ReflectionClass;
+use SteelAnts\LaravelBoilerplate\Helpers\JobHelper;
 use SteelAnts\LivewireForm\Livewire\FormComponent;
 use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
 
@@ -143,13 +144,8 @@ class Form extends FormComponent
     {
         $this->job = $job;
 
-        $class = '\\App\\Jobs\\' . $job;
-        if (!class_exists($class)) {
-            $class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' . $job;
-            if (!class_exists($class)) {
-                $class = '\\SteelAnts\\LaravelBoilerplate\\Dashboard\\Jobs\\' . $this->job;
-            }
-        }
+        $class = JobHelper::resolveClass($job);
+        abort_unless(JobHelper::hasAllowManualRun($class), 403);
 
         $reflection = new ReflectionClass($class);
         $this->note = $reflection->getDocComment();
@@ -184,13 +180,7 @@ class Form extends FormComponent
             $this->validate();
         }
 
-        $class = '\\App\\Jobs\\' . $this->job;
-        if (!class_exists($class)) {
-            $class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' . $this->job;
-            if (!class_exists($class)) {
-                $class = '\\SteelAnts\\LaravelBoilerplate\\Dashboard\\Jobs\\' . $this->job;
-            }
-        }
+        $class = JobHelper::resolveClass($this->job);
 
         if (!empty($this->job_parameters) && count($this->job_parameters) > 0) {
             foreach ($this->job_parameters as $name => $data) {
@@ -212,7 +202,7 @@ class Form extends FormComponent
 
         dispatch(new $class(...$this->properties));
 
-        $this->dispatch('snackbar', ['message' => ($this->job . ' ' . __('Job Scheduled')), 'type' => 'success', 'icon' => 'fas fa-check']);
+        alert()->success($this->job . ' ' . __('Job Scheduled'))->now();
         $this->dispatch('closeModal');
     }
 

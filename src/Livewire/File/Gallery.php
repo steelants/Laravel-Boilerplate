@@ -64,12 +64,12 @@ class Gallery extends Component
 
                 $this->refreshFiles();
                 $this->dispatch('filesAdded');
-                $this->dispatch('snackbar', ['message' => __('Files uploaded sucesfully'), 'type' => 'sucess', 'icon' => 'fas fa-check']);
+                alert()->success(__('Files uploaded successfully'))->now();
             }
         } catch (Throwable $th) {
             $this->refreshFiles();
             $this->addError('files', $th->getMessage());
-            $this->dispatch('snackbar', ['message' => __('Unable to upload files'), 'type' => 'error', 'icon' => 'fas fa-x']);
+            alert()->error(__('Unable to upload files'))->now();
         }
     }
 
@@ -89,11 +89,11 @@ class Gallery extends Component
 
             $this->refreshFiles();
             $this->dispatch('filesAdded');
-            $this->dispatch('snackbar', ['message' => __('File uploaded sucesfully'), 'type' => 'sucess', 'icon' => 'fas fa-check']);
+            alert()->success(__('File uploaded successfully'))->now();
         } catch (Throwable $th) {
             $this->refreshFiles();
             $this->addError('files_replacements.' . $fileModel->id, $th->getMessage());
-            $this->dispatch('snackbar', ['message' => __('Unable to upload file'), 'type' => 'error', 'icon' => 'fas fa-x']);
+            alert()->error(__('Unable to upload file'))->now();
         }
     }
 

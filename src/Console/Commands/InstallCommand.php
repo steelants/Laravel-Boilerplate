@@ -321,6 +321,33 @@ class InstallCommand extends Command
             }
         }
 
+        $orphanedUses = [
+            'use App\\Http\\Middleware\\IsSystemAdmin;',
+            'use Illuminate\\Http\\Request;',
+            'use Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException;',
+        ];
+
+        foreach ($orphanedUses as $use) {
+            $cleaned = preg_replace('/\n?' . preg_quote($use, '/') . '/', '', $content);
+            if ($cleaned !== $content) {
+                $content = $cleaned;
+                $changed = true;
+            }
+        }
+
+        $requiredUses = [
+            'use Illuminate\\Foundation\\Application;',
+            'use Illuminate\\Foundation\\Configuration\\Exceptions;',
+            'use Illuminate\\Foundation\\Configuration\\Middleware;',
+        ];
+
+        foreach ($requiredUses as $use) {
+            if (!str_contains($content, $use)) {
+                $content = preg_replace('/^<\?php\s+/m', "<?php\n\n" . $use . "\n", $content, 1);
+                $changed = true;
+            }
+        }
+
         if ($changed) {
             File::put($path, $content);
             $this->components->warn('Removed legacy BOILERPLATE blocks from bootstrap/app.php');

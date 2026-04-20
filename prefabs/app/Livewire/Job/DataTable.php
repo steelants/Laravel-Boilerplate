@@ -9,6 +9,7 @@ use SteelAnts\DataTable\Livewire\DataTableComponent;
 use SteelAnts\DataTable\Traits\UseDatabase;
 use SteelAnts\LaravelBoilerplate\Models\FailedJob;
 use SteelAnts\LaravelBoilerplate\Models\Job;
+use SteelAnts\LaravelBoilerplate\RenderCasts\FormatDateTime;
 
 class DataTable extends DataTableComponent
 {
@@ -67,6 +68,14 @@ class DataTable extends DataTableComponent
             'queue'        => __('Queue'),
             'name'         => __('Name'),
             'available_at' => __('Available At'),
+        ];
+    }
+
+    public function renderCasts(): array
+    {
+        return [
+            'failed_at'    => FormatDateTime::class,
+            'available_at' => FormatDateTime::class,
         ];
     }
 

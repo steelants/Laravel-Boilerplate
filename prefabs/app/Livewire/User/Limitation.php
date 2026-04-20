@@ -50,7 +50,7 @@ class Limitation extends Component
         );
 
         $this->dispatch('close-modal');
-        $this->dispatch('snackbar', ['message' => __('Saved'), 'type' => 'success', 'icon' => 'fas fa-check']);
+        alert()->success(__('Saved'))->now();
 
         $this->dispatch('limitationSaved');
     }

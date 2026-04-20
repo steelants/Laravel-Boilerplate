@@ -86,10 +86,10 @@ class Form extends FormComponent
             if (!empty($sub)) {
                 $sub->update($this->properties);
             }
-            $this->dispatch('snackbar', ['message' => __('Item successfully updated'), 'type' => 'success', 'icon' => 'fas fa-check']);
+            alert()->success(__('Item successfully updated'))->now();
         } else {
             Subscription::create($this->properties);
-            $this->dispatch('snackbar', ['message' => __('Item successfully created'), 'type' => 'success', 'icon' => 'fas fa-check']);
+            alert()->success(__('Item successfully created'))->now();
         }
 
         return true;

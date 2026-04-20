@@ -4,8 +4,7 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use SteelAnts\LaravelBoilerplate\Helpers\AbstractHelper;
+use SteelAnts\LaravelBoilerplate\Helpers\JobHelper;
 use SteelAnts\LaravelBoilerplate\Models\FailedJob;
 use SteelAnts\LaravelBoilerplate\Models\Job;
 
@@ -13,27 +12,13 @@ class JobsController extends BaseController
 {
     public function index()
     {
-        $rules = [];
-        foreach (
-            [
-                (app_path() . '/Jobs'),
-                (base_path() . '/packages/Laravel-Boilerplate/src/Jobs'),
-                (base_path() . '/packages/Laravel-Boilerplate.Dashboard/src/Jobs'),
-                (base_path() . '/vendor/steelants/laravel-boilerplate/src/Jobs'),
-                (base_path() . '/vendor/steelants/laravel-boilerplate.dashboard/src/Jobs'),
-            ] as $path
-        ) {
-            if (!File::exists($path)) {
-                continue;
-            }
-            $rules = array_merge($rules, AbstractHelper::getClassNames($path));
-        }
+        $jobClasses = JobHelper::getAllManuallyRunnableJobs();
 
         return view('system.job.index', [
             'layout'        => config('boilerplate.layouts.system'),
             'waiting_count' => Job::count(),
             'failed_count'  => FailedJob::count(),
-            'jobs_classes'  => $rules,
+            'jobs_classes'  => $jobClasses,
         ]);
     }
 
