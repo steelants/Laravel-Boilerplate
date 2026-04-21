@@ -38,4 +38,12 @@ return [
         'default' => 'layout-app',
         'system'  => 'layout-app',
     ],
+
+    'jobs' => [
+        'namespaces' => [
+            'App\\Jobs\\',
+            'SteelAnts\\LaravelBoilerplate\\Jobs\\',
+            'SteelAnts\\LaravelBoilerplate\\Dashboard\\Jobs\\',
+        ],
+    ],
 ];

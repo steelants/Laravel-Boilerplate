@@ -7,45 +7,15 @@ use SteelAnts\LaravelBoilerplate\Attributes\AllowManualRun;
 
 class JobHelper
 {
-    protected static array $extraPaths = [];
-
-    protected static array $namespaces = [
-        'App\\Jobs\\',
-        'SteelAnts\\LaravelBoilerplate\\Jobs\\',
-        'SteelAnts\\LaravelBoilerplate\\Dashboard\\Jobs\\',
-    ];
-
-    public static function registerPath(string $path): void
-    {
-        static::$extraPaths[] = $path;
-    }
-
-    public static function registerNamespace(string $namespace): void
-    {
-        static::$namespaces[] = rtrim($namespace, '\\') . '\\';
-    }
-
-    private static function defaultPaths(): array
-    {
-        $paths = array_merge(
-            [
-                app_path('Jobs'),
-                base_path('packages/Laravel-Boilerplate/src/Jobs'),
-                base_path('packages/Laravel-Boilerplate.Dashboard/src/Jobs'),
-                base_path('vendor/steelants/laravel-boilerplate/src/Jobs'),
-                base_path('vendor/steelants/laravel-boilerplate.dashboard/src/Jobs'),
-            ],
-            static::$extraPaths,
-        );
-
-        return array_filter($paths, 'is_dir');
-    }
-
     public static function getAllManuallyRunnableJobs(): array
     {
         $out = [];
-        foreach (static::defaultPaths() as $path) {
-            $out = array_merge($out, static::getManuallyRunnableJobs($path));
+        foreach (config('boilerplate.jobs.namespaces', [
+            'App\\Jobs\\',
+            'SteelAnts\\LaravelBoilerplate\\Jobs\\',
+            'SteelAnts\\LaravelBoilerplate\\Dashboard\\Jobs\\',
+        ]) as $namespace) {
+            $out = array_merge($out, static::findManuallyRunnableInNamespace($namespace));
         }
 
         return $out;
@@ -89,14 +59,15 @@ class JobHelper
 
     public static function resolveClass(string $name): string
     {
-        foreach (static::$namespaces as $namespace) {
+        $namespaces = config('boilerplate.jobs.namespaces', ['App\\Jobs\\']);
+        foreach ($namespaces as $namespace) {
             $fqcn = $namespace . $name;
             if (class_exists($fqcn)) {
                 return $fqcn;
             }
         }
 
-        return static::$namespaces[0] . $name;
+        return $namespaces[0] . $name;
     }
 
     public static function hasAllowManualRun(string $fqcn): bool
@@ -106,5 +77,56 @@ class JobHelper
         }
 
         return !empty((new ReflectionClass($fqcn))->getAttributes(AllowManualRun::class));
+    }
+
+    private static function findManuallyRunnableInNamespace(string $namespace): array
+    {
+        // Production: classmap populated by composer dump-autoload --optimize
+        $classes = static::getClassesFromClassmap($namespace);
+        if (!empty($classes)) {
+            return array_values(array_filter(
+                array_map(fn($fqcn) => substr($fqcn, strrpos($fqcn, '\\') + 1), $classes),
+                fn($short) => static::hasAllowManualRun($namespace . $short),
+            ));
+        }
+
+        // Dev fallback: derive directories from Composer PSR-4 map and scan
+        $out = [];
+        foreach (static::getDirectoriesForNamespace($namespace) as $dir) {
+            $out = array_merge($out, static::getManuallyRunnableJobs($dir));
+        }
+
+        return $out;
+    }
+
+    private static function getClassesFromClassmap(string $namespace): array
+    {
+        $loader = require base_path('vendor/autoload.php');
+
+        return array_values(array_filter(
+            array_keys($loader->getClassMap()),
+            fn($class) => str_starts_with($class, $namespace),
+        ));
+    }
+
+    private static function getDirectoriesForNamespace(string $namespace): array
+    {
+        $loader = require base_path('vendor/autoload.php');
+        $dirs = [];
+
+        foreach ($loader->getPrefixesPsr4() as $prefix => $baseDirs) {
+            if (!str_starts_with($namespace, $prefix)) {
+                continue;
+            }
+            $subPath = str_replace('\\', '/', substr($namespace, strlen($prefix)));
+            foreach ($baseDirs as $baseDir) {
+                $dir = rtrim($baseDir, '/') . '/' . trim($subPath, '/');
+                if (is_dir($dir)) {
+                    $dirs[] = $dir;
+                }
+            }
+        }
+
+        return $dirs;
     }
 }
