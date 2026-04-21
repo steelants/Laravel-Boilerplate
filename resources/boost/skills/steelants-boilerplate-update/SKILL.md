@@ -36,6 +36,9 @@ On each run of `install:boilerplate` the command compares three hashes:
 # 1. Pull the new package version
 composer update steelants/laravel-boilerplate
 
+# 2. read update notes
+cat ./vendor/steelants/laravel-boilerplate/.docs/updates
+
 # 3. Run the update
 php artisan install:boilerplate --force
 
@@ -54,3 +57,5 @@ git diff
 5. `php artisan optimize:clear`
 6. Test authentication, CRUD, and any customized views
 7. enshure any customization before update is still present (you need tu diferentiate betven package changes like updates of prefabs and repo specific changes)
+8. read update notes inside `.docs/updates/` / contains hapefull notes
+9. run anz test contained in project `php artisan test`
