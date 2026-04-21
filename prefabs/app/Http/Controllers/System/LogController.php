@@ -64,7 +64,7 @@ class LogController extends BaseController
 
     public function detail($filename)
     {
-        $path = storage_path('logs/' . $filename);
+        $path = $this->resolveLogPath($filename);
 
         if (File::exists($path)) {
             if (File::size($path) > 1000 * 1000 * 1000 * 1000) {
@@ -74,7 +74,7 @@ class LogController extends BaseController
             return view('system.log.detail', [
                 'layout'   => config('boilerplate.layouts.system'),
                 'content'  => File::get($path),
-                'filename' => $filename,
+                'filename' => basename($path),
             ]);
         } else {
             abort(404);
@@ -83,7 +83,7 @@ class LogController extends BaseController
 
     public function download($filename)
     {
-        $path = storage_path('logs/' . $filename);
+        $path = $this->resolveLogPath($filename);
 
         if (File::exists($path)) {
             return response()->download($path);
@@ -94,7 +94,7 @@ class LogController extends BaseController
 
     public function delete($filename)
     {
-        $path = storage_path('logs/' . $filename);
+        $path = $this->resolveLogPath($filename);
 
         if (File::exists($path)) {
             File::delete($path);
@@ -103,6 +103,11 @@ class LogController extends BaseController
         } else {
             abort(404);
         }
+    }
+
+    private function resolveLogPath(string $filename): string
+    {
+        return storage_path('logs') . DIRECTORY_SEPARATOR . basename($filename);
     }
 
     public function clear(Request $request)
