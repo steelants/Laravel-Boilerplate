@@ -16,10 +16,22 @@
 			@endforeach
 		</div>
 
-		<h5 class="mt-4">{{ __("Waiting") }} <span class="badge text-bg-secondary">{{ $waiting_count }}</span></h5>
+		<div class="d-flex align-items-center justify-content-between mt-4">
+			<h5 class="mb-0">{{ __("Waiting") }} <span class="badge text-bg-secondary">{{ $waiting_count }}</span></h5>
+			<button class="btn btn-warning btn-sm" onclick="confirm('{{ __('Do you really want to stop all waiting jobs?') }}') ? window.location.href = '{{ route('system.jobs.stop') }}' : false">
+				<i class="me-2 fas fa-stop"></i>
+				<span>{{ __('Stop jobs') }}</span>
+			</button>
+		</div>
         @livewire('job.data-table', [], key('data-table'))
 
-		<h5 class="mt-4">{{ __("Failed") }} <span class="badge text-bg-secondary">{{ $failed_count }}</span></h5>
+		<div class="d-flex align-items-center justify-content-between mt-4">
+			<h5 class="mb-0">{{ __("Failed") }} <span class="badge text-bg-secondary">{{ $failed_count }}</span></h5>
+			<button class="btn btn-success btn-sm" onclick="confirm('{{ __('Do you really want to rerun all failed jobs?') }}') ? window.location.href = '{{ route('system.jobs.rerun') }}' : false">
+				<i class="me-2 fas fa-redo"></i>
+				<span>{{ __('Rerun jobs') }}</span>
+			</button>
+		</div>
         @livewire('job.data-table', ['failed' => true], key('data-table'))
 	</div>
 </x-dynamic-component>

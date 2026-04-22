@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use SteelAnts\LaravelBoilerplate\Helpers\JobHelper;
 use SteelAnts\LaravelBoilerplate\Models\FailedJob;
@@ -27,5 +28,19 @@ class JobsController extends BaseController
         DB::table('failed_jobs')->delete();
 
         return redirect()->route('system.jobs.index')->with('success', __('Jobs cleared!'));
+    }
+
+    public function rerun()
+    {
+        Artisan::call('queue:retry', ['id' => ['all']]);
+
+        return redirect()->route('system.jobs.index')->with('success', __('Failed jobs queued for retry!'));
+    }
+
+    public function stop()
+    {
+        DB::table('jobs')->delete();
+
+        return redirect()->route('system.jobs.index')->with('success', __('Waiting jobs stopped!'));
     }
 }
