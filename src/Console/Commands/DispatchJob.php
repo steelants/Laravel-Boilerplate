@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class DispatchJob extends Command
 {
-       /**
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -27,12 +27,12 @@ class DispatchJob extends Command
      */
     public function handle()
     {
-		$job = $this->argument('job');
-		$class = '\\App\\Jobs\\' . $job;
+        $job = $this->argument('job');
+        $class = '\\App\\Jobs\\' . $job;
         if (!class_exists($class)) {
             $class = '\\SteelAnts\\LaravelBoilerplate\\Jobs\\' . $job;
         }
 
-        dispatch(new $class());
+        dispatch(new $class);
     }
 }

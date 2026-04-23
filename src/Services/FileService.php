@@ -16,7 +16,7 @@ class FileService
     public static function parseInlineImages(Model $owner, $rawContent, $imageFilePrefix = '', $imagesStoragePath = '', $imageLazyLoad = true, bool $public = false)
     {
         if (empty($rawContent)) {
-            return "";
+            return '';
         }
 
         if (empty($imageFilePrefix)) {
@@ -30,11 +30,11 @@ class FileService
             }
         }
 
-		$imagesStoragePath = Str::lower($imagesStoragePath);
+        $imagesStoragePath = Str::lower($imagesStoragePath);
 
         libxml_use_internal_errors(true);
 
-        $dom = new DOMDocument();
+        $dom = new DOMDocument;
         $dom->encoding = 'utf-8';
         $dom->loadHTML(mb_convert_encoding($rawContent, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $images = $dom->getElementsByTagName('img');
@@ -44,9 +44,9 @@ class FileService
 
         foreach ($images as $image) {
             $src = $image->getAttribute('src');
-            //unset file from files if exists
+            // unset file from files if exists
             if (!empty($filesName) && count($filesName) > 0 && !preg_match('/data:image/', $src)) {
-                $nameParts = explode("\\", str_replace("/", "\\", urldecode($src)));
+                $nameParts = explode('\\', str_replace('/', '\\', urldecode($src)));
                 unset($filesName[array_search(end($nameParts), $filesName)]);
             }
 
@@ -79,14 +79,14 @@ class FileService
             }
         }
 
-        //remove all not unset files
+        // remove all not unset files
         if (!empty($filesName) && count($filesName) > 0) {
             foreach ($filesName as $id => $path) {
                 File::where('id', $id)->delete();
             }
         }
 
-        #preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1">$1</a>',
+        // preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1">$1</a>',
         return $dom->savehtml($dom->documentElement);
     }
 
@@ -94,7 +94,7 @@ class FileService
     {
         libxml_use_internal_errors(true);
 
-        $dom = new DOMDocument();
+        $dom = new DOMDocument;
         $dom->encoding = 'utf-8';
         $dom->loadHTML(mb_convert_encoding($rawContent, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $images = $dom->getElementsByTagName('img');
@@ -103,7 +103,7 @@ class FileService
 
         foreach ($images as $image) {
             $src = $image->getAttribute('src');
-            $nameParts = explode("\\", str_replace("/", "\\", urldecode($src)));
+            $nameParts = explode('\\', str_replace('/', '\\', urldecode($src)));
             $file = $owner->files()->withoutGlobalScopes()->where('filename', end($nameParts))->first();
             if (!empty($file)) {
                 $files[] = $file->id;
@@ -113,21 +113,21 @@ class FileService
         return $files;
     }
 
-    public static function uploadFile(Model $owner, UploadedFile|TemporaryUploadedFile $file, string $rootPath = "", bool $public = false): string
+    public static function uploadFile(Model $owner, UploadedFile|TemporaryUploadedFile $file, string $rootPath = '', bool $public = false): string
     {
-        $filename = Str::uuid()->toString() . "." . $file->getClientOriginalExtension();
+        $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
 
-		if (empty($rootPath)) {
+        if (empty($rootPath)) {
             $rootPath = 'uploads' . DIRECTORY_SEPARATOR . Str::snake($owner->getTable());
             if (method_exists($owner, 'rootPath')) {
                 $rootPath = $owner->rootPath($rootPath);
             }
         }
 
-		$rootPath = Str::lower($rootPath);
+        $rootPath = Str::lower($rootPath);
 
-		$drive = !empty($public) ? 'public' : 'local';
-		Storage::drive($drive)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);
+        $drive = !empty($public) ? 'public' : 'local';
+        Storage::drive($drive)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);
 
         $owner->files()->updateOrCreate(
             [
@@ -145,10 +145,10 @@ class FileService
 
     public static function loadFile(string $filename, string $rootPath, bool $public = false): string
     {
-        return route("file.serv", [
-            "path"      => str_replace(DIRECTORY_SEPARATOR, '-', trim($rootPath, DIRECTORY_SEPARATOR)),
-            "file_name" => $filename,
-			"public"    => $public,
+        return route('file.serv', [
+            'path'      => str_replace(DIRECTORY_SEPARATOR, '-', trim($rootPath, DIRECTORY_SEPARATOR)),
+            'file_name' => $filename,
+            'public'    => $public,
         ], false);
     }
 
@@ -181,46 +181,47 @@ class FileService
             'xpm',
             'xwd',
         ];
-        $explode = explode(".", $filename);
+        $explode = explode('.', $filename);
+
         return in_array(end($explode), $imageExtensions);
     }
 
-	public static function uploadFileAnonymouse(UploadedFile|TemporaryUploadedFile $file, string $rootPath, bool $public = false): string
-	{
-		$filename = Str::uuid()->toString() . "." . $file->getClientOriginalExtension();
-		$drive = !empty($public) ? 'public' : 'local';
-		Storage::drive($drive)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);
+    public static function uploadFileAnonymouse(UploadedFile|TemporaryUploadedFile $file, string $rootPath, bool $public = false): string
+    {
+        $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+        $drive = !empty($public) ? 'public' : 'local';
+        Storage::drive($drive)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);
 
         File::updateOrCreate(
-			[
-				'filename' => $filename,
+            [
+                'filename' => $filename,
                 'path'     => $rootPath,
             ],
             [
-				'original_name' => $file->getClientOriginalName(),
+                'original_name' => $file->getClientOriginalName(),
                 'size'          => $file->getSize(),
             ],
         );
 
-        return "";
-	}
+        return '';
+    }
 
-	public static function replaceFile(File $fileModel, UploadedFile|TemporaryUploadedFile $file, bool $public = false): string
-	{
+    public static function replaceFile(File $fileModel, UploadedFile|TemporaryUploadedFile $file, bool $public = false): string
+    {
         $drive = !empty($public) ? 'public' : 'local';
         $file_path = Storage::drive($drive)->putFileAs(Str::trim($fileModel->path, DIRECTORY_SEPARATOR), $file, $fileModel->filename);
 
         File::updateOrCreate(
-			[
-				'filename' => $fileModel->filename,
+            [
+                'filename' => $fileModel->filename,
                 'path'     => $fileModel->path,
             ],
             [
-				'original_name' => $file->getClientOriginalName(),
+                'original_name' => $file->getClientOriginalName(),
                 'size'          => $file->getSize(),
             ],
         );
 
-        return "";
-	}
+        return '';
+    }
 }

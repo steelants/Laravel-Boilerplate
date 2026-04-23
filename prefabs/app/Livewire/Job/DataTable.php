@@ -9,6 +9,7 @@ use SteelAnts\DataTable\Livewire\DataTableComponent;
 use SteelAnts\DataTable\Traits\UseDatabase;
 use SteelAnts\LaravelBoilerplate\Models\FailedJob;
 use SteelAnts\LaravelBoilerplate\Models\Job;
+use SteelAnts\LaravelBoilerplate\RenderCasts\FormatDateTime;
 
 class DataTable extends DataTableComponent
 {
@@ -70,6 +71,14 @@ class DataTable extends DataTableComponent
         ];
     }
 
+    public function renderCasts(): array
+    {
+        return [
+            'failed_at'    => FormatDateTime::class,
+            'available_at' => FormatDateTime::class,
+        ];
+    }
+
     public function actions($item): array
     {
         if ($this->failed) {
@@ -124,12 +133,14 @@ class DataTable extends DataTableComponent
         $command = unserialize($job->payload['data']['command']);
         app()->call([$command, 'handle']);
         $job->delete();
+        alert()->success(__('Job executed'))->now();
     }
 
     public function stop($job_id)
     {
         Gate::authorize('is-system-admin');
         Job::find($job_id)->delete();
+        alert()->success(__('Job deleted'))->now();
     }
 
     public function trace($job_uuid)
@@ -142,5 +153,6 @@ class DataTable extends DataTableComponent
     {
         Gate::authorize('is-system-admin');
         Artisan::call('queue:retry', ['id' => [$job_uuid]]);
+        alert()->success(__('Job queued for retry'))->now();
     }
 }

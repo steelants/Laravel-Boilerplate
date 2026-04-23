@@ -12,14 +12,14 @@ trait HasSettings
         return $this->morphMany(config('boilerplate.models.setting', Setting::class), 'settable');
     }
 
-	public function getSettings($key, $default = null)
+    public function getSettings($key, $default = null)
     {
         $value = $this->settings()->where('index', $key)->get();
         if ($value->isEmpty()) {
             return $default;
         }
 
-        if ($value->count() == 1){
+        if ($value->count() == 1) {
             return $value->first()->value;
         }
 

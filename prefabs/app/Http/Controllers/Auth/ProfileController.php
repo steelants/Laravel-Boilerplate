@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Requests\Auth\UpdateUserRequest;
 use App\Http\Requests\Auth\CreateApiTokenRequest;
 use App\Http\Requests\Auth\RemoveApiTokenRequest;
+use App\Http\Requests\Auth\UpdateUserRequest;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends BaseController
@@ -36,9 +36,9 @@ class ProfileController extends BaseController
             unset($validated['password']);
         }
         $request->user()->update($validated);
+
         return redirect()->route('profile.index')->with('success', __('Updated'));
     }
-
 
     public function api(Request $request)
     {
@@ -52,15 +52,16 @@ class ProfileController extends BaseController
     {
         $validated = $request->validated();
         $tokenCreationParameters = [
-            "name"      => $validated['token_name'],
-            "abilities" => ['*'],
+            'name'      => $validated['token_name'],
+            'abilities' => ['*'],
         ];
 
         if (!empty($validated['expire_at'])) {
-            $tokenCreationParameters["expires_at"] = Carbon::parse($validated['expire_at']);
+            $tokenCreationParameters['expires_at'] = Carbon::parse($validated['expire_at']);
         }
 
         $newToken = $request->user()->createToken(...$tokenCreationParameters)->plainTextToken;
+
         return redirect()->route('profile.api')->with([
             'success' => __('Created'),
             'secret'  => $newToken,
@@ -71,6 +72,7 @@ class ProfileController extends BaseController
     {
         $validated = $request->validated();
         $request->user()->tokens()->where('id', $validated['token_id'])->first()->delete();
+
         return redirect()->route('profile.api')->with('success', __('Removed'));
     }
 }

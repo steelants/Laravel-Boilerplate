@@ -6,21 +6,21 @@ use SteelAnts\LaravelBoilerplate\Models\Activity;
 
 class ActivityService
 {
-	public static function log($text, $data = null)
-	{
-		$activity = new Activity();
-		$activity->lang_text = __($text);
-		$activity->data = $data;
-		$activity->save();
-	}
+    public static function log($text, $data = null)
+    {
+        $activity = new Activity;
+        $activity->lang_text = __($text);
+        $activity->data = $data;
+        $activity->save();
+    }
 
-	public static function logUrl($text = 'Accessed url')
-	{
-		$activity = new Activity();
-		$activity->lang_text = __($text);
-		$activity->data = [
-			'url' => url()->full(),
-		];
-		$activity->save();
-	}
+    public static function logUrl($text = 'Accessed url')
+    {
+        $activity = new Activity;
+        $activity->lang_text = __($text);
+        $activity->data = [
+            'url' => url()->full(),
+        ];
+        $activity->save();
+    }
 }

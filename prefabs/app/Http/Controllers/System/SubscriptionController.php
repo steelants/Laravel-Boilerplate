@@ -9,6 +9,7 @@ use SteelAnts\LaravelBoilerplate\Traits\SystemPage;
 
 class SubscriptionController extends BaseController
 {
-	use CRUD, SystemPage;
-	public string $model = Subscription::class;
+    use CRUD, SystemPage;
+
+    public string $model = Subscription::class;
 }

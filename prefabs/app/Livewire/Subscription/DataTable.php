@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use SteelAnts\DataTable\Livewire\DataTableComponent;
 use SteelAnts\DataTable\Traits\UseDatabase;
 use SteelAnts\LaravelBoilerplate\Models\Subscription;
+use SteelAnts\LaravelBoilerplate\RenderCasts\FormatDateTime;
 use SteelAnts\LaravelBoilerplate\Types\SubscriptionTier;
 
 class DataTable extends DataTableComponent
@@ -24,7 +25,14 @@ class DataTable extends DataTableComponent
         return [
             'id'       => $row->id,
             'tier'     => SubscriptionTier::getName($row->tier),
-            'valid_to' => $row->valid_to->format('d. m. Y'),
+            'valid_to' => $row->valid_to,
+        ];
+    }
+
+    public function renderCasts(): array
+    {
+        return [
+            'valid_to' => FormatDateTime::class,
         ];
     }
 
@@ -41,10 +49,10 @@ class DataTable extends DataTableComponent
     {
         return [
             [
-                'type'       => "livewire",
-                'action'     => "edit",
+                'type'       => 'livewire',
+                'action'     => 'edit',
                 'parameters' => $item['id'],
-                'text'       => __("Edit"),
+                'text'       => __('Edit'),
             ],
         ];
     }
