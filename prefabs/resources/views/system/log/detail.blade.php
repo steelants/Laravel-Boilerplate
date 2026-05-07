@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <pre class="p-2 border">{!! $content !!}</pre>
+        <pre class="p-2 border">{{ $content }}</pre>
 
         <div id="end"></div>
     </div>
