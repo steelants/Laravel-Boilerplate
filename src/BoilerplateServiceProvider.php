@@ -29,10 +29,11 @@ use SteelAnts\LaravelBoilerplate\Traits\Auditable;
 use SteelAnts\LaravelBoilerplate\Traits\AuditableDetailed;
 use SteelAnts\LaravelBoilerplate\Traits\SupportSystemAdmins;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Routing\Router;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(Router $router)
     {
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'boilerplate');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'boilerplate');
@@ -41,8 +42,9 @@ class BoilerplateServiceProvider extends ServiceProvider
         Blade::componentNamespace('SteelAnts\LaravelBoilerplate\View\Components', 'boilerplate');
 
         if (class_exists('App\Http\Middleware\GenerateMenus')) {
-            $router = $this->app['router'];
-            $router->pushMiddlewareToGroup('web', GenerateMenus::class);
+            $this->app->booted(function () use ($router): void {
+                $router->pushMiddlewareToGroup('web', GenerateMenus::class);
+            });
         }
 
         if (class_exists('App\Http\Middleware\IsSystemAdmin')) {
