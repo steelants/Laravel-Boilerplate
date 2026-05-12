@@ -13,7 +13,7 @@ class Trace extends Component
 
     public function mount($job_uuid)
     {
-       $this->exception = FailedJob::where('uuid', $this->job_uuid)->first()?->exception ?? '';
+        $this->exception = FailedJob::where('uuid', $this->job_uuid)->first()?->exception ?? '';
     }
 
     public function render()

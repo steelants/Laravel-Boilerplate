@@ -5,22 +5,22 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Observers\UserObserver;
-use SteelAnts\LaravelBoilerplate\Traits\HasSettings;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
-use SteelAnts\LaravelBoilerplate\Traits\Auditable;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use SteelAnts\LaravelBoilerplate\Models\Session;
+use SteelAnts\LaravelBoilerplate\Traits\Auditable;
+use SteelAnts\LaravelBoilerplate\Traits\HasSettings;
 use SteelAnts\LaravelBoilerplate\Traits\SupportSystemAdmins;
 
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens, Auditable, HasSettings, SupportSystemAdmins;
+    use Auditable, HasApiTokens, HasFactory, HasSettings, Notifiable, SupportSystemAdmins;
 
     /**
      * The attributes that are mass assignable.
@@ -31,7 +31,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-		'totp_force',
+        'totp_force',
     ];
 
     /**
@@ -42,7 +42,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-		'totp_secret',
+        'totp_secret',
     ];
 
     /**
@@ -61,7 +61,7 @@ class User extends Authenticatable
     protected function limitationSetting(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->settings()->where("index", "limitation.items_per_page")->first()->value ?? null,
+            get: fn () => $this->settings()->where('index', 'limitation.items_per_page')->first()->value ?? null,
         )->shouldCache();
     }
 
@@ -81,8 +81,8 @@ class User extends Authenticatable
 
     public function getSortPreference(): string
     {
-        return once(fn(): string => Cache::remember(sprintf('user-%d-sorting-preference', $this->id), 500, function () {
-            return (!empty($this->settings()->where('index', 'profile.sort')->first()->value) ? 'desc' : 'asc');
+        return once(fn (): string => Cache::remember(sprintf('user-%d-sorting-preference', $this->id), 500, function () {
+            return !empty($this->settings()->where('index', 'profile.sort')->first()->value) ? 'desc' : 'asc';
         }));
     }
 

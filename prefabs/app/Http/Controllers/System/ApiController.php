@@ -15,7 +15,6 @@ class ApiController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -24,46 +23,46 @@ class ApiController extends Controller
         $routesCollection = Route::getRoutes();
 
         foreach ($routesCollection as $route) {
-            if (!str_starts_with($route->uri(), "api")) {
+            if (!str_starts_with($route->uri(), 'api')) {
                 continue;
             }
 
             $reflectionMethod = null;
-            if (str_contains($route->getActionName(), "@")) {
+            if (str_contains($route->getActionName(), '@')) {
                 [
                     $class,
                     $method,
-                ] = explode("@", $route->getActionName());
+                ] = explode('@', $route->getActionName());
                 $reflectionClass = new ReflectionClass($class);
                 $reflectionMethod = $reflectionClass->getMethod($method);
             }
 
-			$type = $reflectionMethod?->getReturnType();
+            $type = $reflectionMethod?->getReturnType();
 
-			if ($type === null) {
-				$returns = 'NULL';
-			} elseif ($type instanceof ReflectionUnionType) {
-				$returns = collect($type->getTypes())
-					->pluck('name');
-			} elseif ($type instanceof ReflectionNamedType) {
-				$returns = $type->getName();
-			} else {
-				$returns = 'UNKNOWN';
-			}
+            if ($type === null) {
+                $returns = 'NULL';
+            } elseif ($type instanceof ReflectionUnionType) {
+                $returns = collect($type->getTypes())
+                    ->pluck('name');
+            } elseif ($type instanceof ReflectionNamedType) {
+                $returns = $type->getName();
+            } else {
+                $returns = 'UNKNOWN';
+            }
 
             $routes[] = [
-                "Method"      => $route->methods()[0],
-                "Uri"         => $route->uri(),
-                "Description" => ($reflectionMethod != null ? $this->phpDocsDescription($reflectionMethod) : ""),
-                "Parameters"  => ($reflectionMethod != null ? $this->phpDocsParameters($reflectionMethod) : []),
-                "Returns"     => $returns,
+                'Method'      => $route->methods()[0],
+                'Uri'         => $route->uri(),
+                'Description' => ($reflectionMethod != null ? $this->phpDocsDescription($reflectionMethod) : ''),
+                'Parameters'  => ($reflectionMethod != null ? $this->phpDocsParameters($reflectionMethod) : []),
+                'Returns'     => $returns,
             ];
         }
 
         return view('system.api.index', [
-			'layout' => config('boilerplate.layouts.system'),
-			'routes' => $routes,
-		]);
+            'layout' => config('boilerplate.layouts.system'),
+            'routes' => $routes,
+        ]);
     }
 
     private function phpDocsParameters(ReflectionMethod $method): array
@@ -73,12 +72,12 @@ class ApiController extends Controller
 
         // Trim each line from space and star chars
         $lines = array_map(function ($line) {
-            return trim($line, " *");
+            return trim($line, ' *');
         }, explode("\n", $doc));
 
         // Retain lines that start with an @
         $lines = array_filter($lines, function ($line) {
-            return strpos($line, "@param") === 0;
+            return strpos($line, '@param') === 0;
         });
 
         $args = [];
@@ -108,9 +107,9 @@ class ApiController extends Controller
         $lines = [];
 
         foreach (explode("\n", $doc) as $i => $line) {
-            $trimedLine = trim(trim($line, " *"), "/");
+            $trimedLine = trim(trim($line, ' *'), '/');
 
-            if (str_starts_with($trimedLine, "@")) {
+            if (str_starts_with($trimedLine, '@')) {
                 break;
             }
 

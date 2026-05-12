@@ -10,22 +10,22 @@ class MenuCollector
 
     public function __construct()
     {
-        $this->menus = new Collection();
+        $this->menus = new Collection;
     }
 
-    public function make(string $menuKey = '', callable $callback = null)
+    public function make(string $menuKey = '', ?callable $callback = null)
     {
-		$menu = new MenuBuilder();
+        $menu = new MenuBuilder;
 
-		if (is_callable($callback)) {
+        if (is_callable($callback)) {
             call_user_func($callback, $menu);
         }
 
-		if (!empty($menuKey)) {
-			$this->menus->put($menuKey, $menu);
-		}
+        if (!empty($menuKey)) {
+            $this->menus->put($menuKey, $menu);
+        }
 
-		return $menu;
+        return $menu;
     }
 
     public function get(string $menuKey)

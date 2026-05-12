@@ -1,0 +1,68 @@
+<?php
+namespace {{namespace}};
+
+use Livewire\Component;
+use App\Models\{{model}};
+{{uses}}
+
+class Form extends Component
+{
+    public $model;
+    {{propertiesString}}
+
+    public string $action = 'store';
+    public bool $isModal = {{isModal}};
+
+    protected function rules(): array
+    {
+        return [
+            {{validationRules}}
+        ];
+    }
+
+    {{modelFunctions}}
+
+    public function mount($modelId = null): void
+    {
+        if (!empty($modelId)) {
+            ${{model_camel_case}} = {{model}}::find($modelId);
+            $this->model = $modelId;
+            {{loadProperties}}
+            $this->action = 'update';
+        }
+    }
+
+    public function store(): void
+    {
+        $validatedData = $this->validate();
+        {{model}}::create($validatedData);
+
+        if ($this->isModal) {
+            $this->dispatch('closeModal');
+        } else {
+            $this->dispatch('{{model_camel_case}}Saved');
+            {{action_back}}
+        }
+    }
+
+    public function update(): void
+    {
+        $validatedData = $this->validate();
+        ${{model_camel_case}} = {{model}}::find($this->model);
+        if (!empty(${{model_camel_case}})) {
+            ${{model_camel_case}}->update($validatedData);
+        }
+
+        if ($this->isModal) {
+            $this->dispatch('closeModal');
+        } else {
+            $this->dispatch('{{model_camel_case}}Saved');
+            {{action_back}}
+        }
+    }
+
+    public function render()
+    {
+        return view('{{view}}');
+    }
+}

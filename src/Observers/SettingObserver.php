@@ -3,11 +3,11 @@
 namespace SteelAnts\LaravelBoilerplate\Observers;
 
 use Carbon\Carbon;
-use SteelAnts\LaravelBoilerplate\Types\SettingDataType;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use SteelAnts\LaravelBoilerplate\Models\File as ModelsFile;
 use SteelAnts\LaravelBoilerplate\Models\Setting;
+use SteelAnts\LaravelBoilerplate\Types\SettingDataType;
 
 class SettingObserver
 {
@@ -27,8 +27,8 @@ class SettingObserver
             if ($setting->isDirty('value')) {
                 if ($setting->value != $setting->getOriginal('value')) {
                     $pathArr = array_filter(explode('/', $setting->getOriginal('value')));
-                    $path = explode("/", str_replace("/files/", "", str_replace("-", DIRECTORY_SEPARATOR, $setting->getOriginal('value'))))[0] . "/" . $pathArr[3];
-                    $file = ModelsFile::where("path", $path)->first();
+                    $path = explode('/', str_replace('/files/', '', str_replace('-', DIRECTORY_SEPARATOR, $setting->getOriginal('value'))))[0] . '/' . $pathArr[3];
+                    $file = ModelsFile::where('path', $path)->first();
                     if (!empty($file)) {
                         $file->delete();
                     }

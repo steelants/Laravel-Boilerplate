@@ -11,14 +11,12 @@ use SteelAnts\LaravelBoilerplate\Types\AlertModeType;
 
 class Alerts extends Component
 {
-
     /**
      * Create a new component instance.
      */
     public function __construct(
         public ?array $alerts = [],
-    )
-    {
+    ) {
         $types = [
             'success',
             'error',
@@ -27,24 +25,24 @@ class Alerts extends Component
             'message',
         ];
 
-        foreach($types as $type){
+        foreach ($types as $type) {
             $message = session()->get($type);
-            if(!empty($message)){
+            if (!empty($message)) {
                 $this->alerts[] = new AlertItem(type: $type, text: $message);
             }
         }
 
-        if(session()->has('errors')){
+        if (session()->has('errors')) {
             $items = session()->get('errors')->toArray();
-            foreach($items as $item){
-                if(!empty($item['error'])){
+            foreach ($items as $item) {
+                if (!empty($item['error'])) {
                     $this->alerts[] = new AlertItem(type: 'error', text: $item['error']);
                 }
             }
         }
 
-		$this->alerts = array_merge($this->alerts, Alert::get(AlertModeType::INSTANT));
-		$this->alerts = array_merge($this->alerts, Alert::get(AlertModeType::RELOAD));
+        $this->alerts = array_merge($this->alerts, Alert::get(AlertModeType::INSTANT));
+        $this->alerts = array_merge($this->alerts, Alert::get(AlertModeType::RELOAD));
     }
 
     /**

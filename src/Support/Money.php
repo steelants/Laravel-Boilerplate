@@ -80,14 +80,14 @@ final class Money implements \JsonSerializable
     public function format(int $precision = 2, ?bool $dynamicPrecision = null, string $currency = 'CZK'): string
     {
         $useDynamic = $dynamicPrecision ?? static::$defaultDynamicPrecision;
-        $finalPrecision = ($useDynamic && ! $this->hasCents()) ? 0 : $precision;
+        $finalPrecision = ($useDynamic && !$this->hasCents()) ? 0 : $precision;
 
         return Number::currency($this->toFloat(), $currency, config('app.locale'), $finalPrecision);
     }
 
     private function hasCents(): bool
     {
-        if (! str_contains($this->amount, '.')) {
+        if (!str_contains($this->amount, '.')) {
             return false;
         }
 

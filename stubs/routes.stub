@@ -13,7 +13,7 @@ Route::prefix('profile')->name('profile.')->middleware(['auth'])->group(function
     Route::delete('/api/remove', [App\Http\Controllers\Auth\ProfileController::class, 'removeApiToken'])->middleware('auth')->name('api.remove');
 });
 
-Route::prefix('system')->name('system.')->middleware(['auth'])->group(function () {
+Route::prefix('system')->name('system.')->middleware(['auth', 'is-system-admin'])->group(function () {
 	Route::get('/settings', [App\Http\Controllers\System\SettingController::class, 'index'])->name('setting.index');
 
 	Route::get('/files', [App\Http\Controllers\System\FileController::class, 'index'])->name('file.index');

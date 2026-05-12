@@ -15,7 +15,6 @@ class MakeBasicTestsCommand extends Command
     protected $signature = 'make:basic-tests
                             {--force : Overwrite existing views by default}';
 
-
     /**
      * The console command description.
      *
@@ -30,7 +29,7 @@ class MakeBasicTestsCommand extends Command
     {
         $testFilePath = base_path() . '/tests/Feature/BasicCoverageTest.php';
         if (file_exists($testFilePath) && !$this->option('force')) {
-            if (!$this->components->confirm("The [" . $testFilePath . "] test already exists. Do you want to replace it?")) {
+            if (!$this->components->confirm('The [' . $testFilePath . '] test already exists. Do you want to replace it?')) {
                 return;
             }
         }
@@ -54,9 +53,9 @@ class MakeBasicTestsCommand extends Command
             }
         }
 
-        $this->info("Routes:");
+        $this->info('Routes:');
         foreach ($pages as $page) {
-            $this->info(" > " . $page);
+            $this->info(' > ' . $page);
         }
 
         $content = '';
@@ -119,6 +118,6 @@ class MakeBasicTestsCommand extends Command
         fwrite($fp, $this->getHead($name) . $content . $this->getFoot());
         fclose($fp);
 
-        $this->info("Generated test file " . $name . '.php');
+        $this->info('Generated test file ' . $name . '.php');
     }
 }

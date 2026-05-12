@@ -1,0 +1,60 @@
+<?php
+
+use App\Models\{{model}};
+use {{livewire_form_class}};
+use {{livewire_datatable_class}};
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(Tests\TestCase::class, RefreshDatabase::class);
+
+test('guest is redirected from index', function () {
+    $this->get(route('{{route_index}}'))->assertRedirect(route('login'));
+});
+
+test('authenticated user can view index', function () {
+    $user = \App\Models\User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('{{route_index}}'))
+        ->assertOk();
+});
+
+test('authenticated user can create {{model_singular}}', function () {
+    $user = \App\Models\User::factory()->create();
+
+    Livewire::actingAs($user)
+        ->test(Form::class)
+        ->set('properties', [
+            {{test_properties}}
+        ])
+        ->call('store')
+        ->assertHasNoErrors();
+
+    $this->assertDatabaseHas('{{table}}', [
+        {{assert_db}}
+    ]);
+});
+
+test('authenticated user can update {{model_singular}}', function () {
+    $user = \App\Models\User::factory()->create();
+    $record = {{model}}::factory()->create();
+
+    Livewire::actingAs($user)
+        ->test(Form::class, ['modelId' => $record->id])
+        ->set('properties', [
+            {{test_properties}}
+        ])
+        ->call('store')
+        ->assertHasNoErrors();
+});
+
+test('authenticated user can delete {{model_singular}}', function () {
+    $user = \App\Models\User::factory()->create();
+    $record = {{model}}::factory()->create();
+
+    Livewire::actingAs($user)
+        ->test(DataTable::class)
+        ->call('remove', $record->id);
+
+    $this->assertDatabaseMissing('{{table}}', ['id' => $record->id]);
+});
