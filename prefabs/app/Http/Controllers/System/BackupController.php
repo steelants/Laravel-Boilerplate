@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\BaseController;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use SteelAnts\LaravelBoilerplate\Helpers\SizeHelper;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
+use SteelAnts\LaravelBoilerplate\Jobs\Restore;
 
 class BackupController extends BaseController
 {
@@ -71,5 +74,36 @@ class BackupController extends BaseController
         }
 
         return redirect()->back()->with('success', __('Deleted'));
+    }
+
+    public function restore(Request $request, string $backup_date)
+    {
+        $restoreDb = $request->boolean('restore_database');
+        $restoreStorage = $request->boolean('restore_storage');
+        $restoreEnv = $request->boolean('restore_env');
+
+        if (!$restoreDb && !$restoreStorage && !$restoreEnv) {
+            return redirect()->back()->with('error', __('Select at least one component to restore'));
+        }
+
+        try {
+            $date = Carbon::createFromFormat('Y-m-d', $backup_date)->startOfDay();
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
+        $dbZip = storage_path('backups/' . $date->format('Y-m-d') . '_database.zip');
+        $fsZip = storage_path('backups/' . $date->format('Y-m-d') . '_storage.zip');
+
+        if ($restoreDb && !File::exists($dbZip)) {
+            abort(404);
+        }
+        if (($restoreStorage || $restoreEnv) && !File::exists($fsZip)) {
+            abort(404);
+        }
+
+        Restore::dispatchSync($date, $restoreDb, $restoreStorage, $restoreEnv);
+
+        return redirect()->back()->with('success', __('Restore completed'));
     }
 }

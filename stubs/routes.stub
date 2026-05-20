@@ -51,5 +51,6 @@ Route::prefix('system')->name('system.')->middleware(['auth', 'is-system-admin']
         Route::get('/delete/{backup_date}', [App\Http\Controllers\System\BackupController::class, 'delete'])->name('delete');
         Route::get('/download/{file_name}', [App\Http\Controllers\System\BackupController::class, 'download'])->name('download');
         Route::get('/download', [App\Http\Controllers\System\BackupController::class, 'download'])->name('download.latest');
+        Route::post('/restore/{backup_date}', [App\Http\Controllers\System\BackupController::class, 'restore'])->name('restore');
     });
 });

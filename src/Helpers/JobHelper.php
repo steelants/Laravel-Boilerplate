@@ -59,7 +59,11 @@ class JobHelper
 
     public static function resolveClass(string $name): string
     {
-        $namespaces = config('boilerplate.jobs.namespaces', ['App\\Jobs\\']);
+        $namespaces = config('boilerplate.jobs.namespaces', [
+            'App\\Jobs\\',
+            'SteelAnts\\LaravelBoilerplate\\Jobs\\',
+            'SteelAnts\\LaravelBoilerplate\\Dashboard\\Jobs\\',
+        ]);
         foreach ($namespaces as $namespace) {
             $fqcn = $namespace . $name;
             if (class_exists($fqcn)) {
