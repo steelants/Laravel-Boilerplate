@@ -5,3 +5,4 @@ import './quill';
 import './ace';
 import './selectbox';
 import './selectbox-ajax';
+import './log-tail';

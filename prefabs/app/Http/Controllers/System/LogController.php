@@ -9,6 +9,8 @@ use SteelAnts\LaravelBoilerplate\Helpers\SizeHelper;
 
 class LogController extends BaseController
 {
+    private const LOG_OPEN_LIMIT = 10 * 1000 * 1000 * 1000;
+
     public function index()
     {
         $items = [];
@@ -41,7 +43,7 @@ class LogController extends BaseController
         }
 
         if (File::exists($todayLog)) {
-            if (File::size($todayLog) > 1000 * 1000 * 1000 * 1000) {
+            if (File::size($todayLog) > self::LOG_OPEN_LIMIT) {
                 $todayStats = [
                     'ERROR'   => '??',
                     'WARNING' => '??',
@@ -66,19 +68,42 @@ class LogController extends BaseController
     {
         $path = $this->resolveLogPath($filename);
 
-        if (File::exists($path)) {
-            if (File::size($path) > 1000 * 1000 * 1000 * 1000) {
-                return response()->download($path);
-            }
-
-            return view('system.log.detail', [
-                'layout'   => config('boilerplate.layouts.system'),
-                'content'  => File::get($path),
-                'filename' => basename($path),
-            ]);
-        } else {
+        if (!File::exists($path)) {
             abort(404);
         }
+
+        if (File::size($path) > self::LOG_OPEN_LIMIT) {
+            return response()->download($path);
+        }
+
+        $lines     = File::lines($path)->all();
+        $lineCount = count($lines);
+
+        return view('system.log.detail', [
+            'layout'    => config('boilerplate.layouts.system'),
+            'lines'     => $lines,
+            'lineCount' => $lineCount,
+            'filename'  => basename($path),
+        ]);
+    }
+
+    public function tail(Request $request, $filename)
+    {
+        $path = $this->resolveLogPath($filename);
+
+        if (!File::exists($path)) {
+            abort(404);
+        }
+
+        $offset = max(0, (int) $request->input('offset', 0));
+
+        $newLines = File::lines($path)->skip($offset)->values();
+        $total    = $offset + $newLines->count();
+
+        return response()->json([
+            'lines'  => $newLines->all(),
+            'offset' => $total,
+        ]);
     }
 
     public function download($filename)

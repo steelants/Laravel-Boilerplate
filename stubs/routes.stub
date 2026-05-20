@@ -39,6 +39,7 @@ Route::prefix('system')->name('system.')->middleware(['auth', 'is-system-admin']
     Route::prefix('log')->name('log.')->group(function () {
         Route::get('/', [App\Http\Controllers\System\LogController::class, 'index'])->name('index');
         Route::get('/detail/{file}', [App\Http\Controllers\System\LogController::class, 'detail'])->name('detail');
+        Route::get('/tail/{file}', [App\Http\Controllers\System\LogController::class, 'tail'])->name('tail');
         Route::get('/download/{file}', [App\Http\Controllers\System\LogController::class, 'download'])->name('download');
         Route::get('/delete/{file}', [App\Http\Controllers\System\LogController::class, 'delete'])->name('delete');
         Route::get('/clear', [App\Http\Controllers\System\LogController::class, 'clear'])->name('clear');
