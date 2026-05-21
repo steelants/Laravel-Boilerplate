@@ -166,7 +166,7 @@ class Form extends FormComponent
 
     public function submit()
     {
-        if (method_exists($this, 'rules')) {
+        if (method_exists($this, 'rules') && $this->rules() != []) {
             $this->validate();
         }
 

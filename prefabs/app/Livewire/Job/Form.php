@@ -176,7 +176,7 @@ class Form extends FormComponent
     {
         Gate::authorize('is-system-admin');
 
-        if (method_exists($this, 'rules')) {
+        if (method_exists($this, 'rules') && $this->rules() != []) {
             $this->validate();
         }
 

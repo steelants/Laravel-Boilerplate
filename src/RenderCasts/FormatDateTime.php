@@ -13,6 +13,6 @@ class FormatDateTime implements RenderCast
             return '';
         }
 
-        return ($value instanceof Carbon ? $value : Carbon::parse($value))->format('Y-m-d H:i');
+        return ($value instanceof Carbon ? $value : Carbon::parse($value))->isoFormat('L LT');
     }
 }
