@@ -177,8 +177,8 @@ class User extends Model
     use HasSettings;
 }
 
-$user->getSettings('theme', 'light'); // returns value or default
-$user->settings()->where('index', 'theme')->first();
+$user->getSettings('theme', 'light'); // returns value or default; falls back to config('setting_field.theme.value') when $default is null
+$user->settings->firstWhere('index', 'theme'); // raw model via eager-loaded relation (no fresh query)
 ```
 
 ### `SupportSystemAdmins` — system admin flag from config

@@ -61,8 +61,8 @@ class User extends Authenticatable
     protected function limitationSetting(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->settings()->where('index', 'limitation.items_per_page')->first()->value ?? null,
-        )->shouldCache();
+            get: fn () => $this->getSettings('limitation.items_per_page'),
+        );
     }
 
     private static function parseSettingsToArray($settingsRaw)
@@ -82,7 +82,7 @@ class User extends Authenticatable
     public function getSortPreference(): string
     {
         return once(fn (): string => Cache::remember(sprintf('user-%d-sorting-preference', $this->id), 500, function () {
-            return !empty($this->settings()->where('index', 'profile.sort')->first()->value) ? 'desc' : 'asc';
+            return !empty($this->getSettings('profile.sort')) ? 'desc' : 'asc';
         }));
     }
 
