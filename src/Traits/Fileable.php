@@ -17,15 +17,15 @@ trait Fileable
         return $this->morphMany(File::class, 'fileable');
     }
 
-	/**
+    /**
      * Get one latest file.
      */
-	public function file()
+    public function file()
     {
         return $this->morphOne(File::class, 'fileable')->latestOfMany();
     }
 
-    public function uploadFile(UploadedFile|TemporaryUploadedFile $file, string $rootPath = "", bool $public = false): string
+    public function uploadFile(UploadedFile|TemporaryUploadedFile $file, string $rootPath = '', bool $public = false): string
     {
         return FileService::uploadFile(owner: $this, file: $file, rootPath: $rootPath, public: $public);
     }

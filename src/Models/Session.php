@@ -11,9 +11,13 @@ class Session extends Model
     use HasFactory;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
+
     public $timestamps = false;
+
     protected $casts = ['last_activity' => 'datetime'];
+
     protected $appends = [
         'browser_name',
         'browser_os_name',
@@ -41,7 +45,7 @@ class Session extends Model
         );
     }
 
-    protected function browserOSName(): Attribute
+    protected function browserOsName(): Attribute
     {
         return Attribute::make(
             get: function () {

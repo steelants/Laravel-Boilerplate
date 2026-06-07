@@ -19,3 +19,18 @@ window.addEventListener('hide.bs.collapse', function(e){
 window.addEventListener('show.bs.collapse', function(e){
     updateToggler(e.target, 'open');
 });
+
+window.initTabState = function(){
+    window.tabState = JSON.parse(getCookie('tabState') ?? '{}');
+}
+
+initTabState();
+
+window.addEventListener('shown.bs.tab', function(e){
+    var tab = e.target;
+    var group = tab.closest('[role="tablist"]');
+    if(group && group.classList.contains('remember') && group.id && tab.id){
+        window.tabState[group.id] = tab.id;
+        setCookie('tabState', JSON.stringify(window.tabState), 30);
+    }
+});

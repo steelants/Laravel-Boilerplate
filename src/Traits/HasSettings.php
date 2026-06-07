@@ -4,6 +4,7 @@ namespace SteelAnts\LaravelBoilerplate\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use SteelAnts\LaravelBoilerplate\Models\Setting;
+use SteelAnts\LaravelBoilerplate\Support\SettingResolver;
 
 trait HasSettings
 {
@@ -12,17 +13,12 @@ trait HasSettings
         return $this->morphMany(config('boilerplate.models.setting', Setting::class), 'settable');
     }
 
-	public function getSettings($key, $default = null)
+    public function getSettings($key, $default = null)
     {
-        $value = $this->settings()->where('index', $key)->get();
-        if ($value->isEmpty()) {
-            return $default;
-        }
-
-        if ($value->count() == 1){
-            return $value->first()->value;
-        }
-
-        return $value->pluck('value', 'index')->toArray();
+        return SettingResolver::resolve(
+            $this->settings->where('index', $key),
+            $key,
+            $default,
+        );
     }
 }

@@ -2,9 +2,9 @@
 
 namespace SteelAnts\LaravelBoilerplate\Casts;
 
-use SteelAnts\LaravelBoilerplate\Support\Money;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
+use SteelAnts\LaravelBoilerplate\Support\Money;
 
 class MoneyCast implements CastsAttributes
 {

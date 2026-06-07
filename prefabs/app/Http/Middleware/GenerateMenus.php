@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
 class GenerateMenus
 {
     /**
-    * Handle an incoming request.
-    *
-    * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-    */
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::guest()) {
@@ -33,15 +33,15 @@ class GenerateMenus
         ];
 
         $systemRoutes = [
-			       'Settings'        => [
+            'Settings' => [
                 'fas fa-cog',
                 'system.setting.index',
             ],
-            'Audit'            => [
+            'Audit' => [
                 'fas fa-eye',
                 'system.audit.index',
             ],
-            'User'             => [
+            'User' => [
                 'fas fa-users',
                 'system.user.index',
             ],
@@ -49,37 +49,37 @@ class GenerateMenus
                 'fas fa-dollar-sign',
                 'system.subscription.index',
             ],
-			'File'          => [
-				'fas fa-folder',
+            'File' => [
+                'fas fa-folder',
                 'system.file.index',
             ],
-            'Logs'         => [
+            'Logs' => [
                 'fas fa-bug',
                 'system.log.index',
             ],
-            'Jobs'             => [
+            'Jobs' => [
                 'fas fa-business-time',
                 'system.jobs.index',
             ],
-            'Cache'            => [
+            'Cache' => [
                 'fas fa-box',
                 'system.cache.index',
             ],
-            'Backup'           => [
+            'Backup' => [
                 'fas fa-file-archive',
                 'system.backup.index',
             ],
         ];
 
-		if (file_exists(base_path() . '/routes/api.php')) {
-			$systemRoutes['Api'] = [
-				'fas fa-rocket',
-				'system.api.index',
-			];
-		}
+        if (file_exists(base_path() . '/routes/api.php')) {
+            $systemRoutes['Api'] = [
+                'fas fa-rocket',
+                'system.api.index',
+            ];
+        }
 
         $menus = [
-            'main-menu' => $menuRoutes,
+            'main-menu'   => $menuRoutes,
             'system-menu' => $systemRoutes,
         ];
 

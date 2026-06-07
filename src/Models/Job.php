@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
-	protected $casts = [
+    protected $casts = [
         'payload'      => AsCollection::class,
-		'available_at' => 'datetime',
+        'available_at' => 'datetime',
     ];
 }

@@ -11,19 +11,19 @@ use SteelAnts\LaravelBoilerplate\Services\ActivityService;
 class UserEventSubscriber
 {
     public function handleLogin(Login $event): void
-	{
-		ActivityService::log(__('Login'));
-	}
+    {
+        ActivityService::log(__('Login'));
+    }
 
     public function handleLogout(Logout $event): void
-	{
-		ActivityService::log(__('Logout'));
-	}
+    {
+        ActivityService::log(__('Logout'));
+    }
 
     public function handleFailed(Failed $event): void
-	{
-		ActivityService::log(__('Failed login'), ['email' => $event->credentials['email']]);
-	}
+    {
+        ActivityService::log(__('Failed login'), ['email' => $event->credentials['email']]);
+    }
 
     public function subscribe(Dispatcher $events): array
     {

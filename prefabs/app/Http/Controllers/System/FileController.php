@@ -9,9 +9,11 @@ use SteelAnts\LaravelBoilerplate\Traits\SystemPage;
 
 class FileController extends BaseController
 {
-	use CRUD, SystemPage;
-	public array $views = [
-		'index' => 'system.file.index'
-	];
-	public string $model = File::class;
+    use CRUD, SystemPage;
+
+    public array $views = [
+        'index' => 'system.file.index',
+    ];
+
+    public string $model = File::class;
 }

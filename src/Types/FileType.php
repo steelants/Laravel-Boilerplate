@@ -5,6 +5,7 @@ namespace SteelAnts\LaravelBoilerplate\Types;
 class FileType
 {
     const INLINE = 0;
+
     const ATTACHMENT = 1;
 
     public static function getNames()
@@ -21,6 +22,7 @@ class FileType
         if (isset($names[$type])) {
             return __($names[$type]);
         }
+
         return __('NULL');
     }
 

@@ -1,8 +1,0 @@
-		$middleware->encryptCookies(except: [
-			'theme',
-			'layout-nav',
-			'toggleState',
-		]);
-		$middleware->alias([
-            'is-system-admin' => IsSystemAdmin::class,
-        ]);
