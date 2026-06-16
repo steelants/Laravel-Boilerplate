@@ -148,9 +148,12 @@ class Backup implements ShouldQueue
             Log::info($backupPath . '=>' . $zippedFilePath . '=>' . $fileMD5Hash);
         }
 
-        if (!empty(config('boilerplate.system_admins_mail')) && config('boilerplate.system_admins_mail') != '') {
-            Mail::raw(__('Backup Run successfully'), function ($message) {
-                $message->to(config('boilerplate.system_admins_mail'))->subject(__('Backup Run successfully ') . config('app.name'));
+        $mails = config('boilerplate.system_admins_mail') ?? [];
+        $mails = array_filter($mails);
+
+        if (!empty($mails)) {
+            Mail::raw(__('Backup Run successfully'), function ($message) use ($mails) {
+                $message->to($mails)->subject(__('Backup Run successfully ') . config('app.name'));
             });
             Log::info('Sending Notification');
         }
