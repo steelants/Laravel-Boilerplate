@@ -31,7 +31,7 @@ class Selectbox extends Component
         public $id = '',
         public $required = false,
     ) {
-		$this->variant = $multiple ? 'tags' : 'select';
+        $this->variant = $multiple ? 'tags' : 'select';
 
         foreach ($options as $id => $value) {
             if (is_array($value)) {

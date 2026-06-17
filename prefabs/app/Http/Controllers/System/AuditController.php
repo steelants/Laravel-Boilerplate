@@ -9,6 +9,7 @@ use SteelAnts\LaravelBoilerplate\Traits\SystemPage;
 
 class AuditController extends BaseController
 {
-	use CRUD, SystemPage;
-	public string $model = Activity::class;
+    use CRUD, SystemPage;
+
+    public string $model = Activity::class;
 }

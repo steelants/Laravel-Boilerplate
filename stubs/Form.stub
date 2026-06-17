@@ -1,73 +1,44 @@
 <?php
 namespace {{namespace}};
 
-use Livewire\Component;
 use App\Models\{{model}};
-{{uses}}
+use SteelAnts\LivewireForm\Livewire\FormComponent;
+use SteelAnts\LivewireForm\Traits\HasModel;
 
-class Form extends Component
+class Form extends FormComponent
 {
-    public $model;
-    {{propertiesString}}
+    use HasModel;
 
-    public $action = 'store';
-	public bool $isModal = {{isModal}};
+    public $modelClass = {{model}}::class;
+    public string $viewName = '{{view}}';
+    public bool $isModal = {{isModal}};
 
-	protected function rules()
+    protected function rules(): array
     {
         return [
             {{validationRules}}
         ];
     }
 
-    {{modelFunctions}}
-
-    public function mount ($model = null){
-        if (!empty($model)) {
-            ${{model_camel_case}} = {{model}}::find($model);
-
-            $this->model = $model;
-
-            {{loadProperties}}
-
-            $this->action = 'update';
-        }
+    public function labels(): array
+    {
+        return [
+            {{labels}}
+        ];
     }
 
-    public function store()
+    public function onSuccess(): void
     {
-        $validatedData = $this->validate();
-        {{model}}::create($validatedData);
-
         if ($this->isModal) {
             $this->dispatch('closeModal');
         } else {
-        	$this->dispatch('{{model_camel_case}}Added');
+            $this->dispatch('{{model_camel_case}}Saved');
+            {{action_back}}
         }
-
-		{{action_back}}
-
     }
 
-    public function update()
+    public function onError(): void
     {
-        $validatedData = $this->validate();
-        ${{model_camel_case}} = {{model}}::find($this->model);
-        if (!empty(${{model_camel_case}})) {
-            ${{model_camel_case}}->update($validatedData);
-        }
-
-		if ($this->isModal) {
-            $this->dispatch('closeModal');
-        } else {
-        	$this->dispatch('{{model_camel_case}}Updated');
-        }
-
-		{{action_back}}
-    }
-
-    public function render()
-    {
-        return view('{{view}}');
+        //
     }
 }

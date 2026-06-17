@@ -8,182 +8,182 @@ use Illuminate\Support\Facades\Route;
 
 class MenuItemLink extends MenuItem
 {
-	protected string $type = 'route';
+    protected string $type = 'route';
 
-	public function __construct(public string $title, public string $id, public string $route, public string $icon = '', public array $parameters = [], public array $options = [])
-	{
-		if (! Route::has($route)) {
-			throw new Exception(__("Route with name: $route dont exists!"), 1);
-		}
-	}
+    public function __construct(public string $title, public string $id, public string $route, public string $icon = '', public array $parameters = [], public array $options = [])
+    {
+        if (!Route::has($route)) {
+            throw new Exception(__("Route with name: $route dont exists!"), 1);
+        }
+    }
 
-	public function debug()
-	{
-		$query = $this->resolveQueryParameters();
-		$parameters = $this->resolveRouteParameters();
-		$current = $this->resolveActiveRoute();
-		$currentName = $current->getName();
-		$route =  $this->matchRoute();
-		$url = $this->matchUrl();
+    public function debug()
+    {
+        $query = $this->resolveQueryParameters();
+        $parameters = $this->resolveRouteParameters();
+        $current = $this->resolveActiveRoute();
+        $currentName = $current->getName();
+        $route = $this->matchRoute();
+        $url = $this->matchUrl();
 
-		return [
-			'current_url' => route($this->resolveActiveRoute()->getName(), ($query + $parameters), absolute: false),
-			'url' => route($this->route, ($query + $parameters), absolute: false),
-			'url_match' =>  $this->matchUrl(true),
-			'current_route' => $this->resolveActiveRoute()->getName(),
-			'route' => $this->route,
-			'route_match' => $this->matchRoute(true),
-			'is_use' => $this->isUse(),
-			'is_active' => $this->isActive(),
-			'null_parameters' => (count($this->getItemParameters()) == 0 && count($query) == 0),
-			'parameters' => ($route || $url) && (count($this->getItemParameters()) == count($query)),
-			'parameters_detail' => ($parameters),
-			'parameters_query' => ($query),
-			'item_params' => $this->getItemParameters(),
-			'route_detail' => $this->route,
-			'parameters_count' => count($query + $parameters),
-			'item_params_count' => count($this->getItemParameters()),
+        return [
+            'current_url'       => route($this->resolveActiveRoute()->getName(), ($query + $parameters), absolute: false),
+            'url'               => route($this->route, ($query + $parameters), absolute: false),
+            'url_match'         => $this->matchUrl(true),
+            'current_route'     => $this->resolveActiveRoute()->getName(),
+            'route'             => $this->route,
+            'route_match'       => $this->matchRoute(true),
+            'is_use'            => $this->isUse(),
+            'is_active'         => $this->isActive(),
+            'null_parameters'   => (count($this->getItemParameters()) == 0 && count($query) == 0),
+            'parameters'        => ($route || $url) && (count($this->getItemParameters()) == count($query)),
+            'parameters_detail' => ($parameters),
+            'parameters_query'  => ($query),
+            'item_params'       => $this->getItemParameters(),
+            'route_detail'      => $this->route,
+            'parameters_count'  => count($query + $parameters),
+            'item_params_count' => count($this->getItemParameters()),
 
-		];
-	}
+        ];
+    }
 
-	public function isUse(): bool
-	{
-		$current = $this->resolveActiveRoute();
-		$query = $this->resolveQueryParameters();
-		$parameters = $this->resolveRouteParameters();
+    public function isUse(): bool
+    {
+        $current = $this->resolveActiveRoute();
+        $query = $this->resolveQueryParameters();
+        $parameters = $this->resolveRouteParameters();
 
-		if (! $current || ! $currentName = $current->getName()) {
-			return false;
-		}
+        if (!$current || !$currentName = $current->getName()) {
+            return false;
+        }
 
-		$route = $this->matchRoute(true);
-		$url = $this->matchUrl(true);
+        $route = $this->matchRoute(true);
+        $url = $this->matchUrl(true);
 
-		return ($route && str_ends_with($route, '.index')) || ($url && route($this->route, ($query + $parameters), absolute: false) != '/');
-	}
+        return ($route && str_ends_with($route, '.index')) || ($url && route($this->route, ($query + $parameters), absolute: false) != '/');
+    }
 
-	public function isActive(): bool
-	{
-		$current = $this->resolveActiveRoute();
-		$query = $this->resolveQueryParameters();
-		$parameters = $this->resolveRouteParameters();
-		$route = ($current->getName() == $this->route);
-		$url = (route($current->getName(), ($query + $parameters), absolute: false) == route($this->route, ($query + $parameters), absolute: false));
+    public function isActive(): bool
+    {
+        $current = $this->resolveActiveRoute();
+        $query = $this->resolveQueryParameters();
+        $parameters = $this->resolveRouteParameters();
+        $route = ($current->getName() == $this->route);
+        $url = (route($current->getName(), ($query + $parameters), absolute: false) == route($this->route, ($query + $parameters), absolute: false));
 
+        if (count($this->getItemParameters()) == 0 && count($query) == 0) {
+            return $route || $url;
+        }
 
-		if (count($this->getItemParameters()) == 0 && count($query) == 0) {
-			return $route || $url;
-		}
+        if (($route || $url) && (count($this->getItemParameters()) == count(($query + $parameters)))) {
+            return ($query + $parameters) == $this->getItemParameters();
+        }
 
+        if (($route && $url) && (count($query) == 0 && str_contains($current->uri(), '{') && str_contains($current->uri(), '}'))) {
+            return true;
+        }
 
-		if (($route || $url) && (count($this->getItemParameters()) == count(($query + $parameters)))) {
-			return ($query + $parameters) == $this->getItemParameters();
-		}
+        return false;
+    }
 
-		if (($route && $url) && (count($query) == 0 && str_contains($current->uri(), '{') && str_contains($current->uri(), '}'))) {
-			return true;
-		}
+    protected function resolveActiveRoute(): ?\Illuminate\Routing\Route
+    {
+        return once(function () {
+            $current = Route::current();
 
-		return false;
-	}
+            if (!$current) {
+                return null;
+            }
 
-	protected function resolveActiveRoute(): ?\Illuminate\Routing\Route
-	{
-		return once(function () {
-			$current = Route::current();
+            if ($current->getName() !== 'livewire.message') {
+                return $current;
+            }
 
-			if (! $current) {
-				return null;
-			}
+            $referer = request()->headers->get('referer');
 
-			if ($current->getName() !== 'livewire.message') {
-				return $current;
-			}
+            if (!$referer) {
+                return $current;
+            }
 
-			$referer = request()->headers->get('referer');
+            try {
+                $matchRequest = HttpRequest::create($referer, 'GET');
 
-			if (! $referer) {
-				return $current;
-			}
+                return app('router')->getRoutes()->match($matchRequest);
+            } catch (\Throwable) {
+                return $current;
+            }
+        });
+    }
 
-			try {
-				$matchRequest = HttpRequest::create($referer, 'GET');
+    protected function resolveQueryParameters(): array
+    {
+        return once(function () {
+            if (Route::currentRouteName() === 'livewire.message') {
+                $referer = request()->headers->get('referer');
+                if ($referer) {
+                    $queryString = parse_url($referer, PHP_URL_QUERY);
 
-				return app('router')->getRoutes()->match($matchRequest);
-			} catch (\Throwable) {
-				return $current;
-			}
-		});
-	}
+                    if ($queryString) {
+                        parse_str($queryString, $query);
 
-	protected function resolveQueryParameters(): array
-	{
-		return once(function () {
-			if (Route::currentRouteName() === 'livewire.message') {
-				$referer = request()->headers->get('referer');
-				if ($referer) {
-					$queryString = parse_url($referer, PHP_URL_QUERY);
+                        return $query;
+                    }
 
-					if ($queryString) {
-						parse_str($queryString, $query);
+                    return [];
+                }
+            }
 
-						return $query;
-					}
+            return request()->query->all();
+        });
+    }
 
-					return [];
-				}
-			}
+    protected function resolveRouteParameters(): array
+    {
+        return once(function () {
+            return collect($this->resolveActiveRoute()->originalParameters())->filter(function ($value, $key) {
+                return $value != null;
+            })->toArray();
+        });
+    }
 
-			return request()->query->all();
-		});
-	}
+    protected function matchUrl(bool $ignoreQuery = false): bool
+    {
+        $current = $this->resolveActiveRoute();
+        $query = $this->resolveQueryParameters();
+        $parameters = $this->resolveRouteParameters();
+        $currentName = $current->getName();
 
-	protected function resolveRouteParameters(): array
-	{
-		return once(function () {
-			return collect($this->resolveActiveRoute()->originalParameters())->filter(function ($value, $key) {
-				return $value != null;
-			})->toArray();
-		});
-	}
+        $routeCurrent = route($currentName, ($query + $parameters), false);
+        $routeItem = route($this->route, ($query + $parameters), false);
 
-	protected function matchUrl(bool $ignoreQuery = false): bool
-	{
-		$current = $this->resolveActiveRoute();
-		$query = $this->resolveQueryParameters();
-		$parameters = $this->resolveRouteParameters();
-		$currentName = $current->getName();
+        if ($ignoreQuery) {
+            $routeCurrentNoQuerry = explode('?', $routeCurrent)[0];
+            $routeItemNoQuerry = explode('?', $routeItem)[0];
 
-		$routeCurrent = route($currentName, ($query + $parameters), false);
-		$routeItem = route($this->route, ($query + $parameters), false);
+            return $routeCurrentNoQuerry == $routeItemNoQuerry || str_starts_with($routeCurrentNoQuerry, $routeItemNoQuerry);
+        }
 
-		if ($ignoreQuery) {
-			$routeCurrentNoQuerry = explode('?', $routeCurrent)[0];
-			$routeItemNoQuerry = explode('?', $routeItem)[0];
-			return ($routeCurrentNoQuerry == $routeItemNoQuerry || str_starts_with($routeCurrentNoQuerry, $routeItemNoQuerry));
-		}
+        return $routeCurrent == $routeItem || str_starts_with(route($currentName, ($query + $parameters), false), $routeItem);
+    }
 
-		return ($routeCurrent == $routeItem || str_starts_with(route($currentName, ($query + $parameters), false), $routeItem));
-	}
+    protected function matchRoute(bool $ignoreQuery = false): bool
+    {
+        $current = $this->resolveActiveRoute();
+        $query = $this->resolveQueryParameters();
+        $parameters = $this->resolveRouteParameters();
+        $currentName = $current->getName();
 
-	protected function matchRoute(bool $ignoreQuery = false): bool
-	{
-		$current = $this->resolveActiveRoute();
-		$query = $this->resolveQueryParameters();
-		$parameters = $this->resolveRouteParameters();
-		$currentName = $current->getName();
+        if ($ignoreQuery) {
+            return $currentName == $this->route || str_starts_with($currentName, $this->route . '.');
+        }
 
-		if ($ignoreQuery) {
-			return ($currentName == $this->route || str_starts_with($currentName, $this->route.'.'));
-		}
+        return ($currentName == $this->route || str_starts_with($currentName, $this->route . '.')) && ($query == $this->getItemParameters());
+    }
 
-		return ($currentName == $this->route || str_starts_with($currentName, $this->route.'.')) && ($query == $this->getItemParameters());
-	}
-
-	private function getItemParameters(): array {
-			return collect($this->parameters)->filter(function ($value, $key) {
-				return $value != null;
-			})->toArray();
-	}
+    private function getItemParameters(): array
+    {
+        return collect($this->parameters)->filter(function ($value, $key) {
+            return $value != null;
+        })->toArray();
+    }
 }

@@ -6,19 +6,20 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Gate;
 use SteelAnts\DataTable\Livewire\DataTableComponent;
-use SteelAnts\DataTable\Traits\UseDatabase;
 use SteelAnts\DataTable\Traits\UseDatabaseEloquent;
 use SteelAnts\LaravelBoilerplate\Traits\HasUsersPerPage;
 
 class DataTable extends DataTableComponent
 {
     use HasUsersPerPage;
-	use UseDatabaseEloquent;
+    use UseDatabaseEloquent;
 
     public $listeners = ['userAdded' => '$refresh'];
 
     private array $badgeCache = [];
+
     private array $priorityCache = [];
+
     private array $avatarCache = [];
 
     public function query(): Builder
@@ -54,18 +55,18 @@ class DataTable extends DataTableComponent
 
         return [
             [
-                'type'        => "livewire",
-                'action'      => "edit",
+                'type'        => 'livewire',
+                'action'      => 'edit',
                 'parameters'  => $item['id'],
-                'text'        => __("Edit"),
+                'text'        => __('Edit'),
                 'actionClass' => '',
                 'iconClass'   => 'fas fa-pen',
             ],
             [
-                'type'        => "livewire",
-                'action'      => "remove",
+                'type'        => 'livewire',
+                'action'      => 'remove',
                 'parameters'  => $item['id'],
-                'text'        => __("Remove"),
+                'text'        => __('Remove'),
                 'actionClass' => 'text-danger',
                 'iconClass'   => 'fas fa-trash',
                 'confirm'     => __('Are you sure?'),
@@ -73,7 +74,7 @@ class DataTable extends DataTableComponent
         ];
     }
 
-	public function renderColumnName(mixed $value, $row): string
+    public function renderColumnName(mixed $value, $row): string
     {
         if (!$row->isSystemAdmin) {
             return e($value);
@@ -81,6 +82,7 @@ class DataTable extends DataTableComponent
 
         return e($value) . ' <span class="badge text-bg-danger ms-1">' . __('System Admin') . '</span>';
     }
+
     public function renderColumnTotpForce($value, $row): string
     {
         $button = !empty($value)
@@ -99,6 +101,7 @@ class DataTable extends DataTableComponent
     {
         Gate::authorize('is-system-admin');
         User::find($user_id)->delete();
+        alert()->success(__('User removed'))->now();
     }
 
     public function change($id, $name)
@@ -106,6 +109,7 @@ class DataTable extends DataTableComponent
         Gate::authorize('is-system-admin');
         $user = User::where('id', $id)->first();
         $user->update([$name => !$user->{$name}]);
+        alert()->success(__('Updated'))->now();
         $this->dispatch('closeModal');
     }
 }

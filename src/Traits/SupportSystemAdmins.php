@@ -1,6 +1,7 @@
 <?php
 
 namespace SteelAnts\LaravelBoilerplate\Traits;
+
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait SupportSystemAdmins

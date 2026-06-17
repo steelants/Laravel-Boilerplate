@@ -15,7 +15,25 @@
         <h6>head 6</h6>
 
         <div class="my-4">
-            <h4>Tabs</h4>
+            <h4>Tabs — <code>&lt;x-boilerplate::tab.group&gt;</code></h4>
+            <x-boilerplate::tab.group id="home-demo">
+                <x-boilerplate::tab.tabs>
+                    <x-boilerplate::tab.tab name="first">First</x-boilerplate::tab.tab>
+                    <x-boilerplate::tab.tab name="second">Second</x-boilerplate::tab.tab>
+                    <x-boilerplate::tab.tab name="third">Third</x-boilerplate::tab.tab>
+                </x-boilerplate::tab.tabs>
+                <x-boilerplate::tab.panel name="first">
+                    <p class="mt-3">Content of the first tab.</p>
+                </x-boilerplate::tab.panel>
+                <x-boilerplate::tab.panel name="second">
+                    <p class="mt-3">Content of the second tab.</p>
+                </x-boilerplate::tab.panel>
+                <x-boilerplate::tab.panel name="third">
+                    <p class="mt-3">Content of the third tab.</p>
+                </x-boilerplate::tab.panel>
+            </x-boilerplate::tab.group>
+
+            <h4 class="mt-4">Tabs — Bootstrap raw</h4>
             <ul class="nav nav-tabs mb-4">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Active</a>
@@ -270,6 +288,28 @@
                     <li class="breadcrumb-item active" aria-current="page">Data</li>
                 </ol>
             </nav>
+        </div>
+
+        <div class="my-4">
+            <h4>Alert Test</h4>
+            <p class="text-muted mb-2">Snackbar — HTTP redirect (<code>->reload()</code>)</p>
+            <div class="d-flex gap-2 flex-wrap mb-3">
+                @foreach(['success','error','warning','info'] as $type)
+                    <a href="{{ route('home.test-alert', $type) }}" class="btn btn-sm btn-outline-{{ $type === 'error' ? 'danger' : $type }}">
+                        {{ ucfirst($type) }}
+                    </a>
+                @endforeach
+            </div>
+            <p class="text-muted mb-2">Inline — HTTP redirect (<code>->inline()->reload()</code>)</p>
+            <div class="d-flex gap-2 flex-wrap mb-3">
+                @foreach(['success','error','warning','info'] as $type)
+                    <a href="{{ route('home.test-alert-inline', $type) }}" class="btn btn-sm btn-outline-{{ $type === 'error' ? 'danger' : $type }}">
+                        {{ ucfirst($type) }}
+                    </a>
+                @endforeach
+            </div>
+            <p class="text-muted mb-2">Livewire snackbar (<code>->now()</code>)</p>
+            @livewire('test')
         </div>
 
         <div class="my-4">

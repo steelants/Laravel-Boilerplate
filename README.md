@@ -1,7 +1,5 @@
 # Laravel-Boilerplate
 
-#### Currently WIP
-
 ### Created by: [SteelAnts s.r.o.](https://www.steelants.cz/)
 
 [![Total Downloads](https://img.shields.io/packagist/dt/steelants/laravel-boilerplate.svg?style=flat-square)](https://packagist.org/packages/steelants/laravel-boilerplate)
@@ -9,24 +7,9 @@
 ## Preview
 [boilerplate.steelants.cz](https://boilerplate.steelants.cz)
 
-## Change notes
-### 2.3.0
-Now by default modal will show only livewire that have AllowInModal attribute.
-
-```php
-use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
-
-// only logged in users
-#[AllowInModal()]
-class Form extends Component
-
-#[AllowInModal(asGuest: true)]
-class Form extends Component
-
-// only for users with Gate::allows('is-admin')
-#[AllowInModal(ability: 'is-admin')]
-class Form extends Component
-```
+## Upgrade Guide
+- [v2.3 → v2.4](.docs/upgrade/upgrade-2_5.md)
+- [v2.2 → v2.3](.docs/upgrade/upgrade-2_3.md)
 
 #### Tag project
 ```bash
@@ -140,100 +123,29 @@ Menu::make('main-menu', function ($menu) {
 icon - využívá defaultní ikonu dle typu, pokud není nastavena
 persist - pokud je true, zůstává notifikace aktivní dokud ji neodklikne uživatel nebo neprovede redirect.
 
+## Commands
 
-## Development
+| Command | Description |
+|---------|-------------|
+| [install:boilerplate](.docs/commands/install-boilerplate.md) | Install or update boilerplate scaffolding into the project |
+| [make:crud](.docs/commands/make-crud.md) | Scaffold a full CRUD resource (DataTable, Form, controller, routes, tests) |
+| [make:basic-tests](.docs/commands/make-basic-tests.md) | Generate basic route coverage tests |
+| [job:dispatch](.docs/commands/job-dispatch.md) | Dispatch a job by class name |
 
-1. Create subfolder `/packages` at root of your laravel project
+## Components
 
-2. clone repository to sub folder `/packages` (you need to be positioned at root of your laravel project in your terminal)
-```bash
-git clone https://github.com/steelants/Laravel-Boilerplate.git ./packages/Laravel-Boilerplate
-```
+| Component | Tag | Description |
+|-----------|-----|-------------|
+| [Tab Group](.docs/components/tab.md) | `<x-boilerplate::tab.group>` | Bootstrap tabs with Alpine.js state and cookie persistence |
+| [Breadcrumb](.docs/components/breadcrumb.md) | `<x-boilerplate::breadcrumb>` | Bootstrap breadcrumb from associative array |
+| [Gantt](.docs/components/gantt.md) | `<x-boilerplate::gantt>` | Horizontal Gantt chart with day/week/month scale |
+| [Pie Graph](.docs/components/pie-graph.md) | `<x-boilerplate::pie-graph>` | Chart.js pie chart |
+| [Selectbox](.docs/components/selectbox.md) | `<x-boilerplate::selectbox>` | Alpine.js select with tags mode and multi-select |
+| [Selectbox Ajax](.docs/components/selectbox.md#selectbox-ajax) | `<x-boilerplate::selectbox-ajax>` | Selectbox with server-side Livewire search |
+| [Searchbox](.docs/components/searchbox.md) | `<x-boilerplate::searchbox>` | Client-side filtered dropdown search |
+| [Alert](.docs/components/alert.md) | `alert()->success()->now()` | Snackbar notifications for Livewire and HTTP contexts |
 
-3. edit composer.json file
-```json
-"autoload": {
-	"psr-4": {
-		"SteelAnts\\LaravelBoilerplate\\": "packages/Laravel-Boilerplate/src/"
-	}
-}
-```
-
-4. Add provider to `bootstrap/providers.php`
-```php
-return [
-	...
-	SteelAnts\LaravelBoilerplate\BoilerplateServiceProvider::class,
-	...
-];
-```
-
-5. use commands to aplicate changes
-```bash
-composer dump-autoload
-```
-
-6. aplicate packages changes - before this you need have auth package
-```bash
-php artisan install:boilerplate --force
-```
-
-## CRUD
-### Create CRUD
-Create default files in model livewire
-```bash
-php artisan make:crud {model name}
-```
-### Create CRUD Forced
-Create default files in model livewire with ovewrite
-```bash
-php artisan make:crud {model name} --force
-```
-### Create CRUD Full Page
-Create default files in livewire with create and edit as full page
-```bash
-php artisan make:crud {model name} --full-page-components
-```
-### Create CRUD Full Page
-Create components in custome namespace
-```bash
-php artisan make:crud {model name} --namespace=\\Admin
-```
-
-## CRUD parameters
-### Add prefix in TestController
-Give you for example "admin.test.datatable"
-```php
-public string $prefix = "admin.";
-```
-
-### Add model options in TestController
-Give to add modal size parameter
-```php
-public function __construct()
-{
-	$this->model_component = [
-		'size' => 'lg',
-	];
-}
-```
-
-## SelectboxAjax (WIP)
-When you have selectbox with more than 100 options, it's recommended to use dynamic search with livewire (for now only available in selextbox-ajax).
-Alpine will then call method speicified in searchagble parameter.
-```html
-<x-selectbox-ajax :options="$this->getOptions()" searchable="getOptions" property="user_ids" multiple/>
-```
-Only thing you need to change is to create renderless function and call searchableSelectbox method that will handle everything.
-```php
-	use SearchableSelectbox;
-
-	#[Renderless]
-	public function getOptions($search = '')
-	{
-		return $this->searchableSelectbox($search, User::class, $this->user_id)->toArray();
-	}
-```
+## [Development](.docs/development.md)
 
 ## Contributors
 <a href="https://github.com/steelants/Laravel-Boilerplate/graphs/contributors">

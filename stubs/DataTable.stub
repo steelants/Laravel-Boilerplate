@@ -12,8 +12,7 @@ class DataTable extends DataTableComponent
     use UseDatabase;
 
     public $listeners = [
-        '{{model_camel_case}}Added' => '$refresh',
-        '{{model_camel_case}}Updated' => '$refresh',
+        '{{model_camel_case}}Saved' => '$refresh',
         'closeModal' => '$refresh',
     ];
 
@@ -57,6 +56,6 @@ class DataTable extends DataTableComponent
 
     public function edit(${{model_snake_case}}_id)
     {
-        $this->dispatch('openModal', '{{action_form}}', __('Edit {{model_singular}}'), ['model' => ${{model_snake_case}}_id]);
+        $this->dispatch('openModal', '{{action_form}}', __('Edit {{model_singular}}'), ['modelId' => ${{model_snake_case}}_id]);
     }
 }

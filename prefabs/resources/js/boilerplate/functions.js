@@ -76,23 +76,27 @@ window.addEventListener('snackbar', function(e){
 
 window.copyToClipboard = function (text, el = false) {
     if (navigator.clipboard && window.isSecureContext) {
-       navigator.clipboard.writeText(text).then(() => {})
-            .catch(() => {snackbar('something went wrong');});
+        navigator.clipboard.writeText(text)
+            .then(() => { snackbar('Copied to clipboard', false, false, 'fas fa-copy'); })
+            .catch(() => { snackbar('something went wrong', false, 'error', 'fas fa-exclamation-triangle'); });
     } else {
-        let textArea = document.createElement("textarea");
+        const textArea = document.createElement('textarea');
         textArea.value = text;
-        textArea.style.position = "fixed";
-        textArea.style.left = "-999999px";
-        textArea.style.top = "-999999px";
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
-        new Promise((res, rej) => {
-            document.execCommand('copy') ? res() : rej();
+        try {
+            document.execCommand('copy');
+            snackbar('Copied to clipboard', false, false, 'fas fa-copy');
+        } catch {
+            snackbar('something went wrong', false, 'error', 'fas fa-exclamation-triangle');
+        } finally {
             textArea.remove();
-        });
+        }
     }
-    snackbar('Copied to clipboard');
 }
 
 window.addEventListener('openDropdown', function(e){

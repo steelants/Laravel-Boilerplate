@@ -5,7 +5,9 @@ namespace SteelAnts\LaravelBoilerplate\Types;
 class SubscriptionTier
 {
     const TIER_1 = 1;
+
     const TIER_2 = 2;
+
     const TIER_3 = 3;
     // Add more tiers if needed
 
@@ -14,7 +16,7 @@ class SubscriptionTier
         return [
             self::TIER_1 => [
                 'limit_name'   => 100,
-				'limit_name_2' => 20,
+                'limit_name_2' => 20,
                 // Add more limits if needed
             ],
             self::TIER_2 => ['limit_name' => 1000],

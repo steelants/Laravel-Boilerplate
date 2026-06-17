@@ -9,7 +9,9 @@ use Illuminate\View\Component;
 class PieGraph extends Component
 {
     public array $datasets = [];
+
     public array $labels = [];
+
     public array $options = [];
 
     public function __construct($data, $labels = [], $colors = [], bool $legend = true)

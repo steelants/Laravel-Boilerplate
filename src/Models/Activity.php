@@ -11,6 +11,7 @@ class Activity extends Model
     use HasFactory;
 
     protected $casts = ['data' => 'array'];
+
     const UPDATED_AT = null;
 
     /**

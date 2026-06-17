@@ -8,7 +8,9 @@
 			</button>
 		</div>
 
-		<h5>{{ __('Start job') }}</h5>
+		<div class="page-header mb-2">
+			<h5>{{ __('Start job') }}</h5>
+		</div>
 		<div class="">
 			@foreach ($jobs_classes as $job)
 				<x-form::button class="btn-primary" group-class="mb-3"
@@ -16,10 +18,22 @@
 			@endforeach
 		</div>
 
-		<h5 class="mt-4">{{ __("Waiting") }} <span class="badge text-bg-secondary">{{ $waiting_count }}</span></h5>
+		<div class="page-header mb-2 mt-4">
+			<h5>{{ __("Waiting") }} <span class="badge text-bg-secondary">{{ $waiting_count }}</span></h5>
+			<button class="btn btn-warning btn-sm" onclick="confirm('{{ __('Do you really want to stop all waiting jobs?') }}') ? window.location.href = '{{ route('system.jobs.stop') }}' : false">
+				<i class="me-2 fas fa-stop"></i>
+				<span>{{ __('Stop jobs') }}</span>
+			</button>
+		</div>
         @livewire('job.data-table', [], key('data-table'))
 
-		<h5 class="mt-4">{{ __("Failed") }} <span class="badge text-bg-secondary">{{ $failed_count }}</span></h5>
+		<div class="page-header mb-2 mt-4">
+			<h5>{{ __("Failed") }} <span class="badge text-bg-secondary">{{ $failed_count }}</span></h5>
+			<button class="btn btn-success btn-sm" onclick="confirm('{{ __('Do you really want to rerun all failed jobs?') }}') ? window.location.href = '{{ route('system.jobs.rerun') }}' : false">
+				<i class="me-2 fas fa-redo"></i>
+				<span>{{ __('Rerun jobs') }}</span>
+			</button>
+		</div>
         @livewire('job.data-table', ['failed' => true], key('data-table'))
 	</div>
 </x-dynamic-component>

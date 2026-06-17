@@ -15,11 +15,11 @@ return new class extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string("filename");
-            $table->string("path");
-            $table->string("original_name");
-            $table->integer("size");
-			$table->integer("type")->default(FileType::ATTACHMENT);
+            $table->string('filename');
+            $table->string('path');
+            $table->string('original_name');
+            $table->integer('size');
+            $table->integer('type')->default(FileType::ATTACHMENT);
             $table->morphs('fileable');
         });
     }
