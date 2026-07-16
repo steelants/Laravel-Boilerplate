@@ -37,7 +37,7 @@ On each run of `install:boilerplate` the command compares three hashes:
 composer update steelants/laravel-boilerplate
 
 # 2. read update notes (path relative to Laravel project root)
-cat vendor/steelants/laravel-boilerplate/.docs/updates
+cat vendor/steelants/laravel-boilerplate/docs/updates
 
 # 3. Run the update
 # WARNING: --force overwrites customized files without prompting — run only on a clean git working tree
@@ -58,5 +58,5 @@ git diff
 5. `php artisan optimize:clear`
 6. Test authentication, CRUD, and any customized views
 7. Ensure all project-specific customizations are still present — distinguish between package prefab changes (expected) and repo-specific changes (must be preserved)
-8. Read update notes inside `vendor/steelants/laravel-boilerplate/.docs/updates/` (relative to Laravel project root) — contains helpful migration notes for the new version
+8. Read update notes inside `vendor/steelants/laravel-boilerplate/docs/updates/` (relative to Laravel project root) — contains helpful migration notes for the new version
 9. Run any tests contained in the project: `php artisan test`
