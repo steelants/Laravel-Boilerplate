@@ -2,7 +2,7 @@
     "name": "steelants/laravel-boilerplate",
     "description": "Everything you need to start your Laravel journey.",
     "type": "library",
-    "license": "Apache-2.0",
+    "license": "MIT",
     "require": {
         "laravel/framework": "^11.0|^12.0",
         "livewire/livewire": "^3.0",
