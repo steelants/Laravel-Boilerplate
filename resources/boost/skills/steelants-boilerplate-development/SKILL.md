@@ -167,7 +167,15 @@ $post->file;          // MorphOne — latest file
 $post->uploadFile($uploadedFile, rootPath: 'posts', public: true); // rootPath optional
 $post->replaceFile($fileModel, $uploadedFile);
 ```
-Without `rootPath`, the path is built as `{prefix}/{model}/{id}` (always `/`, never `DIRECTORY_SEPARATOR`) via `FileService::buildDirectory()`. `$public` picks the disk (`public`/`local`) and is persisted on `files.disk`, so links always resolve to the right disk.
+Without `rootPath`, the path is built as `{prefix}/{model}/{id}` (joined with `DIRECTORY_SEPARATOR`) via `FileService::buildDirectory()`. `$public` picks the disk (`public`/`local`) and is persisted on `files.disk`, so links always resolve to the right disk.
+
+Override the `{model}/{id}` part per-model by defining `filePath()` on it:
+```php
+public function filePath(): string
+{
+    return 'tasks/' . $this->id; // combined with the prefix: {prefix}/tasks/{id}
+}
+```
 
 For anonymous uploads or to set a tenant-style prefix, use the `FileStorage` facade (`app(FileService::class)` singleton under the hood):
 ```php

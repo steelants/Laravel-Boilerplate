@@ -4,6 +4,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
 use SteelAnts\LaravelBoilerplate\Services\FileService;
+use SteelAnts\LaravelBoilerplate\Tests\Fixtures\TaskFixture;
 use SteelAnts\LaravelBoilerplate\Tests\Fixtures\UserFixture;
 
 beforeEach(function () {
@@ -18,25 +19,33 @@ describe('FileService::buildDirectory() (via uploadFile)', function () {
 
         $user->uploadFile(UploadedFile::fake()->image('avatar.png'));
 
-        expect($user->files()->first()->path)->toBe('user_fixture/' . $user->id);
+        expect($user->files()->first()->path)->toBe('user_fixture' . DIRECTORY_SEPARATOR . $user->id);
     });
 
     it('builds {prefix}/{model}/{id} once a prefix is set', function () {
         $user = UserFixture::create(['name' => 'Joe']);
-        app(FileService::class)->setPrefix('tenant_media/5');
+        app(FileService::class)->setPrefix('tenant_media' . DIRECTORY_SEPARATOR . '5');
 
         $user->uploadFile(UploadedFile::fake()->image('avatar.png'));
 
-        expect($user->files()->first()->path)->toBe('tenant_media/5/user_fixture/' . $user->id);
+        expect($user->files()->first()->path)->toBe('tenant_media' . DIRECTORY_SEPARATOR . '5' . DIRECTORY_SEPARATOR . 'user_fixture' . DIRECTORY_SEPARATOR . $user->id);
     });
 
-    it('never uses backslashes, only "/"', function () {
-        $user = UserFixture::create(['name' => 'Joe']);
-        app(FileService::class)->setPrefix('tenant_media/5');
+    it('lets a model override its own path fragment via filePath()', function () {
+        $task = TaskFixture::create(['name' => 'Joe']);
 
-        $user->uploadFile(UploadedFile::fake()->image('avatar.png'));
+        $task->uploadFile(UploadedFile::fake()->image('avatar.png'));
 
-        expect($user->files()->first()->path)->not->toContain('\\');
+        expect($task->files()->first()->path)->toBe('tasks/' . $task->id);
+    });
+
+    it('combines a service-provider-level prefix with a model filePath() override', function () {
+        $task = TaskFixture::create(['name' => 'Joe']);
+        app(FileService::class)->setPrefix('tenant_media' . DIRECTORY_SEPARATOR . '1');
+
+        $task->uploadFile(UploadedFile::fake()->image('avatar.png'));
+
+        expect($task->files()->first()->path)->toBe('tenant_media' . DIRECTORY_SEPARATOR . '1' . DIRECTORY_SEPARATOR . 'tasks/' . $task->id);
     });
 });
 
@@ -48,8 +57,8 @@ describe('FileService::uploadFile()', function () {
         $file = $user->files()->first();
 
         expect($file->disk)->toBe('public');
-        Storage::disk('public')->assertExists($file->path . '/' . $file->filename);
-        Storage::disk('local')->assertMissing($file->path . '/' . $file->filename);
+        Storage::disk('public')->assertExists($file->path . DIRECTORY_SEPARATOR . $file->filename);
+        Storage::disk('local')->assertMissing($file->path . DIRECTORY_SEPARATOR . $file->filename);
     });
 
     it('stores the file on the local disk and persists disk=local', function () {
@@ -59,7 +68,7 @@ describe('FileService::uploadFile()', function () {
         $file = $user->files()->first();
 
         expect($file->disk)->toBe('local');
-        Storage::disk('local')->assertExists($file->path . '/' . $file->filename);
+        Storage::disk('local')->assertExists($file->path . DIRECTORY_SEPARATOR . $file->filename);
     });
 
     it('returns a link matching the disk the file was stored on', function () {
@@ -76,7 +85,7 @@ describe('FileObserver::deleting()', function () {
         $user = UserFixture::create(['name' => 'Joe']);
         $user->uploadFile(UploadedFile::fake()->image('avatar.png'), public: true);
         $file = $user->files()->first();
-        $key = $file->path . '/' . $file->filename;
+        $key = $file->path . DIRECTORY_SEPARATOR . $file->filename;
 
         Storage::disk('public')->assertExists($key);
 
@@ -97,7 +106,7 @@ describe('Fileable::replaceFile()', function () {
         $file->refresh();
 
         expect($file->filename)->toBe($originalFilename);
-        Storage::disk('local')->assertExists($file->path . '/' . $file->filename);
+        Storage::disk('local')->assertExists($file->path . DIRECTORY_SEPARATOR . $file->filename);
     });
 });
 

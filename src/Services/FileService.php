@@ -17,7 +17,7 @@ class FileService
 
     public function setPrefix(string $prefix): static
     {
-        $this->prefix = trim($prefix, '/');
+        $this->prefix = trim($prefix, DIRECTORY_SEPARATOR);
 
         return $this;
     }
@@ -28,14 +28,18 @@ class FileService
     }
 
     /**
-     * Jediný zdroj pravdy pro stavbu cesty: {prefix}/{model}/{id}, výhradně přes '/'.
+     * Jediný zdroj pravdy pro stavbu cesty: {prefix}/{fragment}.
+     * Fragment je buď $owner->filePath() (granulární override na modelu), nebo default {model}/{id}.
      */
     protected function buildDirectory(Model $owner): string
     {
-        $model = Str::snake(class_basename($owner));
-        $segments = array_filter([$this->prefix, $model, $owner->getKey()], fn ($segment) => $segment !== null && $segment !== '');
+        $fragment = method_exists($owner, 'filePath')
+            ? trim($owner->filePath(), DIRECTORY_SEPARATOR)
+            : Str::snake(class_basename($owner)) . DIRECTORY_SEPARATOR . $owner->getKey();
 
-        return implode('/', $segments);
+        $segments = array_filter([$this->prefix, $fragment], fn ($segment) => $segment !== null && $segment !== '');
+
+        return implode(DIRECTORY_SEPARATOR, $segments);
     }
 
     public function parseInlineImages(Model $owner, $rawContent, $imageFilePrefix = '', $imagesStoragePath = '', $imageLazyLoad = true, bool $public = false)
@@ -78,7 +82,7 @@ class FileService
 
                 $filename = $imageFilePrefix . uniqid('', true) . '.' . $mimeType;
 
-                Storage::drive($disk)->put(trim($imagesStoragePath, '/') . '/' . $filename, file_get_contents($src));
+                Storage::drive($disk)->put(trim($imagesStoragePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename, file_get_contents($src));
 
                 $owner->files()->updateOrCreate(
                     [
@@ -147,7 +151,7 @@ class FileService
         $rootPath = Str::lower($rootPath);
 
         $disk = $public ? 'public' : 'local';
-        Storage::drive($disk)->putFileAs(trim($rootPath, '/'), $file, $filename);
+        Storage::drive($disk)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);
 
         $owner->files()->updateOrCreate(
             [
@@ -167,7 +171,7 @@ class FileService
     public function loadFile(string $filename, string $rootPath, bool $public = false): string
     {
         return route('file.serv', [
-            'path'      => str_replace('/', '-', trim($rootPath, '/')),
+            'path'      => str_replace(DIRECTORY_SEPARATOR, '-', trim($rootPath, DIRECTORY_SEPARATOR)),
             'file_name' => $filename,
             'public'    => $public,
         ], false);
@@ -211,7 +215,7 @@ class FileService
     {
         $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
         $disk = $public ? 'public' : 'local';
-        Storage::drive($disk)->putFileAs(trim($rootPath, '/'), $file, $filename);
+        Storage::drive($disk)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);
 
         File::updateOrCreate(
             [
@@ -231,7 +235,7 @@ class FileService
     public function replaceFile(File $fileModel, UploadedFile|TemporaryUploadedFile $file, bool $public = false): string
     {
         $disk = $public ? 'public' : 'local';
-        Storage::drive($disk)->putFileAs(trim($fileModel->path, '/'), $file, $fileModel->filename);
+        Storage::drive($disk)->putFileAs(trim($fileModel->path, DIRECTORY_SEPARATOR), $file, $fileModel->filename);
 
         $fileModel->update([
             'original_name' => $file->getClientOriginalName(),

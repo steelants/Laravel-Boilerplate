@@ -15,9 +15,9 @@ class FileObserver
         if (Str::contains($file->path, $file->filename)) {
             $disk->delete($file->path);
         } else {
-            $path = rtrim($file->path, '/');
-            $filename = ltrim($file->filename, '/');
-            $disk->delete($path . '/' . $filename);
+            $path = rtrim($file->path, '/\\');
+            $filename = ltrim($file->filename, '/\\');
+            $disk->delete($path . DIRECTORY_SEPARATOR . $filename);
         }
     }
 }

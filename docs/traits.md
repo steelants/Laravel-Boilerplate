@@ -80,7 +80,23 @@ $post->uploadFile($uploadedFile, rootPath: 'posts', public: true); // rootPath i
 $post->replaceFile($fileModel, $uploadedFile);
 ```
 
-Without an explicit `rootPath`, the file is stored under `{prefix}/{model}/{id}` (always `/`-separated, never `DIRECTORY_SEPARATOR`) — `$public` decides the disk (`public` or `local`), which is persisted on the `files.disk` column so links always resolve to the right disk.
+Without an explicit `rootPath`, the file is stored under `{prefix}/{model}/{id}` (joined with `DIRECTORY_SEPARATOR`) — `$public` decides the disk (`public` or `local`), which is persisted on the `files.disk` column so links always resolve to the right disk.
+
+The `{model}/{id}` part can be overridden per-model by defining a `filePath()` method — useful when you want a different folder shape than the default:
+
+```php
+class Task extends Model
+{
+    use Fileable;
+
+    public function filePath(): string
+    {
+        return 'tasks/' . $this->id;
+    }
+}
+```
+
+The prefix (set once, e.g. by Laravel-Tenant via `FileStorage::setPrefix()`) always comes first, so a tenant prefix `tenant_media/1` plus `Task::filePath()` above resolves to `tenant_media/1/tasks/1/file.txt`.
 
 ### FileStorage facade
 
