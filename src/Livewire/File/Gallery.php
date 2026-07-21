@@ -124,7 +124,7 @@ class Gallery extends Component
 
         $this->files = [];
         foreach ($files as $fileObj) {
-            $this->files[$fileObj->id] = FileStorage::loadFile($fileObj->filename, $fileObj->path, $fileObj->disk === 'public') . '?t=' . $fileObj->updated_at;
+            $this->files[$fileObj->id] = $fileObj->getLink() . '?t=' . $fileObj->updated_at;
         }
     }
 

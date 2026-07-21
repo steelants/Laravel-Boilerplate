@@ -80,7 +80,9 @@ $post->uploadFile($uploadedFile, rootPath: 'posts', public: true); // rootPath i
 $post->replaceFile($fileModel, $uploadedFile);
 ```
 
-Without an explicit `rootPath`, the file is stored under `{prefix}/{model}/{id}` (joined with `DIRECTORY_SEPARATOR`) — `$public` decides the disk (`public` or `local`), which is persisted on the `files.disk` column so links always resolve to the right disk.
+Without an explicit `rootPath`, the file is stored under `{prefix}/{model}/{id}` (joined with `DIRECTORY_SEPARATOR`) — `$public` decides the disk (`public` or `local`) it's written to.
+
+There is no `disk` column — which disk a file lives on is never persisted. Reading it back (`$file->getLink()`, deleting) resolves the disk dynamically by checking where the file actually exists (`FileService::resolveDisk()`, `Storage::disk('public')->exists(...)`). Pass `$public` explicitly to `getLink()` when the caller already knows it, to skip that check.
 
 The `{model}/{id}` part can be overridden per-model by defining a `filePath()` method — useful when you want a different folder shape than the default:
 
@@ -98,18 +100,23 @@ class Task extends Model
 
 The prefix (set once, e.g. by Laravel-Tenant via `FileStorage::setPrefix()`) always comes first, so a tenant prefix `tenant_media/1` plus `Task::filePath()` above resolves to `tenant_media/1/tasks/1/file.txt`.
 
-### FileStorage facade
+### FileService / FileStorage facade
 
-The underlying `FileService` is registered as a singleton and exposed through the `FileStorage` facade — use it directly for anonymous uploads (no owning model) or when you need `setPrefix()`:
+`FileService` is registered as a singleton. Same convention as `Alert`/`AlertCollector`: package-internal code (traits, models, other packages like Laravel-Tenant) resolves it directly —
+
+```php
+app(FileService::class)->setPrefix('tenant_media/' . $tenant->id); // e.g. done by Laravel-Tenant
+```
+
+— while the `FileStorage` facade is for the view layer (Blade/Livewire components), same role as `Alert::` in `View/Components/Alerts.php`:
 
 ```php
 use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
 
-FileStorage::setPrefix('tenant_media/' . $tenant->id); // e.g. done by Laravel-Tenant
 FileStorage::uploadFileAnonymouse($uploadedFile, 'uploads');
 ```
 
-The old static `FileService::method()` calls still work (forwarded to the container-bound instance) but are deprecated — prefer the `FileStorage` facade or `app(FileService::class)`.
+The old static `FileService::method()` calls still work (forwarded to the container-bound instance via `__callStatic`) but are deprecated — prefer `app(FileService::class)` or the facade, per the rule above.
 
 
 ## HasSettings

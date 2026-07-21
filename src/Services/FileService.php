@@ -93,7 +93,6 @@ class FileService
                         'original_name' => $filename,
                         'size'          => strlen($src),
                         'type'          => FileType::INLINE,
-                        'disk'          => $disk,
                     ],
                 );
 
@@ -161,7 +160,6 @@ class FileService
             [
                 'original_name' => $file->getClientOriginalName(),
                 'size'          => $file->getSize(),
-                'disk'          => $disk,
             ],
         );
 
@@ -175,6 +173,17 @@ class FileService
             'file_name' => $filename,
             'public'    => $public,
         ], false);
+    }
+
+    /**
+     * Disk se nikde nepersistuje — když ho volající nezná (např. Gallery se souborem, který nenahrával),
+     * zjistí se podle toho, kde soubor reálně leží.
+     */
+    public function resolveDisk(string $rootPath, string $filename): string
+    {
+        $key = trim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename;
+
+        return Storage::disk('public')->exists($key) ? 'public' : 'local';
     }
 
     public static function isImage($filename)
@@ -225,7 +234,6 @@ class FileService
             [
                 'original_name' => $file->getClientOriginalName(),
                 'size'          => $file->getSize(),
-                'disk'          => $disk,
             ],
         );
 
@@ -240,7 +248,6 @@ class FileService
         $fileModel->update([
             'original_name' => $file->getClientOriginalName(),
             'size'           => $file->getSize(),
-            'disk'           => $disk,
         ]);
 
         return $this->loadFile($fileModel->filename, $fileModel->path, $public);

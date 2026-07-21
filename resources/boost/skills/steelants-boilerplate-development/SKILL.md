@@ -167,7 +167,9 @@ $post->file;          // MorphOne — latest file
 $post->uploadFile($uploadedFile, rootPath: 'posts', public: true); // rootPath optional
 $post->replaceFile($fileModel, $uploadedFile);
 ```
-Without `rootPath`, the path is built as `{prefix}/{model}/{id}` (joined with `DIRECTORY_SEPARATOR`) via `FileService::buildDirectory()`. `$public` picks the disk (`public`/`local`) and is persisted on `files.disk`, so links always resolve to the right disk.
+Without `rootPath`, the path is built as `{prefix}/{model}/{id}` (joined with `DIRECTORY_SEPARATOR`) via `FileService::buildDirectory()`. `$public` picks the disk (`public`/`local`) it's written to — there's no `disk` column, it's never persisted.
+
+Reading it back (`$file->getLink()`, deleting via `FileObserver`) resolves the disk dynamically — checks where the file actually exists (`FileService::resolveDisk()`). Pass `$public` explicitly to `getLink()` when the caller already knows it, to skip that check.
 
 Override the `{model}/{id}` part per-model by defining `filePath()` on it:
 ```php
@@ -177,14 +179,13 @@ public function filePath(): string
 }
 ```
 
-For anonymous uploads or to set a tenant-style prefix, use the `FileStorage` facade (`app(FileService::class)` singleton under the hood):
+Same convention as `Alert`/`AlertCollector`: package-internal code (traits, models, other packages) resolves `FileService` directly via `app(FileService::class)` — e.g. Laravel-Tenant's `TenantManager::set()` calls `app(FileService::class)->setPrefix(...)`. The `FileStorage` facade is for the view layer (Blade/Livewire), same role as `Alert::`:
 ```php
 use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
 
-FileStorage::setPrefix('tenant_media/' . $tenant->id);
 FileStorage::uploadFileAnonymouse($uploadedFile, 'uploads');
 ```
-Static `FileService::method()` calls still work as deprecated back-compat wrappers — prefer the facade.
+Static `FileService::method()` calls still work as deprecated back-compat wrappers (`__callStatic`) — prefer `app(FileService::class)` or the facade per the rule above.
 
 ### `HasSettings` — per-model key/value settings
 ```php

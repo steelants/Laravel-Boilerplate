@@ -50,33 +50,59 @@ describe('FileService::buildDirectory() (via uploadFile)', function () {
 });
 
 describe('FileService::uploadFile()', function () {
-    it('stores the file on the public disk and persists disk=public', function () {
+    it('stores the file on the public disk', function () {
         $user = UserFixture::create(['name' => 'Joe']);
 
         $user->uploadFile(UploadedFile::fake()->image('avatar.png'), public: true);
         $file = $user->files()->first();
 
-        expect($file->disk)->toBe('public');
         Storage::disk('public')->assertExists($file->path . DIRECTORY_SEPARATOR . $file->filename);
         Storage::disk('local')->assertMissing($file->path . DIRECTORY_SEPARATOR . $file->filename);
     });
 
-    it('stores the file on the local disk and persists disk=local', function () {
+    it('stores the file on the local disk', function () {
         $user = UserFixture::create(['name' => 'Joe']);
 
         $user->uploadFile(UploadedFile::fake()->image('avatar.png'));
         $file = $user->files()->first();
 
-        expect($file->disk)->toBe('local');
         Storage::disk('local')->assertExists($file->path . DIRECTORY_SEPARATOR . $file->filename);
     });
 
-    it('returns a link matching the disk the file was stored on', function () {
+    it('returns a link matching the disk the caller asked for', function () {
         $user = UserFixture::create(['name' => 'Joe']);
 
         $link = $user->uploadFile(UploadedFile::fake()->image('avatar.png'), public: true);
 
         expect($link)->toContain('public=1');
+    });
+});
+
+describe('FileService::resolveDisk() / File::getLink()', function () {
+    it('resolves "public" when the file only exists on the public disk', function () {
+        $user = UserFixture::create(['name' => 'Joe']);
+        $user->uploadFile(UploadedFile::fake()->image('avatar.png'), public: true);
+        $file = $user->files()->first();
+
+        expect(app(FileService::class)->resolveDisk($file->path, $file->filename))->toBe('public')
+            ->and($file->getLink())->toContain('public=1');
+    });
+
+    it('resolves "local" when the file only exists on the local disk', function () {
+        $user = UserFixture::create(['name' => 'Joe']);
+        $user->uploadFile(UploadedFile::fake()->image('avatar.png'));
+        $file = $user->files()->first();
+
+        expect(app(FileService::class)->resolveDisk($file->path, $file->filename))->toBe('local')
+            ->and($file->getLink())->not->toContain('public=1');
+    });
+
+    it('lets the caller override the resolved disk explicitly', function () {
+        $user = UserFixture::create(['name' => 'Joe']);
+        $user->uploadFile(UploadedFile::fake()->image('avatar.png'), public: true);
+        $file = $user->files()->first();
+
+        expect($file->getLink(public: false))->not->toContain('public=1');
     });
 });
 
