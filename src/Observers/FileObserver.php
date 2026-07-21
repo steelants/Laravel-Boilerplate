@@ -10,12 +10,14 @@ class FileObserver
 {
     public function deleting(File $file)
     {
+        $disk = Storage::disk($file->disk ?: 'local');
+
         if (Str::contains($file->path, $file->filename)) {
-            Storage::delete($file->path);
+            $disk->delete($file->path);
         } else {
-            $path = rtrim($file->path, '/\\');      // odstraní pouze trailing slash
-            $filename = ltrim($file->filename, '/\\');  // odstraní pouze leading slash
-            Storage::delete($path . DIRECTORY_SEPARATOR . $filename);
+            $path = rtrim($file->path, '/');
+            $filename = ltrim($file->filename, '/');
+            $disk->delete($path . '/' . $filename);
         }
     }
 }

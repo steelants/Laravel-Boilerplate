@@ -13,17 +13,20 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use SteelAnts\LaravelBoilerplate\Console\Commands\BackfillFileDiskCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;
 use SteelAnts\LaravelBoilerplate\Console\Commands\InstallCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeBasicTestsCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
 use SteelAnts\LaravelBoilerplate\Facades\Alert;
+use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
 use SteelAnts\LaravelBoilerplate\Facades\Menu;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
 use SteelAnts\LaravelBoilerplate\Livewire\File\Gallery;
 use SteelAnts\LaravelBoilerplate\Livewire\Hooks\AlertDispatcherHook;
 use SteelAnts\LaravelBoilerplate\Livewire\Setting\Form;
+use SteelAnts\LaravelBoilerplate\Services\FileService;
 use SteelAnts\LaravelBoilerplate\Support\AlertCollector;
 use SteelAnts\LaravelBoilerplate\Traits\Auditable;
 use SteelAnts\LaravelBoilerplate\Traits\AuditableDetailed;
@@ -111,6 +114,7 @@ class BoilerplateServiceProvider extends ServiceProvider
 
         $this->commands([MakeBasicTestsCommand::class]);
         $this->commands([DispatchJob::class]);
+        $this->commands([BackfillFileDiskCommand::class]);
 
         $this->publishes([
             __DIR__ . '/../lang'            => $this->app->langPath('vendor/boilerplate'),
@@ -141,6 +145,9 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->app->singleton(AlertCollector::class);
         $this->app->alias('Menu', Menu::class);
         $this->app->alias('Alert', Alert::class);
+
+        $this->app->singleton(FileService::class);
+        $this->app->alias('FileStorage', FileStorage::class);
 
         Livewire::componentHook(AlertDispatcherHook::class);
 

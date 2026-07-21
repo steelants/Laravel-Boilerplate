@@ -8,9 +8,9 @@ class FileController extends Controller
 {
     public function serv(string $path = '', string $file_name = '', bool $public = false)
     {
-        $file_group_path = str_replace('-', DIRECTORY_SEPARATOR, $path);
+        $file_group_path = str_replace('-', '/', $path);
         $disk = !empty($public) ? 'public' : 'local';
-        $path = trim($file_group_path . DIRECTORY_SEPARATOR . $file_name, DIRECTORY_SEPARATOR);
+        $path = trim($file_group_path . '/' . $file_name, '/');
 
         if (!Storage::disk($disk)->exists($path)) {
             abort(404);

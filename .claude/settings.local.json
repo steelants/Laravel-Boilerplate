@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(///wsl.localhost/Ubuntu/opt/docker/lar_hamrsport_dev/LAR_HamrSport/**)",
+      "Read(///wsl.localhost/Ubuntu/opt/docker/lar_hamrsport_dev/LAR_HamrSport/src/**)",
+      "Read(//c/Git/PackageLaravel/**)",
+      "Bash(sed -E 's/\\(PASSWORD|SECRET|KEY\\)=.*/\\\\1=***/g' \"C:/Git/PackageLaravel/.env\")"
+    ]
+  }
+}

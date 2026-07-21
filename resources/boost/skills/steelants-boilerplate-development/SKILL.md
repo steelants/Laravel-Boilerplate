@@ -164,9 +164,19 @@ $post->files;         // MorphMany — all files
 $post->file;          // MorphOne — latest file
 
 // Upload helpers (use in Livewire components)
-$post->uploadFile($uploadedFile, rootPath: 'posts', public: true);
-$post->replaceFile($uploadedFile);
+$post->uploadFile($uploadedFile, rootPath: 'posts', public: true); // rootPath optional
+$post->replaceFile($fileModel, $uploadedFile);
 ```
+Without `rootPath`, the path is built as `{prefix}/{model}/{id}` (always `/`, never `DIRECTORY_SEPARATOR`) via `FileService::buildDirectory()`. `$public` picks the disk (`public`/`local`) and is persisted on `files.disk`, so links always resolve to the right disk.
+
+For anonymous uploads or to set a tenant-style prefix, use the `FileStorage` facade (`app(FileService::class)` singleton under the hood):
+```php
+use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
+
+FileStorage::setPrefix('tenant_media/' . $tenant->id);
+FileStorage::uploadFileAnonymouse($uploadedFile, 'uploads');
+```
+Static `FileService::method()` calls still work as deprecated back-compat wrappers — prefer the facade.
 
 ### `HasSettings` — per-model key/value settings
 ```php

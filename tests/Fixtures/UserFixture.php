@@ -3,11 +3,12 @@
 namespace SteelAnts\LaravelBoilerplate\Tests\Fixtures;
 
 use Illuminate\Database\Eloquent\Model;
+use SteelAnts\LaravelBoilerplate\Traits\Fileable;
 use SteelAnts\LaravelBoilerplate\Traits\HasSettings;
 
 class UserFixture extends Model
 {
-    use HasSettings;
+    use Fileable, HasSettings;
 
     protected $table = 'users';
 

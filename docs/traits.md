@@ -76,9 +76,24 @@ $post->file;  // MorphOne - latest file
 Upload helpers:
 
 ```php
-$post->uploadFile($uploadedFile, rootPath: 'posts', public: true);
-$post->replaceFile($uploadedFile);
+$post->uploadFile($uploadedFile, rootPath: 'posts', public: true); // rootPath is optional
+$post->replaceFile($fileModel, $uploadedFile);
 ```
+
+Without an explicit `rootPath`, the file is stored under `{prefix}/{model}/{id}` (always `/`-separated, never `DIRECTORY_SEPARATOR`) — `$public` decides the disk (`public` or `local`), which is persisted on the `files.disk` column so links always resolve to the right disk.
+
+### FileStorage facade
+
+The underlying `FileService` is registered as a singleton and exposed through the `FileStorage` facade — use it directly for anonymous uploads (no owning model) or when you need `setPrefix()`:
+
+```php
+use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
+
+FileStorage::setPrefix('tenant_media/' . $tenant->id); // e.g. done by Laravel-Tenant
+FileStorage::uploadFileAnonymouse($uploadedFile, 'uploads');
+```
+
+The old static `FileService::method()` calls still work (forwarded to the container-bound instance) but are deprecated — prefer the `FileStorage` facade or `app(FileService::class)`.
 
 
 ## HasSettings
