@@ -3,7 +3,7 @@
 namespace SteelAnts\LaravelBoilerplate\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use SteelAnts\LaravelBoilerplate\Services\FileService;
+use SteelAnts\LaravelBoilerplate\Support\FileService;
 
 class FileStorage extends Facade
 {

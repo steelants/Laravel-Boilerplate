@@ -3,7 +3,8 @@
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
-use SteelAnts\LaravelBoilerplate\Services\FileService;
+use SteelAnts\LaravelBoilerplate\Models\File;
+use SteelAnts\LaravelBoilerplate\Support\FileService;
 use SteelAnts\LaravelBoilerplate\Tests\Fixtures\TaskFixture;
 use SteelAnts\LaravelBoilerplate\Tests\Fixtures\UserFixture;
 
@@ -13,7 +14,7 @@ beforeEach(function () {
     app(FileService::class)->setPrefix('');
 });
 
-describe('FileService::buildDirectory() (via uploadFile)', function () {
+describe('FileService path building (defaultFragment + withPrefix, via uploadFile)', function () {
     it('builds {model}/{id} without a prefix', function () {
         $user = UserFixture::create(['name' => 'Joe']);
 
@@ -46,6 +47,23 @@ describe('FileService::buildDirectory() (via uploadFile)', function () {
         $task->uploadFile(UploadedFile::fake()->image('avatar.png'));
 
         expect($task->files()->first()->path)->toBe('tenant_media' . DIRECTORY_SEPARATOR . '1' . DIRECTORY_SEPARATOR . 'tasks/' . $task->id);
+    });
+
+    it('prepends the prefix even when the caller passes an explicit rootPath', function () {
+        $user = UserFixture::create(['name' => 'Joe']);
+        app(FileService::class)->setPrefix('tenant_media' . DIRECTORY_SEPARATOR . '5');
+
+        $user->uploadFile(UploadedFile::fake()->image('avatar.png'), rootPath: 'custom/path');
+
+        expect($user->files()->first()->path)->toBe('tenant_media' . DIRECTORY_SEPARATOR . '5' . DIRECTORY_SEPARATOR . 'custom/path');
+    });
+
+    it('prepends the prefix to the default "uploads" path for owner-less uploads', function () {
+        app(FileService::class)->setPrefix('tenant_media' . DIRECTORY_SEPARATOR . '5');
+
+        FileStorage::uploadFileAnonymouse(UploadedFile::fake()->image('avatar.png'));
+
+        expect(File::first()->path)->toBe('tenant_media' . DIRECTORY_SEPARATOR . '5' . DIRECTORY_SEPARATOR . 'uploads');
     });
 });
 

@@ -98,7 +98,9 @@ class Task extends Model
 }
 ```
 
-The prefix (set once, e.g. by Laravel-Tenant via `FileStorage::setPrefix()`) always comes first, so a tenant prefix `tenant_media/1` plus `Task::filePath()` above resolves to `tenant_media/1/tasks/1/file.txt`.
+The prefix (set once, e.g. by Laravel-Tenant via `FileStorage::setPrefix()`) always comes first — including when you pass an explicit `rootPath` — so a tenant prefix `tenant_media/1` plus `Task::filePath()` above resolves to `tenant_media/1/tasks/1/file.txt`, and `uploadFile($file, rootPath: 'posts')` under that same prefix resolves to `tenant_media/1/posts/file.txt`.
+
+Uploads without an owning model (`FileStorage::uploadFileAnonymouse()`) default their root to `uploads` — the prefix still applies the same way: `{prefix}/uploads/file.txt`.
 
 ### FileService / FileStorage facade
 

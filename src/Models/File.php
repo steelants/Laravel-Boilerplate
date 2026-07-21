@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use SteelAnts\LaravelBoilerplate\Observers\FileObserver;
-use SteelAnts\LaravelBoilerplate\Services\FileService;
+use SteelAnts\LaravelBoilerplate\Support\FileService;
 
 #[ObservedBy([FileObserver::class])]
 class File extends Model

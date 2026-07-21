@@ -1,6 +1,6 @@
 <?php
 
-namespace SteelAnts\LaravelBoilerplate\Services;
+namespace SteelAnts\LaravelBoilerplate\Support;
 
 use DOMDocument;
 use Illuminate\Database\Eloquent\Model;
@@ -28,16 +28,22 @@ class FileService
     }
 
     /**
-     * Jediný zdroj pravdy pro stavbu cesty: {prefix}/{fragment}.
-     * Fragment je buď $owner->filePath() (granulární override na modelu), nebo default {model}/{id}.
+     * Default fragment cesty, pokud volající nezadá vlastní: $owner->filePath()
+     * (granulární override na modelu), jinak {model}/{id}.
      */
-    protected function buildDirectory(Model $owner): string
+    protected function defaultFragment(Model $owner): string
     {
-        $fragment = method_exists($owner, 'filePath')
+        return method_exists($owner, 'filePath')
             ? trim($owner->filePath(), DIRECTORY_SEPARATOR)
             : Str::snake(class_basename($owner)) . DIRECTORY_SEPARATOR . $owner->getKey();
+    }
 
-        $segments = array_filter([$this->prefix, $fragment], fn ($segment) => $segment !== null && $segment !== '');
+    /**
+     * Prefix se lepí vždy — ať je zbytek cesty default, nebo ho volající zadal explicitně.
+     */
+    protected function withPrefix(string $path): string
+    {
+        $segments = array_filter([$this->prefix, trim($path, DIRECTORY_SEPARATOR)], fn ($segment) => $segment !== null && $segment !== '');
 
         return implode(DIRECTORY_SEPARATOR, $segments);
     }
@@ -53,10 +59,10 @@ class FileService
         }
 
         if (empty($imagesStoragePath)) {
-            $imagesStoragePath = $this->buildDirectory($owner);
+            $imagesStoragePath = $this->defaultFragment($owner);
         }
 
-        $imagesStoragePath = Str::lower($imagesStoragePath);
+        $imagesStoragePath = Str::lower($this->withPrefix($imagesStoragePath));
 
         libxml_use_internal_errors(true);
 
@@ -144,10 +150,10 @@ class FileService
         $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
 
         if (empty($rootPath)) {
-            $rootPath = $this->buildDirectory($owner);
+            $rootPath = $this->defaultFragment($owner);
         }
 
-        $rootPath = Str::lower($rootPath);
+        $rootPath = Str::lower($this->withPrefix($rootPath));
 
         $disk = $public ? 'public' : 'local';
         Storage::drive($disk)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);
@@ -220,8 +226,14 @@ class FileService
         return in_array(end($explode), $imageExtensions);
     }
 
-    public function uploadFileAnonymouse(UploadedFile|TemporaryUploadedFile $file, string $rootPath, bool $public = false): string
+    public function uploadFileAnonymouse(UploadedFile|TemporaryUploadedFile $file, string $rootPath = '', bool $public = false): string
     {
+        if (empty($rootPath)) {
+            $rootPath = 'uploads';
+        }
+
+        $rootPath = $this->withPrefix($rootPath);
+
         $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
         $disk = $public ? 'public' : 'local';
         Storage::drive($disk)->putFileAs(trim($rootPath, DIRECTORY_SEPARATOR), $file, $filename);

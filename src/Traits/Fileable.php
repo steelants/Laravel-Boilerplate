@@ -5,7 +5,7 @@ namespace SteelAnts\LaravelBoilerplate\Traits;
 use Illuminate\Http\UploadedFile;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use SteelAnts\LaravelBoilerplate\Models\File;
-use SteelAnts\LaravelBoilerplate\Services\FileService;
+use SteelAnts\LaravelBoilerplate\Support\FileService;
 
 trait Fileable
 {

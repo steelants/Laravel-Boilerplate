@@ -167,7 +167,9 @@ $post->file;          // MorphOne — latest file
 $post->uploadFile($uploadedFile, rootPath: 'posts', public: true); // rootPath optional
 $post->replaceFile($fileModel, $uploadedFile);
 ```
-Without `rootPath`, the path is built as `{prefix}/{model}/{id}` (joined with `DIRECTORY_SEPARATOR`) via `FileService::buildDirectory()`. `$public` picks the disk (`public`/`local`) it's written to — there's no `disk` column, it's never persisted.
+Without `rootPath`, the path defaults to `{model}/{id}`. `$public` picks the disk (`public`/`local`) it's written to — there's no `disk` column, it's never persisted.
+
+**The prefix (see below) always comes first — default or explicit `rootPath`, doesn't matter.** `uploadFile($file, rootPath: 'posts')` under prefix `tenant_media/1` resolves to `tenant_media/1/posts/file.txt`. Owner-less uploads (`FileStorage::uploadFileAnonymouse()`) default their root to `uploads`, same rule: `{prefix}/uploads/file.txt`.
 
 Reading it back (`$file->getLink()`, deleting via `FileObserver`) resolves the disk dynamically — checks where the file actually exists (`FileService::resolveDisk()`). Pass `$public` explicitly to `getLink()` when the caller already knows it, to skip that check.
 
@@ -179,11 +181,11 @@ public function filePath(): string
 }
 ```
 
-Same convention as `Alert`/`AlertCollector`: package-internal code (traits, models, other packages) resolves `FileService` directly via `app(FileService::class)` — e.g. Laravel-Tenant's `TenantManager::set()` calls `app(FileService::class)->setPrefix(...)`. The `FileStorage` facade is for the view layer (Blade/Livewire), same role as `Alert::`:
+Same convention as `Alert`/`AlertCollector`: package-internal code (traits, models, other packages) resolves `FileService` directly via `app(FileService::class)` — e.g. Laravel-Tenant's `TenantManager::set()` calls `app(FileService::class)->setPrefix(...)`. `FileService` lives in `Support/` (facade-backed), not `Services/` (that's for plain services with no facade, like `ActivityService`). The `FileStorage` facade is for the view layer (Blade/Livewire), same role as `Alert::`:
 ```php
 use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
 
-FileStorage::uploadFileAnonymouse($uploadedFile, 'uploads');
+FileStorage::uploadFileAnonymouse($uploadedFile);
 ```
 Static `FileService::method()` calls still work as deprecated back-compat wrappers (`__callStatic`) — prefer `app(FileService::class)` or the facade per the rule above.
 
