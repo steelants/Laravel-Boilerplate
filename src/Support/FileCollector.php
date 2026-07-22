@@ -11,7 +11,7 @@ use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use SteelAnts\LaravelBoilerplate\Models\File;
 use SteelAnts\LaravelBoilerplate\Types\FileType;
 
-class FileService
+class FileCollector
 {
     protected string $prefix = '';
 
@@ -263,13 +263,5 @@ class FileService
         ]);
 
         return $this->loadFile($fileModel->filename, $fileModel->path, $public);
-    }
-
-    /**
-     * @deprecated Statické volání je zpětně kompatibilní wrapper. Použij FileStorage facade nebo app(FileService::class).
-     */
-    public static function __callStatic(string $method, array $arguments)
-    {
-        return app(static::class)->$method(...$arguments);
     }
 }

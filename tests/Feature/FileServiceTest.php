@@ -1,20 +1,27 @@
 <?php
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
 use SteelAnts\LaravelBoilerplate\Models\File;
-use SteelAnts\LaravelBoilerplate\Support\FileService;
+use SteelAnts\LaravelBoilerplate\Services\FileService as DeprecatedFileService;
+use SteelAnts\LaravelBoilerplate\Support\FileCollector;
 use SteelAnts\LaravelBoilerplate\Tests\Fixtures\TaskFixture;
 use SteelAnts\LaravelBoilerplate\Tests\Fixtures\UserFixture;
 
 beforeEach(function () {
     Storage::fake('local');
     Storage::fake('public');
-    app(FileService::class)->setPrefix('');
+    app(FileCollector::class)->setPrefix('');
+    DB::beginTransaction();
 });
 
-describe('FileService path building (defaultFragment + withPrefix, via uploadFile)', function () {
+afterEach(function () {
+    DB::rollBack();
+});
+
+describe('FileCollector path building (defaultFragment + withPrefix, via uploadFile)', function () {
     it('builds {model}/{id} without a prefix', function () {
         $user = UserFixture::create(['name' => 'Joe']);
 
@@ -25,7 +32,7 @@ describe('FileService path building (defaultFragment + withPrefix, via uploadFil
 
     it('builds {prefix}/{model}/{id} once a prefix is set', function () {
         $user = UserFixture::create(['name' => 'Joe']);
-        app(FileService::class)->setPrefix('tenant_media' . DIRECTORY_SEPARATOR . '5');
+        app(FileCollector::class)->setPrefix('tenant_media' . DIRECTORY_SEPARATOR . '5');
 
         $user->uploadFile(UploadedFile::fake()->image('avatar.png'));
 
@@ -42,7 +49,7 @@ describe('FileService path building (defaultFragment + withPrefix, via uploadFil
 
     it('combines a service-provider-level prefix with a model filePath() override', function () {
         $task = TaskFixture::create(['name' => 'Joe']);
-        app(FileService::class)->setPrefix('tenant_media' . DIRECTORY_SEPARATOR . '1');
+        app(FileCollector::class)->setPrefix('tenant_media' . DIRECTORY_SEPARATOR . '1');
 
         $task->uploadFile(UploadedFile::fake()->image('avatar.png'));
 
@@ -51,7 +58,7 @@ describe('FileService path building (defaultFragment + withPrefix, via uploadFil
 
     it('prepends the prefix even when the caller passes an explicit rootPath', function () {
         $user = UserFixture::create(['name' => 'Joe']);
-        app(FileService::class)->setPrefix('tenant_media' . DIRECTORY_SEPARATOR . '5');
+        app(FileCollector::class)->setPrefix('tenant_media' . DIRECTORY_SEPARATOR . '5');
 
         $user->uploadFile(UploadedFile::fake()->image('avatar.png'), rootPath: 'custom/path');
 
@@ -59,7 +66,7 @@ describe('FileService path building (defaultFragment + withPrefix, via uploadFil
     });
 
     it('prepends the prefix to the default "uploads" path for owner-less uploads', function () {
-        app(FileService::class)->setPrefix('tenant_media' . DIRECTORY_SEPARATOR . '5');
+        app(FileCollector::class)->setPrefix('tenant_media' . DIRECTORY_SEPARATOR . '5');
 
         FileStorage::uploadFileAnonymouse(UploadedFile::fake()->image('avatar.png'));
 
@@ -67,7 +74,7 @@ describe('FileService path building (defaultFragment + withPrefix, via uploadFil
     });
 });
 
-describe('FileService::uploadFile()', function () {
+describe('FileCollector::uploadFile()', function () {
     it('stores the file on the public disk', function () {
         $user = UserFixture::create(['name' => 'Joe']);
 
@@ -92,18 +99,18 @@ describe('FileService::uploadFile()', function () {
 
         $link = $user->uploadFile(UploadedFile::fake()->image('avatar.png'), public: true);
 
-        expect($link)->toContain('public=1');
+        expect($link)->toEndWith('/1');
     });
 });
 
-describe('FileService::resolveDisk() / File::getLink()', function () {
+describe('FileCollector::resolveDisk() / File::getLink()', function () {
     it('resolves "public" when the file only exists on the public disk', function () {
         $user = UserFixture::create(['name' => 'Joe']);
         $user->uploadFile(UploadedFile::fake()->image('avatar.png'), public: true);
         $file = $user->files()->first();
 
-        expect(app(FileService::class)->resolveDisk($file->path, $file->filename))->toBe('public')
-            ->and($file->getLink())->toContain('public=1');
+        expect(app(FileCollector::class)->resolveDisk($file->path, $file->filename))->toBe('public')
+            ->and($file->getLink())->toEndWith('/1');
     });
 
     it('resolves "local" when the file only exists on the local disk', function () {
@@ -111,8 +118,8 @@ describe('FileService::resolveDisk() / File::getLink()', function () {
         $user->uploadFile(UploadedFile::fake()->image('avatar.png'));
         $file = $user->files()->first();
 
-        expect(app(FileService::class)->resolveDisk($file->path, $file->filename))->toBe('local')
-            ->and($file->getLink())->not->toContain('public=1');
+        expect(app(FileCollector::class)->resolveDisk($file->path, $file->filename))->toBe('local')
+            ->and($file->getLink())->not->toEndWith('/1');
     });
 
     it('lets the caller override the resolved disk explicitly', function () {
@@ -120,7 +127,7 @@ describe('FileService::resolveDisk() / File::getLink()', function () {
         $user->uploadFile(UploadedFile::fake()->image('avatar.png'), public: true);
         $file = $user->files()->first();
 
-        expect($file->getLink(public: false))->not->toContain('public=1');
+        expect($file->getLink(public: false))->not->toEndWith('/1');
     });
 });
 
@@ -154,16 +161,16 @@ describe('Fileable::replaceFile()', function () {
     });
 });
 
-describe('FileService static back-compat', function () {
-    it('forwards deprecated static calls to the container-bound instance', function () {
+describe('Services\FileService static back-compat shim', function () {
+    it('forwards deprecated static calls (old namespace) to the container-bound instance', function () {
         $user = UserFixture::create(['name' => 'Joe']);
 
-        FileService::uploadFile($user, UploadedFile::fake()->image('avatar.png'));
+        DeprecatedFileService::uploadFile($user, UploadedFile::fake()->image('avatar.png'));
 
         expect($user->files()->count())->toBe(1);
     });
 });
 
 it('exposes the same singleton through the FileStorage facade', function () {
-    expect(FileStorage::getFacadeRoot())->toBe(app(FileService::class));
+    expect(FileStorage::getFacadeRoot())->toBe(app(FileCollector::class));
 });
