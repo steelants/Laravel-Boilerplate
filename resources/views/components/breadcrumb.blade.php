@@ -1,5 +1,3 @@
-@props(['items' => []])
-
 @if (count($items))
     <nav {{ $attributes }} aria-label="{{ __('Breadcrumb') }}">
         <ol class="breadcrumb">
