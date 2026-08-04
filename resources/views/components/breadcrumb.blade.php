@@ -1,9 +1,15 @@
-<nav {{ $attributes }} aria-label="breadcrumb">
-	<ol class ="breadcrumb">
-		@foreach ($items as $item)
-			<li class="breadcrumb-item">
-				<a href={{ $item['link'] }}">{{ $item['name'] }}</a>
-			</li>
-		@endforeach
-	</ol>
-</nav>
+@props(['items' => []])
+
+@if (count($items))
+    <nav {{ $attributes }} aria-label="{{ __('Breadcrumb') }}">
+        <ol class="breadcrumb">
+            @foreach ($items as $path => $label)
+                @if ($loop->last)
+                    <li class="breadcrumb-item active" aria-current="page">{{ $label }}</li>
+                @else
+                    <li class="breadcrumb-item"><a href="{{ url($path) }}">{{ $label }}</a></li>
+                @endif
+            @endforeach
+        </ol>
+    </nav>
+@endif
