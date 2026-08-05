@@ -173,9 +173,9 @@ class FileCollector
     }
 
     /**
-     * Veřejné soubory se vrací přímým odkazem na disk (bez PHP routy) — nevytěžují
-     * aplikaci při velkém množství dotazů (např. obrázky v listu). Soukromé soubory
-     * dál jedou přes 'file.serv', kde je nad nimi auth middleware.
+     * Public files are returned as a direct link to the disk (no PHP route) — this
+     * avoids hitting the app on every request when there's a lot of them (e.g. images
+     * in a list). Private files still go through 'file.serv', which has auth middleware.
      */
     public function loadFile(string $filename, string $rootPath, bool $public = false): string
     {
