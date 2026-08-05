@@ -5,11 +5,10 @@ namespace SteelAnts\LaravelBoilerplate\Tests\Fixtures;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use SteelAnts\LaravelBoilerplate\Traits\Fileable;
-use SteelAnts\LaravelBoilerplate\Traits\HasSettings;
 
-class UserFixture extends Model
+class TaskFixture extends Model
 {
-    use Fileable, HasSettings;
+    use Fileable;
 
     protected $table = 'users';
 
@@ -19,9 +18,14 @@ class UserFixture extends Model
 
     protected static function booted(): void
     {
-        static::creating(function (self $user) {
-            $user->email ??= Str::random(16) . '@example.com';
-            $user->password ??= Str::random(32);
+        static::creating(function (self $task) {
+            $task->email ??= Str::random(16) . '@example.com';
+            $task->password ??= Str::random(32);
         });
+    }
+
+    public function filePath(): string
+    {
+        return 'tasks/' . $this->id;
     }
 }

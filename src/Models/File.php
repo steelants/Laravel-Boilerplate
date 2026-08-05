@@ -5,8 +5,8 @@ namespace SteelAnts\LaravelBoilerplate\Models;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
 use SteelAnts\LaravelBoilerplate\Observers\FileObserver;
-use SteelAnts\LaravelBoilerplate\Services\FileService;
 
 #[ObservedBy([FileObserver::class])]
 class File extends Model
@@ -29,8 +29,10 @@ class File extends Model
         return $this->morphTo();
     }
 
-    public function getLink()
+    public function getLink(?bool $public = null): string
     {
-        return FileService::loadFile($this->filename, $this->path);
+        $public ??= FileStorage::resolveDisk($this->path, $this->filename) === 'public';
+
+        return FileStorage::loadFile($this->filename, $this->path, $public);
     }
 }

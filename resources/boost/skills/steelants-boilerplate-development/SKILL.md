@@ -164,9 +164,38 @@ $post->files;         // MorphMany — all files
 $post->file;          // MorphOne — latest file
 
 // Upload helpers (use in Livewire components)
-$post->uploadFile($uploadedFile, rootPath: 'posts', public: true);
-$post->replaceFile($uploadedFile);
+$post->uploadFile($uploadedFile, rootPath: 'posts', public: true); // rootPath optional
+$post->replaceFile($fileModel, $uploadedFile);
 ```
+Without `rootPath`, the path defaults to `{model}/{id}`. `$public` picks the disk (`public`/`local`) it's written to — there's no `disk` column, it's never persisted.
+
+**The prefix (see below) always comes first — default or explicit `rootPath`, doesn't matter.** `uploadFile($file, rootPath: 'posts')` under prefix `tenant_media/1` resolves to `tenant_media/1/posts/file.txt`. Owner-less uploads (`FileStorage::uploadFileAnonymouse()`) default their root to `uploads`, same rule: `{prefix}/uploads/file.txt`.
+
+Reading it back (`$file->getLink()`, deleting via `FileObserver`) resolves the disk dynamically — checks where the file actually exists (`FileCollector::resolveDisk()`). Pass `$public` explicitly to `getLink()` when the caller already knows it, to skip that check.
+
+Override the `{model}/{id}` part per-model by defining `filePath()` on it:
+```php
+public function filePath(): string
+{
+    return 'tasks/' . $this->id; // combined with the prefix: {prefix}/tasks/{id}
+}
+```
+
+Underlying class is `SteelAnts\LaravelBoilerplate\Support\FileCollector` — `Support/` because it's facade-backed (like `AlertCollector`/`MenuCollector`), not `Services/` (that's for services with no facade, like `ActivityService`). Registered as a singleton so `$prefix` state is shared everywhere within a request.
+
+Consumer-facing code (`Fileable`, `Models\File::getLink()`, `Livewire\File\Gallery`) uses the `FileStorage` facade:
+```php
+use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
+
+FileStorage::uploadFileAnonymouse($uploadedFile);
+```
+Other packages that just configure it (not consume the upload API) resolve `FileCollector` directly — e.g. Laravel-Tenant's `TenantManager::set()`:
+```php
+if (class_exists(FileCollector::class)) {
+    app(FileCollector::class)->setPrefix('tenant_media/' . $tenant->id);
+}
+```
+`SteelAnts\LaravelBoilerplate\Services\FileService` still exists as a deprecated shim — static calls forward to the `FileStorage` facade, old code keeps working unchanged.
 
 ### `HasSettings` — per-model key/value settings
 ```php

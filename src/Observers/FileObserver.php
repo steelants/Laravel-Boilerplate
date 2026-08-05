@@ -11,11 +11,20 @@ class FileObserver
     public function deleting(File $file)
     {
         if (Str::contains($file->path, $file->filename)) {
-            Storage::delete($file->path);
+            $key = $file->path;
         } else {
-            $path = rtrim($file->path, '/\\');      // odstraní pouze trailing slash
-            $filename = ltrim($file->filename, '/\\');  // odstraní pouze leading slash
-            Storage::delete($path . DIRECTORY_SEPARATOR . $filename);
+            $path = rtrim($file->path, '/\\');
+            $filename = ltrim($file->filename, '/\\');
+            $key = $path . DIRECTORY_SEPARATOR . $filename;
+        }
+
+        // Disk se nikde nepersistuje, zjistíme, kde soubor reálně leží.
+        foreach (['public', 'local'] as $disk) {
+            if (Storage::disk($disk)->exists($key)) {
+                Storage::disk($disk)->delete($key);
+
+                return;
+            }
         }
     }
 }

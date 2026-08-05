@@ -5,9 +5,8 @@ namespace SteelAnts\LaravelBoilerplate\Livewire\File;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
-use SplFileInfo;
+use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
 use SteelAnts\LaravelBoilerplate\Models\File;
-use SteelAnts\LaravelBoilerplate\Services\FileService;
 use Throwable;
 
 class Gallery extends Component
@@ -58,7 +57,7 @@ class Gallery extends Component
                     if (!empty($this->model)) {
                         $this->model->uploadFile($file);
                     } else {
-                        FileService::uploadFileAnonymouse($file, 'uploads');
+                        FileStorage::uploadFileAnonymouse($file, 'uploads');
                     }
                 }
 
@@ -84,7 +83,7 @@ class Gallery extends Component
             if (!empty($this->model)) {
                 $this->model->replaceFile($fileModel, $file);
             } else {
-                FileService::replaceFile($fileModel, $file);
+                FileStorage::replaceFile($fileModel, $file);
             }
 
             $this->refreshFiles();
@@ -125,8 +124,7 @@ class Gallery extends Component
 
         $this->files = [];
         foreach ($files as $fileObj) {
-            $file = new SplFileInfo($fileObj->path . DIRECTORY_SEPARATOR . $fileObj->filename);
-            $this->files[$fileObj->id] = FileService::loadFile($file->getFilename(), $file->getPath()) . '?t=' . $fileObj->updated_at;
+            $this->files[$fileObj->id] = $fileObj->getLink() . '?t=' . $fileObj->updated_at;
         }
     }
 

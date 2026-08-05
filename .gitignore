@@ -29,5 +29,6 @@ stubs/resources/views/test*/*
 stubs/resources/views/livewire/test-*.blade.php
 Prefabs/resources/**/test-*.blade.php
 .vscode/sftp.json
+.claude/
 
 composer.lock

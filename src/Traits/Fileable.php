@@ -2,10 +2,10 @@
 
 namespace SteelAnts\LaravelBoilerplate\Traits;
 
-use App\Models\File;
 use Illuminate\Http\UploadedFile;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use SteelAnts\LaravelBoilerplate\Services\FileService;
+use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
+use SteelAnts\LaravelBoilerplate\Models\File;
 
 trait Fileable
 {
@@ -14,7 +14,7 @@ trait Fileable
      */
     public function files()
     {
-        return $this->morphMany(File::class, 'fileable');
+        return $this->morphMany(config('boilerplate.models.file', File::class), 'fileable');
     }
 
     /**
@@ -22,16 +22,16 @@ trait Fileable
      */
     public function file()
     {
-        return $this->morphOne(File::class, 'fileable')->latestOfMany();
+        return $this->morphOne(config('boilerplate.models.file', File::class), 'fileable')->latestOfMany();
     }
 
     public function uploadFile(UploadedFile|TemporaryUploadedFile $file, string $rootPath = '', bool $public = false): string
     {
-        return FileService::uploadFile(owner: $this, file: $file, rootPath: $rootPath, public: $public);
+        return FileStorage::uploadFile(owner: $this, file: $file, rootPath: $rootPath, public: $public);
     }
 
-    public function replaceFile(UploadedFile|TemporaryUploadedFile $file, bool $public = false): string
+    public function replaceFile(File $fileModel, UploadedFile|TemporaryUploadedFile $file, bool $public = false): string
     {
-        return FileService::replaceFile($this->files, $file, $public);
+        return FileStorage::replaceFile($fileModel, $file, $public);
     }
 }

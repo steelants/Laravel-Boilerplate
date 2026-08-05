@@ -18,6 +18,7 @@ use SteelAnts\LaravelBoilerplate\Console\Commands\InstallCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeBasicTestsCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
 use SteelAnts\LaravelBoilerplate\Facades\Alert;
+use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
 use SteelAnts\LaravelBoilerplate\Facades\Menu;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
@@ -25,6 +26,7 @@ use SteelAnts\LaravelBoilerplate\Livewire\File\Gallery;
 use SteelAnts\LaravelBoilerplate\Livewire\Hooks\AlertDispatcherHook;
 use SteelAnts\LaravelBoilerplate\Livewire\Setting\Form;
 use SteelAnts\LaravelBoilerplate\Support\AlertCollector;
+use SteelAnts\LaravelBoilerplate\Support\FileCollector;
 use SteelAnts\LaravelBoilerplate\Traits\Auditable;
 use SteelAnts\LaravelBoilerplate\Traits\AuditableDetailed;
 use SteelAnts\LaravelBoilerplate\Traits\SupportSystemAdmins;
@@ -141,6 +143,9 @@ class BoilerplateServiceProvider extends ServiceProvider
         $this->app->singleton(AlertCollector::class);
         $this->app->alias('Menu', Menu::class);
         $this->app->alias('Alert', Alert::class);
+
+        $this->app->singleton(FileCollector::class);
+        $this->app->alias('FileStorage', FileStorage::class);
 
         Livewire::componentHook(AlertDispatcherHook::class);
 
