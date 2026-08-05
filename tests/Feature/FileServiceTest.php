@@ -99,7 +99,8 @@ describe('FileCollector::uploadFile()', function () {
 
         $link = $user->uploadFile(UploadedFile::fake()->image('avatar.png'), public: true);
 
-        expect($link)->toEndWith('/1');
+        expect($link)->toContain('/storage/')
+            ->and($link)->toEndWith('.png');
     });
 });
 
@@ -110,7 +111,7 @@ describe('FileCollector::resolveDisk() / File::getLink()', function () {
         $file = $user->files()->first();
 
         expect(app(FileCollector::class)->resolveDisk($file->path, $file->filename))->toBe('public')
-            ->and($file->getLink())->toEndWith('/1');
+            ->and($file->getLink())->toContain('/storage/');
     });
 
     it('resolves "local" when the file only exists on the local disk', function () {
@@ -119,7 +120,7 @@ describe('FileCollector::resolveDisk() / File::getLink()', function () {
         $file = $user->files()->first();
 
         expect(app(FileCollector::class)->resolveDisk($file->path, $file->filename))->toBe('local')
-            ->and($file->getLink())->not->toEndWith('/1');
+            ->and($file->getLink())->not->toContain('/storage/');
     });
 
     it('lets the caller override the resolved disk explicitly', function () {
@@ -127,7 +128,7 @@ describe('FileCollector::resolveDisk() / File::getLink()', function () {
         $user->uploadFile(UploadedFile::fake()->image('avatar.png'), public: true);
         $file = $user->files()->first();
 
-        expect($file->getLink(public: false))->not->toEndWith('/1');
+        expect($file->getLink(public: false))->not->toContain('/storage/');
     });
 });
 

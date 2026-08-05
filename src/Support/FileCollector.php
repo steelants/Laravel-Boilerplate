@@ -172,12 +172,20 @@ class FileCollector
         return $this->loadFile($filename, $rootPath, $public);
     }
 
+    /**
+     * Veřejné soubory se vrací přímým odkazem na disk (bez PHP routy) — nevytěžují
+     * aplikaci při velkém množství dotazů (např. obrázky v listu). Soukromé soubory
+     * dál jedou přes 'file.serv', kde je nad nimi auth middleware.
+     */
     public function loadFile(string $filename, string $rootPath, bool $public = false): string
     {
+        if ($public) {
+            return Storage::disk('public')->url(trim($rootPath, DIRECTORY_SEPARATOR) . '/' . $filename);
+        }
+
         return route('file.serv', [
             'path'      => str_replace(DIRECTORY_SEPARATOR, '-', trim($rootPath, DIRECTORY_SEPARATOR)),
             'file_name' => $filename,
-            'public'    => $public,
         ], false);
     }
 
