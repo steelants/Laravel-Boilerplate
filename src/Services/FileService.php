@@ -36,8 +36,12 @@ class FileService
 
         $dom = new DOMDocument;
         $dom->encoding = 'utf-8';
-        $dom->loadHTML(mb_convert_encoding($rawContent, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $images = $dom->getElementsByTagName('img');
+        // Wrap in a single root element: without it, libxml's HTML parser nests
+        // sibling top-level block elements (e.g. <h3>a</h3><p>b</p>) inside each
+        // other instead of keeping them as siblings.
+        $dom->loadHTML('<div>' . mb_convert_encoding($rawContent, 'HTML-ENTITIES', 'UTF-8') . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $wrapper = $dom->documentElement;
+        $images = $wrapper->getElementsByTagName('img');
         $filesName = $owner->files()->where('type', FileType::INLINE)->pluck('filename', 'id')->toArray();
 
         $drive = !empty($public) ? 'public' : 'local';
@@ -87,7 +91,12 @@ class FileService
         }
 
         // preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1">$1</a>',
-        return $dom->savehtml($dom->documentElement);
+        $html = '';
+        foreach ($wrapper->childNodes as $child) {
+            $html .= $dom->saveHTML($child);
+        }
+
+        return $html;
     }
 
     public static function getInLineImagesFileIds(Model $owner, $rawContent): array
