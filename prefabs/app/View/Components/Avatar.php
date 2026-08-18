@@ -29,7 +29,7 @@ class Avatar extends Component
         $hash = substr(sha1($this->name), 0, 10);
         $this->color ??= 1 + hexdec($hash) % 6;
 
-        preg_match_all('/(?<=\s|^)[a-z]/i', $this->name, $matches);
+        preg_match_all('/(*UTF8)(?<=\s|^)\p{L}/i', $this->name, $matches);
         $this->short = strtoupper(implode('', array_slice($matches[0], 0, 2)));
     }
 
