@@ -5,6 +5,8 @@ namespace SteelAnts\LaravelBoilerplate\Jobs;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\Attributes\Timeout;
+use Illuminate\Queue\Attributes\Tries;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
@@ -13,6 +15,8 @@ use Illuminate\Support\Facades\Mail;
 use SteelAnts\LaravelBoilerplate\Attributes\AllowManualRun;
 
 #[AllowManualRun()]
+#[Timeout(600)]
+#[Tries(1)]
 class Backup implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
