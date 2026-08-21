@@ -87,7 +87,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
                                                     <button type="submit" class="btn btn-warning">
-                                                        <i class="fa fa-rotate-left me-1"></i>{{ __('Restore') }}
+                                                        <i class="fa fa-undo me-1"></i>{{ __('Restore') }}
                                                     </button>
                                                 </div>
                                             </div>
