@@ -152,7 +152,7 @@ class Backup implements ShouldQueue
             Log::info($backupPath . '=>' . $zippedFilePath . '=>' . $fileMD5Hash);
         }
 
-        $mails = config('boilerplate.system_admins_mail') ?? [];
+        $mails = config('boilerplate.system_admins_mail') ?: [];
         $mails = array_filter($mails);
 
         if (!empty($mails)) {
