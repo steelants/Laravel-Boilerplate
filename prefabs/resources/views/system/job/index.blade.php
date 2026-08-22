@@ -19,13 +19,16 @@
 		</div>
 
 		<div class="page-header mb-2 mt-4">
-			<h5>{{ __("Waiting") }} <span class="badge text-bg-secondary">{{ $waiting_count }}</span></h5>
+			<h5>
+				{{ __("Waiting") }} <span class="badge text-bg-secondary">{{ $waiting_count }}</span>
+				<span class="badge text-bg-primary">{{ __('Processing') }} {{ $processing_count }}</span>
+			</h5>
 			<button class="btn btn-warning btn-sm" onclick="confirm('{{ __('Do you really want to stop all waiting jobs?') }}') ? window.location.href = '{{ route('system.jobs.stop') }}' : false">
 				<i class="me-2 fas fa-stop"></i>
 				<span>{{ __('Stop jobs') }}</span>
 			</button>
 		</div>
-        @livewire('job.data-table', [], key('data-table'))
+        @livewire('job.data-table', [], key('waiting-jobs'))
 
 		<div class="page-header mb-2 mt-4">
 			<h5>{{ __("Failed") }} <span class="badge text-bg-secondary">{{ $failed_count }}</span></h5>
@@ -34,6 +37,9 @@
 				<span>{{ __('Rerun jobs') }}</span>
 			</button>
 		</div>
-        @livewire('job.data-table', ['failed' => true], key('data-table'))
+        {{-- Both tables are the same component and DataTableComponent::queryString() has no
+             per-instance prefix, so the second one would pick up the first one's sortBy from
+             the URL - e.g. "status", which failed_jobs has no column for. --}}
+        @livewire('job.data-table', ['failed' => true, 'useUrl' => false], key('failed-jobs'))
 	</div>
 </x-dynamic-component>

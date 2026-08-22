@@ -43,11 +43,17 @@ class DataTable extends DataTableComponent
             ];
         }
 
+        // The jobs table has no connection column - only failed_jobs stores it.
         return [
             'id'           => $row->id,
             'uuid'         => $row->payload['uuid'],
             'name'         => $row->payload['displayName'],
-            'queue'        => '[' . $row->connection . '] ' . $row->queue,
+            'queue'        => $row->queue,
+            'status'       => match (true) {
+                $row->isReserved() => 'processing',
+                $row->isDelayed()  => 'delayed',
+                default            => 'waiting',
+            },
             'available_at' => $row->available_at,
         ];
     }
@@ -67,8 +73,56 @@ class DataTable extends DataTableComponent
             'uuid'         => __('UUID'),
             'queue'        => __('Queue'),
             'name'         => __('Name'),
+            'status'       => __('Status'),
             'available_at' => __('Available At'),
         ];
+    }
+
+    /**
+     * Tells apart a job a worker already picked up (reserved_at is stamped) from one
+     * that is only sitting in the queue, and from one scheduled for later.
+     */
+    public function renderColumnStatus($value, $row): string
+    {
+        $badges = [
+            'processing' => ['text-bg-primary', __('Processing')],
+            'delayed'    => ['text-bg-info', __('Delayed')],
+            'waiting'    => ['text-bg-secondary', __('Waiting')],
+        ];
+
+        [$class, $label] = $badges[$value] ?? $badges['waiting'];
+
+        return '<span class="badge ' . $class . '">' . e($label) . '</span>';
+    }
+
+    /**
+     * Status is not a real column, so sorting by it needs the same expression in SQL.
+     */
+    public function orderColumnStatus(): string
+    {
+        return '(CASE WHEN reserved_at IS NOT NULL THEN 0 WHEN available_at > '
+            . now()->getTimestamp() . ' THEN 2 ELSE 1 END)';
+    }
+
+    public function orderColumnUuid(): string
+    {
+        // failed_jobs has a real uuid column, the jobs table only carries it in the payload.
+        return $this->wrapColumn($this->failed ? 'uuid' : 'payload->uuid');
+    }
+
+    public function orderColumnName(): string
+    {
+        return $this->wrapColumn('payload->displayName');
+    }
+
+    /**
+     * Both tables read uuid and name out of the payload JSON, so ordering by them needs a
+     * JSON selector. Grammar::wrap() builds the driver-specific one (json_extract on SQLite,
+     * json_unquote(json_extract(...)) on MySQL) instead of hardcoding a single dialect.
+     */
+    protected function wrapColumn(string $column): string
+    {
+        return $this->query()->getQuery()->getGrammar()->wrap($column);
     }
 
     public function renderCasts(): array
