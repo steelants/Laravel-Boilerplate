@@ -83,8 +83,6 @@ class Backup implements ShouldQueue
                 $this->replaceArchive($partFile, $this->archivePath($date, $name));
                 unset($partFiles[$name]);
             }
-
-            $this->pruneOldBackups($date);
         } catch (Throwable $e) {
             foreach ($partFiles as $partFile) {
                 File::delete($partFile);
@@ -239,37 +237,6 @@ class Backup implements ShouldQueue
         }
 
         Log::info('Backup stored ' . $zippedFilePath);
-    }
-
-    /**
-     * Drops archives older than boilerplate.backup.retention_days. Runs only after a
-     * successful backup, so a failed run never shrinks the set of available backups.
-     */
-    protected function pruneOldBackups(string $date): void
-    {
-        // Defaults to keeping everything: mergeConfigFrom() is shallow, so an app that
-        // published config/boilerplate.php before this key existed has no value here and
-        // must not suddenly start deleting its archive history.
-        $days = (int) config('boilerplate.backup.retention_days', 0);
-
-        if ($days <= 0) {
-            return;
-        }
-
-        $oldestKeptDate = date('Y-m-d', strtotime($date . ' -' . ($days - 1) . ' days'));
-
-        foreach (File::glob(storage_path('backups') . '/*.zip') ?: [] as $file) {
-            $fileDate = explode('_', basename($file))[0];
-
-            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $fileDate) || $fileDate >= $oldestKeptDate) {
-                continue;
-            }
-
-            File::delete($file);
-            Log::info('Clean Old backup ' . $file);
-        }
-
-        Log::info('Clean Old backups older than ' . $oldestKeptDate);
     }
 
     protected function notify(string $subject, string $message): void

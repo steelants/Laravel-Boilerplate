@@ -26,11 +26,10 @@ Backup behavior is controlled using environment variables:
 
 ```php
 'backup' => [
-    'database'       => (bool) env('BACKUP_DATABASE', true),
-    'storage'        => (bool) env('BACKUP_STORAGE', true),
-    'storage_paths'  => explode(',', env('BACKUP_STORAGE_PATHS', 'app')),
-    'enviroment'     => (bool) env('BACKUP_ENV', true),
-    'retention_days' => (int) env('BACKUP_RETENTION_DAYS', 0),
+    'database'      => (bool) env('BACKUP_DATABASE', true),
+    'storage'       => (bool) env('BACKUP_STORAGE', true),
+    'storage_paths' => explode(',', env('BACKUP_STORAGE_PATHS', 'app')),
+    'enviroment'    => (bool) env('BACKUP_ENV', true),
 ],
 ```
 
@@ -40,25 +39,16 @@ Backup behavior is controlled using environment variables:
 | `storage` | Include storage files |
 | `storage_paths` | Storage paths to include (resolved using `storage_path()`) |
 | `enviroment` | Include the `.env` file |
-| `retention_days` | How many days of backups are kept in `storage/backups`, `0` (default) keeps everything |
 
-Pruning runs only after a successful backup and deletes every archive older than the window.
-It is off by default because it deletes archives irreversibly - set `BACKUP_RETENTION_DAYS=3`
-once you are sure the older archives in `storage/backups` are not needed.
+The job only ever writes the archives of the day it runs for - dropping old archives is left
+to housekeeping.
 
 ### Upgrading an existing project
 
-Nothing has to be added to `.env` or to the published config - the fail safe backup works as
-it is, and retention stays off. Two things are worth doing anyway:
-
-- `retention_days` only reaches an app whose published `config/boilerplate.php` contains the
-  key, because `mergeConfigFrom()` merges the top level only: a published `'backup' => [...]`
-  array replaces the package defaults wholesale. To use retention, add
-  `'retention_days' => (int) env('BACKUP_RETENTION_DAYS', 0),` to that array and then set
-  `BACKUP_RETENTION_DAYS` - the env variable alone does nothing.
-- Re-publish `App\Http\Controllers\System\BackupController` (or copy its `run()` method). The
-  job now throws when a backup fails, so an older controller turns a failed manual run into a
-  500 page instead of an error message. The backup itself stays safe either way.
+Nothing has to be added to `.env` or to the published config. One thing is worth doing anyway:
+re-publish `App\Http\Controllers\System\BackupController` (or copy its `run()` method). The job
+now throws when a backup fails, so an older controller turns a failed manual run into a 500
+page instead of an error message. The backup itself stays safe either way.
 
 Archives are written to `storage/backups` as `Y-m-d_database.zip` and `Y-m-d_storage.zip`
 (the `.env` file is stored inside the storage archive).

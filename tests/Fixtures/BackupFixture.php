@@ -26,11 +26,6 @@ class BackupFixture extends Backup
         $this->replaceArchive($partFilePath, $zippedFilePath);
     }
 
-    public function callPruneOldBackups(string $date): void
-    {
-        $this->pruneOldBackups($date);
-    }
-
     protected function execShellCommand(string $command, string $description): array
     {
         return [];

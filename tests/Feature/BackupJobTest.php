@@ -156,71 +156,27 @@ describe('replaceArchive', function () {
     });
 });
 
-describe('retention', function () {
-    it('keeps the retention window and deletes anything older', function () {
-        config()->set('boilerplate.backup.retention_days', 3);
-        foreach (['2026-09-04', '2026-09-03', '2026-09-02', '2026-09-01', '2026-08-20'] as $date) {
-            seedBackupArchive($date, 'database');
-            seedBackupArchive($date, 'storage');
-        }
+describe('housekeeping', function () {
+    // Dropping old archives is not this job's business - it only ever touches the archives
+    // of the day it is running for.
+    it('never touches archives of other days', function () {
+        seedBackupArchive('2019-01-01', 'database', 'old database backup');
+        seedBackupArchive('2019-01-01', 'storage', 'old storage backup');
 
-        (new BackupFixture())->callPruneOldBackups('2026-09-04');
+        (new BackupFixture())->handle();
 
-        foreach (['2026-09-04', '2026-09-03', '2026-09-02'] as $date) {
-            expect(File::exists(backupArchivePath($date, 'database')))->toBeTrue();
-            expect(File::exists(backupArchivePath($date, 'storage')))->toBeTrue();
-        }
-        foreach (['2026-09-01', '2026-08-20'] as $date) {
-            expect(File::exists(backupArchivePath($date, 'database')))->toBeFalse();
-            expect(File::exists(backupArchivePath($date, 'storage')))->toBeFalse();
-        }
+        expect(File::get(backupArchivePath('2019-01-01', 'database')))->toBe('old database backup');
+        expect(File::get(backupArchivePath('2019-01-01', 'storage')))->toBe('old storage backup');
     });
 
-    it('keeps everything when retention is disabled', function () {
-        config()->set('boilerplate.backup.retention_days', 0);
-        seedBackupArchive('2019-01-01', 'database');
-
-        (new BackupFixture())->callPruneOldBackups('2026-09-04');
-
-        expect(File::exists(backupArchivePath('2019-01-01', 'database')))->toBeTrue();
-    });
-
-    it('keeps everything when the config key is missing entirely', function () {
-        // An app that published config/boilerplate.php before retention_days existed has
-        // no value here, because mergeConfigFrom() only merges the top level.
-        config()->set('boilerplate.backup', [
-            'database'      => true,
-            'storage'       => true,
-            'storage_paths' => ['app'],
-            'enviroment'    => false,
-        ]);
-        seedBackupArchive('2019-01-01', 'database');
-
-        (new BackupFixture())->callPruneOldBackups('2026-09-04');
-
-        expect(File::exists(backupArchivePath('2019-01-01', 'database')))->toBeTrue();
-    });
-
-    it('ignores files that are not dated archives', function () {
-        config()->set('boilerplate.backup.retention_days', 3);
-        File::put(storage_path('backups/notes.zip'), 'not a backup');
-        File::put(storage_path('backups/2019-01-01_database.zip.part'), 'unfinished');
-
-        (new BackupFixture())->callPruneOldBackups('2026-09-04');
-
-        expect(File::exists(storage_path('backups/notes.zip')))->toBeTrue();
-        expect(File::exists(storage_path('backups/2019-01-01_database.zip.part')))->toBeTrue();
-    });
-
-    it('does not prune when the backup failed', function () {
-        config()->set('boilerplate.backup.retention_days', 3);
-        seedBackupArchive('2019-01-01', 'database');
+    it('never touches archives of other days when the backup fails', function () {
+        seedBackupArchive('2019-01-01', 'database', 'old database backup');
 
         $job = new BackupFixture();
         $job->failing[] = 'storage';
 
         expect(fn () => $job->handle())->toThrow(RuntimeException::class);
 
-        expect(File::exists(backupArchivePath('2019-01-01', 'database')))->toBeTrue();
+        expect(File::get(backupArchivePath('2019-01-01', 'database')))->toBe('old database backup');
     });
 });
