@@ -26,10 +26,11 @@ Backup behavior is controlled using environment variables:
 
 ```php
 'backup' => [
-    'database'      => (bool) env('BACKUP_DATABASE', true),
-    'storage'       => (bool) env('BACKUP_STORAGE', true),
-    'storage_paths' => explode(',', env('BACKUP_STORAGE_PATHS', 'app')),
-    'enviroment'    => (bool) env('BACKUP_ENV', true),
+    'database'       => (bool) env('BACKUP_DATABASE', true),
+    'storage'        => (bool) env('BACKUP_STORAGE', true),
+    'storage_paths'  => explode(',', env('BACKUP_STORAGE_PATHS', 'app')),
+    'enviroment'     => (bool) env('BACKUP_ENV', true),
+    'retention_days' => (int) env('BACKUP_RETENTION_DAYS', 0),
 ],
 ```
 
@@ -39,6 +40,21 @@ Backup behavior is controlled using environment variables:
 | `storage` | Include storage files |
 | `storage_paths` | Storage paths to include (resolved using `storage_path()`) |
 | `enviroment` | Include the `.env` file |
+| `retention_days` | How many days of backups are kept in `storage/backups`, `0` (default) keeps everything |
+
+Pruning runs only after a successful backup and deletes every archive older than the window.
+It is off by default because it deletes archives irreversibly - set `BACKUP_RETENTION_DAYS=3`
+once you are sure the older archives in `storage/backups` are not needed.
+
+Archives are written to `storage/backups` as `Y-m-d_database.zip` and `Y-m-d_storage.zip`
+(the `.env` file is stored inside the storage archive).
+
+The backup job is fail safe: every archive is first built as a `.zip.part` file, verified with
+`zip -T`, and only then renamed over the previous archive. If any step fails - a missing
+`mysqldump`, wrong credentials, a full disk, the 600s timeout - the previous backup is left
+untouched, no old archives are pruned, the admins get a failure mail and the job lands in
+`failed_jobs` instead of reporting success. The job needs the `rm`, `cp`, `zip` and (depending
+on the driver) `mysqldump` / `pg_dump` binaries to be available.
 
 
 ## Models

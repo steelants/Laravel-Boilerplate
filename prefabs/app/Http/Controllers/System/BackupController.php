@@ -15,9 +15,15 @@ class BackupController extends BaseController
 {
     public function run()
     {
-        Backup::dispatchSync();
+        // The job runs synchronously and throws when any step fails, so the previous
+        // backup is kept - report that instead of letting it bubble up as a 500.
+        try {
+            Backup::dispatchSync();
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', __('Backup failed') . ': ' . $e->getMessage());
+        }
 
-        return redirect()->back()->with('success', __('Backup is running'));
+        return redirect()->back()->with('success', __('Backup finished'));
     }
 
     public function index()

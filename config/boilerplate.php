@@ -18,10 +18,11 @@ return [
     'system_admins'      => explode(',', env('APP_SYSTEM_ADMINS', '')),
     'system_admins_mail' => env('APP_SYSTEM_ADMINS_MAIL', '') ? explode(',', env('APP_SYSTEM_ADMINS_MAIL', '')) : '',
     'backup'             => [
-        'database'      => (bool) env('BACKUP_DATABASE', true),
-        'storage'       => (bool) env('BACKUP_STORAGE', true),
-        'storage_paths' => explode(',', env('BACKUP_STORAGE_PATHS', 'app')), // Later storage_path() is used to get full path
-        'enviroment'    => (bool) env('BACKUP_ENV', true),
+        'database'       => (bool) env('BACKUP_DATABASE', true),
+        'storage'        => (bool) env('BACKUP_STORAGE', true),
+        'storage_paths'  => explode(',', env('BACKUP_STORAGE_PATHS', 'app')), // Later storage_path() is used to get full path
+        'enviroment'     => (bool) env('BACKUP_ENV', true),
+        'retention_days' => (int) env('BACKUP_RETENTION_DAYS', 0), // How many days of backups are kept, 0 (default) keeps everything
     ],
 
     'models' => [
