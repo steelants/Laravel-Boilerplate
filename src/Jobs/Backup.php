@@ -247,7 +247,10 @@ class Backup implements ShouldQueue
      */
     protected function pruneOldBackups(string $date): void
     {
-        $days = (int) config('boilerplate.backup.retention_days', 3);
+        // Defaults to keeping everything: mergeConfigFrom() is shallow, so an app that
+        // published config/boilerplate.php before this key existed has no value here and
+        // must not suddenly start deleting its archive history.
+        $days = (int) config('boilerplate.backup.retention_days', 0);
 
         if ($days <= 0) {
             return;
