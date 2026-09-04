@@ -49,7 +49,7 @@ class Backup implements ShouldQueue
         }
 
         if (empty($archives)) {
-            Log::warning('Backup skipped, every component is disabled');
+            Log::debug('Backup skipped, every component is disabled');
 
             return;
         }
@@ -75,13 +75,14 @@ class Backup implements ShouldQueue
 
             // Build every archive under a temporary name first, ...
             foreach ($archives as $name => $backupPath) {
-                $partFiles[$name] = $this->createArchive($backupPath, $this->archivePath($date, $name));
+                $zippedFilePath = storage_path('backups/' . $date . '_' . $name . '.zip');
+                $partFiles[$zippedFilePath] = $this->createArchive($backupPath, $zippedFilePath);
             }
 
             // ... and replace the previous backup only once all of them are complete.
-            foreach ($partFiles as $name => $partFile) {
-                $this->replaceArchive($partFile, $this->archivePath($date, $name));
-                unset($partFiles[$name]);
+            foreach ($partFiles as $zippedFilePath => $partFile) {
+                $this->replaceArchive($partFile, $zippedFilePath);
+                unset($partFiles[$zippedFilePath]);
             }
         } catch (Throwable $e) {
             foreach ($partFiles as $partFile) {
@@ -95,11 +96,6 @@ class Backup implements ShouldQueue
         }
 
         $this->notify(__('Backup Run successfully'), __('Backup Run successfully'));
-    }
-
-    protected function archivePath(string $date, string $name): string
-    {
-        return storage_path('backups/' . $date . '_' . $name . '.zip');
     }
 
     protected function prepareTmpDirectory(string $backupPath): void
@@ -163,7 +159,9 @@ class Backup implements ShouldQueue
             }
 
             $backupFile = $db_backup_path . '/' . $dbName . '_' . $type . '_' . $date . '.sql';
-            $command = 'mysqldump --skip-ssl --skip-comments ' . $parameters . ' -h ' . $dbHost . ' -u ' . $dbUserName . ' -p' . $dbPassword . ' ' . $dbName . " -r $backupFile 2>&1";
+            // MySQL 8 dumps tablespaces by default, which needs the PROCESS privilege the
+            // application user usually does not have - without this the dump aborts.
+            $command = 'mysqldump --skip-ssl --skip-comments --no-tablespaces ' . $parameters . ' -h ' . $dbHost . ' -u ' . $dbUserName . ' -p' . $dbPassword . ' ' . $dbName . " -r $backupFile 2>&1";
 
             $this->execShellCommand($command, 'Backup of ' . $dbName . ' ' . $type);
             Log::info('Backup ' . $dbName . ' db ' . $type);
