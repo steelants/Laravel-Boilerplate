@@ -185,6 +185,22 @@ describe('retention', function () {
         expect(File::exists(backupArchivePath('2019-01-01', 'database')))->toBeTrue();
     });
 
+    it('keeps everything when the config key is missing entirely', function () {
+        // An app that published config/boilerplate.php before retention_days existed has
+        // no value here, because mergeConfigFrom() only merges the top level.
+        config()->set('boilerplate.backup', [
+            'database'      => true,
+            'storage'       => true,
+            'storage_paths' => ['app'],
+            'enviroment'    => false,
+        ]);
+        seedBackupArchive('2019-01-01', 'database');
+
+        (new BackupFixture())->callPruneOldBackups('2026-09-04');
+
+        expect(File::exists(backupArchivePath('2019-01-01', 'database')))->toBeTrue();
+    });
+
     it('ignores files that are not dated archives', function () {
         config()->set('boilerplate.backup.retention_days', 3);
         File::put(storage_path('backups/notes.zip'), 'not a backup');
