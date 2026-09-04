@@ -7,7 +7,6 @@ beforeEach(function () {
     config()->set('boilerplate.backup.database', true);
     config()->set('boilerplate.backup.storage', true);
     config()->set('boilerplate.backup.enviroment', false);
-    config()->set('boilerplate.backup.retention_days', 0);
     config()->set('boilerplate.system_admins_mail', '');
 
     File::deleteDirectory(storage_path('backups'));
