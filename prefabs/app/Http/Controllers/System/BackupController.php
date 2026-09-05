@@ -56,18 +56,14 @@ class BackupController extends BaseController
         ]);
     }
 
-    public function download($file_name = null)
+    public function download(string $file_name)
     {
-        if (!empty($file_name)) {
-            $path = storage_path('backups/' . $file_name);
-            if (!File::exists($path)) {
-                abort(404);
-            }
-
-            return response()->download($path);
+        $path = storage_path('backups/' . $file_name);
+        if (!File::exists($path)) {
+            abort(404);
         }
 
-        abort(404);
+        return response()->download($path);
     }
 
     public function delete($backup_date)
