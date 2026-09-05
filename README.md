@@ -64,6 +64,37 @@ import './boilerplate/boilerplate.js';
 > Instead create new root file boilerplate.scss/js by copying it from boilerplate folder. By changing paths of imported files you can make your custom verison or keep importing from boilerplate.
 > When you update boilerplate package you will need to check changes only in root files boilerplate.scss/js and update your custom version accordingly.
 
+## Backup Manager
+
+Archives are written to `storage/backups` as `Y-m-d_database.zip` and `Y-m-d_storage.zip`
+(the `.env` file is stored inside the storage archive). The job runs daily at `00:00` and can
+also be started by hand from *System > Backup*.
+
+Behavior is controlled from `config/boilerplate.php` (`backup` key), backed by these environment variables:
+
+| Variable | Description |
+| --- | --- |
+| `BACKUP_DATABASE` | Back up the database |
+| `BACKUP_STORAGE` | Back up the storage paths |
+| `BACKUP_STORAGE_PATHS` | Comma separated storage paths to include (resolved using `storage_path()`) |
+| `BACKUP_ENV` | Include the `.env` file |
+
+The job is fail safe: every archive is first built as a `.zip.part` file, verified with `zip -T`,
+and only then renamed over the previous archive - and nothing is swapped until every archive of
+the run is complete. If any step fails - a missing `mysqldump`, wrong credentials, a full disk,
+the 600s timeout - the previous backup is left untouched, the admins get a failure mail and the
+job lands in `failed_jobs` instead of reporting success.
+
+The job only ever writes the archives of the day it runs for; dropping old archives is left to
+housekeeping. It needs the `rm`, `cp`, `zip` and (depending on the driver) `mysqldump` / `pg_dump`
+binaries to be available.
+
+> [!NOTE]
+> Upgrading an existing project needs nothing in `.env` or in the published config. One thing is
+> worth doing anyway: re-publish `App\Http\Controllers\System\BackupController` (or copy its `run()`
+> method). The job now throws when a backup fails, so an older controller turns a failed manual run
+> into a 500 page instead of an error message. The backup itself stays safe either way.
+
 ## Menu Builder
 ### Single Level
 ```php
