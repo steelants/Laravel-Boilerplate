@@ -15,9 +15,15 @@ class BackupController extends BaseController
 {
     public function run()
     {
-        Backup::dispatchSync();
+        // The job runs synchronously and throws when any step fails, so the previous
+        // backup is kept - report that instead of letting it bubble up as a 500.
+        try {
+            Backup::dispatchSync();
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', __('Backup failed') . ': ' . $e->getMessage());
+        }
 
-        return redirect()->back()->with('success', __('Backup is running'));
+        return redirect()->back()->with('success', __('Backup finished'));
     }
 
     public function index()
@@ -50,18 +56,14 @@ class BackupController extends BaseController
         ]);
     }
 
-    public function download($file_name = null)
+    public function download(string $file_name)
     {
-        if (!empty($file_name)) {
-            $path = storage_path('backups/' . $file_name);
-            if (!File::exists($path)) {
-                abort(404);
-            }
-
-            return response()->download($path);
+        $path = storage_path('backups/' . $file_name);
+        if (!File::exists($path)) {
+            abort(404);
         }
 
-        abort(404);
+        return response()->download($path);
     }
 
     public function delete($backup_date)

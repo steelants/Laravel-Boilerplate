@@ -40,6 +40,26 @@ Backup behavior is controlled using environment variables:
 | `storage_paths` | Storage paths to include (resolved using `storage_path()`) |
 | `enviroment` | Include the `.env` file |
 
+The job only ever writes the archives of the day it runs for - dropping old archives is left
+to housekeeping.
+
+### Upgrading an existing project
+
+Nothing has to be added to `.env` or to the published config. One thing is worth doing anyway:
+re-publish `App\Http\Controllers\System\BackupController` (or copy its `run()` method). The job
+now throws when a backup fails, so an older controller turns a failed manual run into a 500
+page instead of an error message. The backup itself stays safe either way.
+
+Archives are written to `storage/backups` as `Y-m-d_database.zip` and `Y-m-d_storage.zip`
+(the `.env` file is stored inside the storage archive).
+
+The backup job is fail safe: every archive is first built as a `.zip.part` file, verified with
+`zip -T`, and only then renamed over the previous archive. If any step fails - a missing
+`mysqldump`, wrong credentials, a full disk, the 600s timeout - the previous backup is left
+untouched, no old archives are pruned, the admins get a failure mail and the job lands in
+`failed_jobs` instead of reporting success. The job needs the `rm`, `cp`, `zip` and (depending
+on the driver) `mysqldump` / `pg_dump` binaries to be available.
+
 
 ## Models
 
