@@ -12,7 +12,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use RuntimeException;
 use SteelAnts\LaravelBoilerplate\Attributes\AllowManualRun;
+use Throwable;
 
 #[AllowManualRun()]
 #[Timeout(600)]
@@ -27,146 +29,250 @@ class Backup implements ShouldQueue
     {
         // PREPARATION
         ini_set('date.timezone', 'Europe/Prague');
-        $days = 3;
+        $date = date('Y-m-d', time());
         $fs_backup_path = storage_path('backups/tmp/storage');
         $db_backup_path = storage_path('backups/tmp/db');
 
-        // TODO: verifi all folders exists
-        foreach ([$db_backup_path, $fs_backup_path] as $backupPath) {
-            if (!File::exists($backupPath)) {
-                File::makeDirectory($backupPath, 0755, true);
-            } else {
-                $command = 'rm -r -f ' . $backupPath . '/*';
-                exec($command, $output);
-                Log::Info('Clean Old Temp ' . $backupPath);
-                Log::Debug($output);
+        $backupDatabase = (bool) config('boilerplate.backup.database');
+        $backupStorage = (bool) config('boilerplate.backup.storage');
+        $backupEnvironment = (bool) config('boilerplate.backup.enviroment');
+
+        // A component that is turned off is skipped completely, so its existing
+        // archive is left alone instead of being replaced by an empty one.
+        $archives = [];
+        if ($backupDatabase) {
+            $archives['database'] = $db_backup_path;
+        }
+        if ($backupStorage || $backupEnvironment) {
+            // The .env file travels inside the storage archive, same as Restore expects it.
+            $archives['storage'] = $fs_backup_path;
+        }
+
+        if (empty($archives)) {
+            Log::debug('Backup skipped, every component is disabled');
+
+            return;
+        }
+
+        $partFiles = [];
+
+        try {
+            foreach ([$db_backup_path, $fs_backup_path] as $backupPath) {
+                $this->prepareTmpDirectory($backupPath);
             }
+
+            if ($backupDatabase) {
+                $this->backupDatabase($db_backup_path, $date);
+            }
+
+            if ($backupStorage) {
+                $this->backupStorage($fs_backup_path);
+            }
+
+            if ($backupEnvironment) {
+                $this->backupEnvironment($fs_backup_path);
+            }
+
+            // Build every archive under a temporary name first, ...
+            foreach ($archives as $name => $backupPath) {
+                $zippedFilePath = storage_path('backups/' . $date . '_' . $name . '.zip');
+                $partFiles[$zippedFilePath] = $this->createArchive($backupPath, $zippedFilePath);
+            }
+
+            // ... and replace the previous backup only once all of them are complete.
+            foreach ($partFiles as $zippedFilePath => $partFile) {
+                $this->replaceArchive($partFile, $zippedFilePath);
+                unset($partFiles[$zippedFilePath]);
+            }
+        } catch (Throwable $e) {
+            foreach ($partFiles as $partFile) {
+                File::delete($partFile);
+            }
+
+            Log::error('Backup failed: ' . $e->getMessage());
+            $this->notify(__('Backup Failed'), __('Backup failed') . ': ' . $e->getMessage());
+
+            throw $e;
         }
 
-        // REMOVE OLD BACKUPS
-        foreach (['database', 'storage'] as $backupPath) {
-            $command = 'rm -f ' . storage_path('app/backups') . '/' . date('Y-m-d', strtotime('-' . $days . ' days')) . '_' . $backupPath . '.zip';
-            exec($command, $output);
+        $this->notify(__('Backup Run successfully'), __('Backup Run successfully'));
+    }
+
+    protected function prepareTmpDirectory(string $backupPath): void
+    {
+        if (!File::exists($backupPath)) {
+            File::makeDirectory($backupPath, 0755, true);
+
+            return;
         }
-        Log::info('Clean Old backups ' . $days . ' old');
 
-        // /DATABASE
-        if (config('boilerplate.backup.database')) {
-            if (config('database.default') == 'sqlite') {
-                $dbFile = database_path('database.sqlite');
-                $dbName = basename($dbFile, '.php');
-                $backupFile = $db_backup_path . '/' . $dbName . '_' . date('Y-m-d', time()) . '.sqlite';
-                $command = "cp $dbFile $backupFile 2>&1";
-                exec($command, $output);
-                Log::info('Backup ' . $dbName . ' db ');
-                Log::Debug($output);
-            } elseif (config('database.default') == 'pgsql') {
-                $dbHost = config('database.connections.pgsql.host');
-                $dbName = config('database.connections.pgsql.database');
-                $dbUserName = config('database.connections.pgsql.username');
-                $dbPassword = config('database.connections.pgsql.password');
+        $this->execShellCommand('rm -r -f ' . $backupPath . '/*', 'Cleanup of ' . $backupPath);
+        Log::info('Clean Old Temp ' . $backupPath);
+    }
 
-                foreach (['data', 'scheme'] as $type) {
-                    $parameters = '--schema-only';
-                    if ($type == 'data') {
-                        $parameters = '--data-only';
-                    }
+    protected function backupDatabase(string $db_backup_path, string $date): void
+    {
+        if (config('database.default') == 'sqlite') {
+            $dbFile = database_path('database.sqlite');
+            $dbName = basename($dbFile, '.php');
+            $backupFile = $db_backup_path . '/' . $dbName . '_' . $date . '.sqlite';
 
-                    putenv('PGPASSWORD=' . $dbPassword);
+            $this->execShellCommand("cp $dbFile $backupFile 2>&1", 'Backup of ' . $dbName);
+            Log::info('Backup ' . $dbName . ' db ');
 
-                    $backupFile = $db_backup_path . '/' . $dbName . '_' . $type . '_' . date('Y-m-d', time()) . '.sql';
-                    $command = "pg_dump --no-comments $parameters -h $dbHost -U $dbUserName -d $dbName -f \"$backupFile\" 2>&1";
-                    exec($command, $output);
-                    Log::info('Backup ' . $dbName . ' db ' . $type);
-                    Log::Debug($output);
+            return;
+        }
+
+        if (config('database.default') == 'pgsql') {
+            $dbHost = config('database.connections.pgsql.host');
+            $dbName = config('database.connections.pgsql.database');
+            $dbUserName = config('database.connections.pgsql.username');
+            $dbPassword = config('database.connections.pgsql.password');
+
+            foreach (['data', 'scheme'] as $type) {
+                $parameters = '--schema-only';
+                if ($type == 'data') {
+                    $parameters = '--data-only';
                 }
-            } else {
-                $dbHost = config('database.connections.mysql.host');
-                $dbName = config('database.connections.mysql.database');
-                $dbUserName = config('database.connections.mysql.username');
-                $dbPassword = config('database.connections.mysql.password');
 
-                foreach (['data', 'scheme'] as $type) {
-                    $parameters = '--no-data';
-                    if ($type == 'data') {
-                        $parameters = '--no-create-info';
-                    }
+                putenv('PGPASSWORD=' . $dbPassword);
 
-                    $backupFile = $db_backup_path . '/' . $dbName . '_' . $type . '_' . date('Y-m-d', time()) . '.sql';
-                    $command = 'mysqldump --skip-ssl --skip-comments ' . $parameters . ' -h ' . $dbHost . ' -u ' . $dbUserName . ' -p' . $dbPassword . ' ' . $dbName . " -r $backupFile 2>&1";
-                    exec($command, $output);
-                    Log::info('Backup ' . $dbName . ' db ' . $type);
-                    Log::Debug($output);
-                }
-            }
-        }
+                $backupFile = $db_backup_path . '/' . $dbName . '_' . $type . '_' . $date . '.sql';
+                $command = "pg_dump --no-comments $parameters -h $dbHost -U $dbUserName -d $dbName -f \"$backupFile\" 2>&1";
 
-        if (config('boilerplate.backup.storage')) {
-            // STORAGE
-            foreach (config('boilerplate.backup.storage_paths') as $storage_path) {
-                Log::info('storage backup done');
-                Log::Debug($output);
-                $command = 'cp -R ' . storage_path($storage_path) . ' ' . storage_path('backups/tmp/storage');
-                exec($command, $output);
-            }
-        }
-
-        if (config('boilerplate.backup.enviroment')) {
-            // Backupo .env
-            $envBackupFile = storage_path('backups/tmp/storage/env.backup');
-            $envSourceFile = app()->environmentFilePath();
-
-            $command = 'cp ' . $envSourceFile . ' ' . $envBackupFile;
-            exec($command, $output);
-            Log::info('Backup .env');
-        }
-
-        // Clear previouse backups from same day
-        $command = 'rm -f ' . storage_path('backups') . '/' . date('Y-m-d', time()) . '.zip';
-        exec($command, $output);
-        Log::info('Clean previous backup');
-
-        foreach (['database' => $db_backup_path, 'storage' => $fs_backup_path] as $filename => $backupPath) {
-            $zippedFilePath = storage_path('backups/' . date('Y-m-d', time()) . '_' . $filename . '.zip');
-
-            if (File::exists($zippedFilePath)) {
-                $command = 'rm -r -f ' . $zippedFilePath;
-                exec($command, $output);
-                Log::Info('Clean Old Backup File' . $zippedFilePath);
-                Log::Debug($output);
+                $this->execShellCommand($command, 'Backup of ' . $dbName . ' ' . $type);
+                Log::info('Backup ' . $dbName . ' db ' . $type);
             }
 
-            $command = 'cd ' . $backupPath . '; zip -rm ' . $zippedFilePath . ' ./*';
-            exec($command, $output);
-            Log::info($backupPath . '=>' . $zippedFilePath);
-
-            $command = 'md5sum ' . $zippedFilePath;
-            exec($command, $output);
-            Log::info('Zipping hash');
-
-            $charSet = preg_replace(['/\s{2,}/', '/[\t\n]/'], ' ', $output[count($output) - 1]);
-            $charSet = rtrim($charSet);
-
-            $fileMD5Hash = explode(' ', $charSet)[0];
-            Log::debug($fileMD5Hash);
-            Log::info($backupPath . '=>' . $zippedFilePath . '=>' . $fileMD5Hash);
+            return;
         }
 
-        $mails = config('boilerplate.system_admins_mail') ?: [];
-        $mails = array_filter($mails);
+        $dbHost = config('database.connections.mysql.host');
+        $dbName = config('database.connections.mysql.database');
+        $dbUserName = config('database.connections.mysql.username');
+        $dbPassword = config('database.connections.mysql.password');
 
-        if (!empty($mails)) {
-            Mail::raw(__('Backup Run successfully'), function ($message) use ($mails) {
-                $message->to($mails)->subject(__('Backup Run successfully ') . config('app.name'));
-            });
-            Log::info('Sending Notification');
+        foreach (['data', 'scheme'] as $type) {
+            $parameters = '--no-data';
+            if ($type == 'data') {
+                $parameters = '--no-create-info';
+            }
+
+            $backupFile = $db_backup_path . '/' . $dbName . '_' . $type . '_' . $date . '.sql';
+            // MySQL 8 dumps tablespaces by default, which needs the PROCESS privilege the
+            // application user usually does not have - without this the dump aborts.
+            $command = 'mysqldump --skip-ssl --skip-comments --no-tablespaces ' . $parameters . ' -h ' . $dbHost . ' -u ' . $dbUserName . ' -p' . $dbPassword . ' ' . $dbName . " -r $backupFile 2>&1";
+
+            $this->execShellCommand($command, 'Backup of ' . $dbName . ' ' . $type);
+            Log::info('Backup ' . $dbName . ' db ' . $type);
         }
     }
 
-    private function execShellCommand($command, &$output)
+    protected function backupStorage(string $fs_backup_path): void
     {
-        $output = null;
-        exec($command, $output);
+        foreach (config('boilerplate.backup.storage_paths') ?? [] as $storage_path) {
+            $this->execShellCommand('cp -R ' . storage_path($storage_path) . ' ' . $fs_backup_path, 'Backup of storage/' . $storage_path);
+            Log::info('storage backup done');
+        }
+    }
+
+    protected function backupEnvironment(string $fs_backup_path): void
+    {
+        $envBackupFile = $fs_backup_path . '/env.backup';
+        $envSourceFile = app()->environmentFilePath();
+
+        $this->execShellCommand('cp ' . $envSourceFile . ' ' . $envBackupFile, 'Backup of .env');
+        Log::info('Backup .env');
+    }
+
+    /**
+     * Zips $backupPath next to its final destination and verifies the result.
+     * Returns the path of the finished, still temporary archive.
+     */
+    protected function createArchive(string $backupPath, string $zippedFilePath): string
+    {
+        $partFilePath = $zippedFilePath . '.part';
+        File::delete($partFilePath);
+
+        // An empty source directory means an earlier step produced nothing - zip would
+        // just report "Nothing to do" and leave us without any archive at all.
+        $collectedSize = array_sum(array_map(fn ($file) => $file->getSize(), File::allFiles($backupPath)));
+        if ($collectedSize === 0) {
+            throw new RuntimeException('Nothing to archive in ' . $backupPath);
+        }
+
+        $this->zipDirectory($backupPath, $partFilePath);
+
+        // zip can report success and still leave nothing behind, e.g. when the disk fills up.
+        if (!File::exists($partFilePath) || File::size($partFilePath) === 0) {
+            throw new RuntimeException('Archive was not created: ' . $partFilePath);
+        }
+
+        Log::info($backupPath . '=>' . $zippedFilePath . '=>' . md5_file($partFilePath));
+
+        return $partFilePath;
+    }
+
+    protected function zipDirectory(string $backupPath, string $partFilePath): void
+    {
+        $this->execShellCommand('cd ' . $backupPath . ' && zip -rm ' . $partFilePath . ' ./*', 'Zipping of ' . $backupPath);
+        $this->execShellCommand('zip -T ' . $partFilePath, 'Integrity check of ' . $partFilePath);
+    }
+
+    /**
+     * Puts the finished archive in place of the previous one. rename() is atomic within
+     * a single filesystem, so a backup is only ever replaced by a complete archive.
+     */
+    protected function replaceArchive(string $partFilePath, string $zippedFilePath): void
+    {
+        if (!@rename($partFilePath, $zippedFilePath)) {
+            // Some platforms refuse to rename onto an existing file.
+            File::delete($zippedFilePath);
+
+            if (!rename($partFilePath, $zippedFilePath)) {
+                throw new RuntimeException('Unable to store backup ' . $zippedFilePath);
+            }
+        }
+
+        Log::info('Backup stored ' . $zippedFilePath);
+    }
+
+    protected function notify(string $subject, string $message): void
+    {
+        $mails = array_filter((array) (config('boilerplate.system_admins_mail') ?: []));
+
+        if (empty($mails)) {
+            return;
+        }
+
+        // A broken mailer must never turn a finished backup into a failed job, nor mask
+        // the error that made the backup fail in the first place.
+        try {
+            Mail::raw($message, function ($mail) use ($mails, $subject) {
+                $mail->to($mails)->subject($subject . ' ' . config('app.name'));
+            });
+            Log::info('Sending Notification');
+        } catch (Throwable $e) {
+            Log::error('Backup notification could not be sent: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * @return array<int, string> lines the command wrote to stdout/stderr
+     */
+    protected function execShellCommand(string $command, string $description): array
+    {
+        $output = [];
+        $resultCode = 0;
+
+        exec($command, $output, $resultCode);
         Log::debug($output);
+
+        if ($resultCode !== 0) {
+            // The command itself is never part of the message, it can carry database credentials.
+            throw new RuntimeException($description . ' failed (exit code ' . $resultCode . '): ' . implode(' ', $output));
+        }
+
+        return $output;
     }
 }
