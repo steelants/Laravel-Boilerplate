@@ -12,6 +12,13 @@ class MenuItem
 
     private Collection $dropdown;
 
+    /**
+     * Kolekce, do které tahle položka patří (tedy ona sama + její sourozenci).
+     * Slouží k určení, které parametry jsou v dané úrovni menu "rozlišovací" -
+     * viz MenuItemLink::scopedParameterKeys().
+     */
+    protected ?Collection $siblings = null;
+
     protected string $type = 'item';
 
     public function __construct(public string $title, public string $id, public string $icon = '', public array $parameters = [], public array $options = []) {}
@@ -19,6 +26,16 @@ class MenuItem
     public function setBuilder(MenuBuilder $builder)
     {
         $this->builder = $builder;
+    }
+
+    public function setSiblings(Collection $siblings)
+    {
+        $this->siblings = $siblings;
+    }
+
+    public function siblings(): ?Collection
+    {
+        return $this->siblings;
     }
 
     public function items(): ?Collection
@@ -60,6 +77,7 @@ class MenuItem
         $item = $this->builder::createMenuItem($title, $options);
         $item->setBuilder($this->builder);
         $this->items->push($item);
+        $item->setSiblings($this->items);
 
         return $item;
     }
@@ -105,6 +123,7 @@ class MenuItem
         $item = $this->builder::createMenuItem($title, $options);
         $item->setBuilder($this->builder);
         $this->dropdown->push($item);
+        $item->setSiblings($this->dropdown);
 
         return $item;
     }
