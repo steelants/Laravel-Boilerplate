@@ -15,6 +15,7 @@
 
 // Bootstrap
 @import "bootstrap/scss/bootstrap";
+@import "./palette";
 
 @import "./quill";
 @import "./ace";
@@ -40,6 +41,12 @@
 @import "./components/breadcrumb";
 @import "./components/dropdown";
 @import "./components/form";
+@import "./components/icon-tile";
+@import "./components/alert";
+@import "./components/progress";
+@import "./components/detail-list";
+@import "./components/empty-state";
+@import "./components/misc-ui";
 
 @import "./helpers/hover-group";
 

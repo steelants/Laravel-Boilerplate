@@ -1,0 +1,40 @@
+.icon-tile{
+    --icon-tile-size: 2.5rem;
+    width: var(--icon-tile-size);
+    height: var(--icon-tile-size);
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--icon-tile-size) * .45);
+    font-weight: 600;
+    line-height: 1;
+    border-radius: var(--bs-border-radius-lg);
+    color: var(--icon-tile-color);
+    background-color: var(--icon-tile-bg);
+}
+
+.icon-tile-sm{
+    --icon-tile-size: 2rem;
+    border-radius: var(--bs-border-radius);
+}
+
+.icon-tile-lg{
+    --icon-tile-size: 3.5rem;
+}
+
+@each $name, $colors in $boilerplate-palette {
+    .icon-tile-#{$name}{
+        --icon-tile-color: #{nth($colors, 2)};
+        --icon-tile-bg: #{rgba(nth($colors, 1), .12)};
+    }
+}
+
+@include color-mode(dark) {
+    @each $name, $colors in $boilerplate-palette {
+        .icon-tile-#{$name}{
+            --icon-tile-color: #{nth($colors, 3)};
+            --icon-tile-bg: #{rgba(nth($colors, 1), .2)};
+        }
+    }
+}

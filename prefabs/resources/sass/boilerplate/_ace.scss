@@ -33,3 +33,7 @@
 .ace-editor.ready+.ace-loading {
     display: none;
 }
+
+.ace-editor.is-readonly {
+    opacity: .85;
+}

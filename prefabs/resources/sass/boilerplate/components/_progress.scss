@@ -1,0 +1,35 @@
+.progress-box-header{
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: .875rem;
+    margin-bottom: .25rem;
+}
+
+.progress-box-value{
+    color: var(--bs-secondary-color);
+    font-variant-numeric: tabular-nums;
+}
+
+.progress-indeterminate{
+    position: relative;
+
+    .progress-bar{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 35%;
+        animation: progress-indeterminate 1.4s ease-in-out infinite;
+    }
+}
+
+@keyframes progress-indeterminate {
+    0% { left: -35%; }
+    100% { left: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .progress-indeterminate .progress-bar{
+        animation-duration: 4s;
+    }
+}

@@ -1,4 +1,4 @@
-@props(['name', 'active' => false, 'disabled' => false])
+@props(['name', 'active' => false, 'disabled' => false, 'badge' => null, 'badgeColor' => 'secondary'])
 
 <li data-tab-item class="nav-item" role="presentation">
     <button
@@ -11,5 +11,5 @@
         id="{{ $name }}"
         :aria-selected="activeTab === '{{ $name }}'"
         @if($disabled) disabled aria-disabled="true" @endif
-    >{{ $slot }}</button>
+    >{{ $slot }}@if(filled((string) $badge))<span class="badge rounded-pill text-bg-{{ $badgeColor }} nav-link-badge">{{ $badge }}</span>@endif</button>
 </li>

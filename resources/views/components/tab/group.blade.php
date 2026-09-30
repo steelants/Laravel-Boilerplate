@@ -1,24 +1,42 @@
-@props(['default' => null, 'remember' => null, 'variant' => 'tabs'])
+@props(['default' => null, 'remember' => null, 'variant' => 'tabs', 'query' => null, 'scroll' => false])
 
 @php
+    $wireModel = $attributes->wire('model');
     $initialTab = $remember ? (getTabState($remember) ?: $default) : $default;
+    if ($query && is_string(request()->query($query))) {
+        $initialTab = request()->query($query);
+    }
 @endphp
 
 <div x-data="{
-    activeTab: @js($initialTab),
+    activeTab: {{ $wireModel->value() ? '$wire.entangle(' . \Illuminate\Support\Js::from($wireModel->value()) . ')' . ($wireModel->hasModifier('live') ? '.live' : '') : \Illuminate\Support\Js::from($initialTab) }},
+    init() {
+        if (!this.activeTab) { this.activeTab = @js($initialTab); }
+        @if($query)
+        this.$watch('activeTab', value => {
+            const url = new URL(window.location.href);
+            url.searchParams.set(@js($query), value);
+            history.replaceState(history.state, '', url);
+        });
+        @endif
+    },
     setTab(name) { this.activeTab = name; }
 }"
 x-init="
-    const ul = document.createElement('ul');
-    ul.className = 'nav nav-{{ $variant }} mb-3';
-    ul.setAttribute('role', 'tablist');
-    @if($remember)
-    ul.id = '{{ $remember }}';
-    ul.classList.add('remember');
-    @endif
-    $el.querySelectorAll('[data-tab-item]').forEach(el => ul.appendChild(el));
-    $el.prepend(ul);
+    const items = [...$el.querySelectorAll('[data-tab-item]')].filter(el => !el.closest('[role=tablist]'));
+    if (items.length) {
+        const ul = document.createElement('ul');
+        ul.className = 'nav nav-{{ $variant }} mb-3{{ $scroll ? ' nav-scroll' : '' }}';
+        ul.setAttribute('role', 'tablist');
+        @if($remember)
+        ul.id = '{{ $remember }}';
+        ul.classList.add('remember');
+        @endif
+        items.forEach(el => ul.appendChild(el));
+        $el.prepend(ul);
+    }
 "
-{{ $attributes }}>
+@if($remember) data-tab-remember="{{ $remember }}" @endif
+{{ $attributes->whereDoesntStartWith('wire:model') }}>
     {{ $slot }}
 </div>
