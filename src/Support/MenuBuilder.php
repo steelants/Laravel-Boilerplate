@@ -18,6 +18,7 @@ class MenuBuilder
         $item = $this::createMenuItem($title, $options);
         $item->setBuilder($this);
         $this->menuItems->push($item);
+        $item->setSiblings($this->menuItems);
 
         return $item;
     }
