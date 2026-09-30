@@ -9,18 +9,16 @@ Square icon on a soft background tinted by `color`. Used in lists, cards, alerts
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `icon` | string | `null` | Icon classes. When empty, the slot is rendered instead (initials, a number…) |
-| `color` | string | `primary` | Any color from the palette (see below) |
+| `color` | string | `primary` | Bootstrap theme color (see below) |
 | `size` | string | `md` | `sm`, `md`, `lg` |
 
-## Palette
+## Colors
 
-Theme colors `primary`, `secondary`, `success`, `danger`, `warning`, `info` and Tailwind hues `slate`, `gray`, `red`, `orange`, `amber`, `yellow`, `lime`, `green`, `emerald`, `teal`, `cyan`, `sky`, `blue`, `indigo`, `violet`, `purple`, `fuchsia`, `pink`, `rose`.
-
-The palette is the `$boilerplate-palette` SCSS map (`_palette.scss`). It is also used by [Stat](ui.md#stat), and you can override it with `!default`.
+Any Bootstrap theme color (`primary`, `secondary`, `success`, `danger`, `warning`, `info`, `light`, `dark`). The tile uses the `bg-{color}-subtle` and `text-{color}-emphasis` utilities, so it follows light / dark mode.
 
 ## Usage
 
 ```blade
-<x-boilerplate::icon-tile icon="fas fa-file-invoice" color="teal" />
-<x-boilerplate::icon-tile color="violet" size="sm">JD</x-boilerplate::icon-tile>
+<x-boilerplate::icon-tile icon="fas fa-file-invoice" color="success" />
+<x-boilerplate::icon-tile color="info" size="sm">JD</x-boilerplate::icon-tile>
 ```

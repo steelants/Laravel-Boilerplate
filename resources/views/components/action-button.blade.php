@@ -22,7 +22,7 @@
 @endif
 <button
     type="{{ $type }}"
-    {{ $attributes->class(['btn', 'btn-action', 'btn-' . $variant, 'btn-' . $size => $size]) }}
+    {{ $attributes->class(['btn', 'd-inline-flex', 'align-items-center', 'justify-content-center', 'gap-2', 'btn-' . $variant, 'btn-' . $size => $size]) }}
     @if ($action && !$attributes->wire('click')->value()) wire:click="{{ $action }}" @endif
     @if ($confirm) wire:confirm="{{ $confirm }}" @endif
     @if ($target) wire:target="{{ $target }}" @endif

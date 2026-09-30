@@ -13,13 +13,13 @@ Tile with a number, built on `.stat` / `.stat-ico`.
 | `label` | string | `null` | Caption above the value |
 | `value` | string | slot | Value |
 | `icon` | string | `null` | Icon classes |
-| `color` | string | `primary` | Any color from the [palette](icon-tile.md#palette) |
+| `color` | string | `null` | Icon background from the existing `.stat-ico` modifiers: `green`, `red`, `purple` (default dark) |
 | `href` | string | `null` | Makes the whole tile a link |
 
 Slot `description` renders a small line below the value.
 
 ```blade
-<x-boilerplate::stat :label="__('Orders')" :value="$ordersCount" icon="fas fa-shopping-cart" color="emerald">
+<x-boilerplate::stat :label="__('Orders')" :value="$ordersCount" icon="fas fa-shopping-cart" color="green">
     <x-slot:description>+12 % {{ __('this month') }}</x-slot:description>
 </x-boilerplate::stat>
 ```
@@ -30,7 +30,7 @@ Slot `description` renders a small line below the value.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | number\|null | `null` | Current value; `null` renders the indeterminate (animated) state |
+| `value` | number\|null | `null` | Current value; `null` renders the indeterminate state (full animated striped bar) |
 | `max` | number | `100` | Maximum |
 | `label` | string | `null` | Caption on the left |
 | `percent` | bool | `true` | Shows the percentage on the right |

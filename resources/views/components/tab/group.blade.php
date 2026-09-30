@@ -20,13 +20,14 @@
         });
         @endif
     },
+    scroll: @js((bool) $scroll),
     setTab(name) { this.activeTab = name; }
 }"
 x-init="
     const items = [...$el.querySelectorAll('[data-tab-item]')].filter(el => !el.closest('[role=tablist]'));
     if (items.length) {
         const ul = document.createElement('ul');
-        ul.className = 'nav nav-{{ $variant }} mb-3{{ $scroll ? ' nav-scroll' : '' }}';
+        ul.className = 'nav nav-{{ $variant }} mb-3{{ $scroll ? ' flex-nowrap overflow-x-auto overflow-y-hidden text-nowrap' : '' }}';
         ul.setAttribute('role', 'tablist');
         @if($remember)
         ul.id = '{{ $remember }}';

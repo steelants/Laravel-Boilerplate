@@ -51,20 +51,22 @@ it('renders alert with title, actions and close button', function () {
         ->toContain('fas fa-times-circle')
         ->toContain('Failed')
         ->toContain('Something went wrong.')
-        ->toContain('alert-box-actions')
+        ->toContain('flex-shrink-0')
         ->toContain('data-bs-dismiss="alert"');
 });
 
 it('renders icon tile, stat and empty state', function () {
-    expect(Blade::render('<x-boilerplate::icon-tile icon="fas fa-user" color="teal" />'))
-        ->toContain('icon-tile icon-tile-teal icon-tile-md');
+    expect(Blade::render('<x-boilerplate::icon-tile icon="fas fa-user" color="success" />'))
+        ->toContain('bg-success-subtle')
+        ->toContain('text-success-emphasis')
+        ->toContain('w-10 h-10');
 
-    expect(Blade::render('<x-boilerplate::stat label="Users" value="42" icon="fas fa-user" color="sky" />'))
-        ->toContain('stat-ico is-sky')
+    expect(Blade::render('<x-boilerplate::stat label="Users" value="42" icon="fas fa-user" color="green" />'))
+        ->toContain('stat-ico is-green')
         ->toContain('42');
 
     expect(Blade::render('<x-boilerplate::empty-state title="Nothing here" description="Add first item" />'))
-        ->toContain('icon-tile-secondary')
+        ->toContain('bg-secondary-subtle')
         ->toContain('Nothing here');
 });
 
@@ -75,7 +77,7 @@ it('renders determinate and indeterminate progress', function () {
         ->toContain('50&nbsp;%');
 
     expect(Blade::render('<x-boilerplate::progress label="Waiting" />'))
-        ->toContain('progress-indeterminate')
+        ->toContain('progress-bar-animated')
         ->not->toContain('aria-valuenow');
 });
 
@@ -104,7 +106,8 @@ it('renders detail list from items and slot', function () {
     BLADE);
 
     expect($html)
-        ->toContain('<dt class="detail-list-label">Name</dt>')
+        ->toContain('list-group-flush')
+        ->toContain('>Name</dt>')
         ->toContain('John')
         ->toContain('&mdash;');
 });
@@ -123,7 +126,7 @@ it('renders relative time with exact tooltip', function () {
 it('renders copy button and nav switch', function () {
     expect(Blade::render('<x-boilerplate::copy value="secret">secret</x-boilerplate::copy>'))
         ->toContain('copyToClipboard(')
-        ->toContain('copy-text');
+        ->toContain('text-truncate');
 
     $html = Blade::render('<x-boilerplate::nav-switch wire:model.live="view" :options="[\'list\' => \'List\', \'grid\' => [\'label\' => \'Grid\', \'icon\' => \'fas fa-th\']]" />');
 
@@ -148,7 +151,8 @@ it('renders tab group bound to livewire property with badge and scroll', functio
         ->toContain("\$wire.entangle(")
         ->toContain('.live')
         ->toContain('history.replaceState')
-        ->toContain('nav-scroll')
-        ->toContain('nav-link-badge')
+        ->toContain('flex-nowrap overflow-x-auto')
+        ->toContain("'mb-0': scroll")
+        ->toContain('badge rounded-pill')
         ->not->toContain('wire:model.live="tab"');
 });

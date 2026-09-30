@@ -35,13 +35,6 @@ a{
     }
 }
 
-// green, red and purple keep their original shades above
-@each $name, $colors in map-remove($boilerplate-palette, "green", "red", "purple") {
-    .stat-ico.is-#{$name}{
-        background: rgba(nth($colors, 1), .7);
-    }
-}
-
 .stat-name{
     font-size: 14px;
     color: #6c757d;
@@ -50,12 +43,6 @@ a{
 .stat-value{
     font-size: 20px;
     font-weight: 700;
-}
-
-.stat-description{
-    font-size: 12px;
-    color: var(--bs-secondary-color);
-    margin-top: .25rem;
 }
 .nav-item .stat{
     padding-left: 1rem;

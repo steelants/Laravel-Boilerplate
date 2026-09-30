@@ -12,7 +12,7 @@ Renders a Bootstrap-styled tab navigation with Alpine.js state. Tabs are automat
 | `remember` | string | `null` | Unique key — persists active tab in a cookie across page loads |
 | `variant` | string | `tabs` | Bootstrap nav variant: `tabs`, `pills`, `underline` |
 | `query` | string | `null` | Query string parameter that stores the active tab (`?tab=security`); read on render and updated on change |
-| `scroll` | bool | `false` | Tabs scroll horizontally instead of wrapping (the active underline stays visible) |
+| `scroll` | bool | `false` | Tabs scroll horizontally instead of wrapping |
 | `wire:model` | string | — | Binds the active tab to a Livewire property (`wire:model.live` sends every change right away) |
 
 ### `<x-boilerplate::tab.tab>`

@@ -289,35 +289,3 @@
         }
     }
 }
-
-// horizontally scrollable tabs (x-boilerplate::tab.group scroll)
-.nav-scroll{
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: thin;
-
-    > .nav-item,
-    > .nav-link{
-        flex-shrink: 0;
-    }
-
-    .nav-link{
-        white-space: nowrap;
-    }
-
-    // border is drawn inside the list so the active underline isn't clipped by overflow
-    &.nav-tabs{
-        border-bottom: 0;
-        box-shadow: inset 0 calc(-1 * var(--#{$prefix}nav-tabs-border-width)) 0 var(--#{$prefix}nav-tabs-border-color);
-
-        .nav-link{
-            margin-bottom: 0;
-        }
-    }
-}
-
-.nav-link-badge{
-    margin-left: .375rem;
-    vertical-align: text-top;
-}

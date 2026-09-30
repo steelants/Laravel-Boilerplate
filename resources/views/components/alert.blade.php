@@ -10,25 +10,25 @@
     };
 @endphp
 
-<div {{ $attributes->class(['alert', 'alert-' . $color, 'alert-box', 'fade show' => $dismissible]) }} role="alert">
+<div {{ $attributes->class(['alert', 'alert-' . $color, 'd-flex', 'align-items-start', 'gap-3', 'fade show' => $dismissible]) }} role="alert">
     @if ($icon)
-        <i class="alert-box-ico {{ $icon }}"></i>
+        <i class="{{ $icon }} fs-5 lh-base flex-shrink-0"></i>
     @endif
 
-    <div class="alert-box-body">
+    <div class="flex-grow-1 min-w-0">
         @if ($title)
-            <div class="alert-box-title">{{ $title }}</div>
+            <div class="fw-semibold">{{ $title }}</div>
         @endif
         @if ($slot->isNotEmpty())
-            <div class="alert-box-text">{{ $slot }}</div>
+            <div>{{ $slot }}</div>
         @endif
     </div>
 
     @isset($actions)
-        <div {{ $actions->attributes->class(['alert-box-actions']) }}>{{ $actions }}</div>
+        <div {{ $actions->attributes->class(['d-flex', 'flex-wrap', 'gap-2', 'flex-shrink-0']) }}>{{ $actions }}</div>
     @endisset
 
     @if ($dismissible)
-        <button type="button" class="btn-close alert-box-close" data-bs-dismiss="alert" aria-label="{{ __('Close') }}"></button>
+        <button type="button" class="btn-close flex-shrink-0 mt-1" data-bs-dismiss="alert" aria-label="{{ __('Close') }}"></button>
     @endif
 </div>

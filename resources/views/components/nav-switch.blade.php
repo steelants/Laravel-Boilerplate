@@ -6,14 +6,14 @@
     $inputId = fn ($key) => \Illuminate\Support\Str::slug($name) . '-' . \Illuminate\Support\Str::slug((string) $key);
 @endphp
 
-<div {{ $attributes->whereDoesntStartWith('wire:model')->class(['btn-group', 'nav-switch', 'btn-group-' . $size => $size]) }} role="group">
+<div {{ $attributes->whereDoesntStartWith('wire:model')->class(['btn-group', 'btn-group-' . $size => $size]) }} role="group">
     @foreach ($options as $key => $option)
         @php
             $option = is_array($option) ? $option : ['label' => $option];
             $active = (string) $key === (string) $value;
         @endphp
         @isset($option['href'])
-            <a href="{{ $option['href'] }}" @class(['btn', 'active' => $active]) @if ($active) aria-current="page" @endif>
+            <a href="{{ $option['href'] }}" @class(['btn', 'btn-outline-secondary', 'active' => $active]) @if ($active) aria-current="page" @endif>
                 @isset($option['icon'])<i class="{{ $option['icon'] }}"></i>@endisset
                 {{ $option['label'] ?? '' }}
             </a>
@@ -28,7 +28,7 @@
                 @if ($wireModel->value()) {{ $wireModel }} @endif
                 @checked($active)
             >
-            <label class="btn" for="{{ $inputId($key) }}">
+            <label class="btn btn-outline-secondary" for="{{ $inputId($key) }}">
                 @isset($option['icon'])<i class="{{ $option['icon'] }}"></i>@endisset
                 {{ $option['label'] ?? '' }}
             </label>

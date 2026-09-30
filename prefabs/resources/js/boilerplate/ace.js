@@ -50,7 +50,6 @@ window.loadAce = function($wire = null, language, theme, options = {}){
             if (options.readOnly) {
                 editor.setOptions({ highlightActiveLine: false, highlightGutterLine: false });
                 editor.renderer.$cursorLayer.element.style.display = 'none';
-                editorEl.classList.add('is-readonly');
             }
 
             if (autoTheme) {

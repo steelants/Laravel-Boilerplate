@@ -146,7 +146,7 @@ persist - pokud je true, zůstává notifikace aktivní dokud ji neodklikne uži
 | [Alert](.docs/components/alert.md) | `alert()->success()->now()` | Snackbar notifications for Livewire and HTTP contexts |
 | [Action Button](.docs/components/action-button.md) | `<x-boilerplate::action-button>` | Livewire button with scoped loading state, confirm and disabled reason tooltip |
 | [Alert (inline)](.docs/components/alert-box.md) | `<x-boilerplate::alert>` | Inline alert with icon, title, actions and close button |
-| [Icon Tile](.docs/components/icon-tile.md) | `<x-boilerplate::icon-tile>` | Square icon with a soft background from the color palette |
+| [Icon Tile](.docs/components/icon-tile.md) | `<x-boilerplate::icon-tile>` | Square icon with a soft background in a theme color |
 | [Stat](.docs/components/ui.md#stat) | `<x-boilerplate::stat>` | Number tile with icon |
 | [Progress](.docs/components/ui.md#progress) | `<x-boilerplate::progress>` | Progress bar with label, percentage and indeterminate state |
 | [Dropdown](.docs/components/ui.md#dropdown) | `<x-boilerplate::dropdown>` | Actions menu with icons, danger items and dividers |
