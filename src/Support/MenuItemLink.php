@@ -6,6 +6,24 @@ use Exception;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * Menu item pointing at a named route.
+ *
+ * Highlighting answers two questions:
+ *
+ *  - isActive() - does this item point exactly at what is on screen right now?
+ *    The route name has to match exactly and the item parameters have to match.
+ *
+ *  - isUse()    - does the current page live "below" this item? The route name may
+ *    be a descendant (`tasks.index` -> `tasks.edit`), parameters still have to match.
+ *
+ * Parameters are only compared on the keys that distinguish items on the given menu
+ * level, meaning the keys declared by at least one item pointing at the same route on
+ * that level (see scopedParameterKeys()). That way `?page=2` or `?search=foo` in the
+ * URL does not break the highlight, while siblings `?filter=9` and `?filter=10` still
+ * tell each other apart and an item without a filter ("All") is not active on
+ * `?filter=9`.
+ */
 class MenuItemLink extends MenuItem
 {
     protected string $type = 'route';
@@ -19,71 +37,128 @@ class MenuItemLink extends MenuItem
 
     public function debug()
     {
-        $query = $this->resolveQueryParameters();
-        $parameters = $this->resolveRouteParameters();
         $current = $this->resolveActiveRoute();
-        $currentName = $current->getName();
-        $route = $this->matchRoute();
-        $url = $this->matchUrl();
 
         return [
-            'current_url'       => route($this->resolveActiveRoute()->getName(), ($query + $parameters), absolute: false),
-            'url'               => route($this->route, ($query + $parameters), absolute: false),
-            'url_match'         => $this->matchUrl(true),
-            'current_route'     => $this->resolveActiveRoute()->getName(),
-            'route'             => $this->route,
-            'route_match'       => $this->matchRoute(true),
-            'is_use'            => $this->isUse(),
-            'is_active'         => $this->isActive(),
-            'null_parameters'   => (count($this->getItemParameters()) == 0 && count($query) == 0),
-            'parameters'        => ($route || $url) && (count($this->getItemParameters()) == count($query)),
-            'parameters_detail' => ($parameters),
-            'parameters_query'  => ($query),
-            'item_params'       => $this->getItemParameters(),
-            'route_detail'      => $this->route,
-            'parameters_count'  => count($query + $parameters),
-            'item_params_count' => count($this->getItemParameters()),
-
+            'route'              => $this->route,
+            'current_route'      => $current?->getName(),
+            'route_match'        => $this->matchRoute(),
+            'url'                => route($this->route, $this->getItemParameters(), absolute: false),
+            'current_url'        => request()->getRequestUri(),
+            'item_parameters'    => $this->getItemParameters(),
+            'current_parameters' => $this->currentParameters(),
+            'scoped_keys'        => $this->scopedParameterKeys(),
+            'parameters_match'   => $this->matchParameters(),
+            'is_use'             => $this->isUse(),
+            'is_active'          => $this->isActive(),
         ];
     }
 
     public function isUse(): bool
     {
-        $current = $this->resolveActiveRoute();
-        $query = $this->resolveQueryParameters();
-        $parameters = $this->resolveRouteParameters();
-
-        if (!$current || !$currentName = $current->getName()) {
-            return false;
-        }
-
-        $route = $this->matchRoute(true);
-        $url = $this->matchUrl(true);
-
-        return ($route && str_ends_with($route, '.index')) || ($url && route($this->route, ($query + $parameters), absolute: false) != '/');
+        return $this->matchRoute() && $this->matchParameters();
     }
 
     public function isActive(): bool
     {
         $current = $this->resolveActiveRoute();
-        $query = $this->resolveQueryParameters();
-        $parameters = $this->resolveRouteParameters();
-        $route = ($current->getName() == $this->route);
-        $url = (route($current->getName(), ($query + $parameters), absolute: false) == route($this->route, ($query + $parameters), absolute: false));
 
-        if (count($this->getItemParameters()) == 0 && count($query) == 0) {
-            return $route || $url;
+        if (!$current || $current->getName() !== $this->route) {
+            return false;
         }
 
-        if (($route || $url) && (count($this->getItemParameters()) == count(($query + $parameters)))) {
-            return ($query + $parameters) == $this->getItemParameters();
+        return $this->matchParameters();
+    }
+
+    /**
+     * Does the item point at the current route or at one of its ancestors?
+     * `system.user.index` is also in use on `system.user.edit` or `system.user.show`.
+     */
+    protected function matchRoute(): bool
+    {
+        $currentName = $this->resolveActiveRoute()?->getName();
+
+        if (!$currentName) {
+            return false;
         }
 
-        if (($route && $url) && (count($query) == 0 && str_contains($current->uri(), '{') && str_contains($current->uri(), '}'))) {
-            return true;
+        return $currentName === $this->route || str_starts_with($currentName, $this->routeGroup() . '.');
+    }
+
+    /**
+     * Do the item parameters match the current request on the distinguishing keys?
+     */
+    protected function matchParameters(): bool
+    {
+        $itemParameters = $this->getItemParameters();
+        $currentParameters = $this->currentParameters();
+
+        foreach ($this->scopedParameterKeys() as $key) {
+            if (!$this->sameValue($itemParameters[$key] ?? null, $currentParameters[$key] ?? null)) {
+                return false;
+            }
         }
 
-        return false;
+        return true;
+    }
+
+    /**
+     * Keys compared on this menu level: the item's own parameters plus the parameters
+     * of siblings pointing at the same route. Anything else in the URL (paging,
+     * sorting, fulltext) is ignored.
+     *
+     * @return array<int, string>
+     */
+    protected function scopedParameterKeys(): array
+    {
+        $keys = array_keys($this->getItemParameters());
+
+        foreach ($this->siblings() ?? [] as $sibling) {
+            if ($sibling === $this || !$sibling instanceof self || $sibling->route !== $this->route) {
+                continue;
+            }
+
+            $keys = array_merge($keys, array_keys($sibling->getItemParameters()));
+        }
+
+        return array_values(array_unique($keys));
+    }
+
+    /**
+     * Route prefix used to look up descendants: `tasks.index` -> `tasks`.
+     */
+    protected function routeGroup(): string
+    {
+        if (!str_ends_with($this->route, '.index')) {
+            return $this->route;
+        }
+
+        return substr($this->route, 0, -strlen('.index'));
+    }
+
+    /**
+     * Parameters of the current request - route parameters and the query string
+     * together, the same way the item mixes them in its own `parameters`.
+     */
+    protected function currentParameters(): array
+    {
+        return $this->resolveQueryParameters() + $this->resolveRouteParameters();
+    }
+
+    /**
+     * Values coming from a URL are always strings, menu definitions usually use ints.
+     */
+    protected function sameValue(mixed $itemValue, mixed $currentValue): bool
+    {
+        if ($itemValue === null || $currentValue === null) {
+            return $itemValue === null && $currentValue === null;
+        }
+
+        if (is_scalar($itemValue) && is_scalar($currentValue)) {
+            return (string) $itemValue === (string) $currentValue;
+        }
+
+        return $itemValue == $currentValue;
     }
 
     protected function resolveActiveRoute(): ?\Illuminate\Routing\Route
@@ -140,47 +215,19 @@ class MenuItemLink extends MenuItem
     protected function resolveRouteParameters(): array
     {
         return once(function () {
-            return collect($this->resolveActiveRoute()->originalParameters())->filter(function ($value, $key) {
+            $current = $this->resolveActiveRoute();
+
+            if (!$current) {
+                return [];
+            }
+
+            return collect($current->originalParameters())->filter(function ($value, $key) {
                 return $value != null;
             })->toArray();
         });
     }
 
-    protected function matchUrl(bool $ignoreQuery = false): bool
-    {
-        $current = $this->resolveActiveRoute();
-        $query = $this->resolveQueryParameters();
-        $parameters = $this->resolveRouteParameters();
-        $currentName = $current->getName();
-
-        $routeCurrent = route($currentName, ($query + $parameters), false);
-        $routeItem = route($this->route, ($query + $parameters), false);
-
-        if ($ignoreQuery) {
-            $routeCurrentNoQuerry = explode('?', $routeCurrent)[0];
-            $routeItemNoQuerry = explode('?', $routeItem)[0];
-
-            return $routeCurrentNoQuerry == $routeItemNoQuerry || str_starts_with($routeCurrentNoQuerry, $routeItemNoQuerry);
-        }
-
-        return $routeCurrent == $routeItem || str_starts_with(route($currentName, ($query + $parameters), false), $routeItem);
-    }
-
-    protected function matchRoute(bool $ignoreQuery = false): bool
-    {
-        $current = $this->resolveActiveRoute();
-        $query = $this->resolveQueryParameters();
-        $parameters = $this->resolveRouteParameters();
-        $currentName = $current->getName();
-
-        if ($ignoreQuery) {
-            return $currentName == $this->route || str_starts_with($currentName, $this->route . '.');
-        }
-
-        return ($currentName == $this->route || str_starts_with($currentName, $this->route . '.')) && ($query == $this->getItemParameters());
-    }
-
-    private function getItemParameters(): array
+    protected function getItemParameters(): array
     {
         return collect($this->parameters)->filter(function ($value, $key) {
             return $value != null;
