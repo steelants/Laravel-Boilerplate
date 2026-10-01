@@ -16,8 +16,10 @@ body{
             padding-top: 60px;
         }
 
+        // keep the end of the content above the fixed bottom navigation (.layout-nav-mobile)
+        // and the home indicator of the phone
         @if $mobile-has-tabbar {
-            padding-bottom: 60px;
+            padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
         }
     }
 }

@@ -50,10 +50,4 @@
         }
     }
 
-    // the bottom navigation is fixed over the page; keep the end of the content above it
-    // (its height plus the home indicator of the phone)
-    .layout-content{
-        padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
-    }
-
 }
