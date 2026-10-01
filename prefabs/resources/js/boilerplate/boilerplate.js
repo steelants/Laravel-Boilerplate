@@ -3,6 +3,7 @@ import './functions';
 import './toggle';
 import './quill';
 import './ace';
+import './components';
 import './selectbox';
 import './selectbox-ajax';
 import './log-tail';
