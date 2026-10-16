@@ -3,9 +3,11 @@
 namespace SteelAnts\LaravelBoilerplate\Helpers;
 
 use Illuminate\Support\Str;
+use Livewire\Component;
 use Livewire\Livewire;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionClass;
 
 class LivewireHelper
 {
@@ -18,6 +20,12 @@ class LivewireHelper
                     $relativePath = str_replace($livewirePath . DIRECTORY_SEPARATOR, '', $file->getPathname());
                     $classPath = str_replace('.php', '', $relativePath);
                     $classNamespace = $namespace . str_replace(DIRECTORY_SEPARATOR, '\\', $classPath);
+
+                    // Skip non-components (hooks, traits, abstract base classes, ...)
+                    if (!is_subclass_of($classNamespace, Component::class) || (new ReflectionClass($classNamespace))->isAbstract()) {
+                        continue;
+                    }
+
                     $componentName = Str::of($classPath)->replace(DIRECTORY_SEPARATOR, '.')->kebab()->replace('.-', '.')->value;
                     Livewire::component((Str::trim($prefix, '.') . '.' . $componentName), $classNamespace);
                 }

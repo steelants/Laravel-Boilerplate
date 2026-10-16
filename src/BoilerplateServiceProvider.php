@@ -22,9 +22,8 @@ use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
 use SteelAnts\LaravelBoilerplate\Facades\Menu;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
-use SteelAnts\LaravelBoilerplate\Livewire\File\Gallery;
+use SteelAnts\LaravelBoilerplate\Helpers\LivewireHelper;
 use SteelAnts\LaravelBoilerplate\Livewire\Hooks\AlertDispatcherHook;
-use SteelAnts\LaravelBoilerplate\Livewire\Setting\Form;
 use SteelAnts\LaravelBoilerplate\Support\AlertCollector;
 use SteelAnts\LaravelBoilerplate\Support\FileCollector;
 use SteelAnts\LaravelBoilerplate\Traits\Auditable;
@@ -68,8 +67,7 @@ class BoilerplateServiceProvider extends ServiceProvider
             Event::subscribe(UserEventSubscriber::class);
         }
 
-        Livewire::component('boilerplate.file.gallery', Gallery::class);
-        Livewire::component('boilerplate.setting.form', Form::class);
+        LivewireHelper::registerLivewire(__DIR__ . '/Livewire', '\\SteelAnts\\LaravelBoilerplate\\Livewire\\', 'boilerplate');
 
         Gate::define('is-system-admin', function ($user) {
             if ($this->classHasAnyTrait(get_class($user), [SupportSystemAdmins::class])) {
