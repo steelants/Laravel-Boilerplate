@@ -73,3 +73,7 @@ or overrode the modal view, move it to
 `resources/views/vendor/boilerplate/livewire/modal/basic.blade.php`.
 
 ---
+
+### `DatatableComponent` components require some locked properties
+
+Component properties $sortableColumns, $searchableColumns and $viewName must be decorade with #[Locked]
