@@ -46,6 +46,7 @@ SteelAnts Laravel-Boilerplate provides:
 - Alert system
 - CRUD generator
 - UI components (tabs, breadcrumb, gantt, pie graph, selectbox, searchbox)
+- Modal for opening any Livewire component
 - Quill editor
 
 ## Documentation
@@ -82,7 +83,6 @@ Upgrade guides:
 - [Livewire-Form](https://github.com/steelants/Livewire-Form)
 - [Laravel-General](https://github.com/steelants/Laravel-General)
 - [Laravel-Tenant](https://github.com/steelants/Laravel-Tenant)
-- [Livewire-Modal](https://github.com/steelants/Livewire-Modal)
 
 ## License
 

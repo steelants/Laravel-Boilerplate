@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Computed;
 use SteelAnts\LivewireForm\Livewire\FormComponent;
-use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
+use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
 
-#[AllowInModal('is-system-admin')]
+#[AllowInModal(ability: 'is-system-admin')]
 class Form extends FormComponent
 {
     public $user_id;

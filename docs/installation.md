@@ -14,7 +14,6 @@ The following SteelAnts packages are installed automatically as dependencies:
 - steelants/datatable
 - steelants/form
 - steelants/livewire-form
-- steelants/modal
 - steelants/laravel-general
 
 

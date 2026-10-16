@@ -12,6 +12,7 @@ SteelAnts Laravel-Boilerplate provides Blade components under the `boilerplate::
 | [Selectbox Ajax](components/selectbox.md#selectbox-ajax) | `<x-boilerplate::selectbox-ajax>` | Selectbox with server side Livewire search |
 | [Searchbox](components/searchbox.md) | `<x-boilerplate::searchbox>` | Client side filtered dropdown search |
 | [Alert](components/alert.md) | `alert()->success()->now()` | Snackbar notifications for Livewire and HTTP contexts |
+| [Modal](components/modal.md) | `@livewire("boilerplate.modal.basic")` | Bootstrap modal opening any Livewire component |
 
 Each component has its own detailed documentation page.
 
@@ -22,6 +23,7 @@ Each component has its own detailed documentation page.
 |---|---|
 | `boilerplate.file.gallery` | File gallery with upload |
 | `boilerplate.setting.form` | Generic settings form |
+| `boilerplate.modal.basic` | [Modal](components/modal.md) for opening any Livewire component (legacy name `modal-basic`) |
 
 
 ## Next Steps

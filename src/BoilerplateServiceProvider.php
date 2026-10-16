@@ -24,6 +24,7 @@ use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
 use SteelAnts\LaravelBoilerplate\Helpers\LivewireHelper;
 use SteelAnts\LaravelBoilerplate\Livewire\Hooks\AlertDispatcherHook;
+use SteelAnts\LaravelBoilerplate\Livewire\Modal\Basic as ModalBasic;
 use SteelAnts\LaravelBoilerplate\Support\AlertCollector;
 use SteelAnts\LaravelBoilerplate\Support\FileCollector;
 use SteelAnts\LaravelBoilerplate\Traits\Auditable;
@@ -68,6 +69,10 @@ class BoilerplateServiceProvider extends ServiceProvider
         }
 
         LivewireHelper::registerLivewire(__DIR__ . '/Livewire', '\\SteelAnts\\LaravelBoilerplate\\Livewire\\', 'boilerplate');
+
+        // Zpetna kompatibilita s archivovanym balickem steelants/modal,
+        // ktery komponentu registroval pod jmenem modal-basic.
+        Livewire::component('modal-basic', ModalBasic::class);
 
         Gate::define('is-system-admin', function ($user) {
             if ($this->classHasAnyTrait(get_class($user), [SupportSystemAdmins::class])) {

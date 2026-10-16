@@ -4,9 +4,9 @@ namespace App\Livewire\Job;
 
 use Livewire\Component;
 use SteelAnts\LaravelBoilerplate\Models\FailedJob;
-use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
+use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
 
-#[AllowInModal('is-system-admin')]
+#[AllowInModal(ability: 'is-system-admin')]
 class Trace extends Component
 {
     public $exception = '';

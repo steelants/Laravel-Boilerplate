@@ -73,7 +73,7 @@
     <x-alerts />
 
     @livewireScripts
-    @livewire('modal-basic', key('modal'))
+    @livewire('boilerplate.modal.basic', key('modal'))
     @stack('scripts')
 </body>
 

@@ -21,7 +21,7 @@ description: Build and work with the SteelAnts Laravel Boilerplate package (stee
 
 Dependencies pulled in automatically:
 - `livewire/livewire` ^3.0
-- `steelants/form`, `steelants/modal`, `steelants/datatable`
+- `steelants/form`, `steelants/datatable`
 - `steelants/laravel-auth`, `steelants/livewire-form`, `steelants/laravel-general`
 
 ---

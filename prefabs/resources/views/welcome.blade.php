@@ -43,7 +43,6 @@
                 <a href="https://github.com/steelants/laravel-auth" target="_blank" class="btn border">laravel-auth</a>
                 <a href="https://github.com/steelants/Livewire-DataTable" target="_blank" class="btn border">datatable</a>
                 <a href="https://github.com/steelants/Laravel-Form" target="_blank" class="btn border">form</a>
-                <a href="https://github.com/steelants/Livewire-Modal" target="_blank" class="btn border">modal</a>
                 <a href="https://github.com/steelants/Laravel-Tenant" target="_blank" class="btn border">laravel-tenant</a>
                 <a href="https://github.com/steelants/Livewire-Form" target="_blank" class="btn border">livewire-form</a>
             </div>

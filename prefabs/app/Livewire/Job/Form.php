@@ -12,9 +12,9 @@ use Livewire\Attributes\Computed;
 use ReflectionClass;
 use SteelAnts\LaravelBoilerplate\Helpers\JobHelper;
 use SteelAnts\LivewireForm\Livewire\FormComponent;
-use SteelAnts\Modal\Livewire\Attributes\AllowInModal;
+use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
 
-#[AllowInModal('is-system-admin')]
+#[AllowInModal(ability: 'is-system-admin')]
 class Form extends FormComponent
 {
     public string $job;
