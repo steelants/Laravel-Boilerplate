@@ -11,9 +11,12 @@ use ReflectionClass;
 
 class LivewireHelper
 {
-    public static function registerLivewire($livewirePath, $namespace, $prefix)
+    public static function registerLivewire($livewirePath, $namespace, $prefix = '')
     {
         if (is_dir($livewirePath)) {
+            $prefix = Str::trim($prefix, '.');
+            $prefix = $prefix !== '' ? $prefix . '.' : '';
+
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($livewirePath));
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
@@ -27,7 +30,7 @@ class LivewireHelper
                     }
 
                     $componentName = Str::of($classPath)->replace(DIRECTORY_SEPARATOR, '.')->kebab()->replace('.-', '.')->value;
-                    Livewire::component((Str::trim($prefix, '.') . '.' . $componentName), $classNamespace);
+                    Livewire::component($prefix . $componentName, $classNamespace);
                 }
             }
         }
