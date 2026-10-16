@@ -4,10 +4,10 @@ namespace App\Livewire\Subscription;
 
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Computed;
+use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
 use SteelAnts\LaravelBoilerplate\Models\Subscription;
 use SteelAnts\LaravelBoilerplate\Types\SubscriptionTier;
 use SteelAnts\LivewireForm\Livewire\FormComponent;
-use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
 
 #[AllowInModal(ability: 'is-system-admin')]
 class Form extends FormComponent

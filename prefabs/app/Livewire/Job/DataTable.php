@@ -170,8 +170,8 @@ class DataTable extends DataTableComponent
                 'action'      => 'stop',
                 'parameters'  => $item['id'],
                 'text'        => __('Delete'),
-                'actionClass' => '',
-                'iconClass'   => 'fas fa-trash',
+                'actionClass' => 'text-danger',
+                'iconClass'   => 'fas fa-trash text-danger',
             ],
         ];
     }

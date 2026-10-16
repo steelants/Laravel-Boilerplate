@@ -3,8 +3,8 @@
 namespace App\Livewire\Job;
 
 use Livewire\Component;
-use SteelAnts\LaravelBoilerplate\Models\FailedJob;
 use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
+use SteelAnts\LaravelBoilerplate\Models\FailedJob;
 
 #[AllowInModal(ability: 'is-system-admin')]
 class Trace extends Component

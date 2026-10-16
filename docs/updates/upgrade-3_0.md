@@ -77,3 +77,34 @@ or overrode the modal view, move it to
 ### `DatatableComponent` components require some locked properties
 
 Component properties $sortableColumns, $searchableColumns and $viewName must be decorade with #[Locked]
+
+---
+
+## v3.0.0 -> v3.0.1
+
+### Missing `system.jobs.rerun` and `system.jobs.stop` routes
+
+`stubs/routes.stub` defined only `system.jobs.index` and `system.jobs.clear`, while the prefab
+`JobsController` and `system/job/index.blade.php` use `rerun` and `stop` as well.
+
+- Projects whose `routes/web.php` was generated from the stub and not edited since: nothing to do if
+  you reinstall the stub; otherwise add the two routes as below.
+- Projects with a hand-maintained `routes/web.php` have to add them inside the `system.jobs.` group:
+
+  ```php
+  Route::get('/rerun', [App\Http\Controllers\System\JobsController::class, 'rerun'])->name('rerun');
+  Route::get('/stop', [App\Http\Controllers\System\JobsController::class, 'stop'])->name('stop');
+  ```
+
+### Destructive actions in DataTables
+
+Prefab `Job\DataTable` (`stop`) and `User\DataTable` (`remove`) now use `text-danger` on the action and
+on the icon. Projects that copied the prefabs have to apply the same change.
+
+`text-danger` has to be on the icon itself (`iconClass`): `.dropdown-item-icon` sets a grey colour and
+does not inherit it from the item, only Bootstrap's `!important` `.text-danger` overrides it.
+
+### Verified e-mail in the User DataTable
+
+Prefab `User\DataTable` gained `renderColumnEmail()`. The new tooltip text `E-mail verified` is translated
+in `lang/cs.json`; the package now calls `loadJsonTranslationsFrom()` for its `lang` directory.

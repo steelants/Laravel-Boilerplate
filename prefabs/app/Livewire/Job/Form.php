@@ -10,9 +10,9 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use ReflectionClass;
+use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
 use SteelAnts\LaravelBoilerplate\Helpers\JobHelper;
 use SteelAnts\LivewireForm\Livewire\FormComponent;
-use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
 
 #[AllowInModal(ability: 'is-system-admin')]
 class Form extends FormComponent

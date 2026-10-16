@@ -68,7 +68,7 @@ class DataTable extends DataTableComponent
                 'parameters'  => $item['id'],
                 'text'        => __('Remove'),
                 'actionClass' => 'text-danger',
-                'iconClass'   => 'fas fa-trash',
+                'iconClass'   => 'fas fa-trash text-danger',
                 'confirm'     => __('Are you sure?'),
             ],
         ];
@@ -81,6 +81,15 @@ class DataTable extends DataTableComponent
         }
 
         return e($value) . ' <span class="badge text-bg-danger ms-1">' . __('System Admin') . '</span>';
+    }
+
+    public function renderColumnEmail(mixed $value, $row): string
+    {
+        if (empty($row->email_verified_at)) {
+            return e($value);
+        }
+
+        return e($value) . ' <i class="fa fa-check-circle text-success ms-1" title="' . e(__('E-mail verified')) . '"></i>';
     }
 
     public function renderColumnTotpForce($value, $row): string

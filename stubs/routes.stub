@@ -29,6 +29,8 @@ Route::prefix('system')->name('system.')->middleware(['auth', 'is-system-admin']
     Route::prefix('jobs')->name('jobs.')->group(function () {
         Route::get('/', [App\Http\Controllers\System\JobsController::class, 'index'])->name('index');
         Route::get('/clear', [App\Http\Controllers\System\JobsController::class, 'clear'])->name('clear');
+        Route::get('/rerun', [App\Http\Controllers\System\JobsController::class, 'rerun'])->name('rerun');
+        Route::get('/stop', [App\Http\Controllers\System\JobsController::class, 'stop'])->name('stop');
     });
 
     Route::prefix('cache')->name('cache.')->group(function () {

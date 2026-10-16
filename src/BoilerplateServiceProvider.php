@@ -38,6 +38,7 @@ class BoilerplateServiceProvider extends ServiceProvider
     public function boot(Router $router)
     {
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'boilerplate');
+        $this->loadJsonTranslationsFrom(__DIR__ . '/../lang');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'boilerplate');
         $this->loadMigrationsFrom(dirname(__DIR__) . '/database/migrations');
 
