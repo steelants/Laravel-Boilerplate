@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-		DB::prohibitDestructiveCommands(app()->isProduction());
+        DB::prohibitDestructiveCommands(app()->isProduction());
 
         if (config('app.env') != 'local') {
             URL::forceScheme('https');

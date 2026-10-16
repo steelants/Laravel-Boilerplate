@@ -8,6 +8,9 @@
     <!-- CSRF Token -->
     <meta content="{{ csrf_token() }}" name="csrf-token">
 
+    <!-- Reload before the session expires to avoid stale CSRF token (419) -->
+    <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <link href="{{ asset('/manifest.json') }}" rel="manifest">
