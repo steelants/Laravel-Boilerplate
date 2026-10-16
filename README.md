@@ -144,6 +144,18 @@ persist - pokud je true, zůstává notifikace aktivní dokud ji neodklikne uži
 | [Selectbox Ajax](.docs/components/selectbox.md#selectbox-ajax) | `<x-boilerplate::selectbox-ajax>` | Selectbox with server-side Livewire search |
 | [Searchbox](.docs/components/searchbox.md) | `<x-boilerplate::searchbox>` | Client-side filtered dropdown search |
 | [Alert](.docs/components/alert.md) | `alert()->success()->now()` | Snackbar notifications for Livewire and HTTP contexts |
+| [Action Button](.docs/components/action-button.md) | `<x-boilerplate::action-button>` | Livewire button with scoped loading state, confirm and disabled reason tooltip |
+| [Alert (inline)](.docs/components/alert-box.md) | `<x-boilerplate::alert>` | Inline alert with icon, title, actions and close button |
+| [Icon Tile](.docs/components/icon-tile.md) | `<x-boilerplate::icon-tile>` | Square icon with a soft background in a theme color |
+| [Stat](.docs/components/ui.md#stat) | `<x-boilerplate::stat>` | Number tile with icon |
+| [Progress](.docs/components/ui.md#progress) | `<x-boilerplate::progress>` | Progress bar with label, percentage and indeterminate state |
+| [Dropdown](.docs/components/ui.md#dropdown) | `<x-boilerplate::dropdown>` | Actions menu with icons, danger items and dividers |
+| [Detail List](.docs/components/ui.md#detail-list) | `<x-boilerplate::detail-list>` | Label / value rows for detail pages |
+| [Time](.docs/components/ui.md#time) | `<x-boilerplate::time>` | Relative time with exact date in a tooltip |
+| [Copy](.docs/components/ui.md#copy) | `<x-boilerplate::copy>` | Copy to clipboard |
+| [Empty State](.docs/components/ui.md#empty-state) | `<x-boilerplate::empty-state>` | Empty list placeholder |
+| [Nav Switch](.docs/components/ui.md#nav-switch) | `<x-boilerplate::nav-switch>` | Segmented switch |
+| [Ace editor](.docs/components/ace.md) | `<x-form::ace>` | Options, read-only mode, light/dark theme, npm loading |
 
 ## [Development](.docs/development.md)
 
