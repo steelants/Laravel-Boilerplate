@@ -3,7 +3,7 @@
 SteelAnts Laravel-Boilerplate opens any Livewire component inside a Bootstrap modal.
 
 The modal was originally distributed as the separate `steelants/modal` package. It is now part of
-Laravel-Boilerplate; see [v2.6 to v2.7](../updates/upgrade-2_7.md) for migration details.
+Laravel-Boilerplate; see [v2.6 to v3.0](../updates/upgrade-3_0.md) for migration details.
 
 The modal is controlled by the `openModal` and `closeModal` Livewire events.
 

@@ -72,6 +72,8 @@ class BoilerplateServiceProvider extends ServiceProvider
 
         // Zpetna kompatibilita s archivovanym balickem steelants/modal,
         // ktery komponentu registroval pod jmenem modal-basic.
+        // TODO: deprecovat behem roku 2027 a odstranit v dalsi major verzi,
+        // do te doby maji projekty cas prejit na boilerplate.modal.basic.
         Livewire::component('modal-basic', ModalBasic::class);
 
         Gate::define('is-system-admin', function ($user) {

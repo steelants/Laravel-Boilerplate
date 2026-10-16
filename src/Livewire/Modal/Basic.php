@@ -12,12 +12,6 @@ use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
 
 class Basic extends Component
 {
-    /**
-     * Puvodni umisteni atributu v jiz archivovanem balicku steelants/modal.
-     * Drzime kvuli zpetne kompatibilite s projekty, ktere jeste neprepsaly importy.
-     */
-    private const LEGACY_ALLOW_IN_MODAL = 'SteelAnts\Modal\Livewire\Attributes\AllowInModal';
-
     protected $listeners = [
         'openModal',
         'closeModal',
@@ -118,21 +112,13 @@ class Basic extends Component
 
     private function resolveAllowInModal(string $class): ?AllowInModal
     {
-        $reflection = new ReflectionClass($class);
+        $attribute = (new ReflectionClass($class))->getAttributes(AllowInModal::class)[0] ?? null;
 
-        foreach ([AllowInModal::class, self::LEGACY_ALLOW_IN_MODAL] as $attributeName) {
-            $attribute = $reflection->getAttributes($attributeName)[0] ?? null;
-
-            if (!$attribute) {
-                continue;
-            }
-
-            // Legacy atribut nemusi byt vubec nainstalovany, proto se instance
-            // sestavuje z argumentu a ne pres newInstance().
-            return new AllowInModal(...$this->normalizeArguments($attribute->getArguments()));
+        if (!$attribute) {
+            return null;
         }
 
-        return null;
+        return new AllowInModal(...$this->normalizeArguments($attribute->getArguments()));
     }
 
     /**

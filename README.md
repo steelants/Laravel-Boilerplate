@@ -65,6 +65,7 @@ SteelAnts Laravel-Boilerplate provides:
 
 Upgrade guides:
 
+- [v2.6 to v3.0](docs/updates/upgrade-3_0.md)
 - [v2.3 to v2.4](docs/updates/upgrade-2_4.md)
 - [v2.2 to v2.3](docs/updates/upgrade-2_3.md)
 
@@ -79,6 +80,11 @@ Upgrade guides:
 - [Laravel-Auth](https://github.com/steelants/Laravel-Auth)
 - [Livewire-DataTable](https://github.com/steelants/Livewire-DataTable)
 - [Laravel-Boilerplate.Warehouse](https://github.com/steelants/Laravel-Boilerplate.Warehouse)
+- [Laravel-Boilerplate.Dashboard](https://github.com/steelants/Laravel-Boilerplate.Dashboard)
+- [Laravel-Boilerplate.Automation](https://github.com/steelants/Laravel-Boilerplate.Automation)
+- [Laravel-Boilerplate.Form](https://github.com/steelants/Laravel-Boilerplate.Form)
+- [Laravel-Boilerplate.Calendar](https://github.com/steelants/Laravel-Boilerplate.Calendar)
+- [Laravel-Boilerplate.CMS](https://github.com/steelants/Laravel-Boilerplate.CMS)
 - [Laravel-Form](https://github.com/steelants/Laravel-Form)
 - [Livewire-Form](https://github.com/steelants/Livewire-Form)
 - [Laravel-General](https://github.com/steelants/Laravel-General)
