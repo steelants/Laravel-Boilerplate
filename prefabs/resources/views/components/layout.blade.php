@@ -22,7 +22,8 @@
     <!-- Scripts -->
     @livewireStyles
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-
+	@stack('styles')
+	
     {{-- <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
@@ -30,7 +31,7 @@
             });
         }
     </script> --}}
-
+	
 </head>
 
 <body>
