@@ -21,7 +21,7 @@
                  @else
                      <div class="badge bg-secondary">OPcache: {{ __('Not loaded') }}</div>
                  @endif
-                 <button onclick="confirm('{{ __('Do you really want to clear all data in cache?') }}') ? window.location.href = '{{ route('system.cache.clear') }}' : false" class="btn btn-danger">{{ __('Clear cashes') }}</button>
+                 <x-boilerplate::form-button :action="route('system.cache.clear')" :confirm="__('Do you really want to clear all data in cache?')" :label="__('Clear cashes')" />
              </div>
         </div>
 

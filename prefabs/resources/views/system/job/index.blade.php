@@ -2,10 +2,7 @@
 	<div class="container-xl">
 		<div class="page-header">
 			<h1>{{ __("Jobs") }}</h1>
-			<button class="btn btn-danger" onclick="confirm('{{ __('Do you really want to clear all jobs?') }}') ? window.location.href = '{{ route('system.jobs.clear') }}' : false">
-				<i class="me-2 fas fa-trash"></i>
-				<span>{{ __('Clear jobs') }}</span>
-			</button>
+			<x-boilerplate::form-button :action="route('system.jobs.clear')" :confirm="__('Do you really want to clear all jobs?')" :label="__('Clear jobs')" />
 		</div>
 
 		<div class="page-header mb-2">
@@ -23,19 +20,13 @@
 				{{ __("Waiting") }} <span class="badge text-bg-secondary">{{ $waiting_count }}</span>
 				<span class="badge text-bg-primary">{{ __('Processing') }} {{ $processing_count }}</span>
 			</h5>
-			<button class="btn btn-warning btn-sm" onclick="confirm('{{ __('Do you really want to stop all waiting jobs?') }}') ? window.location.href = '{{ route('system.jobs.stop') }}' : false">
-				<i class="me-2 fas fa-stop"></i>
-				<span>{{ __('Stop jobs') }}</span>
-			</button>
+			<x-boilerplate::form-button :action="route('system.jobs.stop')" :confirm="__('Do you really want to stop all waiting jobs?')" :label="__('Stop jobs')" variant="warning" icon="fas fa-stop" class="btn-sm" />
 		</div>
         @livewire('job.data-table', [], key('waiting-jobs'))
 
 		<div class="page-header mb-2 mt-4">
 			<h5>{{ __("Failed") }} <span class="badge text-bg-secondary">{{ $failed_count }}</span></h5>
-			<button class="btn btn-success btn-sm" onclick="confirm('{{ __('Do you really want to rerun all failed jobs?') }}') ? window.location.href = '{{ route('system.jobs.rerun') }}' : false">
-				<i class="me-2 fas fa-redo"></i>
-				<span>{{ __('Rerun jobs') }}</span>
-			</button>
+			<x-boilerplate::form-button :action="route('system.jobs.rerun')" :confirm="__('Do you really want to rerun all failed jobs?')" :label="__('Rerun jobs')" variant="success" icon="fas fa-redo" class="btn-sm" />
 		</div>
         {{-- Both tables are the same component and DataTableComponent::queryString() has no
              per-instance prefix, so the second one would pick up the first one's sortBy from

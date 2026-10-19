@@ -2,7 +2,7 @@
     <div class="container-xl">
         <div class="page-header">
             <h1 class="hide-mobile">{{ __('Logs')}}</h1>
-            <button onclick="confirm('{{ __('Do you really want to clear all logs?') }}') ? window.location.href = '{{ route('system.log.clear') }}' : false" class="btn btn-danger">{{ __('Clear logs') }}</button>
+            <x-boilerplate::form-button :action="route('system.log.clear')" :confirm="__('Do you really want to clear all logs?')" :label="__('Clear logs')" />
         </div>
 
         <div class="row g-3 mb-4">
@@ -41,9 +41,7 @@
                                 <a href='{{ route('system.log.download', ['file' => $item['fileName']]) }}' class="btn btn-primary">
                                     <i class="fa fa-download"></i>
                                 </a>
-                                <a href='{{ route('system.log.delete', ['file' => $item['fileName']]) }}' onclick="return confirm('{{ __('Are you sure?') }}')" class="btn btn-danger">
-                                    <i class="fa fa-trash"></i>
-                                </a>
+                                <x-boilerplate::form-button :action="route('system.log.delete', ['file' => $item['fileName']])" :confirm="__('Are you sure?')" :title="__('Remove')" />
                             </td>
                         </tr>
                     @endforeach

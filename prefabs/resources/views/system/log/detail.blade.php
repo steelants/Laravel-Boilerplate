@@ -10,9 +10,7 @@
                 <a href='{{ route('system.log.download', ['file' => $filename]) }}' class="btn btn-primary">
                     <i class="fa fa-download"></i>
                 </a>
-                <a href='{{ route('system.log.delete', ['file' => $filename]) }}' onclick="return confirm('{{ __('Are you sure?') }}')" class="btn btn-danger">
-                    <i class="fa fa-trash"></i>
-                </a>
+                <x-boilerplate::form-button :action="route('system.log.delete', ['file' => $filename])" :confirm="__('Are you sure?')" :title="__('Remove')" />
             </div>
         </div>
 

@@ -3,10 +3,7 @@
         <div class="page-header">
             <h1 class="hide-mobile">{{ __('Backup') }}</h1>
             <div>
-                <a class="btn btn-primary" href="{{ route('system.backup.run') }}">
-					<i class="fas fa-robot me-2"></i>
-					<span>{{ __('Start Backup') }}</span>
-				</a>
+                <x-boilerplate::form-button :action="route('system.backup.run')" variant="primary" icon="fas fa-robot" :label="__('Start Backup')" />
             </div>
         </div>
         <table class="table">
@@ -96,14 +93,7 @@
                                 </div>
                             @endif
 
-                                <a class="btn btn-sm btn-danger" title="{{ __('Remove') }}" href="{{ route('system.backup.delete', ['backup_date' => $backups_slug]) }}" onclick="return confirm('{{ __('Are you sure?') }}')">
-                                    <div class="d-none d-md-none">
-                                        {{ __('Remove') }}
-                                    </div>
-                                    <div class="d-inline d-md-inline">
-                                        <i class="fa fa-trash"></i>
-                                    </div>
-                                </a>
+                                <x-boilerplate::form-button :action="route('system.backup.delete', ['backup_date' => $backups_slug])" :confirm="__('Are you sure?')" :title="__('Remove')" class="btn-sm" />
                             </td>
                         </tr>
                     @endforeach
