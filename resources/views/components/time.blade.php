@@ -1,12 +1,8 @@
+@use(\Illuminate\Support\Carbon)
+
 @props(['datetime' => null, 'format' => 'LLL', 'relative' => true])
 
-@php
-    $date = match (true) {
-        $datetime instanceof \DateTimeInterface => \Illuminate\Support\Carbon::instance($datetime),
-        filled($datetime) => \Illuminate\Support\Carbon::parse($datetime),
-        default => null,
-    };
-@endphp
+@php($date = filled($datetime) ? Carbon::parse($datetime) : null)
 
 @if ($date)
     <time
