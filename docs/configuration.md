@@ -46,9 +46,39 @@ to housekeeping.
 ### Upgrading an existing project
 
 Nothing has to be added to `.env` or to the published config. One thing is worth doing anyway:
-re-publish `App\Http\Controllers\System\BackupController` (or copy its `run()` method). The job
-now throws when a backup fails, so an older controller turns a failed manual run into a 500
-page instead of an error message. The backup itself stays safe either way.
+re-publish the backup prefabs (`App\Http\Controllers\System\BackupController`,
+`App\Livewire\Backup\*` and `resources/views/system/backup/index.blade.php`) and drop the
+`run` and `restore` routes from `routes/web.php`. Manual backups and restores now run from modals.
+An older published controller keeps working, but both a failed backup and a failed restore
+(`Restore::dispatchSync()`, now deprecated) end up as a 500 page instead of an error message.
+The backup itself stays safe either way.
+
+### Queue and cache requirements
+
+The "Start Backup" modal queues the `Backup` job and polls its status from the cache:
+
+- a queue worker has to run (with `QUEUE_CONNECTION=sync` the backup runs inside the request),
+- the web server and the worker have to share one cache store (not `array`),
+- the queue `retry_after` (`config/queue.php`, 90s by default) has to be longer than the job's
+  600s timeout, otherwise a second worker picks the still running backup up again and reports
+  it as failed.
+
+Backup and restore share one cache lock, so only one of them runs at a time. A backup that finds
+the lock taken (e.g. the scheduled one while a manual backup is running) logs a warning and quits.
+The lock needs a cache store that supports atomic locks (`database`, `redis`, `file`, `memcached`).
+
+When the system kills the process (OOM killer, `kill -9`, a server restart), nothing gets to clean up:
+
+- a killed **backup** releases its lock in `failed()` once the worker picks the job up again after
+  `retry_after`. Without a worker the lock expires after 15 minutes, and a status that stopped
+  updating for that long is shown as failed. The previous archives are never touched - they are only
+  replaced by an atomic rename of a finished archive.
+- a killed **restore** leaves the data half restored and keeps the lock for up to an hour. A restore
+  ignores `max_execution_time` and a closed browser tab, but not the PHP-FPM
+  `request_terminate_timeout`, which should be raised (or disabled) for the backup page. To release the
+  lock right away: `php artisan tinker --execute="SteelAnts\LaravelBoilerplate\Services\BackupService::restoreLock()->forceRelease();"`
+A restore runs synchronously in the request, never on the queue - restoring `.env` or the
+database could change the queue connection, `APP_KEY` or the `jobs` table under the worker.
 
 Archives are written to `storage/backups` as `Y-m-d_database.zip` and `Y-m-d_storage.zip`
 (the `.env` file is stored inside the storage archive).

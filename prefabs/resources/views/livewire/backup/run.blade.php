@@ -11,6 +11,11 @@
         <i class="fas fa-circle-check fa-3x text-success mb-3"></i>
         <p>{{ $status['message'] ?? \SteelAnts\LaravelBoilerplate\Types\BackupStatusType::getName($state) }}</p>
         <x-form::button class="btn-primary" onclick="window.location.reload()">{{ __('Close') }}</x-form::button>
+    @elseif ($state === null)
+        <i class="fas fa-circle-question fa-3x text-warning mb-3"></i>
+        <p class="mb-1">{{ __('Backup status is not available') }}</p>
+        <small class="text-muted d-block mb-3">{{ __('The web server and the queue worker have to share the same cache store.') }}</small>
+        <x-form::button class="btn-secondary" onclick="window.location.reload()">{{ __('Close') }}</x-form::button>
     @else
         <i class="fas fa-circle-xmark fa-3x text-danger mb-3"></i>
         <p class="mb-1">{{ \SteelAnts\LaravelBoilerplate\Types\BackupStatusType::getName(\SteelAnts\LaravelBoilerplate\Types\BackupStatusType::FAILED) }}</p>

@@ -126,10 +126,14 @@ class Restore extends FormComponent
         // DO SOMETHING ON ERROR;
     }
 
+    #[Computed()]
+    public function archives(): array
+    {
+        return BackupService::list()[$this->backup_date]['fileName'] ?? [];
+    }
+
     private function hasArchive(string $type): bool
     {
-        $fileNames = BackupService::list()[$this->backup_date]['fileName'] ?? [];
-
-        return in_array($this->backup_date . '_' . $type . '.zip', $fileNames);
+        return in_array($this->backup_date . '_' . $type . '.zip', $this->archives);
     }
 }

@@ -11,6 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use RuntimeException;
 use SteelAnts\LaravelBoilerplate\Attributes\AllowManualRun;
 use SteelAnts\LaravelBoilerplate\Services\BackupService;
@@ -28,6 +29,30 @@ class Backup implements ShouldQueue
     public function __construct() {}
 
     public function handle()
+    {
+        // Two runs would share backups/tmp and wipe each other's files, and a restore running
+        // at the same time would end up in the archive - whoever queued the job, it steps aside.
+        // The job uuid is unique per dispatch and is known again in failed(); a direct handle() call has no job.
+        $lock = BackupService::backupLock($this->job?->uuid() ?? (string) Str::uuid());
+        if (!$lock->get()) {
+            Log::warning('Backup skipped, another backup or restore is already running');
+
+            // Only a backup queued from the modal waits for this job; a running one owns the status.
+            if ((BackupService::status()['state'] ?? null) === BackupStatusType::QUEUED) {
+                BackupService::setStatus(BackupStatusType::FAILED, __('Backup skipped, another backup or restore is already running'));
+            }
+
+            return;
+        }
+
+        try {
+            $this->runBackup();
+        } finally {
+            $lock->release();
+        }
+    }
+
+    protected function runBackup(): void
     {
         // PREPARATION
         ini_set('date.timezone', 'Europe/Prague');
@@ -109,6 +134,11 @@ class Backup implements ShouldQueue
      */
     public function failed(?Throwable $e): void
     {
+        // A killed worker never reached the finally in handle(); only this job's own lock is released.
+        if ($this->job?->uuid()) {
+            BackupService::backupLock($this->job->uuid())->release();
+        }
+
         BackupService::setStatus(BackupStatusType::FAILED, $e?->getMessage());
         SystemAdminNotificationService::send(__('Backup Failed'), __('Backup failed') . ': ' . $e?->getMessage());
     }

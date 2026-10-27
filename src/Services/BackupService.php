@@ -3,6 +3,7 @@
 namespace SteelAnts\LaravelBoilerplate\Services;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +16,10 @@ use Throwable;
 
 class BackupService
 {
+    // Backup job timeout (600s) plus a margin. Used as the backup lock TTL and as the age after which
+    // a RUNNING status is considered dead, so a killed worker blocks new backups for this long at most.
+    private const BACKUP_MAX_SECONDS = 900;
+
     /**
      * Queues a backup unless one is already queued or running. Returns false when it was not queued.
      */
@@ -35,7 +40,18 @@ class BackupService
      */
     public static function status(): ?array
     {
-        return Cache::get('boilerplate.backup.status');
+        $status = Cache::get('boilerplate.backup.status');
+
+        // A killed process never reports back - a RUNNING status that stopped updating is a dead backup.
+        if (($status['state'] ?? null) === BackupStatusType::RUNNING && now()->timestamp - $status['updated_at'] > self::BACKUP_MAX_SECONDS) {
+            return [
+                'state'      => BackupStatusType::FAILED,
+                'message'    => __('Backup stopped responding, the process was probably killed'),
+                'updated_at' => $status['updated_at'],
+            ];
+        }
+
+        return $status;
     }
 
     public static function setStatus(string $state, ?string $message = null): void
@@ -54,6 +70,24 @@ class BackupService
     }
 
     /**
+     * Backup and restore share one lock, so only one of them runs at a time. The owner has to be
+     * unique per run (a lock re-acquired by the same owner succeeds) - failed() uses it to release
+     * the lock of a killed backup without touching one held by somebody else.
+     */
+    public static function backupLock(string $owner): Lock
+    {
+        return Cache::lock('boilerplate.backup.lock', self::BACKUP_MAX_SECONDS, $owner);
+    }
+
+    /**
+     * Same lock as backupLock(). A restore has no time limit, so it gets an hour before it expires.
+     */
+    public static function restoreLock(): Lock
+    {
+        return Cache::lock('boilerplate.backup.lock', 3600);
+    }
+
+    /**
      * Backups grouped by date: ['Y-m-d' => ['fileName' => [...], 'fileSize' => '1.2 MB']]
      */
     public static function list(): array
@@ -65,7 +99,8 @@ class BackupService
             return $backups;
         }
 
-        foreach (File::allFiles($path . '/') as $file) {
+        // Not recursive - backups/tmp holds copied storage files, which may contain zips of their own.
+        foreach (File::files($path) as $file) {
             if (!Str::endsWith($file->getFilename(), '.zip')) {
                 continue;
             }
@@ -119,12 +154,31 @@ class BackupService
             return false;
         }
 
+        // A backup running at the same time would archive a half restored database.
+        $lock = self::restoreLock();
+        if (!$lock->get()) {
+            throw new RuntimeException(__('A backup or restore is already running, try again once it finishes'));
+        }
+
+        // Stopping halfway leaves the data half restored - neither max_execution_time nor
+        // a closed browser tab may interrupt it.
+        set_time_limit(0);
+        ignore_user_abort(true);
+
         try {
             self::restoreArchives($backup_date, $database, $storage, $env);
         } catch (Throwable $e) {
             SystemAdminNotificationService::send(__('Restore Failed'), __('Restore failed') . ': ' . $e->getMessage());
 
             throw $e;
+        } finally {
+            // With CACHE_STORE=database the restored dump replaces cache_locks and cache, which brings back
+            // the lock and the status from the moment the backup was taken. Nobody else could take the lock
+            // while we held it, so dropping it whatever its owner is safe.
+            $lock->forceRelease();
+            if ($database) {
+                Cache::forget('boilerplate.backup.status');
+            }
         }
 
         SystemAdminNotificationService::send(__('Restore Run successfully'), __('Restore Run successfully'));

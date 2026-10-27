@@ -18,7 +18,13 @@ class Run extends Component
         Gate::authorize('is-system-admin');
 
         // Opening the modal while a backup is already running only shows its progress.
-        BackupService::dispatch();
+        try {
+            BackupService::dispatch();
+        } catch (\Throwable $e) {
+            // On a sync queue the backup runs right here; failed() has already stored the FAILED status.
+            report($e);
+        }
+
         $this->refreshStatus();
     }
 
