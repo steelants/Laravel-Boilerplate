@@ -27,10 +27,8 @@ return [
     'models' => [
         'activity'     => Activity::class,
         'file'         => File::class,
-        'activity'     => Activity::class,
         'setting'      => Setting::class,
         'session'      => Session::class,
-        'setting'      => Setting::class,
         'subscription' => Subscription::class,
     ],
 
