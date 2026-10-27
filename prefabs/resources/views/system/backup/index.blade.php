@@ -3,8 +3,12 @@
         <div class="page-header">
             <h1 class="hide-mobile">{{ __('Backup') }}</h1>
             <div>
-                <x-form::button class="btn-primary" onclick="Livewire.dispatch('openModal', {livewireComponents: 'backup.run', title: '{{ __('Backup') }}'})">
-                    <i class="fas fa-robot me-1"></i>{{ __('Start Backup') }}
+                <x-form::button class="btn-primary" :disabled="$running" onclick="Livewire.dispatch('openModal', {livewireComponents: 'backup.run', title: '{{ __('Backup') }}'})">
+                    @if ($running)
+                        <span class="spinner-border spinner-border-sm me-1" role="status"></span>{{ __('Backup is running...') }}
+                    @else
+                        <i class="fas fa-robot me-1"></i>{{ __('Start Backup') }}
+                    @endif
                 </x-form::button>
             </div>
         </div>

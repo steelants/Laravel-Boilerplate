@@ -37,6 +37,7 @@ class BackupService
 
     /**
      * ['state' => BackupStatusType::*, 'message' => ?string, 'updated_at' => timestamp] or null when no backup ran yet.
+     * Once the backup started it also holds 'started_at' (timestamp), a finished one 'files' (['name', 'size'] of the stored archives).
      */
     public static function status(): ?array
     {
@@ -54,14 +55,14 @@ class BackupService
         return $status;
     }
 
-    public static function setStatus(string $state, ?string $message = null): void
+    public static function setStatus(string $state, ?string $message = null, array $data = []): void
     {
         // Kept a bit longer than the job timeout, so a crashed worker cannot block new backups forever.
         Cache::put('boilerplate.backup.status', [
             'state'      => $state,
             'message'    => $message,
             'updated_at' => now()->timestamp,
-        ], now()->addHour());
+        ] + $data, now()->addHour());
     }
 
     public static function isInProgress(): bool
@@ -157,6 +158,8 @@ class BackupService
         // A backup running at the same time would archive a half restored database.
         $lock = self::restoreLock();
         if (!$lock->get()) {
+            Log::warning('Restore of ' . $backup_date . ' skipped, another backup or restore is already running');
+
             throw new RuntimeException(__('A backup or restore is already running, try again once it finishes'));
         }
 
@@ -165,9 +168,13 @@ class BackupService
         set_time_limit(0);
         ignore_user_abort(true);
 
+        $parts = implode(', ', array_keys(array_filter(['database' => $database, 'storage' => $storage, 'env' => $env])));
+        Log::info('Restore of ' . $backup_date . ' started (' . $parts . ') by user ' . (auth()->id() ?? 'console'));
+
         try {
             self::restoreArchives($backup_date, $database, $storage, $env);
         } catch (Throwable $e) {
+            Log::error('Restore of ' . $backup_date . ' failed: ' . $e->getMessage());
             SystemAdminNotificationService::send(__('Restore Failed'), __('Restore failed') . ': ' . $e->getMessage());
 
             throw $e;
@@ -181,6 +188,7 @@ class BackupService
             }
         }
 
+        Log::info('Restore of ' . $backup_date . ' finished');
         SystemAdminNotificationService::send(__('Restore Run successfully'), __('Restore Run successfully'));
 
         return true;

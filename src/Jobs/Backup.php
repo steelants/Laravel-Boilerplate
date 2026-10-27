@@ -83,8 +83,10 @@ class Backup implements ShouldQueue
         }
 
         $partFiles = [];
+        $storedFiles = [];
+        $startedAt = now()->timestamp;
 
-        BackupService::setStatus(BackupStatusType::RUNNING);
+        BackupService::setStatus(BackupStatusType::RUNNING, null, ['started_at' => $startedAt]);
 
         try {
             foreach ([$db_backup_path, $fs_backup_path] as $backupPath) {
@@ -113,6 +115,7 @@ class Backup implements ShouldQueue
             foreach ($partFiles as $zippedFilePath => $partFile) {
                 $this->replaceArchive($partFile, $zippedFilePath);
                 unset($partFiles[$zippedFilePath]);
+                $storedFiles[] = ['name' => basename($zippedFilePath), 'size' => File::size($zippedFilePath)];
             }
         } catch (Throwable $e) {
             foreach ($partFiles as $partFile) {
@@ -125,7 +128,7 @@ class Backup implements ShouldQueue
             throw $e;
         }
 
-        BackupService::setStatus(BackupStatusType::FINISHED);
+        BackupService::setStatus(BackupStatusType::FINISHED, null, ['started_at' => $startedAt, 'files' => $storedFiles]);
         SystemAdminNotificationService::send(__('Backup Run successfully'), __('Backup Run successfully'));
     }
 

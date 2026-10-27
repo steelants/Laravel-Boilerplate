@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Backup;
 
+use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
@@ -41,6 +42,9 @@ class Run extends Component
             // A queued backup that never starts usually means no queue worker is running.
             'waitingTooLong' => ($this->status['state'] ?? null) === BackupStatusType::QUEUED
                 && now()->timestamp - ($this->status['updated_at'] ?? 0) > 30,
+            'duration' => isset($this->status['started_at'])
+                ? CarbonInterval::seconds($this->status['updated_at'] - $this->status['started_at'])->cascade()->forHumans()
+                : null,
         ]);
     }
 }

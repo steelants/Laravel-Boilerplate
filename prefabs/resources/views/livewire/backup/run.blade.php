@@ -1,3 +1,4 @@
+@use(\SteelAnts\LaravelBoilerplate\Helpers\SizeHelper)
 @use(\SteelAnts\LaravelBoilerplate\Types\BackupStatusType)
 
 <div class="text-center py-3" @if ($inProgress) wire:poll.2s="refreshStatus" @endif>
@@ -10,9 +11,27 @@
             <small class="text-warning d-block mt-2">{{ __('The backup has not started yet. Make sure a queue worker is running.') }}</small>
         @endif
     @elseif ($state === BackupStatusType::FINISHED)
-        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
-        <p>{{ $status['message'] ?? BackupStatusType::getName($state) }}</p>
-        <x-form::button class="btn-primary" onclick="window.location.reload()">{{ __('Close') }}</x-form::button>
+        {{-- The page lists the backups, reload it once the modal is closed to show the new one. --}}
+        <div x-init="$el.closest('.modal')?.addEventListener('hidden.bs.modal', () => window.location.reload(), {once: true})">
+            <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+            <p class="mb-1">{{ $status['message'] ?? BackupStatusType::getName($state) }}</p>
+            @if ($duration)
+                <small class="text-muted d-block">{{ __('Took :duration', ['duration' => $duration]) }}</small>
+            @endif
+            @if (!empty($status['files']))
+                <ul class="list-group text-start mt-3">
+                    @foreach ($status['files'] as $file)
+                        <li class="list-group-item d-flex align-items-center gap-2">
+                            <span class="flex-grow-1">{{ $file['name'] }}</span>
+                            <span class="text-muted">{{ SizeHelper::getHumanReadableSize($file['size']) }}</span>
+                            <a href="{{ route('system.backup.download', ['file_name' => $file['name']]) }}" class="btn btn-sm btn-primary" title="{{ __('Download') }}">
+                                <i class="fa fa-download"></i>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
     @elseif ($state === null)
         <i class="fas fa-question-circle fa-3x text-warning mb-3"></i>
         <p class="mb-1">{{ __('Backup status is not available') }}</p>

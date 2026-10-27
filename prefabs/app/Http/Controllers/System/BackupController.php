@@ -13,6 +13,7 @@ class BackupController extends BaseController
         return view('system.backup.index', [
             'layout'  => config('boilerplate.layouts.system'),
             'backups' => BackupService::list(),
+            'running' => BackupService::isInProgress(),
         ]);
     }
 
