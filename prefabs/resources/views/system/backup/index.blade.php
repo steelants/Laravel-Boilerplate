@@ -3,7 +3,7 @@
         <div class="page-header">
             <h1 class="hide-mobile">{{ __('Backup') }}</h1>
             <div>
-                <x-form::button class="btn-primary" onclick="Livewire.dispatch('openModal', {livewireComponents: 'backup.run', title: @js(__('Backup'))})">
+                <x-form::button class="btn-primary" onclick="Livewire.dispatch('openModal', {livewireComponents: 'backup.run', title: '{{ __('Backup') }}'})">
                     <i class="fas fa-robot me-1"></i>{{ __('Start Backup') }}
                 </x-form::button>
             </div>
@@ -34,12 +34,7 @@
                             @if(in_array($backups_slug . '_database.zip', $backup['fileName']) || in_array($backups_slug . '_storage.zip', $backup['fileName']))
                                 <button type="button" class="btn btn-sm btn-warning" title="{{ __('Restore') }}"
                                         onclick="Livewire.dispatch('openModal', {livewireComponents: 'backup.restore', title: @js(__('Restore Backup') . ' — ' . $backups_slug), parameters: {backup_date: @js($backups_slug)}})">
-                                    <div class="d-none d-md-none">
-                                        {{ __('Restore') }}
-                                    </div>
-                                    <div class="d-inline d-md-inline">
-                                        <i class="fa fa-rotate-left"></i>
-                                    </div>
+                                    <i class="fas fa-undo"></i>
                                 </button>
                             @endif
 
