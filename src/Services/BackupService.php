@@ -5,6 +5,7 @@ namespace SteelAnts\LaravelBoilerplate\Services;
 use Carbon\Carbon;
 use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -272,6 +273,8 @@ class BackupService
                 } else {
                     throw new RuntimeException('Database backup not found: ' . basename($dbZip));
                 }
+
+                self::forgetRestoredBackupJobs();
             }
 
             // STORAGE + .ENV RESTORE (share the same unzip)
@@ -318,6 +321,32 @@ class BackupService
                 File::deleteDirectory($restorePath);
                 Log::info('Cleanup ' . $restorePath);
             }
+        }
+    }
+
+    /**
+     * The restored database holds the jobs table from the moment the backup was taken, including the backup
+     * job that was running then. A worker would pick it up again and fail it as attempted too many times.
+     */
+    protected static function forgetRestoredBackupJobs(): void
+    {
+        $queue = config('queue.connections.' . config('queue.default'));
+        if (($queue['driver'] ?? null) !== 'database') {
+            return;
+        }
+
+        // The restore replaced the database under the open connection.
+        $db = DB::connection($queue['connection'] ?? null);
+        $db->reconnect();
+
+        $jobs = $db->table($queue['table'] ?? 'jobs');
+        $ids = (clone $jobs)->get(['id', 'payload'])
+            ->filter(fn ($job) => (json_decode($job->payload, true)['displayName'] ?? null) === Backup::class)
+            ->pluck('id');
+
+        if ($ids->isNotEmpty()) {
+            $jobs->whereIn('id', $ids)->delete();
+            Log::info('Removed ' . $ids->count() . ' backup job(s) restored with the database');
         }
     }
 
