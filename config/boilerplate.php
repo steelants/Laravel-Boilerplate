@@ -21,7 +21,7 @@ return [
         'database'      => (bool) env('BACKUP_DATABASE', true),
         'storage'       => (bool) env('BACKUP_STORAGE', true),
         'storage_paths' => explode(',', env('BACKUP_STORAGE_PATHS', 'app')), // Later storage_path() is used to get full path
-        'enviroment'    => (bool) env('BACKUP_ENV', true),
+        'enviroment'    => (bool) env('BACKUP_ENV', false),
     ],
 
     'models' => [
