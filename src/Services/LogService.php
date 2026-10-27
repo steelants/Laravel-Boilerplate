@@ -26,24 +26,23 @@ class LogService
      * Log files of all channels from logging.channels that have a "path" (single, daily, custom ...)
      * plus any other file in storage/logs (e.g. of a channel removed from the config), newest first.
      *
-     * @return array<string, string[]> absolute path => names of the channels writing into it
+     * @return string[] absolute paths
      */
     public static function files(): array
     {
         $files = [];
-        foreach (config('logging.channels', []) as $channel => $config) {
-            foreach (self::channelFiles($config) as $path) {
-                $files[$path][] = $channel;
-            }
+        foreach (config('logging.channels', []) as $config) {
+            array_push($files, ...self::channelFiles($config));
         }
 
         if (File::isDirectory(self::directory())) {
             foreach (File::files(self::directory()) as $file) {
-                $files[$file->getRealPath()] ??= [];
+                $files[] = $file->getRealPath();
             }
         }
 
-        uksort($files, fn (string $a, string $b) => filemtime($b) <=> filemtime($a));
+        $files = array_unique($files);
+        usort($files, fn (string $a, string $b) => filemtime($b) <=> filemtime($a));
 
         return $files;
     }
@@ -70,16 +69,15 @@ class LogService
     }
 
     /**
-     * List of ['fileName', 'channel', 'size', 'humanReadableSize', 'modified_at' => Carbon].
+     * List of ['fileName', 'size', 'humanReadableSize', 'modified_at' => Carbon].
      */
     public static function list(): array
     {
         $items = [];
-        foreach (self::files() as $path => $channels) {
+        foreach (self::files() as $path) {
             $file = new SplFileInfo($path);
             $items[] = [
                 'fileName'          => $file->getFilename(),
-                'channel'           => $channels ? implode(', ', $channels) : null,
                 'size'              => $file->getSize(),
                 'humanReadableSize' => SizeHelper::getHumanReadableSize($file->getSize()),
                 'modified_at'       => Carbon::createFromTimestamp($file->getMTime())->setTimezone(config('app.timezone')),
@@ -112,7 +110,7 @@ class LogService
         $today = Carbon::now(config('app.timezone'))->startOfDay();
         $prefix = '[' . $today->format('Y-m-d');
 
-        foreach (array_keys(self::files()) as $path) {
+        foreach (self::files() as $path) {
             if (filemtime($path) < $today->getTimestamp()) {
                 continue;
             }
@@ -145,7 +143,7 @@ class LogService
      */
     public static function path(string $filename): ?string
     {
-        foreach (array_keys(self::files()) as $path) {
+        foreach (self::files() as $path) {
             if (basename($path) === $filename) {
                 return $path;
             }
@@ -198,7 +196,7 @@ class LogService
     {
         $today = Carbon::now(config('app.timezone'))->startOfDay()->getTimestamp();
 
-        foreach (array_keys(self::files()) as $path) {
+        foreach (self::files() as $path) {
             if (filemtime($path) >= $today) {
                 File::put($path, '');
             } else {

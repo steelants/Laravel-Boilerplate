@@ -24,7 +24,6 @@
                 <thead>
                     <tr>
                         <th scope="col">{{ __('Name')}}</th>
-                        <th scope="col">{{ __('Channel')}}</th>
                         <th scope="col">{{ __('Size')}}</th>
                         <th scope="col" class="text-end">{{ __('Actions') }}</th>
                     </tr>
@@ -35,9 +34,6 @@
                             <th scope="row">
                                 <a href="{{ route('system.log.detail', ['file' => $item['fileName']]) }}#end">{{ $item['fileName'] }}</a>
                             </th>
-                            <td>
-                                {{ $item['channel'] ?? '-' }}
-                            </td>
                             <td>
                                 {{ $item['humanReadableSize'] }}
                             </td>
