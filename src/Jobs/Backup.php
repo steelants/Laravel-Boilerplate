@@ -11,9 +11,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use RuntimeException;
 use SteelAnts\LaravelBoilerplate\Attributes\AllowManualRun;
+use SteelAnts\LaravelBoilerplate\Services\BackupService;
+use SteelAnts\LaravelBoilerplate\Services\SystemAdminNotificationService;
+use SteelAnts\LaravelBoilerplate\Types\BackupStatusType;
 use Throwable;
 
 #[AllowManualRun()]
@@ -50,11 +52,14 @@ class Backup implements ShouldQueue
 
         if (empty($archives)) {
             Log::debug('Backup skipped, every component is disabled');
+            BackupService::setStatus(BackupStatusType::FINISHED, __('Backup skipped, every component is disabled'));
 
             return;
         }
 
         $partFiles = [];
+
+        BackupService::setStatus(BackupStatusType::RUNNING);
 
         try {
             foreach ([$db_backup_path, $fs_backup_path] as $backupPath) {
@@ -90,12 +95,22 @@ class Backup implements ShouldQueue
             }
 
             Log::error('Backup failed: ' . $e->getMessage());
-            $this->notify(__('Backup Failed'), __('Backup failed') . ': ' . $e->getMessage());
 
+            // Status and notification are handled in failed(), which runs for queued and sync dispatch alike.
             throw $e;
         }
 
-        $this->notify(__('Backup Run successfully'), __('Backup Run successfully'));
+        BackupService::setStatus(BackupStatusType::FINISHED);
+        SystemAdminNotificationService::send(__('Backup Run successfully'), __('Backup Run successfully'));
+    }
+
+    /**
+     * Runs for any failure, including a timeout or a killed worker.
+     */
+    public function failed(?Throwable $e): void
+    {
+        BackupService::setStatus(BackupStatusType::FAILED, $e?->getMessage());
+        SystemAdminNotificationService::send(__('Backup Failed'), __('Backup failed') . ': ' . $e?->getMessage());
     }
 
     protected function prepareTmpDirectory(string $backupPath): void
@@ -237,42 +252,11 @@ class Backup implements ShouldQueue
         Log::info('Backup stored ' . $zippedFilePath);
     }
 
-    protected function notify(string $subject, string $message): void
-    {
-        $mails = array_filter((array) (config('boilerplate.system_admins_mail') ?: []));
-
-        if (empty($mails)) {
-            return;
-        }
-
-        // A broken mailer must never turn a finished backup into a failed job, nor mask
-        // the error that made the backup fail in the first place.
-        try {
-            Mail::raw($message, function ($mail) use ($mails, $subject) {
-                $mail->to($mails)->subject($subject . ' ' . config('app.name'));
-            });
-            Log::info('Sending Notification');
-        } catch (Throwable $e) {
-            Log::error('Backup notification could not be sent: ' . $e->getMessage());
-        }
-    }
-
     /**
      * @return array<int, string> lines the command wrote to stdout/stderr
      */
     protected function execShellCommand(string $command, string $description): array
     {
-        $output = [];
-        $resultCode = 0;
-
-        exec($command, $output, $resultCode);
-        Log::debug($output);
-
-        if ($resultCode !== 0) {
-            // The command itself is never part of the message, it can carry database credentials.
-            throw new RuntimeException($description . ' failed (exit code ' . $resultCode . '): ' . implode(' ', $output));
-        }
-
-        return $output;
+        return BackupService::execShellCommand($command, $description);
     }
 }
