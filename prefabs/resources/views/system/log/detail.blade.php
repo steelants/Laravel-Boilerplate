@@ -21,7 +21,7 @@
     @php
         $logTailConfig = [
             'url'    => route('system.log.tail', ['file' => $filename]),
-            'offset' => $lineCount,
+            'offset' => $offset,
         ];
     @endphp
     @push('scripts')

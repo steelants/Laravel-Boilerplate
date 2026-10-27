@@ -7,11 +7,11 @@
 
         <div class="row g-3 mb-4">
             @foreach ($todayStats as $stat => $value)
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-body ">
                             <div class="h5 fw-medium">{{ $stat }}</div>
-                            <div class="h1 mb-0 {{$stat == "ERROR" ? "text-danger" : "" }}{{$stat == "WARNING" ? "text-warning" : "" }}">{{ $value }}</div>
+                            <div class="h1 mb-0 {{$stat == "ERROR" ? "text-danger" : "" }}{{$stat == "WARNING" ? "text-warning" : "" }}">{{ $value ?? '??' }}</div>
                             <small class="text-body-tertiary">{{ __('today') }}</small>
                         </div>
                     </div>
@@ -24,6 +24,7 @@
                 <thead>
                     <tr>
                         <th scope="col">{{ __('Name')}}</th>
+                        <th scope="col">{{ __('Channel')}}</th>
                         <th scope="col">{{ __('Size')}}</th>
                         <th scope="col" class="text-end">{{ __('Actions') }}</th>
                     </tr>
@@ -34,6 +35,9 @@
                             <th scope="row">
                                 <a href="{{ route('system.log.detail', ['file' => $item['fileName']]) }}#end">{{ $item['fileName'] }}</a>
                             </th>
+                            <td>
+                                {{ $item['channel'] ?? '-' }}
+                            </td>
                             <td>
                                 {{ $item['humanReadableSize'] }}
                             </td>

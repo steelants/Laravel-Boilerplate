@@ -17,9 +17,12 @@ window.initLogTail = function(config) {
             });
             if (!resp.ok) return;
             const data = await resp.json();
-            if (data.lines && data.lines.length) {
-                output.textContent += data.lines.join('\n') + '\n';
+            if (typeof data.offset === 'number') {
                 offset = data.offset;
+            }
+            if (data.lines && data.lines.length) {
+                const separator = output.textContent && !output.textContent.endsWith('\n') ? '\n' : '';
+                output.textContent += separator + data.lines.join('\n') + '\n';
                 if (toggle.checked) {
                     window.scrollTo(0, document.documentElement.scrollHeight);
                 }
