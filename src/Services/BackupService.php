@@ -4,6 +4,7 @@ namespace SteelAnts\LaravelBoilerplate\Services;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Cache\Lock;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -187,6 +188,16 @@ class BackupService
             if ($database) {
                 Cache::forget('boilerplate.backup.status');
             }
+        }
+
+        // Whatever is cached was computed from the previous database (or comes from the restored cache table).
+        if ($database) {
+            Cache::flush();
+        }
+
+        // A cached config would keep using the values of the previous .env.
+        if ($env) {
+            Artisan::call('config:clear');
         }
 
         Log::info('Restore of ' . $backup_date . ' finished');
