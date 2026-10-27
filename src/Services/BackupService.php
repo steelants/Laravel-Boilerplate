@@ -147,6 +147,13 @@ class BackupService
      */
     public static function restore(string $backup_date, bool $database, bool $storage, bool $env): bool
     {
+        // Checked here, so no caller (old published controllers, the deprecated job, custom code) can get around it.
+        if (!config('boilerplate.backup.restore', true)) {
+            Log::warning('Restore of ' . $backup_date . ' refused, restoring is disabled (boilerplate.backup.restore)');
+
+            throw new RuntimeException(__('Restoring backups is disabled'));
+        }
+
         if (!self::parseDate($backup_date)) {
             return false;
         }

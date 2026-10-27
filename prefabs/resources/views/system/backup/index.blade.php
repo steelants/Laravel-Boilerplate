@@ -35,7 +35,7 @@
                             <td class="text-end">
                             @php($backups_slug = explode('_', $backup['fileName'][0])[0])
 
-                            @if(in_array($backups_slug . '_database.zip', $backup['fileName']) || in_array($backups_slug . '_storage.zip', $backup['fileName']))
+                            @if(config('boilerplate.backup.restore', true) && (in_array($backups_slug . '_database.zip', $backup['fileName']) || in_array($backups_slug . '_storage.zip', $backup['fileName'])))
                                 <button type="button" class="btn btn-sm btn-warning" title="{{ __('Restore') }}"
                                         onclick="Livewire.dispatch('openModal', {livewireComponents: 'backup.restore', title: @js(__('Restore Backup') . ' — ' . $backups_slug), parameters: {backup_date: @js($backups_slug)}})">
                                     <i class="fas fa-undo"></i>

@@ -30,6 +30,7 @@ Backup behavior is controlled using environment variables:
     'storage'       => (bool) env('BACKUP_STORAGE', true),
     'storage_paths' => explode(',', env('BACKUP_STORAGE_PATHS', 'app')),
     'enviroment'    => (bool) env('BACKUP_ENV', true),
+    'restore'       => (bool) env('BACKUP_RESTORE', true),
 ],
 ```
 
@@ -39,6 +40,10 @@ Backup behavior is controlled using environment variables:
 | `storage` | Include storage files |
 | `storage_paths` | Storage paths to include (resolved using `storage_path()`) |
 | `enviroment` | Include the `.env` file |
+| `restore` | Allow restoring a backup. `false` hides the restore button, the restore modal returns 404 and `BackupService::restore()` throws, so nothing can overwrite the data from a backup |
+
+With a published `config/boilerplate.php` add the `restore` key to its `backup` array to turn restoring
+off - a missing key counts as `true`.
 
 The job only ever writes the archives of the day it runs for - dropping old archives is left
 to housekeeping.

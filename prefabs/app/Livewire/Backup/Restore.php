@@ -84,7 +84,7 @@ class Restore extends FormComponent
 
     public function mount($backup_date = null)
     {
-        abort_unless(BackupService::parseDate((string) $backup_date), 404);
+        abort_unless(config('boilerplate.backup.restore', true) && BackupService::parseDate((string) $backup_date), 404);
         $this->backup_date = $backup_date;
 
         parent::mount();
