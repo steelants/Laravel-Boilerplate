@@ -25,6 +25,7 @@ Route::prefix('system')->name('system.')->middleware(['auth', 'is-system-admin']
     Route::get('/subscription', [App\Http\Controllers\System\SubscriptionController::class, 'index'])->name('subscription.index');
 
     Route::get('/api', [App\Http\Controllers\System\ApiController::class, 'index'])->name('api.index');
+    Route::get('/api/export/{format}', [App\Http\Controllers\System\ApiController::class, 'export'])->whereIn('format', ['openapi', 'insomnia', 'restfox'])->name('api.export');
 
     Route::prefix('jobs')->name('jobs.')->group(function () {
         Route::get('/', [App\Http\Controllers\System\JobsController::class, 'index'])->name('index');

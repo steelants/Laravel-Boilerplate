@@ -2,10 +2,18 @@
     <div class="container-xl">
         <div class="page-header">
             <h1 class="hide-mobile">{{ __('Api') }}</h1>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-secondary" href="{{ route('system.api.export', 'openapi') }}"><i class="fas fa-download me-1"></i>OpenAPI</a>
+                <a class="btn btn-outline-secondary" href="{{ route('system.api.export', 'insomnia') }}"><i class="fas fa-download me-1"></i>Insomnia</a>
+                <a class="btn btn-outline-secondary" href="{{ route('system.api.export', 'restfox') }}"><i class="fas fa-download me-1"></i>Restfox</a>
+            </div>
         </div>
         <div>
-            @foreach ($routes as $id => $route)
+            @foreach ($routes as $route)
                 @php
+                    // stable id, the open / closed state is remembered (toggleState cookie)
+                    $collapseId = 'api-' . \Illuminate\Support\Str::slug($route['Method'] . ' ' . str_replace(['/', '{', '}', '?'], ' ', $route['Uri']));
+                    $isOpen = getToggleState($collapseId) == 'open';
                     $color = 'info';
                     switch ($route['Method']) {
                         case 'GET':
@@ -27,40 +35,39 @@
                     <div class="btn-toggle btn py-3 bg-{{ $color }} w-100 text-start position-relative" style="--bs-bg-opacity: .2;">
                         <b class="badge text-bg-{{ $color }} me-2" style="--bs-bg-opacity: 1;">{{ $route['Method'] }}</b>
                         <b class="position-relative z-2"
-                            onclick="copyToClipboard('{{ config('app.url') . $route['Uri'] }}');"
+                            onclick="copyToClipboard('{{ url($route['Uri']) }}');"
                             title="{{ __('Copy to clipboard') }}"
                         >
                             <span>{{ $route['Uri'] }}</span>
                             <i class="fa fa-clipboard"></i>
                         </b>
-                        <a class="stretched-link" data-bs-target="#collapse{{ $id }}" data-bs-toggle="collapse"></a>
+                        @if ($route['RequiresToken'])
+                            <span class="badge text-bg-secondary ms-2" title="{{ __('Requires an API token') }}"><i class="fas fa-lock"></i></span>
+                        @endif
+                        <a @class(['stretched-link', 'collapsed' => !$isOpen]) data-bs-target="#{{ $collapseId }}" data-bs-toggle="collapse" aria-expanded="{{ $isOpen ? 'true' : 'false' }}"></a>
                     </div>
-                    <div class="collapse" id="collapse{{ $id }}">
+                    <div class="remember collapse {{ $isOpen ? 'show' : '' }}" id="{{ $collapseId }}">
                         <div class="card card-body mt-2">
                             <h6>{{ __('Description') }}</h6>
                             <pre>{{ $route['Description'] }}</pre>
 
-                            <h6>{{ __('Parameters') }}</h6>
-                            <table class="table table-sm table-bordered">
-                                <thead>
-                                    <th>{{ __('Name') }}</th>
-                                    <th>{{ __('Type') }}</th>
-                                    <th>{{ __('Comment') }}</th>
-                                </thead>
-                                @foreach ($route['Parameters'] as $parameter)
-                                    <tr>
-                                        <td>
-                                            {{ $parameter['name'] }}
-                                        </td>
-                                        <td>
-                                            {{ $parameter['type'] }}
-                                        </td>
-                                        <td>
-                                            {{ $parameter['comment'] }}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </table>
+                            @if ($route['Parameters'])
+                                <h6>{{ __('Parameters') }}</h6>
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <th>{{ __('Name') }}</th>
+                                        <th>{{ __('Rules / type') }}</th>
+                                        <th>{{ __('Comment') }}</th>
+                                    </thead>
+                                    @foreach ($route['Parameters'] as $parameter)
+                                        <tr>
+                                            <td>{{ $parameter['name'] }}</td>
+                                            <td>{{ $parameter['rules'] }}</td>
+                                            <td>{{ $parameter['comment'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            @endif
 
                             <h6>{{ __('Returns') }}</h6>
                             <pre>{{ $route['Returns'] ?? __('NULL') }}</pre>

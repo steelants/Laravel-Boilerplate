@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use SteelAnts\LaravelBoilerplate\Console\Commands\DispatchJob;
+use SteelAnts\LaravelBoilerplate\Console\Commands\ImportSqliteDatabase;
 use SteelAnts\LaravelBoilerplate\Console\Commands\InstallCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeBasicTestsCommand;
 use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
@@ -118,6 +119,7 @@ class BoilerplateServiceProvider extends ServiceProvider
 
         $this->commands([MakeBasicTestsCommand::class]);
         $this->commands([DispatchJob::class]);
+        $this->commands([ImportSqliteDatabase::class]);
 
         $this->publishes([
             __DIR__ . '/../lang'            => $this->app->langPath('vendor/boilerplate'),
