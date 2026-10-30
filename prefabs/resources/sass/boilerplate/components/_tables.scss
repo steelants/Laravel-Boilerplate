@@ -1,3 +1,6 @@
+@use "../settings" as *;
+@use "../mixins" as *;
+
 .table-actions{
     text-align: right;
 }
@@ -7,16 +10,16 @@
     border-bottom: none;
     padding: 0.5rem 0.75rem;
     font-weight: 500;
-    color: var(--bs-secondary-color);
-    background: var(--bs-tertiary-bg);
+    color: var(--bs-fg-3);
+    background: var(--bs-bg-2);
     font-size: .75rem;
 
     &:first-child{
-        border-radius: $border-radius 0 0 $border-radius;
+        border-radius: $radius 0 0 $radius;
     }
 
     &:last-child{
-        border-radius: 0 $border-radius $border-radius 0;
+        border-radius: 0 $radius $radius 0;
     }
 }
 
@@ -26,11 +29,11 @@
 
 .table tbody tr:last-child td{
     &:first-child{
-        border-radius: 0 0 0 $border-radius;
+        border-radius: 0 0 0 $radius;
     }
 
     &:last-child{
-        border-radius: 0 0 $border-radius 0;
+        border-radius: 0 0 $radius 0;
     }
 }
 
@@ -50,11 +53,11 @@
 
 .table-selectable tbody tr:hover td{
     cursor: pointer;
-    background: var(--bs-tertiary-bg);
+    background: var(--bs-bg-2);
 }
 
 .table-selectable tbody tr.selected td{
-    background: var(--bs-tertiary-bg);
+    background: var(--bs-bg-2);
 }
 
 .table-selectable .custom-control{
@@ -68,13 +71,13 @@
     margin: -4px -6px;
 
     &:hover{
-        background: var(--bs-secondary-bg);
+        background: var(--bs-bg-3);
     }
 }
 
 @include media-breakpoint-down(md) {
-    .table-responsive-md td,
-    .table-responsive-md th{
+    .md\:table-responsive td,
+    .md\:table-responsive th{
         white-space: nowrap;
     }
 }

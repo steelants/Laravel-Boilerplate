@@ -1,0 +1,53 @@
+@use "sass:map";
+@forward "./tailwind/colors";
+
+// Layout
+$mobile-has-navbar: true !default;
+$mobile-has-tabbar: false !default;
+
+// Breakpoints kept at the Bootstrap 5 values the layout was designed for
+$breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  2xl: 1400px
+) !default;
+
+$container-max-widths: (
+  xs: 360px,
+  sm: 640px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  2xl: 1320px
+) !default;
+
+$radius: 10px !default;
+
+$h2-font-size: 1.875rem !default;
+
+$card-spacer-y: 1rem !default;
+$card-spacer-x: 1rem !default;
+
+$nav-link-padding-y: .5rem !default;
+$nav-link-padding-x: .5rem !default;
+
+// Tailwind like spacing scale: 1 = .25rem, 4 = 1rem, ...
+$spacers: (
+  0: 0,
+) !default;
+
+@for $i from 1 through 20 {
+    $spacers : map.merge($spacers, (
+        $i : 0.25rem * $i
+    ));
+}
+
+@for $i from 1 through 30 {
+    $tmp: 20 + $i * 2;
+    $spacers : map.merge($spacers, (
+        $tmp : 0.25rem * $tmp
+    ));
+}

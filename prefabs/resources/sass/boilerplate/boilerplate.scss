@@ -4,45 +4,164 @@
  * Licensed under MIT (https://github.com/steelants/Laravel-Boilerplate/blob/main/LICENSE)
  */
 
+@use "sass:meta";
+@forward "./settings";
+@use "./settings" as *;
+
+@use "bootstrap/scss/bootstrap" with (
+    $color-mode-type: "data",
+    $enable-container-classes: false,
+    $breakpoints: $breakpoints,
+    $container-max-widths: $container-max-widths,
+    $spacers: $spacers,
+    $radius: $radius,
+    $gray: oklch(60% 0 0),
+    $theme-colors: (
+        "primary": (
+            "base": var(--indigo-600),
+            "fg": light-dark(var(--indigo-600), var(--indigo-400)),
+            "fg-emphasis": light-dark(var(--indigo-800), var(--indigo-200)),
+            "bg": var(--indigo-600),
+            "bg-subtle": light-dark(var(--indigo-100), var(--indigo-900)),
+            "bg-muted": light-dark(var(--indigo-200), var(--indigo-800)),
+            "border": light-dark(var(--indigo-300), var(--indigo-600)),
+            "focus-ring": light-dark(color-mix(in oklch, var(--indigo-600) 50%, var(--bg-body)), color-mix(in oklch, var(--indigo-500) 75%, var(--bg-body))),
+            "contrast": var(--white),
+        ),
+    ),
+    $theme-bgs: (
+        "body": light-dark(var(--white), var(--black)),
+    ),
+    $root-tokens: (
+        --body-font-family: "'Inter', sans-serif",
+        --body-font-size: .875rem,
+        --body-line-height: calc(1.25 / .875),
+        --heading-font-weight: 600,
+        --btn-input-min-height: 0,
+        --btn-input-padding-y: .4375rem,
+        --btn-input-padding-x: .75rem,
+        --btn-input-line-height: 1.25rem,
+        --btn-input-sm-min-height: 0,
+        --btn-input-sm-padding-y: .3125rem,
+        --btn-input-sm-padding-x: .625rem,
+        --btn-input-sm-font-size: .875rem,
+        --btn-input-sm-line-height: 1.25rem,
+        --btn-input-lg-min-height: 0,
+        --btn-input-lg-padding-y: .5rem,
+        --btn-input-lg-padding-x: 1rem,
+        --btn-input-lg-font-size: 1rem,
+    ),
+    $button-tokens: (
+        --btn-font-weight: 500,
+    ),
+    $badge-tokens: (
+        --badge-font-weight: 500,
+        --badge-border-radius: 6px,
+        --badge-font-size: 12px,
+        --badge-padding-x: .375rem,
+        --badge-padding-y: .25rem,
+    ),
+    $menu-tokens: (
+        --menu-min-width: 12rem,
+        --menu-padding-x: .5rem,
+        --menu-padding-y: .5rem,
+        --menu-bg: light-dark(var(--bg-body), #0f0f0f),
+        --menu-border-color: light-dark(color-mix(in oklch, var(--gray-500) 7.5%, transparent), rgba(115, 115, 115, .25)),
+        --menu-border-radius: calc(4px + .5rem),
+        --menu-divider-bg: color-mix(in oklch, var(--gray-500) 10%, transparent),
+        --menu-item-padding-x: .4rem,
+        --menu-item-padding-y: .4rem,
+        --menu-item-border-radius: 4px,
+        --menu-item-active-bg: var(--bg-3),
+        --menu-item-active-color: var(--fg-body),
+    ),
+    $nav-tokens: (
+        --nav-link-padding-x: $nav-link-padding-x,
+        --nav-link-padding-y: $nav-link-padding-y,
+        --nav-link-font-weight: 500,
+    ),
+    $nav-tabs-tokens: (
+        --nav-tabs-border-width: 2px,
+        --nav-tabs-border-radius: 0,
+        --nav-tabs-border-color: var(--bg-3),
+        --nav-tabs-link-hover-border-color: var(--border-color),
+        --nav-tabs-link-active-color: var(--primary-base),
+        --nav-tabs-link-active-bg: transparent,
+        --nav-tabs-link-active-border-color: var(--primary-base),
+    ),
+    $nav-pills-tokens: (
+        --nav-pills-link-border-radius: $radius,
+        --nav-pills-link-active-color: var(--fg-body),
+        --nav-pills-link-active-bg: var(--bg-3),
+    ),
+    $pagination-tokens: (
+        --pagination-color: var(--fg-body),
+        --pagination-bg: transparent,
+        --pagination-border-width: 0,
+        --pagination-hover-color: var(--fg-body),
+        --pagination-active-color: var(--fg-body),
+        --pagination-active-bg: var(--bg-3),
+        --pagination-disabled-color: var(--fg-4),
+        --pagination-disabled-bg: transparent,
+    ),
+    $list-group-tokens: (
+        --list-group-bg: transparent,
+        --list-group-border-color: var(--bg-3),
+        --list-group-item-padding-x: .5rem,
+        --list-group-item-padding-y: .5rem,
+    ),
+    $dialog-tokens: (
+        --dialog-border-width: 1px,
+        --dialog-border-color: rgba(115, 115, 115, .25),
+        --dialog-header-border-width: 0,
+        --dialog-footer-border-width: 0,
+    ),
+    $form-label-tokens: (
+        --label-margin-bottom: .25rem,
+        --label-font-weight: 500,
+    ),
+    $card-tokens: (
+        --card-spacer-y: $card-spacer-y,
+    ),
+    $alert-tokens: (
+        --alert-padding-x: 1rem,
+    ),
+);
+
 @import "@fortawesome/fontawesome-free/css/all.css";
 
-@import "bootstrap/scss/functions";
+// Bootstrap 6 ships its styles in cascade layers. Our styles go into the
+// `custom` layer so Bootstrap helpers and utilities can still override them.
+@layer custom {
+    @include meta.load-css("./quill");
+    @include meta.load-css("./ace");
 
-// Variables
-@import "./tailwind/colors";
-@import "./variables";
-@import "./variables-dark";
+    @include meta.load-css("./misc");
+    @include meta.load-css("./dark-overrides");
 
-// Bootstrap
-@import "bootstrap/scss/bootstrap";
+    @include meta.load-css("./layout/layout");
+    @include meta.load-css("./layout/containers");
+    @include meta.load-css("./layout/layout-nav-default");
+    @include meta.load-css("./layout/layout-nav-mobile");
+    @include meta.load-css("./layout/sidebar");
 
-@import "./quill";
-@import "./ace";
+    @include meta.load-css("./components/nav");
+    @include meta.load-css("./components/tables");
+    @include meta.load-css("./components/snackbar");
+    @include meta.load-css("./components/gantt");
+    @include meta.load-css("./components/sidebar");
+    @include meta.load-css("./components/avatar");
+    @include meta.load-css("./components/button");
+    @include meta.load-css("./components/badge");
+    @include meta.load-css("./components/breadcrumb");
+    @include meta.load-css("./components/dropdown");
+    @include meta.load-css("./components/form");
 
-// Other
-@import "./misc";
-@import "./dark-overrides";
+    @include meta.load-css("./helpers/hover-group");
 
-@import "./layout/layout";
-@import "./layout/containers";
-@import "./layout/layout-nav-default";
-@import "./layout/layout-nav-mobile";
-@import "./layout/sidebar";
+    @include meta.load-css("./responsive");
+}
 
-@import "./components/nav";
-@import "./components/tables";
-@import "./components/snackbar";
-@import "./components/gantt";
-@import "./components/sidebar";
-@import "./components/avatar";
-@import "./components/button";
-@import "./components/badge";
-@import "./components/breadcrumb";
-@import "./components/dropdown";
-@import "./components/form";
-
-@import "./helpers/hover-group";
-
-@import "./utilities/sizing";
-
-@import "./responsive";
+@layer utilities {
+    @include meta.load-css("./utilities/sizing");
+}

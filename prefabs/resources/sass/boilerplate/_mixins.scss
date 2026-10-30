@@ -1,0 +1,17 @@
+@use "bootstrap/scss/layout/breakpoints" as *;
+@forward "bootstrap/scss/layout/breakpoints" show media-breakpoint-up, media-breakpoint-down;
+@forward "bootstrap/scss/layout/containers" show make-container;
+@forward "bootstrap/scss/mixins/border-radius" show border-end-radius;
+@forward "bootstrap/scss/mixins/color-mode";
+
+@mixin desktop(){
+    @include media-breakpoint-up(lg) {
+        @content;
+    }
+}
+
+@mixin mobile(){
+    @include media-breakpoint-down(lg) {
+        @content;
+    }
+}

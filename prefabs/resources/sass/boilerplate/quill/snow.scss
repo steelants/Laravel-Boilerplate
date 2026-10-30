@@ -2,13 +2,13 @@ $themeName: 'snow';
 $tooltipMargin: 8px;
 
 :root {
-  --ql-active-color: var(--bs-body-color);
+  --ql-active-color: var(--bs-fg-body);
   --ql-border-color: var(--bs-border-color);
-  --ql-background-color: var(--bs-body-bg);
-  --ql-inactive-color: var(--bs-secondary);
+  --ql-background-color: var(--bs-bg-body);
+  --ql-inactive-color: var(--bs-fg-3);
   --ql-shadow-color: #ddd;
-  --ql-text-color: var(--bs-body-color);
-  --ql-tooltip-background: var(--bs-body-bg);
+  --ql-text-color: var(--bs-fg-body);
+  --ql-tooltip-background: var(--bs-bg-body);
 }
 
 @import 'core.scss';

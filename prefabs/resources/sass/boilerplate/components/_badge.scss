@@ -40,10 +40,15 @@
 }
 
 .mention {
-    @extend .badge;
+    padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
+    font-size: var(--bs-badge-font-size);
+    font-weight: var(--bs-badge-font-weight);
+    line-height: 1;
+    white-space: nowrap;
+    border-radius: var(--bs-badge-border-radius);
     display: inline-block;
-    color: var(--bs-body-color);
-    background: var(--bs-secondary-bg);
+    color: var(--bs-fg-body);
+    background: var(--bs-bg-3);
     margin-right: 2px;
     user-select: all;
 }

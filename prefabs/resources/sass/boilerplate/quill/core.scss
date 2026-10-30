@@ -103,9 +103,15 @@ $MAX_INDENT: 9 !default;
   }
 
   table {
-    @extend .table;
-    @extend .table-bordered;
-    @extend .table-sm;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+
+    td,
+    th {
+      padding: .25rem;
+      border: var(--bs-border-width) solid var(--bs-border-color);
+    }
   }
 
 

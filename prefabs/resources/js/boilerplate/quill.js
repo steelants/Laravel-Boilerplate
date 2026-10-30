@@ -97,6 +97,8 @@ function createQuillInstance({
                 allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
                 mentionDenotationChars: ['@', '#'],
                 source: buildMentionSource(mentions, tags),
+                mentionContainerClass: 'ql-mention-list-container menu',
+                listItemClass: 'ql-mention-list-item menu-item',
             },
             magicUrl: true,
         }

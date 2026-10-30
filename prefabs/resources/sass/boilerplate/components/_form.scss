@@ -1,3 +1,6 @@
+@use "../settings" as *;
+@use "../mixins" as *;
+
 .card-action {
     padding: 0 $card-spacer-x $card-spacer-y;
     display: flex;
@@ -28,7 +31,7 @@ select[multiple]{
     height: 50px;
 }
 
-.form-select{
+.form-control:is(select){
     cursor: default;
 }
 
@@ -37,30 +40,16 @@ select[multiple]{
     line-height: 1.5;
 }
 
-.form-switch{
+.switch{
     line-height: 1;
 }
 
 .input-group {
     flex-wrap: nowrap;
 
-    &:not(.has-validation) {
-        > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating),
-        >.dropdown-toggle:nth-last-child(n + 3) {
-            .form-control,
-            .form-select{
-                @include border-end-radius(0);
-            }
-        }
-    }
-
-    &.has-validation {
-        > :nth-last-child(n + 3):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating),
-        >.dropdown-toggle:nth-last-child(n + 4) {
-            .form-control,
-            .form-select{
-                @include border-end-radius(0);
-            }
+    > :not(:last-child):not(.menu):not(.form-floating) {
+        .form-control{
+            @include border-end-radius(0);
         }
     }
 }

@@ -1,3 +1,6 @@
+@use "./settings" as *;
+@use "./mixins" as *;
+
 a{
     // text-decoration: none;
 }
@@ -195,7 +198,7 @@ a{
 }
 
 .page-link{
-    border-radius: $pagination-border-radius;
+    border-radius: $radius;
 }
 
 .fa, .fa-solid, .fa-regular, .fa-brands{
@@ -241,16 +244,16 @@ img{
 }
 [data-bs-toggle="collapse"]:hover,
 .btn:hover{
-    &.text-body-tertiary{
-        color: var(--bs-secondary-color) !important;
+    &.fg-4{
+        color: var(--bs-fg-3) !important;
     }
-    &.text-body-secondary{
-        color: var(--bs-body-color) !important;
+    &.fg-3{
+        color: var(--bs-fg-body) !important;
     }
 }
 
 .border-translucent{
-    border-color: var(--#{$prefix}border-color-translucent) !important;
+    border-color: var(--bs-border-color-translucent) !important;
 }
 
 .text-sm{
