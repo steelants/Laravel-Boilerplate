@@ -79,6 +79,8 @@ class InstallCommand extends Command
 
             self::updatePackagesJson();
             self::updateVite();
+            self::appendSASS();
+            self::appendJS();
             self::removeNodeModules();
 
             $this->components->info('Adding Routes');
@@ -287,7 +289,7 @@ class InstallCommand extends Command
 
         $ClassFileContent = file_get_contents($path);
         if (!str_contains($ClassFileContent, $importFileString)) {
-            self::appendFile('resources/sass/app.scss', 'scss.stub', $importFileString);
+            File::append($path, PHP_EOL . self::boilerplateString($importFileString, 'scss') . PHP_EOL);
         }
     }
 
@@ -303,7 +305,7 @@ class InstallCommand extends Command
 
         $ClassFileContent = file_get_contents($path);
         if (!str_contains($ClassFileContent, $importFileString)) {
-            self::appendFile('resources/js/app.js', 'js.stub', $importFileString);
+            File::append($path, PHP_EOL . self::boilerplateString($importFileString, 'js') . PHP_EOL);
         }
     }
 
