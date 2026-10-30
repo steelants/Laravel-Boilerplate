@@ -67,7 +67,9 @@
     color: var(--bs-fg-body);
     // padding: 0.5rem .75rem;
     display: flex;
+    flex-grow: 1;
     align-items: center;
+    justify-content: flex-start;
     cursor: pointer;
 
     &:hover{

@@ -192,7 +192,7 @@
 
             <div class="row g-3">
                 <div class="col-2">
-                    <div class="d-block menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
                             <div class="menu-item">
                                 <x-badge color="{{$item[0]}}" variant="subtle" icon="{{$item[1]}}">{{$item[2]}}</x-badge>
@@ -201,7 +201,7 @@
                     </div>
                 </div>
                 <div class="col-2">
-                    <div class="d-block menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
                             <div class="menu-item">
                                 <x-badge color="{{$item[0]}}" variant="subtle" icon="{{$item[1]}}" size="lg">{{$item[2]}}</x-badge>
@@ -210,7 +210,7 @@
                     </div>
                 </div>
                 <div class="col-2">
-                    <div class="d-block menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
                             <div class="menu-item">
                                 <i class="dropdown-ico {{$item[1]}} fg-{{ BootstrapTheme::theme($item[0]) }}"></i>
@@ -220,7 +220,7 @@
                     </div>
                 </div>
                 <div class="col-2">
-                    <div class="d-block menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
                             <div class="menu-item">
                                 <i class="dropdown-ico {{$item[1]}} fg-emphasis-{{ BootstrapTheme::theme($item[0]) }} bg-subtle-{{ BootstrapTheme::theme($item[0]) }}"></i>
@@ -231,7 +231,7 @@
                 </div>
 
                 <div class="col-2">
-                    <div class="d-block menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
                             <div class="menu-item">
                                 <i class="dropdown-ico {{$item[1]}} fg-{{ BootstrapTheme::theme($item[0]) }} bg-subtle-{{ BootstrapTheme::theme($item[0]) }}"></i>
@@ -242,7 +242,7 @@
                 </div>
 
                 <div class="col-2">
-                    <div class="d-block menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
                             <div class="menu-item">
                                 <i class="dropdown-ico {{$item[1]}} fg-{{ BootstrapTheme::theme($item[0]) }} bg-subtle-{{ BootstrapTheme::theme($item[0]) }} border border-subtle-{{ BootstrapTheme::theme($item[0]) }} small"></i>
@@ -253,7 +253,7 @@
                 </div>
 
                 <div class="col-2">
-                    <div class="d-block menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
                             <div class="menu-item">
                                 <i class="dropdown-ico {{$item[1]}} bg-{{ BootstrapTheme::theme($item[0]) }} fg-contrast-{{ BootstrapTheme::theme($item[0]) }}"></i>
@@ -277,15 +277,18 @@
 
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a class="breadcrumb-link" href="#">Home</a></li>
+                    <li class="breadcrumb-divider" aria-hidden="true"></li>
                     <li class="breadcrumb-item active" aria-current="page">Library</li>
                 </ol>
             </nav>
 
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Library</a></li>
+                    <li class="breadcrumb-item"><a class="breadcrumb-link" href="#">Home</a></li>
+                    <li class="breadcrumb-divider" aria-hidden="true"></li>
+                    <li class="breadcrumb-item"><a class="breadcrumb-link" href="#">Library</a></li>
+                    <li class="breadcrumb-divider" aria-hidden="true"></li>
                     <li class="breadcrumb-item active" aria-current="page">Data</li>
                 </ol>
             </nav>

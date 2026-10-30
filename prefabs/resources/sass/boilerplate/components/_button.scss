@@ -38,6 +38,7 @@
 .btn-toggle{
     display: inline-flex;
     align-items: center;
+    justify-content: flex-start;
 }
 
 .btn-toggle::before {

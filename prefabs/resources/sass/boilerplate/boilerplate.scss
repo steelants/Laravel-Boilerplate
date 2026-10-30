@@ -118,6 +118,11 @@
         --dialog-header-border-width: 0,
         --dialog-footer-border-width: 0,
     ),
+    $breadcrumb-tokens: (
+        --breadcrumb-link-padding-x: .25rem,
+        --breadcrumb-link-padding-y: 0,
+        --breadcrumb-link-hover-bg: transparent,
+    ),
     $card-tokens: (
         --card-spacer-y: $card-spacer-y,
     ),
@@ -126,7 +131,10 @@
     ),
 );
 
-@import "@fortawesome/fontawesome-free/css/all.css";
+// Unlayered CSS would win over every layer, Font Awesome goes below our styles.
+@layer content {
+    @include meta.load-css("@fortawesome/fontawesome-free/css/all");
+}
 
 // Bootstrap 6 ships its styles in cascade layers. Our styles go into the
 // `custom` layer so Bootstrap helpers and utilities can still override them.

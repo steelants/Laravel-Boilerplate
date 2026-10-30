@@ -24,10 +24,10 @@
     text-overflow: ellipsis;
 }
 
+// spacing to the label comes from the .menu-item gap
 .dropdown-ico,
 .dropdown-item-icon{
     color: var(--bs-fg-4);
-    margin-right: .5rem;
     border-radius: var(--bs-radius-5);
 }
 
@@ -39,7 +39,7 @@
     font-weight: 600;
     text-align: center;
     line-height: 2rem;
-    margin-right: .75rem;
+    margin-right: .25rem;
     font-size: .875rem;
 
     img{
@@ -49,7 +49,7 @@
 }
 
 .menu-item .check {
-    margin-right: .75rem;
+    margin-right: .25rem;
     margin-top: 0;
 }
 

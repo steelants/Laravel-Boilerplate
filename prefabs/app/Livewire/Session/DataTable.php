@@ -45,8 +45,8 @@ class DataTable extends DataTableComponent
                 'action'      => 'logout',
                 'parameters'  => $item['id'],
                 'text'        => __('Logout'),
-                'actionClass' => 'text-danger',
-                'iconClass'   => 'fa-solid fa-trash text-danger',
+                'actionClass' => 'fg-danger',
+                'iconClass'   => 'fa-solid fa-trash fg-danger',
                 'confirm'     => __('Are you sure?'),
             ],
         ];
