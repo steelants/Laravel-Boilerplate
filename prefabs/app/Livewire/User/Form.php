@@ -26,7 +26,7 @@ class Form extends FormComponent
     #[Computed()]
     public function fields()
     {
-        return ['name', 'email', 'password', 'password_confirmation'];
+        return ['name', 'email', 'password'];
     }
 
     public function properties()
@@ -54,8 +54,7 @@ class Form extends FormComponent
     public function types()
     {
         return [
-            'password'              => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'password',
         ];
     }
 
@@ -63,10 +62,9 @@ class Form extends FormComponent
     public function labels()
     {
         return [
-            'name'                  => __('Name'),
-            'email'                 => __('Email'),
-            'password'              => __('Password'),
-            'password_confirmation' => __('Confirm Password'),
+            'name'     => __('Name'),
+            'email'    => __('Email'),
+            'password' => __('Password'),
         ];
     }
 
