@@ -1,6 +1,6 @@
 @props(['value'])
 
-<span {{ $attributes->class(['d-inline-flex', 'align-items-center', 'gap-1', 'mw-100']) }} x-data="copyToClipboard(@js((string) $value))">
+<span {{ $attributes->class(['d-inline-flex', 'align-items-center', 'gap-1', 'mw-100']) }} x-data="copyToClipboardData(@js((string) $value))">
     @if ($slot->isNotEmpty())
         <span class="text-truncate">{{ $slot }}</span>
     @endif
