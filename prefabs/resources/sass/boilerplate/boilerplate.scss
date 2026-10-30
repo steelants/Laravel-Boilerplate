@@ -92,6 +92,9 @@
         --nav-tabs-link-active-border-color: var(--primary-base),
     ),
     $nav-pills-tokens: (
+        --nav-pills-bg: transparent,
+        --nav-pills-padding: 0,
+        --nav-pills-border-radius: 0,
         --nav-pills-link-border-radius: $radius,
         --nav-pills-link-active-color: var(--fg-body),
         --nav-pills-link-active-bg: var(--bg-3),
@@ -122,6 +125,9 @@
         --breadcrumb-link-padding-x: .25rem,
         --breadcrumb-link-padding-y: 0,
         --breadcrumb-link-hover-bg: transparent,
+    ),
+    $switch-tokens: (
+        --switch-height: 1rem,
     ),
     $card-tokens: (
         --card-spacer-y: $card-spacer-y,

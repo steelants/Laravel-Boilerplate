@@ -13,6 +13,19 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    build: {
+        // Ace loads its modes and workers on demand, the biggest ones (xquery worker, php/blade mode) exceed the default 500 kB
+        chunkSizeWarningLimit: 1700,
+        rollupOptions: {
+            onwarn(warning, warn) {
+                // eval inside ace-builds' CoffeeScript worker is vendor code we cannot change
+                if (warning.code === 'EVAL' && warning.id?.includes('/ace-builds/')) {
+                    return;
+                }
+                warn(warning);
+            },
+        },
+    },
     css: {
         postcss: {
             plugins: [

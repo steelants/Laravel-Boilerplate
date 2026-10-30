@@ -1,5 +1,7 @@
-$themeName: 'snow';
-$tooltipMargin: 8px;
+@use 'core';
+@use 'base';
+@use 'snow/toolbar';
+@use 'snow/tooltip';
 
 :root {
   --ql-active-color: var(--bs-fg-body);
@@ -10,11 +12,6 @@ $tooltipMargin: 8px;
   --ql-text-color: var(--bs-fg-body);
   --ql-tooltip-background: var(--bs-bg-body);
 }
-
-@import 'core.scss';
-@import 'base';
-@import 'snow/toolbar';
-@import 'snow/tooltip';
 
 // .ql-snow {
 //   a {

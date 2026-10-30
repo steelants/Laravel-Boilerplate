@@ -1,5 +1,5 @@
-@import "./quill/snow.scss";
-@import "quill-table-ui/src/index.scss";
+@use "./quill/snow";
+@use "quill-table-ui/src/index";
 // @import "quill-mention/dist/quill.mention.min.css";
 
 .quill-editor-wrap {

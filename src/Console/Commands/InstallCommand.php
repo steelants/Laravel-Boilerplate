@@ -185,7 +185,6 @@ class InstallCommand extends Command
         $packages['dependencies']['@fortawesome/fontawesome-free'] = '^7.0';
         unset($packages['dependencies']['@popperjs/core']);
         $packages['dependencies']['@floating-ui/dom'] = '^1.7.6';
-        $packages['dependencies']['vanilla-calendar-pro'] = '^3.4.0';
         $packages['dependencies']['vite'] = '^6.2.0';
         $packages['dependencies']['laravel-vite-plugin'] = '^1.0.0';
         $packages['dependencies']['quill'] = '^2.0.3';
