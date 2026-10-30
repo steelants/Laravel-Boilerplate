@@ -1,3 +1,4 @@
+@use('SteelAnts\LaravelBoilerplate\Support\BootstrapTheme')
 @props(['value' => null, 'max' => 100, 'label' => null, 'color' => 'primary', 'percent' => true, 'height' => null])
 
 @php
@@ -10,7 +11,7 @@
         <div class="d-flex justify-content-between gap-3 small mb-1">
             <span>{{ $label }}</span>
             @if ($percent && !$indeterminate)
-                <span class="text-body-secondary">{{ $percentage }}&nbsp;%</span>
+                <span class="fg-3">{{ $percentage }}&nbsp;%</span>
             @endif
         </div>
     @endif
@@ -22,9 +23,9 @@
         @if ($height) style="height: {{ $height }}" @endif
     >
         @if ($indeterminate)
-            <div class="progress-bar progress-bar-striped progress-bar-animated w-100p bg-{{ $color }}"></div>
+            <div class="progress-bar progress-bar-striped progress-bar-animated w-100p bg-{{ BootstrapTheme::theme($color) }}"></div>
         @else
-            <div class="progress-bar bg-{{ $color }}" style="width: {{ $percentage }}%"></div>
+            <div class="progress-bar bg-{{ BootstrapTheme::theme($color) }}" style="width: {{ $percentage }}%"></div>
         @endif
     </div>
 </div>

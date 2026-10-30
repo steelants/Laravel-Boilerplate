@@ -8,7 +8,7 @@
                         {{ session()->get('secret') }}
                     </code>
                 @else
-                    <form action="{{ route('profile.api.create') }}" class="row row-cols-lg-auto g-3 align-items-center mb-3" method="post">
+                    <form action="{{ route('profile.api.create') }}" class="row lg:row-cols-auto g-3 align-items-center mb-3" method="post">
                         @csrf
                         <div class="col-12">
                             <label class="visually-hidden" for="token-name">{{ __('Name') }}</label>
@@ -18,7 +18,7 @@
                         </div>
                         <x-form::input class="form-control" type="date" name="expires_at" id="expires_at" min="{{ now()->toDateString('Y-m-d') }}" placeholder="{{ __('Expire at') }}" />
                         <div class="col-12">
-                            <button class="btn btn-primary" type="submit">{{ __('Create') }}</button>
+                            <button class="btn btn-solid theme-primary" type="submit">{{ __('Create') }}</button>
                         </div>
                         <div class="col-12">
                             @error('token_name')
@@ -59,7 +59,7 @@
                                 <form action="{{ route('profile.api.remove', ['token_id' => $token->id]) }}" method="post">
                                     @method('DELETE')
                                     @csrf
-                                    <input class="btn btn-danger" type="submit" value="{{ __('Remove') }}" />
+                                    <input class="btn btn-solid theme-danger" type="submit" value="{{ __('Remove') }}" />
                                 </form>
                             </td>
                         </tr>

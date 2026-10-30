@@ -1,3 +1,5 @@
+@use "../mixins" as *;
+
 @include desktop(){
     .hover-group{
         .hover-hidden{
@@ -31,10 +33,10 @@
 }
 
 .hover{
-    &\:text-body-secondary{
-        color: var(--bs-secondary-color) !important;
+    &\:fg-3{
+        color: var(--bs-fg-3) !important;
     }
-    &\:text-body-tertiary{
-        color: var(--bs-tertiary-color) !important;
+    &\:fg-4{
+        color: var(--bs-fg-4) !important;
     }
 }

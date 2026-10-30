@@ -11,5 +11,5 @@
         @if ($relative) title="{{ $date->isoFormat($format) }}" x-data="bsTooltip()" @endif
     >{{ $relative ? $date->diffForHumans() : $date->isoFormat($format) }}</time>
 @else
-    <span {{ $attributes->class(['text-body-tertiary']) }}>{{ $slot->isNotEmpty() ? $slot : '—' }}</span>
+    <span {{ $attributes->class(['fg-4']) }}>{{ $slot->isNotEmpty() ? $slot : '—' }}</span>
 @endif

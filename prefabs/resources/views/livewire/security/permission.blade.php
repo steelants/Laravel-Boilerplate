@@ -5,29 +5,29 @@
 
         <div class="mb-3">
             @forelse($allRoles as $role)
-                <div class="form-check mb-2">
+                <div class="form-field mb-2">
                     <input
-                        class="form-check-input"
+                        class="check"
                         type="checkbox"
                         id="role_{{ $role->id }}"
                         value="{{ $role->id }}"
                         wire:click="toggleRole({{ $role->id }})"
                         @checked(in_array($role->id, $assignedRoleIds))
                     />
-                    <label class="form-check-label" for="role_{{ $role->id }}">
+                    <label for="role_{{ $role->id }}">
                         {{ $role->name }}
                         @if($role->scopes->isNotEmpty())
-                            <small class="text-muted ms-1">({{ $role->scopes->pluck('ability')->join(', ') }})</small>
+                            <small class="fg-3 ms-1">({{ $role->scopes->pluck('ability')->join(', ') }})</small>
                         @endif
                     </label>
                 </div>
             @empty
-                <p class="text-muted">{{ __('No roles defined.') }}</p>
+                <p class="fg-3">{{ __('No roles defined.') }}</p>
             @endforelse
         </div>
 
         @if(!empty($user->scope_applied))
-            <p class="text-muted small mb-1">{{ __('Applied scopes') }}:</p>
+            <p class="fg-3 small mb-1">{{ __('Applied scopes') }}:</p>
             <div class="d-flex flex-wrap gap-1">
                 @foreach($user->scope_applied as $scope)
                     <span class="badge bg-secondary">{{ $scope }}</span>
@@ -46,12 +46,12 @@
                     <button
                         wire:click="removeScope('{{ $scope }}')"
                         type="button"
-                        class="btn-close btn-close-white btn-sm ms-1"
+                        class="btn-close btn-sm ms-1"
                         aria-label="{{ __('Remove') }}"
                     ></button>
                 </span>
             @empty
-                <span class="text-muted small">{{ __('No scopes assigned.') }}</span>
+                <span class="fg-3 small">{{ __('No scopes assigned.') }}</span>
             @endforelse
         </div>
 
@@ -63,7 +63,7 @@
                 wire:keydown.enter="addScope"
                 placeholder="{{ __('e.g. edit-posts') }}"
             />
-            <button wire:click="addScope" type="button" class="btn btn-primary">
+            <button wire:click="addScope" type="button" class="btn btn-solid theme-primary">
                 {{ __('Add') }}
             </button>
         </div>

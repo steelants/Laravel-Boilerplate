@@ -17,7 +17,7 @@ it('renders action button with loading state scoped to its target', function () 
         ->toContain('wire:confirm="Sure?"')
         ->toContain('wire:loading.attr="disabled"')
         ->toContain('wire:target="remove(5)"')
-        ->toContain('btn-danger')
+        ->toContain('btn-solid theme-danger')
         ->toContain('spinner-border');
 });
 
@@ -47,7 +47,7 @@ it('renders alert with title, actions and close button', function () {
     BLADE);
 
     expect($html)
-        ->toContain('alert-danger')
+        ->toContain('alert theme-danger')
         ->toContain('fa-solid fa-times-circle')
         ->toContain('Failed')
         ->toContain('Something went wrong.')
@@ -57,8 +57,8 @@ it('renders alert with title, actions and close button', function () {
 
 it('renders icon tile, stat and empty state', function () {
     expect(Blade::render('<x-boilerplate::icon-tile icon="fa-solid fa-user" color="success" />'))
-        ->toContain('bg-success-subtle')
-        ->toContain('text-success-emphasis')
+        ->toContain('bg-subtle-success')
+        ->toContain('fg-emphasis-success')
         ->toContain('w-10 h-10');
 
     expect(Blade::render('<x-boilerplate::stat label="Users" value="42" icon="fa-solid fa-user" color="green" />'))
@@ -66,7 +66,7 @@ it('renders icon tile, stat and empty state', function () {
         ->toContain('42');
 
     expect(Blade::render('<x-boilerplate::empty-state title="Nothing here" description="Add first item" />'))
-        ->toContain('bg-secondary-subtle')
+        ->toContain('bg-subtle-secondary')
         ->toContain('Nothing here');
 });
 
@@ -91,11 +91,12 @@ it('renders dropdown with items and divider', function () {
     BLADE);
 
     expect($html)
-        ->toContain('dropdown-menu dropdown-menu-end')
+        ->toContain('data-bs-placement="bottom-end"')
+        ->toContain('class="menu"')
         ->toContain('href="/edit"')
-        ->toContain('dropdown-divider')
+        ->toContain('menu-divider')
         ->toContain('wire:click="remove"')
-        ->toContain('text-danger');
+        ->toContain('fg-danger');
 });
 
 it('renders detail list from items and slot', function () {

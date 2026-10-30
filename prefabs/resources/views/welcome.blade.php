@@ -21,10 +21,10 @@
                     </a>
                 @endif
             @endauth
-            <label class="dropdown-item ms-2">
+            <label class="menu-item ms-2">
                 <i class="dropdown-ico fa-solid fa-moon"></i>
-                <div class="form-switch lh-1">
-                    <input class="form-check-input me-0" id="datk-theme" onchange="toggleDatkTheme()" type="checkbox">
+                <div class="switch">
+                    <input id="datk-theme" onchange="toggleDatkTheme()" type="checkbox">
                 </div>
             </label>
         </nav>
@@ -60,13 +60,13 @@
                 <div class="layout-nav " id="layout-nav">
                     <div class="sidebar">
                         <div class="sidebar-header">
-                            <div class="dropdown">
+                            <div>
                                 <div class="d-flex align-items-center">
-                                    <div class="app-nav-header flex-grow-1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="app-nav-header flex-grow-1" data-bs-toggle="menu" aria-expanded="false">
                                         <div class="app-nav-logo random-bg-2">LB</div>
                                         <div class="app-nav-header-content nav-collapsed-hide">
                                             <div class="fw-semibold">Laravel Boilerplate</div>
-                                            <small class="text-body-secondary">steelants.cz</small>
+                                            <small class="fg-3">steelants.cz</small>
                                         </div>
                                         <div class="ms-auto nav-collapsed-hide">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -78,25 +78,25 @@
                                         </div>
                                     </div>
 
-                                    <div class="dropdown-menu" style="">
-                                        <a class="dropdown-item" href="#">
+                                    <div class="menu" style="">
+                                        <a class="menu-item" href="#">
                                             <div class="dropdown-img random-bg-2">
                                                 SA
                                             </div>
 
                                             <div class="lh-1">
                                                 <div class="fw-semibold">Steelants</div>
-                                                <small class="text-body-secondary">{{ __('1 member') }}</small>
+                                                <small class="fg-3">{{ __('1 member') }}</small>
                                             </div>
                                         </a>
-                                        <a class="dropdown-item" href="#">
+                                        <a class="menu-item" href="#">
 
                                             <div class="dropdown-img">
                                                 <img src="#storage/images/logo.png" width="2rem" height="2rem">
                                             </div>
                                             <div class="lh-1">
                                                 <div class="fw-semibold">Anthill</div>
-                                                <small class="text-body-secondary">{{ __('42 members') }}</small>
+                                                <small class="fg-3">{{ __('42 members') }}</small>
                                             </div>
                                         </a>
                                     </div>
@@ -126,15 +126,15 @@
                                 </li>
                             </ul>
 
-                            <div class="dropup">
-                                <a class="app-nav-user" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div>
+                                <a class="app-nav-user" data-bs-toggle="menu" data-bs-placement="top-start" aria-expanded="false">
                                     <div class="avatar avatar-md random-bg-5 app-nav-profile" title=" Test User">
                                         TU
                                     </div>
 
                                     <div class="app-nav-header-content nav-collapsed-hide">
                                         <div class="fw-semibold">Test User</div>
-                                        <small class="text-body-secondary">test@example.com</small>
+                                        <small class="fg-3">test@example.com</small>
                                     </div>
                                     <div class="ms-auto nav-collapsed-hide">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -146,36 +146,36 @@
                                     </div>
                                 </a>
 
-                                <div class="dropdown-menu" style="">
-                                    <div class="dropdown-header d-flex align-items-center">
+                                <div class="menu" style="">
+                                    <div class="menu-header d-flex align-items-center">
                                         <div class="fw-semibold me-auto">Test User</div>
-                                        <small class="text-body-tertiary">v1.23</small>
+                                        <small class="fg-4">v1.23</small>
                                     </div>
 
-                                    <a class="dropdown-item" href="#profile">
+                                    <a class="menu-item" href="#profile">
                                         <i class="dropdown-ico  fa-solid fa-user"></i>
                                         {{ __('Profile') }}
                                     </a>
 
-                                    <label class="dropdown-item">
+                                    <label class="menu-item">
                                         <i class="dropdown-ico fa-solid fa-moon"></i>
                                         <div class="me-auto">{{ __('Dark Mode') }}</div>
-                                        <div class="form-switch lh-1">
-                                            <input class="form-check-input me-0" id="datk-theme" onchange="toggleDatkTheme()"
+                                        <div class="switch">
+                                            <input id="datk-theme" onchange="toggleDatkTheme()"
                                                 type="checkbox">
                                         </div>
                                     </label>
 
-                                    <a class="dropdown-item" href="#profile/api">
+                                    <a class="menu-item" href="#profile/api">
                                         <i class="dropdown-ico  fa-solid fa-server"></i>
                                         {{ __('Api Tokens') }}
                                     </a>
 
-                                    <hr class="dropdown-divider">
+                                    <hr class="menu-divider">
 
-                                    <a class="dropdown-item" href="#logout"
+                                    <a class="menu-item" href="#logout"
                                         onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                        <i class="dropdown-ico  fa-solid fa-sign-out-alt text-danger"></i>
+                                        <i class="dropdown-ico  fa-solid fa-sign-out-alt fg-danger"></i>
                                         {{ __('Logout') }}
                                     </a>
 
@@ -189,7 +189,7 @@
                         <div class="container-xl">
                             <div class="page-header">
                                 <h1>{{ __('Welcome Back !') }}</h1>
-                                <a class="btn btn-primary" href="#home"><i class="fa-solid fa-plus me-2"></i> {{ __('Page Action') }}</a>
+                                <a class="btn btn-solid theme-primary" href="#home"><i class="fa-solid fa-plus me-2"></i> {{ __('Page Action') }}</a>
                             </div>
 
 							<x-form::quill />

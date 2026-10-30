@@ -349,7 +349,7 @@ class MakeCrudCommand extends Command
                 />
             @endif
         @endforeach
-        <x-form::button class="btn-primary" type="submit">
+        <x-form::button class="btn-solid theme-primary" type="submit">
             {{ !empty($this->modelId) ? __('Update') : __('Create') }}
         </x-form::button>
     </x-form::form>
@@ -453,7 +453,7 @@ BLADE;
             }
         }
 
-        $content .= "\t\t<x-form::button class=\"btn-primary\" type=\"submit\">@if(\$action == 'update') {{__('Update')}} @else {{__('Create')}} @endif</x-form::button>\n";
+        $content .= "\t\t<x-form::button class=\"btn-solid theme-primary\" type=\"submit\">@if(\$action == 'update') {{__('Update')}} @else {{__('Create')}} @endif</x-form::button>\n";
         $content .= "\t</x-form::form>\n";
         $content .= '</div>';
 

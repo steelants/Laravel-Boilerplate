@@ -1,3 +1,6 @@
+@use "../settings" as *;
+@use "../mixins" as *;
+
 .nav{
     gap: 2px;
 }
@@ -5,8 +8,8 @@
 .layout-nav,
 .layout-subnav{
     width: 15rem;
-    background: var(--bs-tertiary-bg);
-    border-right: 1px solid var(--bs-secondary-bg);
+    background: var(--bs-bg-2);
+    border-right: 1px solid var(--bs-bg-3);
     flex-shrink: 0;
 
     // flex-shrink: 0;

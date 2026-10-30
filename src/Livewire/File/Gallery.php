@@ -132,7 +132,7 @@ class Gallery extends Component
     {
         return <<<'HTML'
         <div class="text-center py-10">
-            <div class="spinner-border text-secondary" role="status"></div>
+            <div class="spinner-border fg-secondary" role="status"></div>
         </div>
         HTML;
     }

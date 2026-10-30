@@ -1,8 +1,9 @@
+@use('SteelAnts\LaravelBoilerplate\Support\BootstrapTheme')
 <x-layout-app>
     <div class="container-xl">
         <div class="page-header">
             <h1 class="hide-mobile">Welcolm Back !</h1>
-            <a class="btn btn-primary" href="{{ url('home') }}"><i class="fa-solid fa-plus me-2"></i> Page Action</a>
+            <a class="btn btn-solid theme-primary" href="{{ url('home') }}"><i class="fa-solid fa-plus me-2"></i> Page Action</a>
         </div>
     </div>
     <div class="container-xl">
@@ -103,7 +104,7 @@
         <div class="my-4">
             <h4>Buttons</h4>
             @foreach ($themes as $theme)
-                        <button type="button" class="btn btn-{{$theme}}">{{ucfirst($theme)}}</button>
+                        <button type="button" class="btn {{ BootstrapTheme::button($theme) }}">{{ucfirst($theme)}}</button>
                     @endforeach
             <button type="button" class="btn">Button</button>
             <button type="button" class="btn btn-link">Link</button>
@@ -113,7 +114,7 @@
             <div data-bs-theme="dark">
                 <div class="bg-body p-4">
                     @foreach ($themes as $theme)
-                        <button type="button" class="btn btn-{{$theme}}">{{ucfirst($theme)}}</button>
+                        <button type="button" class="btn {{ BootstrapTheme::button($theme) }}">{{ucfirst($theme)}}</button>
                     @endforeach
                     <button type="button" class="btn">Button</button>
                 </div>
@@ -121,8 +122,8 @@
 
             <br>
             <br>
-            <button type="button" class="btn btn-light btn-sq"><i class="fa-solid fa-angle-double-up"></i></button>
-            <button type="button" class="btn btn-sm btn-light"><i class="fa-solid fa-angle-down me-2"></i><small>System</small></button>
+            <button type="button" class="btn btn-subtle theme-secondary btn-sq"><i class="fa-solid fa-angle-double-up"></i></button>
+            <button type="button" class="btn btn-sm btn-subtle theme-secondary"><i class="fa-solid fa-angle-down me-2"></i><small>System</small></button>
             <button type="button" class="btn btn-sq">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
@@ -131,7 +132,7 @@
             <br>
             <div class="d-flex gap-2 my-2">
                 <input type="text" class="form-control w-auto">
-                <button type="button" class="btn btn-light">Light</button>
+                <button type="button" class="btn btn-subtle theme-secondary">Light</button>
                 <button type="button" class="btn border">Light</button>
             </div>
             <button type="button" class="btn btn-sm border">Small</button>
@@ -191,49 +192,38 @@
 
             <div class="row g-3">
                 <div class="col-2">
-                    <div class="d-block dropdown-menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
-                            <div class="dropdown-item">
+                            <div class="menu-item">
                                 <x-badge color="{{$item[0]}}" variant="subtle" icon="{{$item[1]}}">{{$item[2]}}</x-badge>
                             </div>
                         @endforeach
                     </div>
                 </div>
                 <div class="col-2">
-                    <div class="d-block dropdown-menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
-                            <div class="dropdown-item">
+                            <div class="menu-item">
                                 <x-badge color="{{$item[0]}}" variant="subtle" icon="{{$item[1]}}" size="lg">{{$item[2]}}</x-badge>
                             </div>
                         @endforeach
                     </div>
                 </div>
                 <div class="col-2">
-                    <div class="d-block dropdown-menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
-                            <div class="dropdown-item">
-                                <i class="dropdown-ico {{$item[1]}} text-{{$item[0]}}"></i>
+                            <div class="menu-item">
+                                <i class="dropdown-ico {{$item[1]}} fg-{{ BootstrapTheme::theme($item[0]) }}"></i>
                                 {{$item[2]}}
                             </div>
                         @endforeach
                     </div>
                 </div>
                 <div class="col-2">
-                    <div class="d-block dropdown-menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
-                            <div class="dropdown-item">
-                                <i class="dropdown-ico {{$item[1]}} text-{{$item[0]}}-emphasis bg-{{$item[0]}}-subtle"></i>
-                                {{$item[2]}}
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                <div class="col-2">
-                    <div class="d-block dropdown-menu position-static">
-                        @foreach ($priorities as $item)
-                            <div class="dropdown-item">
-                                <i class="dropdown-ico {{$item[1]}} text-{{$item[0]}} bg-{{$item[0]}}-subtle"></i>
+                            <div class="menu-item">
+                                <i class="dropdown-ico {{$item[1]}} fg-emphasis-{{ BootstrapTheme::theme($item[0]) }} bg-subtle-{{ BootstrapTheme::theme($item[0]) }}"></i>
                                 {{$item[2]}}
                             </div>
                         @endforeach
@@ -241,10 +231,10 @@
                 </div>
 
                 <div class="col-2">
-                    <div class="d-block dropdown-menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
-                            <div class="dropdown-item">
-                                <i class="dropdown-ico {{$item[1]}} text-{{$item[0]}} bg-{{$item[0]}}-subtle border border-{{$item[0]}}-subtle small"></i>
+                            <div class="menu-item">
+                                <i class="dropdown-ico {{$item[1]}} fg-{{ BootstrapTheme::theme($item[0]) }} bg-subtle-{{ BootstrapTheme::theme($item[0]) }}"></i>
                                 {{$item[2]}}
                             </div>
                         @endforeach
@@ -252,10 +242,21 @@
                 </div>
 
                 <div class="col-2">
-                    <div class="d-block dropdown-menu position-static">
+                    <div class="menu show position-static">
                         @foreach ($priorities as $item)
-                            <div class="dropdown-item">
-                                <i class="dropdown-ico {{$item[1]}} text-bg-{{$item[0]}}"></i>
+                            <div class="menu-item">
+                                <i class="dropdown-ico {{$item[1]}} fg-{{ BootstrapTheme::theme($item[0]) }} bg-subtle-{{ BootstrapTheme::theme($item[0]) }} border border-subtle-{{ BootstrapTheme::theme($item[0]) }} small"></i>
+                                {{$item[2]}}
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="col-2">
+                    <div class="menu show position-static">
+                        @foreach ($priorities as $item)
+                            <div class="menu-item">
+                                <i class="dropdown-ico {{$item[1]}} bg-{{ BootstrapTheme::theme($item[0]) }} fg-contrast-{{ BootstrapTheme::theme($item[0]) }}"></i>
                                 {{$item[2]}}
                             </div>
                         @endforeach
@@ -276,15 +277,18 @@
 
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a class="breadcrumb-link" href="#">Home</a></li>
+                    <li class="breadcrumb-divider" aria-hidden="true"></li>
                     <li class="breadcrumb-item active" aria-current="page">Library</li>
                 </ol>
             </nav>
 
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Library</a></li>
+                    <li class="breadcrumb-item"><a class="breadcrumb-link" href="#">Home</a></li>
+                    <li class="breadcrumb-divider" aria-hidden="true"></li>
+                    <li class="breadcrumb-item"><a class="breadcrumb-link" href="#">Library</a></li>
+                    <li class="breadcrumb-divider" aria-hidden="true"></li>
                     <li class="breadcrumb-item active" aria-current="page">Data</li>
                 </ol>
             </nav>
@@ -292,50 +296,50 @@
 
         <div class="my-4">
             <h4>Alert Test</h4>
-            <p class="text-muted mb-2">Snackbar — HTTP redirect (<code>->reload()</code>)</p>
+            <p class="fg-3 mb-2">Snackbar — HTTP redirect (<code>->reload()</code>)</p>
             <div class="d-flex gap-2 flex-wrap mb-3">
                 @foreach(['success','error','warning','info'] as $type)
-                    <a href="{{ route('home') }}" class="btn btn-sm btn-outline-{{ $type === 'error' ? 'danger' : $type }}">
+                    <a href="{{ route('home') }}" class="btn btn-sm {{ BootstrapTheme::button('outline-' . $type) }}">
                         {{ ucfirst($type) }}
                     </a>
                 @endforeach
             </div>
-            <p class="text-muted mb-2">Inline — HTTP redirect (<code>->inline()->reload()</code>)</p>
+            <p class="fg-3 mb-2">Inline — HTTP redirect (<code>->inline()->reload()</code>)</p>
             <div class="d-flex gap-2 flex-wrap mb-3">
                 @foreach(['success','error','warning','info'] as $type)
-                    <a href="{{ route('home') }}" class="btn btn-sm btn-outline-{{ $type === 'error' ? 'danger' : $type }}">
+                    <a href="{{ route('home') }}" class="btn btn-sm {{ BootstrapTheme::button('outline-' . $type) }}">
                         {{ ucfirst($type) }}
                     </a>
                 @endforeach
             </div>
-            <p class="text-muted mb-2">Livewire snackbar (<code>->now()</code>)</p>
+            <p class="fg-3 mb-2">Livewire snackbar (<code>->now()</code>)</p>
             @livewire('test')
         </div>
 
         <div class="my-4">
             <h4>Alerts</h4>
-            <div class="alert alert-primary" role="alert">
+            <div class="alert theme-primary" role="alert">
                 A simple primary alert—check it out!
             </div>
-            <div class="alert alert-secondary" role="alert">
+            <div class="alert theme-secondary" role="alert">
                 A simple secondary alert—check it out!
             </div>
-            <div class="alert alert-success" role="alert">
+            <div class="alert theme-success" role="alert">
                 A simple success alert—check it out!
             </div>
-            <div class="alert alert-danger" role="alert">
+            <div class="alert theme-danger" role="alert">
                 A simple danger alert—check it out!
             </div>
-            <div class="alert alert-warning" role="alert">
+            <div class="alert theme-warning" role="alert">
                 A simple warning alert—check it out!
             </div>
-            <div class="alert alert-info" role="alert">
+            <div class="alert theme-info" role="alert">
                 A simple info alert—check it out!
             </div>
-            <div class="alert alert-light" role="alert">
+            <div class="alert theme-secondary" role="alert">
                 A simple light alert—check it out!
             </div>
-            <div class="alert alert-dark" role="alert">
+            <div class="alert theme-inverse" role="alert">
                 A simple dark alert—check it out!
             </div>
         </div>
@@ -361,14 +365,14 @@
 
         <div class="my-4">
             <h4>Colors</h4>
-            <div class="text-bg-primary p-3">Primary with contrasting color</div>
-            <div class="text-bg-secondary p-3">Secondary with contrasting color</div>
-            <div class="text-bg-success p-3">Success with contrasting color</div>
-            <div class="text-bg-danger p-3">Danger with contrasting color</div>
-            <div class="text-bg-warning p-3">Warning with contrasting color</div>
-            <div class="text-bg-info p-3">Info with contrasting color</div>
-            <div class="text-bg-light p-3">Light with contrasting color</div>
-            <div class="text-bg-dark p-3">Dark with contrasting color</div>
+            <div class="bg-primary fg-contrast-primary p-3">Primary with contrasting color</div>
+            <div class="bg-secondary fg-contrast-secondary p-3">Secondary with contrasting color</div>
+            <div class="bg-success fg-contrast-success p-3">Success with contrasting color</div>
+            <div class="bg-danger fg-contrast-danger p-3">Danger with contrasting color</div>
+            <div class="bg-warning fg-contrast-warning p-3">Warning with contrasting color</div>
+            <div class="bg-info fg-contrast-info p-3">Info with contrasting color</div>
+            <div class="bg-secondary fg-contrast-secondary p-3">Light with contrasting color</div>
+            <div class="bg-inverse fg-contrast-inverse p-3">Dark with contrasting color</div>
         </div>
     </div>
 </x-layout-app>

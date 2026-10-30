@@ -25,7 +25,7 @@ class Selectbox extends Component
         public $multiple = false,
         public $searchable = null,
         public $pills = 10,
-        public $class = 'form-select d-flex align-items-center gap-2',
+        public $class = 'form-control d-flex align-items-center gap-2',
         public $groupClass = '',
         public $selectedGroupClass = 'd-inline-flex flex-wrap gap-1',
         public $id = '',

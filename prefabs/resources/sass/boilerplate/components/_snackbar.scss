@@ -16,11 +16,11 @@
 
 .snackbar {
   position: relative;
-  color: var(--bs-body-color);
-  background: var(--bs-body-bg);
+  color: var(--bs-fg-body);
+  background: light-dark(var(--bs-bg-body), #0f0f0f);
   max-width: 360px;
   font-size: 0.875rem;
-  box-shadow: var(--bs-dropdown-box-shadow);
+  box-shadow: var(--bs-menu-box-shadow);
   border: 1px solid rgba(128,128,128,.2);
   margin-bottom: 0;
 
@@ -30,13 +30,6 @@
     animation: slideSnackbar 3s forwards;
     animation-delay: 0.2s;
   }
-}
-
-@include color-mode(dark) {
-	.snackbar {
-        --bs-dropdown-border-color: rgba(115, 115, 115, 0.25);
-        background-color: #0f0f0f;
-	}
 }
 
 @keyframes slideSnackbar {

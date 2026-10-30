@@ -6,9 +6,9 @@
             label="{{ __('Valid to') }}" />
 
         @if ($action == 'update')
-            <x-form::button class="btn-primary" type="submit">{{ __('Add') }}</x-form::button>
+            <x-form::button class="btn-solid theme-primary" type="submit">{{ __('Add') }}</x-form::button>
         @else
-            <x-form::button class="btn-primary" type="submit">{{ __('Add') }}</x-form::button>
+            <x-form::button class="btn-solid theme-primary" type="submit">{{ __('Add') }}</x-form::button>
         @endif
     </x-form::form>
 </div>

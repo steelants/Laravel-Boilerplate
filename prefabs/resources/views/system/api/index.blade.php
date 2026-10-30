@@ -3,9 +3,9 @@
         <div class="page-header">
             <h1 class="hide-mobile">{{ __('Api') }}</h1>
             <div class="d-flex gap-2">
-                <a class="btn btn-outline-secondary" href="{{ route('system.api.export', 'openapi') }}"><i class="fa-solid fa-download me-1"></i>OpenAPI</a>
-                <a class="btn btn-outline-secondary" href="{{ route('system.api.export', 'insomnia') }}"><i class="fa-solid fa-download me-1"></i>Insomnia</a>
-                <a class="btn btn-outline-secondary" href="{{ route('system.api.export', 'restfox') }}"><i class="fa-solid fa-download me-1"></i>Restfox</a>
+                <a class="btn btn-outline theme-secondary" href="{{ route('system.api.export', 'openapi') }}"><i class="fa-solid fa-download me-1"></i>OpenAPI</a>
+                <a class="btn btn-outline theme-secondary" href="{{ route('system.api.export', 'insomnia') }}"><i class="fa-solid fa-download me-1"></i>Insomnia</a>
+                <a class="btn btn-outline theme-secondary" href="{{ route('system.api.export', 'restfox') }}"><i class="fa-solid fa-download me-1"></i>Restfox</a>
             </div>
         </div>
         <div>
@@ -32,8 +32,8 @@
                 @endphp
 
                 <div class="mb-3">
-                    <div class="btn-toggle btn py-3 bg-{{ $color }} w-100 text-start position-relative" style="--bs-bg-opacity: .2;">
-                        <b class="badge text-bg-{{ $color }} me-2" style="--bs-bg-opacity: 1;">{{ $route['Method'] }}</b>
+                    <div class="btn-toggle btn py-3 bg-subtle-{{ $color }} w-100 text-start position-relative">
+                        <b class="badge theme-{{ $color }} me-2">{{ $route['Method'] }}</b>
                         <b class="position-relative z-2"
                             onclick="copyToClipboard('{{ url($route['Uri']) }}');"
                             title="{{ __('Copy to clipboard') }}"
@@ -42,9 +42,9 @@
                             <i class="fa-solid fa-clipboard"></i>
                         </b>
                         @if ($route['RequiresToken'])
-                            <span class="badge text-bg-secondary ms-2" title="{{ __('Requires an API token') }}"><i class="fa-solid fa-lock"></i></span>
+                            <span class="badge bg-secondary fg-contrast-secondary ms-2" title="{{ __('Requires an API token') }}"><i class="fa-solid fa-lock"></i></span>
                         @endif
-                        <a @class(['stretched-link', 'collapsed' => !$isOpen]) data-bs-target="#{{ $collapseId }}" data-bs-toggle="collapse" aria-expanded="{{ $isOpen ? 'true' : 'false' }}"></a>
+                        <a class="stretched-link" data-bs-target="#{{ $collapseId }}" data-bs-toggle="collapse" aria-expanded="{{ $isOpen ? 'true' : 'false' }}"></a>
                     </div>
                     <div class="remember collapse {{ $isOpen ? 'show' : '' }}" id="{{ $collapseId }}">
                         <div class="card card-body mt-2">

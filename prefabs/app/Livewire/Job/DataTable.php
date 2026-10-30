@@ -85,9 +85,9 @@ class DataTable extends DataTableComponent
     public function renderColumnStatus($value, $row): string
     {
         $badges = [
-            'processing' => ['text-bg-primary', __('Processing')],
-            'delayed'    => ['text-bg-info', __('Delayed')],
-            'waiting'    => ['text-bg-secondary', __('Waiting')],
+            'processing' => ['bg-primary fg-contrast-primary', __('Processing')],
+            'delayed'    => ['bg-info fg-contrast-info', __('Delayed')],
+            'waiting'    => ['bg-secondary fg-contrast-secondary', __('Waiting')],
         ];
 
         [$class, $label] = $badges[$value] ?? $badges['waiting'];

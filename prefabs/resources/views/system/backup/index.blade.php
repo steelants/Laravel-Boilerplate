@@ -3,9 +3,9 @@
         <div class="page-header">
             <h1 class="hide-mobile">{{ __('Backup') }}</h1>
             <div>
-                <x-form::button class="btn-primary" :disabled="$running" onclick="Livewire.dispatch('openModal', {livewireComponents: 'backup.run', title: '{{ __('Backup') }}'})">
+                <x-form::button class="btn-solid theme-primary" :disabled="$running" onclick="Livewire.dispatch('openModal', {livewireComponents: 'backup.run', title: '{{ __('Backup') }}'})">
                     @if ($running)
-                        <span class="spinner-border spinner-border-sm me-1" role="status"></span>{{ __('Backup is running...') }}
+                        <span class="spinner-border spinner-sm me-1" role="status"></span>{{ __('Backup is running...') }}
                     @else
                         <i class="fa-solid fa-robot me-1"></i>{{ __('Start Backup') }}
                     @endif
@@ -36,7 +36,7 @@
                             @php($backups_slug = explode('_', $backup['fileName'][0])[0])
 
                             @if(config('boilerplate.backup.restore', true) && (in_array($backups_slug . '_database.zip', $backup['fileName']) || in_array($backups_slug . '_storage.zip', $backup['fileName'])))
-                                <button type="button" class="btn btn-sm btn-warning" title="{{ __('Restore') }}"
+                                <button type="button" class="btn btn-sm btn-solid theme-warning" title="{{ __('Restore') }}"
                                         onclick="Livewire.dispatch('openModal', {livewireComponents: 'backup.restore', title: @js(__('Restore Backup') . ' — ' . $backups_slug), parameters: {backup_date: @js($backups_slug)}})">
                                     <i class="fa-solid fa-undo"></i>
                                 </button>

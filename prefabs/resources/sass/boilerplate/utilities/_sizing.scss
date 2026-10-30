@@ -1,3 +1,5 @@
+@use "../settings" as *;
+
 @each $i, $value in $spacers{
 	.w-#{$i}{
 		width: $value !important;

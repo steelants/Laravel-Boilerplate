@@ -1,3 +1,4 @@
+@use('SteelAnts\LaravelBoilerplate\Support\BootstrapTheme')
 @props(['type' => 'info', 'title' => null, 'icon' => null, 'dismissible' => false])
 
 @php
@@ -10,9 +11,9 @@
     };
 @endphp
 
-<div {{ $attributes->class(['alert', 'alert-' . $color, 'd-flex', 'align-items-start', 'gap-3', 'fade show' => $dismissible]) }} role="alert">
+<div {{ $attributes->class(['alert', 'theme-' . BootstrapTheme::theme($color), 'd-flex', 'align-items-start', 'gap-3', 'fade show' => $dismissible]) }} role="alert">
     @if ($icon)
-        <i class="{{ $icon }} fs-5 lh-base flex-shrink-0"></i>
+        <i class="{{ $icon }} fs-lg lh-md flex-shrink-0"></i>
     @endif
 
     <div class="flex-grow-1 min-w-0">

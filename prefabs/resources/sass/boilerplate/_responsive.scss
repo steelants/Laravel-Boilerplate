@@ -1,10 +1,11 @@
+@use "./mixins" as *;
+
 @include mobile(){
     .hide-mobile{
         display: none !important;
     }
 
     .form-control,
-    .form-select,
     .btn{
         font-size: 1rem;
         line-height: 1.625rem;
@@ -18,7 +19,7 @@
         line-height: 1.5rem;
     }
 
-    .dropdown-item{
+    .menu-item{
         line-height: 1.625rem;
         padding: .5rem;
     }

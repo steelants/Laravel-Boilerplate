@@ -1,8 +1,3 @@
-import ace from 'ace-builds';
-import 'ace-builds/esm-resolver';
-
-window.ace = ace;
-
 window.aceDefaults = {
     lightTheme: 'chrome',
     darkTheme: 'tomorrow_night',
@@ -15,7 +10,12 @@ window.loadAce = function($wire = null, language, theme, options = {}){
     return{
         ace: null,
         observer: null,
-        init() {
+        async init() {
+            // Ace is large, load it only on pages that have an editor
+            const { default: ace } = await import('ace-builds');
+            await import('ace-builds/esm-resolver');
+            window.ace = ace;
+
             const editorEl = this.$refs?.editor;
             const textareaEl = this.$refs?.textarea;
             const container = editorEl?.closest?.('.ace-container');

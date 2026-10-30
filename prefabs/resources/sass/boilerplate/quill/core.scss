@@ -1,3 +1,6 @@
+@use "sass:list";
+@use "sass:string";
+
 // Styles necessary for Quill
 
 $LIST_STYLE: (decimal, lower-alpha, lower-roman) !default;
@@ -7,10 +10,10 @@ $LIST_STYLE_OUTER_WIDTH: $LIST_STYLE_MARGIN + $LIST_STYLE_WIDTH !default;
 $MAX_INDENT: 9 !default;
 
 @function resets($from, $to) {
-  $list: (unquote('')); // sass wont allow empty "()" property list
+  $list: (string.unquote('')); // sass wont allow empty "()" property list
 
   @for $num from $from through $to {
-    $list: append($list, unquote('list-' + $num), space);
+    $list: list.append($list, string.unquote('list-' + $num), space);
   }
 
   @return $list;
@@ -103,9 +106,15 @@ $MAX_INDENT: 9 !default;
   }
 
   table {
-    @extend .table;
-    @extend .table-bordered;
-    @extend .table-sm;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+
+    td,
+    th {
+      padding: .25rem;
+      border: var(--bs-border-width) solid var(--bs-border-color);
+    }
   }
 
 
@@ -163,17 +172,17 @@ $MAX_INDENT: 9 !default;
   li[data-list='ordered'] {
     counter-increment: list-0;
     > .ql-ui:before {
-      content: unquote('counter(list-0, ' + nth($LIST_STYLE, 1) + ')') '. '; // indexs stars with 1
+      content: string.unquote('counter(list-0, ' + list.nth($LIST_STYLE, 1) + ')') '. '; // indexs stars with 1
     }
   }
 
   @for $num from 1 through $MAX_INDENT {
     li[data-list='ordered'].ql-indent-#{$num} {
-      counter-increment: unquote('list-' + $num);
+      counter-increment: string.unquote('list-' + $num);
 
       > .ql-ui:before {
-        content: unquote(
-            'counter(list-' + $num + ', ' + nth($LIST_STYLE, 1 + ($num % 3)) + ')'
+        content: string.unquote(
+            'counter(list-' + $num + ', ' + list.nth($LIST_STYLE, 1 + ($num % 3)) + ')'
           )
           '. ';
       }

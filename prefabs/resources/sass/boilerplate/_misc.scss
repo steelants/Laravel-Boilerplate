@@ -1,3 +1,6 @@
+@use "./settings" as *;
+@use "./mixins" as *;
+
 a{
     // text-decoration: none;
 }
@@ -102,11 +105,11 @@ a{
 }
 
 
-.collapsed .collapse-indicator{
+[aria-expanded="false"] .collapse-indicator{
     transform: rotate(180deg);
 }
 
-.collapsed .collapse-icon {
+[aria-expanded="false"] .collapse-icon {
     transform: rotate(-90deg);
 }
 
@@ -190,16 +193,22 @@ a{
     }
 }
 
+// A closed <dialog> stays display:flex for the exit transition, keep it out of the page flow
+.dialog:not([open]){
+    position: fixed;
+}
+
 .list-group-item-action{
     cursor: pointer;
 }
 
 .page-link{
-    border-radius: $pagination-border-radius;
+    border-radius: $radius;
 }
 
-.fa, .fa-solid, .fa-regular, .fa-brands{
-    &:not(.fa-2x):not(.fa-3x){
+// zero specificity, icon rules of components (.btn, .badge) win
+:where(.fa, .fa-solid, .fa-regular, .fa-brands){
+    &:where(:not(.fa-2x, .fa-3x)){
         width: 1.25rem;
         height: 1.25rem;
         text-align: center;
@@ -241,16 +250,16 @@ img{
 }
 [data-bs-toggle="collapse"]:hover,
 .btn:hover{
-    &.text-body-tertiary{
-        color: var(--bs-secondary-color) !important;
+    &.fg-4{
+        color: var(--bs-fg-3) !important;
     }
-    &.text-body-secondary{
-        color: var(--bs-body-color) !important;
+    &.fg-3{
+        color: var(--bs-fg-body) !important;
     }
 }
 
 .border-translucent{
-    border-color: var(--#{$prefix}border-color-translucent) !important;
+    border-color: var(--bs-border-color-translucent) !important;
 }
 
 .text-sm{

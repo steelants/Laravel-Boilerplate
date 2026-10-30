@@ -1,1 +1,1 @@
-<li><hr {{ $attributes->class(['dropdown-divider']) }}></li>
+<li><hr {{ $attributes->class(['menu-divider']) }}></li>

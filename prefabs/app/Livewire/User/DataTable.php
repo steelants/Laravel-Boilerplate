@@ -67,7 +67,7 @@ class DataTable extends DataTableComponent
                 'action'      => 'remove',
                 'parameters'  => $item['id'],
                 'text'        => __('Remove'),
-                'actionClass' => 'text-danger',
+                'actionClass' => 'fg-danger',
                 'iconClass'   => 'fa-solid fa-trash',
                 'confirm'     => __('Are you sure?'),
             ],
@@ -80,16 +80,16 @@ class DataTable extends DataTableComponent
             return e($value);
         }
 
-        return e($value) . ' <span class="badge text-bg-danger ms-1">' . __('System Admin') . '</span>';
+        return e($value) . ' <span class="badge bg-danger fg-contrast-danger ms-1">' . __('System Admin') . '</span>';
     }
 
     public function renderColumnTotpForce($value, $row): string
     {
         $button = !empty($value)
-            ? '<i class="fa-solid fa-check-circle text-success"></i>'
-            : '<i class="fa-solid fa-times-circle text-danger"></i>';
+            ? '<i class="fa-solid fa-check-circle fg-success"></i>'
+            : '<i class="fa-solid fa-times-circle fg-danger"></i>';
 
-        return '<button class="btn btn-link" wire:click="change(' . $row['id'] . ',\'totp_force\')">' . $button . '</button>';
+        return '<button class="btn btn-link text-decoration-none" wire:click="change(' . $row['id'] . ',\'totp_force\')">' . $button . '</button>';
     }
 
     public function edit($id)

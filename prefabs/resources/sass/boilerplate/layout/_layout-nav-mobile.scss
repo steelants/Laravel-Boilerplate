@@ -1,3 +1,5 @@
+@use "../mixins" as *;
+
 .layout-nav-mobile{
     display: none;
 }
@@ -13,8 +15,8 @@
         flex-basis: 100%;
         padding: .5rem;
         padding-bottom: calc(.5rem + env(safe-area-inset-bottom, 0));
-        background: var(--bs-tertiary-bg);
-        border-top: 1px solid var(--bs-secondary-bg);
+        background: var(--bs-bg-2);
+        border-top: 1px solid var(--bs-bg-3);
         box-shadow: 0 0px 6px -1px rgb(0 0 0/0.1),0 2px 4px -2px rgb(0 0 0/0.1);
 
         .app-nav{

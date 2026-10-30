@@ -1,16 +1,16 @@
 <div class="layout-nav {{ Cookie::get('layout-nav') }}" id="layout-nav">
     <div class="sidebar">
         <div class="sidebar-header">
-            <div class="dropdown">
+            <div>
                 <div class="d-flex align-items-center">
-                    <div class="app-nav-header flex-grow-1" data-bs-toggle="dropdown">
+                    <div class="app-nav-header flex-grow-1" data-bs-toggle="menu">
                         <div class="app-nav-logo random-bg-2">
                             {{-- <img src="{{ asset('storage/images/logo.png') }}" width="32px" height="32px"> --}}
                             DT
                         </div>
                         <div class="app-nav-header-content nav-collapsed-hide">
                             <div class="fw-semibold">{{ config('app.name', 'Laravel') }}</div>
-                            <small class="text-body-secondary">steelants.cz</small>
+                            <small class="fg-3">steelants.cz</small>
                         </div>
                         <div class="ms-auto nav-collapsed-hide">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">
@@ -19,8 +19,8 @@
                         </div>
                     </div>
 
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
+                    <div class="menu">
+                        <a class="menu-item" href="#">
                             <div class="dropdown-img random-bg-2">
                                 SA
                             </div>
@@ -29,10 +29,10 @@
                             </div> --}}
                             <div class="lh-1">
                                 <div class="fw-semibold">Steelants</div>
-                                <small class="text-body-secondary">{{ __('1 member') }}</small>
+                                <small class="fg-3">{{ __('1 member') }}</small>
                             </div>
                         </a>
-                        <a class="dropdown-item" href="#">
+                        <a class="menu-item" href="#">
                             {{-- <div class="dropdown-img random-bg-3">
                                 A
                             </div> --}}
@@ -41,7 +41,7 @@
                             </div>
                             <div class="lh-1">
                                 <div class="fw-semibold">Anthill</div>
-                                <small class="text-body-secondary">{{ __('42 members') }}</small>
+                                <small class="fg-3">{{ __('42 members') }}</small>
                             </div>
                         </a>
                     </div>
@@ -63,7 +63,7 @@
             @if($systemMenuItems)
                 {{-- MAIN NAVIGATION ALL --}}
                 <div>
-                    <div class="text-body-tertiary nav-collapsed-hide d-flex align-items-center small nav-title-toggle py-2 {{ getToggleState('nav-system') == 'open' ? '' : 'collapsed' }}" data-bs-toggle="collapse" data-bs-target="#nav-system">
+                    <div class="fg-4 nav-collapsed-hide d-flex align-items-center small nav-title-toggle py-2" aria-expanded="{{ getToggleState('nav-system') == 'open' ? 'true' : 'false' }}" data-bs-toggle="collapse" data-bs-target="#nav-system">
                         <i class="fa-solid fa-angle-down collapse-icon"></i>
                         <span class="fw-medium">{{ __('System') }}</span>
                     </div>
@@ -95,13 +95,13 @@
                 </li>
             </ul>
 
-            <div class="dropup">
-                <a class="app-nav-user" data-bs-toggle="dropdown">
+            <div>
+                <a class="app-nav-user" data-bs-toggle="menu" data-bs-placement="top-start">
                     <x-avatar class="app-nav-profile" :user="auth()->user()"/>
 
                     <div class="app-nav-header-content nav-collapsed-hide">
                         <div class="fw-semibold">{{ Auth::user()->name }}</div>
-                        <small class="text-body-secondary">{{ Auth::user()->email }}</small>
+                        <small class="fg-3">{{ Auth::user()->email }}</small>
                     </div>
                     <div class="ms-auto nav-collapsed-hide">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
@@ -110,34 +110,34 @@
                     </div>
                 </a>
 
-                <div class="dropdown-menu">
-                    <div class="dropdown-header d-flex align-items-center">
+                <div class="menu">
+                    <div class="menu-header d-flex align-items-center">
                         <div class="fw-semibold me-auto">{{ Auth::user()->name }}</div>
-                        <small class="text-body-tertiary">v1.23</small>
+                        <small class="fg-4">v1.23</small>
                     </div>
 
-                    <a class="dropdown-item" href="{{ route('profile.index') }}">
+                    <a class="menu-item" href="{{ route('profile.index') }}">
                         <i class="dropdown-ico  fa-solid fa-user"></i>
                         {{ __('Profile') }}
                     </a>
 
-                    <label class="dropdown-item">
+                    <label class="menu-item">
                         <i class="dropdown-ico fa-solid fa-moon"></i>
                         <div class="me-auto">{{ __('Dark Mode') }}</div>
-                        <div class="form-switch lh-1">
-                            <input {{ Cookie::get('theme') == 'dark' ? 'checked' : '' }} class="form-check-input me-0" id="datk-theme" onchange="toggleDatkTheme()" type="checkbox">
+                        <div class="switch">
+                            <input {{ Cookie::get('theme') == 'dark' ? 'checked' : '' }} id="datk-theme" onchange="toggleDatkTheme()" type="checkbox">
                         </div>
                     </label>
 
-                    <a class="dropdown-item" href="{{ route('profile.api') }}">
+                    <a class="menu-item" href="{{ route('profile.api') }}">
                         <i class="dropdown-ico  fa-solid fa-server"></i>
                         {{ __('Api Tokens') }}
                     </a>
 
-                    <hr class="dropdown-divider">
+                    <hr class="menu-divider">
 
-                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                        <i class="dropdown-ico  fa-solid fa-sign-out-alt text-danger"></i>
+                    <a class="menu-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                        <i class="dropdown-ico  fa-solid fa-sign-out-alt fg-danger"></i>
                         {{ __('Logout') }}
                     </a>
 

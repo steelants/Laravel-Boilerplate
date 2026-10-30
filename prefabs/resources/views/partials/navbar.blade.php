@@ -12,7 +12,7 @@
         </div> --}}
 
         <button aria-expanded="false" aria-label="{{ __('Toggle navigation') }}"
-            class="nav-toggler btn btn-light ml-2 d-xl-none" onclick="$('.layout-nav').toggleClass('layout-nav-open');"
+            class="nav-toggler btn btn-subtle theme-secondary ms-2 xl:d-none" onclick="$('.layout-nav').toggleClass('layout-nav-open');"
             type="button"
         >
             <i class="fa-solid fa-bars"></i>

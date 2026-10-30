@@ -1,9 +1,8 @@
-.dropdown-menu{
-    box-shadow: var(--bs-dropdown-box-shadow);
+.menu{
     max-width: 100vw;
 }
 
-.selectbox .dropdown-menu{
+.selectbox .menu{
     max-width: min(24rem, 100vw);
 }
 
@@ -13,30 +12,23 @@
     max-width: 100%;
 }
 
-@include color-mode(dark) {
-    .dropdown-menu{
-        --bs-dropdown-border-color: rgba(115, 115, 115, 0.25);
-        background-color: #0f0f0f;
-    }
-}
-
-.dropdown-item{
+.menu-item{
     display: flex;
     align-items: center;
     cursor: pointer;
 }
 
-.dropdown-item > span{
+.menu-item > span{
     overflow: hidden;
     display: block;
     text-overflow: ellipsis;
 }
 
+// spacing to the label comes from the .menu-item gap
 .dropdown-ico,
 .dropdown-item-icon{
-    color: var(--bs-tertiary-color);
-    margin-right: .5rem;
-    border-radius: var(--bs-border-radius);
+    color: var(--bs-fg-4);
+    border-radius: var(--bs-radius-5);
 }
 
 .dropdown-img{
@@ -47,7 +39,7 @@
     font-weight: 600;
     text-align: center;
     line-height: 2rem;
-    margin-right: .75rem;
+    margin-right: .25rem;
     font-size: .875rem;
 
     img{
@@ -56,25 +48,25 @@
     }
 }
 
-.dropdown-item .form-check-input {
-    margin-right: .75rem;
+.menu-item .check {
+    margin-right: .25rem;
     margin-top: 0;
 }
 
 .dropdown-input {
     background: transparent;
     border: none;
-    border-top-left-radius: calc(var(--bs-border-radius) - var(--bs-border-width));
-    border-top-right-radius: calc(var(--bs-border-radius) - var(--bs-border-width));
+    border-top-left-radius: calc(var(--bs-radius-5) - var(--bs-border-width));
+    border-top-right-radius: calc(var(--bs-radius-5) - var(--bs-border-width));
     color: inherit;
     display: block;
     margin-bottom: 4px;
     margin-top: -4px;
     min-width: 12rem;
     padding: .35rem .75rem;
-    width: calc(100% + calc(2 * var(--bs-dropdown-padding-y)));
-    margin-left: calc(-1*var(--bs-dropdown-padding-y));
-    margin-right: calc(-1*var(--bs-dropdown-padding-y));
+    width: calc(100% + calc(2 * var(--bs-menu-padding-y)));
+    margin-left: calc(-1*var(--bs-menu-padding-y));
+    margin-right: calc(-1*var(--bs-menu-padding-y));
 
     &:focus{
         outline: none;

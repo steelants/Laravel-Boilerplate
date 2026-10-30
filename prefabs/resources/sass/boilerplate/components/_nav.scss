@@ -1,3 +1,6 @@
+@use "../settings" as *;
+@use "../mixins" as *;
+
 .app-nav{
     flex-direction: column;
     max-width: 100%;
@@ -8,22 +11,17 @@
     display: flex;
     align-items: center;
     gap: .5rem;
-    color: var(--bs-body-color);
+    color: var(--bs-fg-body);
     text-decoration: none;
     padding: .25rem;
-    border-radius: $border-radius;
+    border-radius: $radius;
 
-    &[data-bs-toggle="dropdown"]{
+    &[data-bs-toggle="menu"]{
         cursor: pointer;
 
         &:hover{
-            background-color: var(--bs-secondary-bg);
+            background-color: var(--bs-bg-3);
         }
-    }
-
-    &+.dropdown-menu{
-        // width: 100%;
-        // max-width: 100%;
     }
 
     .nav-collapsed &{
@@ -47,7 +45,7 @@
 .app-nav-profile{
     width: 2rem;
     height: 2rem;
-    border-radius: $border-radius;
+    border-radius: $radius;
     overflow: hidden;
     font-weight: 600;
     text-align: center;
@@ -65,16 +63,18 @@
 }
 
 .app-nav .nav-link{
-    border-radius: $border-radius;
-    color: var(--bs-body-color);
+    border-radius: $radius;
+    color: var(--bs-fg-body);
     // padding: 0.5rem .75rem;
     display: flex;
+    flex-grow: 1;
     align-items: center;
+    justify-content: flex-start;
     cursor: pointer;
 
     &:hover{
-        color: var(--bs-body-color);
-        background: var(--bs-secondary-bg);
+        color: var(--bs-fg-body);
+        background: var(--bs-bg-3);
     }
 }
 
@@ -103,7 +103,7 @@
 }
 
 .nav-link-ico{
-    color: var(--bs-tertiary-color);
+    color: var(--bs-fg-4);
     flex-shrink: 0;
     width: 1.25rem;
     height: 1.25rem;
@@ -138,10 +138,10 @@
 
 .app-nav .is-active{
     .nav-link{
-        background: var(--bs-secondary-bg);
+        background: var(--bs-bg-3);
     }
     .nav-link-ico{
-        color: var(--bs-secodnary-color);
+        color: var(--bs-fg-3);
     }
 }
 
@@ -152,12 +152,12 @@
         border-top: none !important;
         border-left: none !important;
         border-right: none !important;
-        color: var(--bs-secondary-color);
-        padding: calc(var(--#{$prefix}nav-link-padding-y)) calc(var(--#{$prefix}nav-link-padding-x) * 1.5);
+        color: var(--bs-fg-3);
+        padding: calc(var(--bs-nav-link-padding-y)) calc(var(--bs-nav-link-padding-x) * 1.5);
 
         &.disabled,
         &:disabled{
-            color: var(--bs-tertiary-color);
+            color: var(--bs-fg-4);
             opacity: .5;
         }
     }
@@ -165,50 +165,50 @@
     .nav-link:hover,
     .nav-link.active,
     .nav-item.show .nav-link {
-        color: var(--bs-body-color);
+        color: var(--bs-fg-body);
     }
 }
 
 .nav-pills{
     .nav-link{
-        color: var(--bs-body-color);
-        padding: calc(var(--#{$prefix}nav-link-padding-y)) calc(var(--#{$prefix}nav-link-padding-x) * 1.5);
+        color: var(--bs-fg-body);
+        padding: calc(var(--bs-nav-link-padding-y)) calc(var(--bs-nav-link-padding-x) * 1.5);
 
         &:hover{
-            color: var(--bs-body-color);
-            background-color: var(--bs-secondary-bg);
+            color: var(--bs-fg-body);
+            background-color: var(--bs-bg-3);
         }
     }
 }
 
 .nav-switch{
-    border-radius: calc($nav-pills-border-radius + 3px);
-    background-color: var(--bs-tertiary-bg);
+    border-radius: calc($radius + 3px);
+    background-color: var(--bs-bg-2);
     padding: 3px;
     width: max-content;
     align-items: center;
 
     .nav-link{
-        padding: calc(var(--#{$prefix}nav-link-padding-y) - 3px) calc(var(--#{$prefix}nav-link-padding-x) * 1.25);
-        color: var(--bs-tertiary-color);
-        border-radius: $border-radius;
+        padding: calc(var(--bs-nav-link-padding-y) - 3px) calc(var(--bs-nav-link-padding-x) * 1.25);
+        color: var(--bs-fg-4);
+        border-radius: $radius;
 
         &:hover{
-            color: var(--bs-body-color);
+            color: var(--bs-fg-body);
         }
 
         &.disabled,
         &:disabled{
-            color: var(--bs-tertiary-color);
+            color: var(--bs-fg-4);
             opacity: .5;
         }
     }
 
     .nav-link.active,
     .nav-item.show .nav-link {
-        color: var(--bs-body-color);
-        box-shadow: 0 0 1px 1px var(--bs-secondary-bg), inset 0 0 1px $gray-500;
-        background-color: var(--bs-body-bg);
+        color: var(--bs-fg-body);
+        box-shadow: 0 0 1px 1px var(--bs-bg-3), inset 0 0 1px $tw-neutral-500;
+        background-color: var(--bs-bg-body);
     }
 }
 
@@ -285,7 +285,7 @@
             top: 5px;
             height: calc(100% - 10px);
             width: 2px;
-            background: var(--bs-secondary-bg);
+            background: var(--bs-bg-3);
         }
     }
 }

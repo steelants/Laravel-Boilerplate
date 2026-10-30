@@ -1,3 +1,5 @@
+@use "../mixins" as *;
+
 .breadcrumb{
     align-items: center;
     white-space: nowrap;
@@ -14,10 +16,10 @@
 .breadcrumb-item a{
     display: inline-block;
     text-decoration: none;
-    color: var(--bs-secondary-color);
+    color: var(--bs-fg-3);
 
     &:hover{
-        color: var(--bs-body-color);
+        color: var(--bs-fg-body);
     }
 
     @include mobile(){

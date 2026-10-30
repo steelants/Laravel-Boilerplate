@@ -68,13 +68,13 @@ window.initSelectboxAjax = function($wire, property, options, multiple, pills, s
                 );
             },
             toggleDropdown(){
-                if(this.$refs.el.dataset.bsToggle == 'dropdown'){
-                    (bootstrap.Dropdown.getOrCreateInstance(this.$refs.el)).hide();
+                if(this.$refs.el.dataset.bsToggle == 'menu'){
+                    (bootstrap.Menu.getOrCreateInstance(this.$refs.el)).hide();
                 }else{
-                    (bootstrap.Dropdown.getOrCreateInstance(this.$refs.el)).show();
+                    (bootstrap.Menu.getOrCreateInstance(this.$refs.el)).show();
                     this.resetOptions();
                     this.search = '';
-                    this.$refs.el.dataset.bsToggle = 'dropdown';
+                    this.$refs.el.dataset.bsToggle = 'menu';
                     scrollToSelectedChild(this.$refs.items);
                     this.$refs.search?.focus();
                 }
@@ -136,13 +136,13 @@ window.initSelectboxAjax = function($wire, property, options, multiple, pills, s
                 );
             },
             toggleDropdown(){
-                if(this.$refs.el.dataset.bsToggle == 'dropdown'){
-                    (bootstrap.Dropdown.getOrCreateInstance(this.$refs.el)).hide();
+                if(this.$refs.el.dataset.bsToggle == 'menu'){
+                    (bootstrap.Menu.getOrCreateInstance(this.$refs.el)).hide();
                 }else{
-                    (bootstrap.Dropdown.getOrCreateInstance(this.$refs.el)).show();
+                    (bootstrap.Menu.getOrCreateInstance(this.$refs.el)).show();
                     this.resetOptions();
                     this.search = '';
-                    this.$refs.el.dataset.bsToggle = 'dropdown';
+                    this.$refs.el.dataset.bsToggle = 'menu';
                     scrollToSelectedChild(this.$refs.items);
                     this.$refs.search?.focus();
                 }

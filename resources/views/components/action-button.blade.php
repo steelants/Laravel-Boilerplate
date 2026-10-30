@@ -1,3 +1,4 @@
+@use('SteelAnts\LaravelBoilerplate\Support\BootstrapTheme')
 @props([
     'action' => null,
     'target' => null,
@@ -22,7 +23,7 @@
 @endif
 <button
     type="{{ $type }}"
-    {{ $attributes->class(['btn', 'd-inline-flex', 'align-items-center', 'justify-content-center', 'gap-2', 'btn-' . $variant, 'btn-' . $size => $size]) }}
+    {{ $attributes->class(['btn', 'd-inline-flex', 'align-items-center', 'justify-content-center', 'gap-2', BootstrapTheme::button($variant), 'btn-' . $size => $size]) }}
     @if ($action && !$attributes->wire('click')->value()) wire:click="{{ $action }}" @endif
     @if ($confirm) wire:confirm="{{ $confirm }}" @endif
     @if ($target) wire:target="{{ $target }}" @endif
@@ -32,7 +33,7 @@
     @if ($icon)
         <i class="{{ $icon }}" wire:loading.remove @if ($target) wire:target="{{ $target }}" @endif></i>
     @endif
-    <span class="spinner-border spinner-border-sm" wire:loading @if ($target) wire:target="{{ $target }}" @endif role="status" aria-hidden="true"></span>
+    <span class="spinner-border spinner-sm" wire:loading @if ($target) wire:target="{{ $target }}" @endif role="status" aria-hidden="true"></span>
     {{ $slot }}
 </button>
 @if ($disabled && $tooltipText)
