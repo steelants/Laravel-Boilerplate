@@ -295,7 +295,7 @@
             <p class="text-muted mb-2">Snackbar — HTTP redirect (<code>->reload()</code>)</p>
             <div class="d-flex gap-2 flex-wrap mb-3">
                 @foreach(['success','error','warning','info'] as $type)
-                    <a href="{{ route('home.test-alert', $type) }}" class="btn btn-sm btn-outline-{{ $type === 'error' ? 'danger' : $type }}">
+                    <a href="{{ route('home') }}" class="btn btn-sm btn-outline-{{ $type === 'error' ? 'danger' : $type }}">
                         {{ ucfirst($type) }}
                     </a>
                 @endforeach
@@ -303,7 +303,7 @@
             <p class="text-muted mb-2">Inline — HTTP redirect (<code>->inline()->reload()</code>)</p>
             <div class="d-flex gap-2 flex-wrap mb-3">
                 @foreach(['success','error','warning','info'] as $type)
-                    <a href="{{ route('home.test-alert-inline', $type) }}" class="btn btn-sm btn-outline-{{ $type === 'error' ? 'danger' : $type }}">
+                    <a href="{{ route('home') }}" class="btn btn-sm btn-outline-{{ $type === 'error' ? 'danger' : $type }}">
                         {{ ucfirst($type) }}
                     </a>
                 @endforeach
