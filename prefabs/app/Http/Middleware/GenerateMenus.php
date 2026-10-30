@@ -27,53 +27,53 @@ class GenerateMenus
 
         $menuRoutes = [
             'Home' => [
-                ' fas fa-home',
+                ' fa-solid fa-home',
                 'home',
             ],
         ];
 
         $systemRoutes = [
             'Settings' => [
-                'fas fa-cog',
+                'fa-solid fa-cog',
                 'system.setting.index',
             ],
             'Audit' => [
-                'fas fa-eye',
+                'fa-solid fa-eye',
                 'system.audit.index',
             ],
             'User' => [
-                'fas fa-users',
+                'fa-solid fa-users',
                 'system.user.index',
             ],
             'Subscriptions' => [
-                'fas fa-dollar-sign',
+                'fa-solid fa-dollar-sign',
                 'system.subscription.index',
             ],
             'File' => [
-                'fas fa-folder',
+                'fa-solid fa-folder',
                 'system.file.index',
             ],
             'Logs' => [
-                'fas fa-bug',
+                'fa-solid fa-bug',
                 'system.log.index',
             ],
             'Jobs' => [
-                'fas fa-business-time',
+                'fa-solid fa-business-time',
                 'system.jobs.index',
             ],
             'Cache' => [
-                'fas fa-box',
+                'fa-solid fa-box',
                 'system.cache.index',
             ],
             'Backup' => [
-                'fas fa-file-archive',
+                'fa-solid fa-file-archive',
                 'system.backup.index',
             ],
         ];
 
         if (file_exists(base_path() . '/routes/api.php')) {
             $systemRoutes['Api'] = [
-                'fas fa-rocket',
+                'fa-solid fa-rocket',
                 'system.api.index',
             ];
         }

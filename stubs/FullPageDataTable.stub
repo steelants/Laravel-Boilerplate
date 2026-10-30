@@ -34,7 +34,7 @@ class DataTable extends DataTableComponent
                 'type' => "url",
                 'url' => route('{{action_form}}', ['modelId' => $item['id']]),
                 'text' => __("Edit"),
-                'iconClass' => 'fas fa-pen',
+                'iconClass' => 'fa-solid fa-pen',
             ],
             [
                 'type' => "livewire",
@@ -42,7 +42,7 @@ class DataTable extends DataTableComponent
                 'parameters' => $item['id'],
                 'text' => __("Remove"),
                 'actionClass' => 'text-danger',
-                'iconClass' => 'fas fa-trash',
+                'iconClass' => 'fa-solid fa-trash',
                 'confirm' => __('Are you sure?'),
             ]
         ];

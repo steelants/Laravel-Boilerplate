@@ -36,7 +36,7 @@ class DataTable extends DataTableComponent
                 'action' => "edit",
                 'text' => __("Edit"),
                 'parameters' => $item['id'],
-                'iconClass' => 'fas fa-pen',
+                'iconClass' => 'fa-solid fa-pen',
             ],
             [
                 'type' => "livewire",
@@ -44,7 +44,7 @@ class DataTable extends DataTableComponent
                 'parameters' => $item['id'],
                 'text' => __("Remove"),
                 'actionClass' => 'text-danger',
-                'iconClass' => 'fas fa-trash',
+                'iconClass' => 'fa-solid fa-trash',
                 'confirm' => __('Are you sure?'),
             ]
         ];

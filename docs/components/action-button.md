@@ -22,11 +22,11 @@ Livewire button that handles its own loading state: while its action runs it sho
 ## Usage
 
 ```blade
-<x-boilerplate::action-button action="save" icon="fas fa-save">{{ __('Save') }}</x-boilerplate::action-button>
+<x-boilerplate::action-button action="save" icon="fa-solid fa-save">{{ __('Save') }}</x-boilerplate::action-button>
 
 <x-boilerplate::action-button
     action="remove({{ $post->id }})"
-    icon="fas fa-trash"
+    icon="fa-solid fa-trash"
     variant="danger"
     size="sm"
     :confirm="__('Are you sure?')"
@@ -34,7 +34,7 @@ Livewire button that handles its own loading state: while its action runs it sho
 
 <x-boilerplate::action-button
     action="send"
-    icon="fas fa-paper-plane"
+    icon="fa-solid fa-paper-plane"
     :disabled="!$recipients"
     :disabled-reason="__('Add at least one recipient')"
 >{{ __('Send') }}</x-boilerplate::action-button>
