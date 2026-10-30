@@ -3,7 +3,7 @@
         @if (isset($token))
             <x-form::input type="hidden" id="token" name="token" value="{{ $token }}" />
             <x-form::input class="mb-3" type="email" id="email" name="email" label="{{ __('Email') }}" value="{{ $email }}" />
-            <x-form::input class="mb-3" type="password" id="password" name="password" label="{{ __('Password') }}" />
+            <x-form::input class="mb-3" type="password" id="password" name="password" strength label="{{ __('Password') }}" />
             <x-form::input class="mb-3" type="password" id="password_confirmation" name="password_confirmation" label="{{ __('Configm Password') }}" />
         @else
             <x-form::input class="mb-3" type="email" id="email" name="email" label="{{ __('Email') }}" placeholder="email@post.xx" required/>

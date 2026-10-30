@@ -46,6 +46,13 @@
             <div class="form-group">
                 <label class="form-label" for="newPassword">{{ __('New password') }}</label>
                 <input class="form-control @error('newPassword') is-invalid @enderror" id="newPassword" name="newPassword" type="password">
+                <div class="strength" data-bs-strength data-bs-input="#newPassword">
+                    <div class="strength-segment"></div>
+                    <div class="strength-segment"></div>
+                    <div class="strength-segment"></div>
+                    <div class="strength-segment"></div>
+                </div>
+                <span class="strength-text"></span>
 
                 @error('newPassword')
                     <span class="invalid-feedback" role="alert">

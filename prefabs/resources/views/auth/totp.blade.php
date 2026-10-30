@@ -13,7 +13,15 @@
 
     <form method="POST" action="{{ route('totp.verify') }}">
         @csrf
-        <x-form::input class="mb-3" type="text" name="code" id="code" label="{{ __('Authentication code') }}:" />
+        <div class="mb-3">
+            <label class="form-label" for="code">{{ __('Authentication code') }}:</label>
+            <div @class(['otp', 'is-invalid' => $errors->has('code')]) data-bs-otp>
+                <input type="text" class="otp-input" name="code" id="code" maxlength="6" autocomplete="one-time-code" aria-label="{{ __('Authentication code') }}">
+            </div>
+            @error('code')
+                <div class="invalid-feedback d-block" role="alert">{{ $message }}</div>
+            @enderror
+        </div>
         <div class="d-flex">
             <x-form::button class="btn-solid theme-primary" type="submit">{{ __('boilerplate::auth.login') }}</x-form::button>
         </div>
