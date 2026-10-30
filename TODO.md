@@ -15,6 +15,7 @@ Bootstrap is pinned to `6.0.0-alpha.1`. Related branches: Laravel-Boilerplate.CM
 
 - [ ] Lazy loaded Ace (`resources/js/boilerplate/ace.js`) is not verified in a browser, the sandbox has no page with an Ace editor.
 - [ ] Livewire-DataTable tests were updated to the new markup but not run (no `vendor/` in the package).
+- [ ] Create user modal (`prefabs/resources/views/livewire/user/form.blade.php`, opened via `openModal`) shows no password strength meter although the field has `strength`. Check the Alpine `x-init` in `x-form::input` for Livewire-rendered modal content.
 - [ ] Password strength meter has to follow the Laravel password rules (`Password::defaults()`: min length, mixed case, numbers, symbols) instead of the Bootstrap defaults (`minLength` 8, own weights). Pass them to `bootstrap.Strength` from `x-form::input` and the profile page.
 - [ ] Livewire-Form `field` component: offer the password strength meter for the `password` type like `x-form::input strength`.
 - [ ] Remaining `@include color-mode(dark)` blocks could use `light-dark()` like the Bootstrap 6 tokens.
