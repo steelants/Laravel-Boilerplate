@@ -39,7 +39,7 @@
                             </td>
                             <td class="text-end">
                                 <a href='{{ route('system.log.download', ['file' => $item['fileName']]) }}' class="btn btn-primary">
-                                    <i class="fa fa-download"></i>
+                                    <i class="fa-solid fa-download"></i>
                                 </a>
                                 <x-boilerplate::form-button :action="route('system.log.delete', ['file' => $item['fileName']])" :confirm="__('Are you sure?')" :title="__('Remove')" />
                             </td>

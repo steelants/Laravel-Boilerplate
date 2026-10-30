@@ -1,5 +1,5 @@
 @props([
-    'icon' => 'fas fa-ellipsis-v',
+    'icon' => 'fa-solid fa-ellipsis-v',
     'label' => null,
     'variant' => 'light',
     'size' => 'sm',

@@ -22,7 +22,7 @@
                 @endif
             @endauth
             <label class="dropdown-item ms-2">
-                <i class="dropdown-ico fas fa-moon"></i>
+                <i class="dropdown-ico fa-solid fa-moon"></i>
                 <div class="form-switch lh-1">
                     <input class="form-check-input me-0" id="datk-theme" onchange="toggleDatkTheme()" type="checkbox">
                 </div>
@@ -107,7 +107,7 @@
                             <ul class="app-nav nav flex-column">
                                 <li class="nav-item is-active">
                                     <a class="nav-link" href="#home">
-                                        <i class="nav-link-ico  fas fa-home"></i>
+                                        <i class="nav-link-ico  fa-solid fa-home"></i>
                                         <div class="nav-link-title">{{ __('Home') }}</div>
                                     </a>
                                 </li>
@@ -119,8 +119,8 @@
                             <ul class="app-nav nav flex-column mb-1 hide-mobile">
                                 <li class="nav-item">
                                     <div type="button" class="nav-link" onclick="toggleLayoutNav()">
-                                        <i class="nav-link-ico fas fa-chevron-left nav-collapsed-hide"></i>
-                                        <i class="nav-link-ico fas fa-chevron-right nav-collapsed-show"></i>
+                                        <i class="nav-link-ico fa-solid fa-chevron-left nav-collapsed-hide"></i>
+                                        <i class="nav-link-ico fa-solid fa-chevron-right nav-collapsed-show"></i>
                                         <div class="nav-link-title">{{ __('Toggle menu') }}</div>
                                     </div>
                                 </li>
@@ -153,12 +153,12 @@
                                     </div>
 
                                     <a class="dropdown-item" href="#profile">
-                                        <i class="dropdown-ico  fas fa-user"></i>
+                                        <i class="dropdown-ico  fa-solid fa-user"></i>
                                         {{ __('Profile') }}
                                     </a>
 
                                     <label class="dropdown-item">
-                                        <i class="dropdown-ico fas fa-moon"></i>
+                                        <i class="dropdown-ico fa-solid fa-moon"></i>
                                         <div class="me-auto">{{ __('Dark Mode') }}</div>
                                         <div class="form-switch lh-1">
                                             <input class="form-check-input me-0" id="datk-theme" onchange="toggleDatkTheme()"
@@ -167,7 +167,7 @@
                                     </label>
 
                                     <a class="dropdown-item" href="#profile/api">
-                                        <i class="dropdown-ico  fas fa-server"></i>
+                                        <i class="dropdown-ico  fa-solid fa-server"></i>
                                         {{ __('Api Tokens') }}
                                     </a>
 
@@ -175,7 +175,7 @@
 
                                     <a class="dropdown-item" href="#logout"
                                         onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                        <i class="dropdown-ico  fas fa-sign-out-alt text-danger"></i>
+                                        <i class="dropdown-ico  fa-solid fa-sign-out-alt text-danger"></i>
                                         {{ __('Logout') }}
                                     </a>
 
@@ -189,7 +189,7 @@
                         <div class="container-xl">
                             <div class="page-header">
                                 <h1>{{ __('Welcome Back !') }}</h1>
-                                <a class="btn btn-primary" href="#home"><i class="fa fa-plus me-2"></i> {{ __('Page Action') }}</a>
+                                <a class="btn btn-primary" href="#home"><i class="fa-solid fa-plus me-2"></i> {{ __('Page Action') }}</a>
                             </div>
 
 							<x-form::quill />

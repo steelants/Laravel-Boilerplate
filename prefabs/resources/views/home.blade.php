@@ -2,7 +2,7 @@
     <div class="container-xl">
         <div class="page-header">
             <h1 class="hide-mobile">Welcolm Back !</h1>
-            <a class="btn btn-primary" href="{{ url('home') }}"><i class="fa fa-plus me-2"></i> Page Action</a>
+            <a class="btn btn-primary" href="{{ url('home') }}"><i class="fa-solid fa-plus me-2"></i> Page Action</a>
         </div>
     </div>
     <div class="container-xl">
@@ -121,8 +121,8 @@
 
             <br>
             <br>
-            <button type="button" class="btn btn-light btn-sq"><i class="fas fa-angle-double-up"></i></button>
-            <button type="button" class="btn btn-sm btn-light"><i class="fas fa-angle-down me-2"></i><small>System</small></button>
+            <button type="button" class="btn btn-light btn-sq"><i class="fa-solid fa-angle-double-up"></i></button>
+            <button type="button" class="btn btn-sm btn-light"><i class="fa-solid fa-angle-down me-2"></i><small>System</small></button>
             <button type="button" class="btn btn-sq">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
@@ -141,13 +141,13 @@
         <div class="my-4">
             <h4>Badges</h4>
             @foreach ($themes as $theme)
-                <x-badge color="{{$theme}}" icon="far fa-circle">{{ucfirst($theme)}}</x-badge>
+                <x-badge color="{{$theme}}" icon="fa-regular fa-circle">{{ucfirst($theme)}}</x-badge>
             @endforeach
             <br>
             <br>
 
             @foreach ($themes as $theme)
-                <x-badge color="{{$theme}}" variant="subtle" icon="far fa-circle">{{ucfirst($theme)}}</x-badge>
+                <x-badge color="{{$theme}}" variant="subtle" icon="fa-regular fa-circle">{{ucfirst($theme)}}</x-badge>
             @endforeach
             <br>
             <br>
@@ -155,21 +155,21 @@
             <div data-bs-theme="dark">
                 <div class="bg-body p-4">
                     @foreach ($themes as $theme)
-                        <x-badge color="{{$theme}}" icon="far fa-circle">{{ucfirst($theme)}}</x-badge>
+                        <x-badge color="{{$theme}}" icon="fa-regular fa-circle">{{ucfirst($theme)}}</x-badge>
                     @endforeach
                     <br>
                     <br>
 
                     @foreach ($themes as $theme)
-                        <x-badge color="{{$theme}}" variant="subtle" icon="far fa-circle">{{ucfirst($theme)}}</x-badge>
+                        <x-badge color="{{$theme}}" variant="subtle" icon="fa-regular fa-circle">{{ucfirst($theme)}}</x-badge>
                     @endforeach
                 </div>
             </div>
             <br>
 
-            <x-badge color="primary" variant="subtle" icon="far fa-circle" size="sm">Small</x-badge>
-            <x-badge color="primary" variant="subtle" icon="far fa-circle" size="md">Normal</x-badge>
-            <x-badge color="primary" variant="subtle" icon="far fa-circle" size="lg">Large</x-badge>
+            <x-badge color="primary" variant="subtle" icon="fa-regular fa-circle" size="sm">Small</x-badge>
+            <x-badge color="primary" variant="subtle" icon="fa-regular fa-circle" size="md">Normal</x-badge>
+            <x-badge color="primary" variant="subtle" icon="fa-regular fa-circle" size="lg">Large</x-badge>
             <br>
             <x-badge color="primary" variant="subtle" size="sm">Small</x-badge>
             <x-badge color="primary" variant="subtle" size="md">Normal</x-badge>
@@ -182,10 +182,10 @@
 
             @php
                 $priorities = [
-                    ['danger', 'fas fa-skull-crossbones', 'Critical'],
-                    ['warning', 'fas fa-angle-double-up', 'High'],
-                    ['info', 'fas fa-equals', 'Normal'],
-                    ['light', 'fas fa-angle-double-down', 'Low'],
+                    ['danger', 'fa-solid fa-skull-crossbones', 'Critical'],
+                    ['warning', 'fa-solid fa-angle-double-up', 'High'],
+                    ['info', 'fa-solid fa-equals', 'Normal'],
+                    ['light', 'fa-solid fa-angle-double-down', 'Low'],
                 ];
             @endphp
 

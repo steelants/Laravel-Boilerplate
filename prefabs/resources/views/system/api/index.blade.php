@@ -3,9 +3,9 @@
         <div class="page-header">
             <h1 class="hide-mobile">{{ __('Api') }}</h1>
             <div class="d-flex gap-2">
-                <a class="btn btn-outline-secondary" href="{{ route('system.api.export', 'openapi') }}"><i class="fas fa-download me-1"></i>OpenAPI</a>
-                <a class="btn btn-outline-secondary" href="{{ route('system.api.export', 'insomnia') }}"><i class="fas fa-download me-1"></i>Insomnia</a>
-                <a class="btn btn-outline-secondary" href="{{ route('system.api.export', 'restfox') }}"><i class="fas fa-download me-1"></i>Restfox</a>
+                <a class="btn btn-outline-secondary" href="{{ route('system.api.export', 'openapi') }}"><i class="fa-solid fa-download me-1"></i>OpenAPI</a>
+                <a class="btn btn-outline-secondary" href="{{ route('system.api.export', 'insomnia') }}"><i class="fa-solid fa-download me-1"></i>Insomnia</a>
+                <a class="btn btn-outline-secondary" href="{{ route('system.api.export', 'restfox') }}"><i class="fa-solid fa-download me-1"></i>Restfox</a>
             </div>
         </div>
         <div>
@@ -39,10 +39,10 @@
                             title="{{ __('Copy to clipboard') }}"
                         >
                             <span>{{ $route['Uri'] }}</span>
-                            <i class="fa fa-clipboard"></i>
+                            <i class="fa-solid fa-clipboard"></i>
                         </b>
                         @if ($route['RequiresToken'])
-                            <span class="badge text-bg-secondary ms-2" title="{{ __('Requires an API token') }}"><i class="fas fa-lock"></i></span>
+                            <span class="badge text-bg-secondary ms-2" title="{{ __('Requires an API token') }}"><i class="fa-solid fa-lock"></i></span>
                         @endif
                         <a @class(['stretched-link', 'collapsed' => !$isOpen]) data-bs-target="#{{ $collapseId }}" data-bs-toggle="collapse" aria-expanded="{{ $isOpen ? 'true' : 'false' }}"></a>
                     </div>

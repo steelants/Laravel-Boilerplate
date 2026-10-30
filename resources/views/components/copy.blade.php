@@ -11,6 +11,6 @@
         :title="copied ? @js(__('Copied')) : @js(__('Copy'))"
         aria-label="{{ __('Copy') }}"
     >
-        <i class="fa-fw" :class="copied ? 'fas fa-check text-success' : 'far fa-copy'"></i>
+        <i class="fa-fw" :class="copied ? 'fa-solid fa-check text-success' : 'fa-regular fa-copy'"></i>
     </button>
 </span>

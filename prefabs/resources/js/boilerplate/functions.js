@@ -77,8 +77,8 @@ window.addEventListener('snackbar', function(e){
 window.copyToClipboard = function (text, el = false) {
     if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text)
-            .then(() => { snackbar('Copied to clipboard', false, false, 'fas fa-copy'); })
-            .catch(() => { snackbar('something went wrong', false, 'error', 'fas fa-exclamation-triangle'); });
+            .then(() => { snackbar('Copied to clipboard', false, false, 'fa-solid fa-copy'); })
+            .catch(() => { snackbar('something went wrong', false, 'error', 'fa-solid fa-exclamation-triangle'); });
     } else {
         const textArea = document.createElement('textarea');
         textArea.value = text;
@@ -90,9 +90,9 @@ window.copyToClipboard = function (text, el = false) {
         textArea.select();
         try {
             document.execCommand('copy');
-            snackbar('Copied to clipboard', false, false, 'fas fa-copy');
+            snackbar('Copied to clipboard', false, false, 'fa-solid fa-copy');
         } catch {
-            snackbar('something went wrong', false, 'error', 'fas fa-exclamation-triangle');
+            snackbar('something went wrong', false, 'error', 'fa-solid fa-exclamation-triangle');
         } finally {
             textArea.remove();
         }

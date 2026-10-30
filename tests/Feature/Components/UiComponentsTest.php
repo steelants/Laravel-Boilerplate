@@ -10,7 +10,7 @@ beforeEach(function () {
 });
 
 it('renders action button with loading state scoped to its target', function () {
-    $html = Blade::render('<x-boilerplate::action-button action="remove(5)" icon="fas fa-trash" confirm="Sure?" variant="danger">Delete</x-boilerplate::action-button>');
+    $html = Blade::render('<x-boilerplate::action-button action="remove(5)" icon="fa-solid fa-trash" confirm="Sure?" variant="danger">Delete</x-boilerplate::action-button>');
 
     expect($html)
         ->toContain('wire:click="remove(5)"')
@@ -48,7 +48,7 @@ it('renders alert with title, actions and close button', function () {
 
     expect($html)
         ->toContain('alert-danger')
-        ->toContain('fas fa-times-circle')
+        ->toContain('fa-solid fa-times-circle')
         ->toContain('Failed')
         ->toContain('Something went wrong.')
         ->toContain('flex-shrink-0')
@@ -56,12 +56,12 @@ it('renders alert with title, actions and close button', function () {
 });
 
 it('renders icon tile, stat and empty state', function () {
-    expect(Blade::render('<x-boilerplate::icon-tile icon="fas fa-user" color="success" />'))
+    expect(Blade::render('<x-boilerplate::icon-tile icon="fa-solid fa-user" color="success" />'))
         ->toContain('bg-success-subtle')
         ->toContain('text-success-emphasis')
         ->toContain('w-10 h-10');
 
-    expect(Blade::render('<x-boilerplate::stat label="Users" value="42" icon="fas fa-user" color="green" />'))
+    expect(Blade::render('<x-boilerplate::stat label="Users" value="42" icon="fa-solid fa-user" color="green" />'))
         ->toContain('stat-ico is-green')
         ->toContain('42');
 
@@ -84,9 +84,9 @@ it('renders determinate and indeterminate progress', function () {
 it('renders dropdown with items and divider', function () {
     $html = Blade::render(<<<'BLADE'
         <x-boilerplate::dropdown>
-            <x-boilerplate::dropdown-item href="/edit" icon="fas fa-pen">Edit</x-boilerplate::dropdown-item>
+            <x-boilerplate::dropdown-item href="/edit" icon="fa-solid fa-pen">Edit</x-boilerplate::dropdown-item>
             <x-boilerplate::dropdown-divider />
-            <x-boilerplate::dropdown-item wire:click="remove" icon="fas fa-trash" danger>Delete</x-boilerplate::dropdown-item>
+            <x-boilerplate::dropdown-item wire:click="remove" icon="fa-solid fa-trash" danger>Delete</x-boilerplate::dropdown-item>
         </x-boilerplate::dropdown>
     BLADE);
 
@@ -128,13 +128,13 @@ it('renders copy button and nav switch', function () {
         ->toContain('copyToClipboard(')
         ->toContain('text-truncate');
 
-    $html = Blade::render('<x-boilerplate::nav-switch wire:model.live="view" :options="[\'list\' => \'List\', \'grid\' => [\'label\' => \'Grid\', \'icon\' => \'fas fa-th\']]" />');
+    $html = Blade::render('<x-boilerplate::nav-switch wire:model.live="view" :options="[\'list\' => \'List\', \'grid\' => [\'label\' => \'Grid\', \'icon\' => \'fa-solid fa-th\']]" />');
 
     expect($html)
         ->toContain('type="radio"')
         ->toContain('wire:model.live="view"')
         ->toContain('name="view"')
-        ->toContain('fas fa-th');
+        ->toContain('fa-solid fa-th');
 });
 
 it('renders tab group bound to livewire property with badge and scroll', function () {

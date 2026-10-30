@@ -3,7 +3,7 @@
     'confirm' => null,
     'label'   => null,
     'title'   => null,
-    'icon'    => 'fas fa-trash',
+    'icon'    => 'fa-solid fa-trash',
     'variant' => 'danger',
 ])
 <form method="POST" action="{{ $action }}" class="{{ $variant ? 'd-inline' : 'd-block' }}"

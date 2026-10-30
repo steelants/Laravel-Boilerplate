@@ -10,7 +10,7 @@
             />
         @endforeach
         <x-form::button class="btn-warning" type="submit">
-            <i class="fa fa-undo me-1"></i>{{ __('Restore') }}
+            <i class="fa-solid fa-undo me-1"></i>{{ __('Restore') }}
         </x-form::button>
     </x-form::form>
 </div>

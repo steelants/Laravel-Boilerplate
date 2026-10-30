@@ -111,7 +111,7 @@ which renders a POST form with `@csrf` and an optional confirm dialog:
     :title="__('Remove')" />
 ```
 
-Props: `action`, `confirm`, `label`, `title`, `icon` (default `fas fa-trash`), `variant` (default `danger`).
+Props: `action`, `confirm`, `label`, `title`, `icon` (default `fa-solid fa-trash`), `variant` (default `danger`).
 Any other attribute (e.g. `class="btn-sm"`) is merged onto the button.
 
 ## v3.0.5 -> v3.1.0

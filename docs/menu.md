@@ -14,7 +14,7 @@ use SteelAnts\LaravelBoilerplate\Facades\Menu;
 
 Menu::make('main-menu', function ($menu) {
     $systemRoutes = [
-        'general' => ['fas fa-eye', 'general.index'],
+        'general' => ['fa-solid fa-eye', 'general.index'],
     ];
 
     foreach ($systemRoutes as $title => $route_data) {
@@ -39,13 +39,13 @@ Sub items are added to the item returned by `add()`:
 Menu::make('main-menu', function ($menu) {
     $mainItem = $menu->add('Home', [
         'id' => strtolower('Home'),
-        'icon' => 'fas fa-eye',
+        'icon' => 'fa-solid fa-eye',
         'route' => 'general.index',
     ]);
 
     $mainItem->add('Dashboard', [
         'id' => strtolower('Home-Dashboard'),
-        'icon' => 'fas fa-eye',
+        'icon' => 'fa-solid fa-eye',
         'route' => 'general.sub-index',
     ]);
 });
