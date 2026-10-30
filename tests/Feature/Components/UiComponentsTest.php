@@ -125,7 +125,7 @@ it('renders relative time with exact tooltip', function () {
 
 it('renders copy button and nav switch', function () {
     expect(Blade::render('<x-boilerplate::copy value="secret">secret</x-boilerplate::copy>'))
-        ->toContain('copyToClipboard(')
+        ->toContain('copyToClipboardData(')
         ->toContain('text-truncate');
 
     $html = Blade::render('<x-boilerplate::nav-switch wire:model.live="view" :options="[\'list\' => \'List\', \'grid\' => [\'label\' => \'Grid\', \'icon\' => \'fa-solid fa-th\']]" />');

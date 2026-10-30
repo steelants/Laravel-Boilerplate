@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use Livewire\Exceptions\ComponentNotFoundException;
 use Livewire\Mechanisms\ComponentRegistry;
 use ReflectionClass;
 use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
@@ -91,7 +92,14 @@ class Basic extends Component
 
     private function canOpenComponent(string $alias): bool
     {
-        $class = app(ComponentRegistry::class)->getClass($alias);
+        try {
+            // Livewire 3 has the ComponentRegistry, Livewire 4 resolves components through its factory
+            $class = class_exists(ComponentRegistry::class)
+                ? app(ComponentRegistry::class)->getClass($alias)
+                : app('livewire.factory')->resolveComponentClass($alias);
+        } catch (ComponentNotFoundException) {
+            return false;
+        }
 
         if (!$class) {
             return false;
