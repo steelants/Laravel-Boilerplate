@@ -5,9 +5,9 @@
         <x-form::checkbox name="remember" id="remember" label="{{ __('Remember me') }}:" />
 
         <div class="d-flex">
-            <x-form::button class="btn-primary" type="submit">{{ __('Login') }}</x-form::button>
+            <x-form::button class="btn-solid theme-primary" type="submit">{{ __('Login') }}</x-form::button>
             @if (Route::has('register'))
-                <a class="ms-2 btn btn-primary" href="{{ route('register') }}">
+                <a class="ms-2 btn btn-solid theme-primary" href="{{ route('register') }}">
                     {{ __('Register') }}
                 </a>
             @endif

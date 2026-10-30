@@ -1,22 +1,24 @@
+@use('SteelAnts\LaravelBoilerplate\Support\BootstrapTheme')
 @php
     $classes = ['badge', 'badge-' . $size => $size != 'md'];
+    $theme = BootstrapTheme::theme($color);
 
     if ($variant == 'subtle') {
         $classes = array_merge($classes, [
             'border',
-            'border-'.$color.'-subtle',
-            'bg-'.$color.'-subtle',
-            'text-'.$color.'-emphasis',
+            'border-subtle-'.$theme,
+            'bg-subtle-'.$theme,
+            'fg-emphasis-'.$theme,
         ]);
     } else {
         $classes = array_merge($classes, [
-            'text-bg-'.$color,
+            'theme-'.$theme,
         ]);
     }
 @endphp
 
 <span {{ $attributes->class($classes) }}
-    class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle"
+    class="badge bg-subtle-primary fg-emphasis-primary border border-subtle-primary"
 >
     @if ($icon)
         <i class="badge-icon {{ $icon }}"></i>

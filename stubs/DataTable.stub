@@ -43,7 +43,7 @@ class DataTable extends DataTableComponent
                 'action' => "remove",
                 'parameters' => $item['id'],
                 'text' => __("Remove"),
-                'actionClass' => 'text-danger',
+                'actionClass' => 'fg-danger',
                 'iconClass' => 'fa-solid fa-trash',
                 'confirm' => __('Are you sure?'),
             ]

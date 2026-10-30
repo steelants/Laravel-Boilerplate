@@ -1,4 +1,4 @@
-<div class="dropdown selectbox {{ $groupClass }}"
+<div class="selectbox {{ $groupClass }}"
     x-data="initSelectbox($wire, @js($property ?? null), @js($options), @js($multiple), @js($pills), null, @js($required))"
 	wire:key="{{ md5(json_encode($options)) }}"
 >
@@ -21,7 +21,7 @@
             @isset($innerLabel)
                 <span class="form-label text-nowrap my-0">{{ $innerLabel }}</span>
             @else
-                <span class="text-nowrap text-body-secondary" x-show="selected == null || selected.length == 0">{{ $placeholder }}&shy;</span>
+                <span class="text-nowrap fg-3" x-show="selected == null || selected.length == 0">{{ $placeholder }}&shy;</span>
             @endif
 
             <div class="{{ $selectedGroupClass }}">
@@ -40,7 +40,7 @@
                     @endif
                 @elseif($variant == 'tags')
                     <template x-for="option in selectedOptions" :key="option.id">
-                        <span class="badge text-bg-light">
+                        <span class="badge bg-secondary fg-contrast-secondary">
                             <span x-text="option.name"></span>
                             <div class="badge-addon" @click.stop="removeOption(option.id)" data-bs-toggle="collapse">
                                 <i class="fa-solid fa-times"></i>
@@ -55,7 +55,7 @@
             {{ $suffix }}
         @endif
     </div>
-    <div class="dropdown-menu" tabindex="-1" wire:ignore.self>
+    <div class="menu" tabindex="-1" wire:ignore.self>
         @if($searchable)
             <input class="dropdown-input" type="text" placeholder="{{ __('Search') }}..." x-model="search">
         @endif
@@ -64,12 +64,12 @@
 				@isset($optionTemplate)
 					{{ $optionTemplate }}
 				@else
-					<div class="dropdown-item"
+					<div class="menu-item"
 						:tabindex="index"
 						@click="selectOption(option)"
 						@keyup.enter="selectOption(option)"
 					>
-						<input class="form-check-input pe-none" tabindex="-1" type="checkbox" id="{{$id}}" :checked="isSelectedOption(option)"/>
+						<input class="check pe-none" tabindex="-1" type="checkbox" id="{{$id}}" :checked="isSelectedOption(option)"/>
 
 						@isset($customOption)
 							{{ $customOption }}

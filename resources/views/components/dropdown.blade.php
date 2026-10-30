@@ -1,3 +1,4 @@
+@use('SteelAnts\LaravelBoilerplate\Support\BootstrapTheme')
 @props([
     'icon' => 'fa-solid fa-ellipsis-v',
     'label' => null,
@@ -7,14 +8,15 @@
     'caret' => false,
 ])
 
-<div {{ $attributes->class(['dropdown', 'd-inline-block']) }}>
+<div {{ $attributes->class(['d-inline-block']) }}>
     @isset($trigger)
-        <div data-bs-toggle="dropdown" aria-expanded="false" {{ $trigger->attributes }}>{{ $trigger }}</div>
+        <div data-bs-toggle="menu" data-bs-placement="bottom-{{ $align }}" aria-expanded="false" {{ $trigger->attributes }}>{{ $trigger }}</div>
     @else
         <button
             type="button"
-            @class(['btn', 'btn-' . $variant, 'btn-' . $size => $size, 'dropdown-toggle' => $caret])
-            data-bs-toggle="dropdown"
+            @class(['btn', BootstrapTheme::button($variant), 'btn-' . $size => $size])
+            data-bs-toggle="menu"
+            data-bs-placement="bottom-{{ $align }}"
             aria-expanded="false"
             @unless ($label) aria-label="{{ __('Actions') }}" @endunless
         >
@@ -25,7 +27,7 @@
         </button>
     @endisset
 
-    <ul @class(['dropdown-menu', 'dropdown-menu-' . $align => $align])>
+    <ul class="menu">
         {{ $slot }}
     </ul>
 </div>

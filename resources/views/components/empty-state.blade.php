@@ -8,7 +8,7 @@
         <div class="fw-semibold">{{ $title }}</div>
     @endif
     @if ($description)
-        <div class="text-body-secondary mt-1">{{ $description }}</div>
+        <div class="fg-3 mt-1">{{ $description }}</div>
     @endif
     @if ($slot->isNotEmpty())
         <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">{{ $slot }}</div>

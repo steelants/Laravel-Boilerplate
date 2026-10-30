@@ -8,14 +8,14 @@
             <div class="">
 
                 <div class="d-flex align-items-center">
-                    <div class="flex-grow-1 text-body-tertiary nav-collapsed-hide d-flex align-items-center small nav-title-toggle py-2 "
+                    <div class="flex-grow-1 fg-4 nav-collapsed-hide d-flex align-items-center small nav-title-toggle py-2 "
                         data-bs-target="#subnav-task-active" data-bs-toggle="collapse">
                         <i class="fa-solid fa-angle-down collapse-icon"></i>
                         <span class="fw-medium">Projects</span>
                     </div>
 
                     <button class="btn btn-sq btn-sm">
-                        <i class="me-2 fa-solid fa-plus text-body-secondary"></i>
+                        <i class="me-2 fa-solid fa-plus fg-3"></i>
                     </button>
                 </div>
 
@@ -23,7 +23,7 @@
                     <ul class="app-nav nav flex-column">
                         <li class="nav-item nav-item-with-addons ">
                             <div class="nav-link hover-group position-relative">
-                                <button class="btn btn-sq hover-block position-absolute start-0 collapsed"
+                                <button class="btn btn-sq hover-block position-absolute start-0" aria-expanded="false"
                                     data-bs-target="#sub-t-p1" data-bs-toggle="collapse">
                                     <i class="fa-solid fa-angle-down collapse-icon"></i>
                                 </button>
@@ -32,12 +32,12 @@
                                     <i class="nav-link-ico fa-solid fa-folder hover-hidden"></i>
                                     <div class="nav-link-title">Vilma Lakin</div>
                                 </a>
-                                <div class="dropdown position-static">
-                                    <button class="btn btn-sq hover-block" data-bs-toggle="dropdown" type="button">
-                                        <i class="text-body-secondary fa-solid fa-ellipsis-h"></i>
+                                <div class="position-static">
+                                    <button class="btn btn-sq hover-block" data-bs-toggle="menu" type="button">
+                                        <i class="fg-3 fa-solid fa-ellipsis-h"></i>
                                     </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#setting/projects/VL/detail">
+                                    <div class="menu">
+                                        <a class="menu-item" href="#setting/projects/VL/detail">
                                             <i class="dropdown-ico fa-solid fa-cog"></i> Properties
                                         </a>
                                     </div>
@@ -66,12 +66,12 @@
                                     <i class="nav-link-ico fa-solid fa-folder hover-hidden"></i>
                                     <div class="nav-link-title">Dr. Stevie Miller Jr.</div>
                                 </a>
-                                <div class="dropdown position-static">
-                                    <button class="btn btn-sq hover-block" data-bs-toggle="dropdown" type="button">
-                                        <i class="text-body-secondary fa-solid fa-ellipsis-h"></i>
+                                <div class="position-static">
+                                    <button class="btn btn-sq hover-block" data-bs-toggle="menu" type="button">
+                                        <i class="fg-3 fa-solid fa-ellipsis-h"></i>
                                     </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#setting/projects/DSMJ/detail">
+                                    <div class="menu">
+                                        <a class="menu-item" href="#setting/projects/DSMJ/detail">
                                             <i class="dropdown-ico fa-solid fa-cog"></i> Properties
                                         </a>
                                     </div>
@@ -97,7 +97,7 @@
                         </li>
                         <li class="nav-item nav-item-with-addons ">
                             <div class="nav-link hover-group position-relative">
-                                <button class="btn btn-sq hover-block position-absolute start-0 collapsed"
+                                <button class="btn btn-sq hover-block position-absolute start-0" aria-expanded="false"
                                     data-bs-target="#sub-t-p3" data-bs-toggle="collapse">
                                     <i class="fa-solid fa-angle-down collapse-icon"></i>
                                 </button>
@@ -106,12 +106,12 @@
                                     <i class="nav-link-ico fa-solid fa-folder hover-hidden"></i>
                                     <div class="nav-link-title">Ross Gulgowski</div>
                                 </a>
-                                <div class="dropdown position-static">
-                                    <button class="btn btn-sq hover-block" data-bs-toggle="dropdown" type="button">
-                                        <i class="text-body-secondary fa-solid fa-ellipsis-h"></i>
+                                <div class="position-static">
+                                    <button class="btn btn-sq hover-block" data-bs-toggle="menu" type="button">
+                                        <i class="fg-3 fa-solid fa-ellipsis-h"></i>
                                     </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#setting/projects/RG/detail">
+                                    <div class="menu">
+                                        <a class="menu-item" href="#setting/projects/RG/detail">
                                             <i class="dropdown-ico fa-solid fa-cog"></i> Properties
                                         </a>
                                     </div>
@@ -123,7 +123,7 @@
                     </ul>
                 </div>
 
-                <div class="text-body-tertiary nav-collapsed-hide d-flex align-items-center small nav-title-toggle py-2 collapsed"
+                <div class="fg-4 nav-collapsed-hide d-flex align-items-center small nav-title-toggle py-2 collapsed"
                     data-bs-target="#subnav-task-archived" data-bs-toggle="collapse">
                     <i class="fa-solid fa-angle-down collapse-icon"></i>
                     <span class="fw-medium">Archived</span>

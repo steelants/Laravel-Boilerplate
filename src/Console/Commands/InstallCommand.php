@@ -180,10 +180,12 @@ class InstallCommand extends Command
 
         unset($packages['devDependencies']);
         $packages['dependencies']['jquery'] = '^3.6.1';
-        $packages['dependencies']['sass'] = '1.77.6';
-        $packages['dependencies']['bootstrap'] = '^5.3';
+        $packages['dependencies']['sass'] = '^1.99.0';
+        $packages['dependencies']['bootstrap'] = '6.0.0-alpha.1';
         $packages['dependencies']['@fortawesome/fontawesome-free'] = '^7.0';
-        $packages['dependencies']['@popperjs/core'] = '^2.11.6';
+        unset($packages['dependencies']['@popperjs/core']);
+        $packages['dependencies']['@floating-ui/dom'] = '^1.7.6';
+        $packages['dependencies']['vanilla-calendar-pro'] = '^3.4.0';
         $packages['dependencies']['vite'] = '^6.2.0';
         $packages['dependencies']['laravel-vite-plugin'] = '^1.0.0';
         $packages['dependencies']['quill'] = '^2.0.3';
@@ -193,6 +195,7 @@ class InstallCommand extends Command
         $packages['dependencies']['ace-builds'] = '^1.44.0';
         $packages['devDependencies']['postcss'] = '^8.5.6';
         $packages['devDependencies']['postcss-hover-media-feature'] = '^1.0.2';
+        $packages['devDependencies']['postcss-prefix-custom-properties'] = '^0.1.0';
 
         file_put_contents(base_path('package.json'), json_encode($packages, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . PHP_EOL);
     }

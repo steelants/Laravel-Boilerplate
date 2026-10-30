@@ -8,6 +8,6 @@ class BoolAsIcon implements RenderCast
 {
     public function render($key, $value, $model)
     {
-        return '<i class="' . ($value ? 'fa-regular fa-check-circle text-success' : 'fa-regular fa-times-circle text-danger') . '"></i>';
+        return '<i class="' . ($value ? 'fa-regular fa-check-circle fg-success' : 'fa-regular fa-times-circle fg-danger') . '"></i>';
     }
 }

@@ -15,7 +15,7 @@
         @csrf
         <x-form::input class="mb-3" type="text" name="code" id="code" label="{{ __('Authentication code') }}:" />
         <div class="d-flex">
-            <x-form::button class="btn-primary" type="submit">{{ __('boilerplate::auth.login') }}</x-form::button>
+            <x-form::button class="btn-solid theme-primary" type="submit">{{ __('boilerplate::auth.login') }}</x-form::button>
         </div>
     </form>
 </div>

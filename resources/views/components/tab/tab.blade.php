@@ -1,3 +1,4 @@
+@use('SteelAnts\LaravelBoilerplate\Support\BootstrapTheme')
 @props(['name', 'active' => false, 'disabled' => false, 'badge' => null, 'badgeColor' => 'secondary'])
 
 <li data-tab-item class="nav-item" role="presentation">
@@ -11,5 +12,5 @@
         id="{{ $name }}"
         :aria-selected="activeTab === '{{ $name }}'"
         @if($disabled) disabled aria-disabled="true" @endif
-    >{{ $slot }}@if(filled((string) $badge))<span class="badge rounded-pill text-bg-{{ $badgeColor }} ms-1">{{ $badge }}</span>@endif</button>
+    >{{ $slot }}@if(filled((string) $badge))<span class="badge rounded-pill theme-{{ BootstrapTheme::theme($badgeColor) }} ms-1">{{ $badge }}</span>@endif</button>
 </li>

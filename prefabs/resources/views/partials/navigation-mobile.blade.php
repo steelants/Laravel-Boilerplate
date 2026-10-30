@@ -19,7 +19,7 @@
             </a>
         </li>
 
-        <li class="mt-4 text-muted"><small>{{ __('System') }}</small></li>
+        <li class="mt-4 fg-3"><small>{{ __('System') }}</small></li>
         <li class="nav-item {{ request()->routeIs('system.log.index') ? 'is-active' : '' }}">
             <a class="nav-link" href="{{ route('system.log.index') }}">
                 <i class="nav-link-ico fa-solid fa-bug"></i>

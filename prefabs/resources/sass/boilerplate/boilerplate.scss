@@ -37,6 +37,8 @@
         --body-font-size: .875rem,
         --body-line-height: calc(1.25 / .875),
         --heading-font-weight: 600,
+        // $form-label-tokens are never emitted in 6.0.0-alpha.1, .form-label only reads the variable
+        --label-margin-bottom: .25rem,
         --btn-input-min-height: 0,
         --btn-input-padding-y: .4375rem,
         --btn-input-padding-x: .75rem,
@@ -115,10 +117,6 @@
         --dialog-border-color: rgba(115, 115, 115, .25),
         --dialog-header-border-width: 0,
         --dialog-footer-border-width: 0,
-    ),
-    $form-label-tokens: (
-        --label-margin-bottom: .25rem,
-        --label-font-weight: 500,
     ),
     $card-tokens: (
         --card-spacer-y: $card-spacer-y,

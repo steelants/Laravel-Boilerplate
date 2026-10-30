@@ -106,19 +106,19 @@ window.addEventListener('openDropdown', function(e){
 });
 
 window.openDropdown = function(selector){
-    document.querySelector(selector + ' [data-bs-toggle="dropdown"]').click();
+    document.querySelector(selector + ' [data-bs-toggle="menu"]').click();
 }
 
 window.openDropdownAlpine = function (el){
-    if(el.dataset.bsToggle == 'dropdown'){
-        (bootstrap.Dropdown.getOrCreateInstance(el)).hide();
+    if(el.dataset.bsToggle == 'menu'){
+        (bootstrap.Menu.getOrCreateInstance(el)).hide();
     }else{
-        (bootstrap.Dropdown.getOrCreateInstance(el)).show();
-        el.dataset.bsToggle = 'dropdown';
+        (bootstrap.Menu.getOrCreateInstance(el)).show();
+        el.dataset.bsToggle = 'menu';
     }
 }
 
-window.addEventListener('hidden.bs.dropdown', event => {
+window.addEventListener('hidden.bs.menu', event => {
     if(event.target.dataset.toggle == 'custom'){
         setTimeout(function(){
             delete event.target.dataset.bsToggle;

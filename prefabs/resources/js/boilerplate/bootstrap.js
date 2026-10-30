@@ -11,7 +11,7 @@
 import $ from 'jquery';
 window.$ = window.jQuery = $;
 
+// Bootstrap 6 ships ES modules only, inline scripts in Blade still use the global.
 import * as bootstrap from 'bootstrap';
-bootstrap.Dropdown.Default.boundary = 'body';
-bootstrap.Dropdown.Default.popperConfig = { strategy: 'fixed' };
+bootstrap.Menu.Default.strategy = 'fixed';
 window.bootstrap = bootstrap;

@@ -59,7 +59,7 @@
                 <input class="form-control" id="newPassword-confirm" name="newPassword_confirmation" type="password">
             </div>
 
-            <button class="btn btn-primary" type="submit">{{ __('Update') }}</button>
+            <button class="btn btn-solid theme-primary" type="submit">{{ __('Update') }}</button>
         </form>
     </div>
 </x-layout-app>

@@ -105,11 +105,11 @@ a{
 }
 
 
-.collapsed .collapse-indicator{
+[aria-expanded="false"] .collapse-indicator{
     transform: rotate(180deg);
 }
 
-.collapsed .collapse-icon {
+[aria-expanded="false"] .collapse-icon {
     transform: rotate(-90deg);
 }
 

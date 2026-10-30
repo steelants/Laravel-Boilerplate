@@ -6,7 +6,7 @@
     {{ __('auth.notReceiveEmail') }}
 
     @if (session('resent'))
-        <div class="alert alert-success" role="alert">
+        <div class="alert theme-success" role="alert">
             {{ __('auth.sendEmail') }}
         </div>
     @endif
@@ -14,7 +14,7 @@
     <form method="POST" action="{{ route('verification.resend') }}">
         @csrf
         <div class="d-flex">
-            <x-form::button class="btn-primary" type="submit">{{ __('resend') }}</x-form::button>
+            <x-form::button class="btn-solid theme-primary" type="submit">{{ __('resend') }}</x-form::button>
         </div>
     </form>
 </div>
@@ -25,13 +25,13 @@
 <x-layout-auth>
 <div class="container-xl">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="md:col-8">
             <div class="card">
                 <div class="card-header">{{ __('auth.Verify') }}</div>
 
                 <div class="card-body">
                     @if (session('resent'))
-                        <div class="alert alert-success" role="alert">
+                        <div class="alert theme-success" role="alert">
                             {{ __('auth.sendEmail') }}
                         </div>
                     @endif

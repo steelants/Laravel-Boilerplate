@@ -10,7 +10,7 @@
         @endif
         <div class="stat-value">{{ $value ?? $slot }}</div>
         @isset($description)
-            <div class="small text-body-secondary mt-1">{{ $description }}</div>
+            <div class="small fg-3 mt-1">{{ $description }}</div>
         @endisset
     </div>
 </{{ $href ? 'a' : 'div' }}>

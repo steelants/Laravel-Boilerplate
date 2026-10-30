@@ -1,4 +1,4 @@
-<div {{ $attributes }} class="dropdown" x-data="{
+<div {{ $attributes }} x-data="{
     search: '',
     selectedId: @entangle($property).live,
     options: @js(array_values($options)),
@@ -26,22 +26,22 @@
         }
     }
 }">
-    <div data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="{{ $autoclose }}" wire:ignore.self>
+    <div data-bs-toggle="menu" aria-expanded="false" data-bs-auto-close="{{ $autoclose }}" wire:ignore.self>
         @if(isset($trigger) && !$trigger->isEmpty())
             {{ $trigger }}
         @else
             <button class="btn border" type="button">
                 <span>{{ $label }}</span>
-                <span class="badge text-bg-light" x-text="selectedOption"></span>
+                <span class="badge bg-secondary fg-contrast-secondary" x-text="selectedOption"></span>
                 <i class="fa-solid fa-chevron-down ms-2"></i>
             </button>
         @endif
     </div>
-    <div class="dropdown-menu" wire:ignore.self>
+    <div class="menu" wire:ignore.self>
         <input class="dropdown-input" type="text" placeholder="{{ __('Search...') }}" x-model="search">
         <template x-for="option in filteredOptions" :key="option.id">
-            <label class="dropdown-item">
-                <input class="form-check-input" type="checkbox" x-bind:checked="isSelectedOption(option)" @change="selectOption(option)">
+            <label class="menu-item">
+                <input class="check" type="checkbox" x-bind:checked="isSelectedOption(option)" @change="selectOption(option)">
                 <span x-text="option.name"></span>
             </label>
         </template>

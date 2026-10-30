@@ -1,5 +1,5 @@
 <div>
-    <p class="text-muted">{{ __('Select components to restore. This operation will overwrite current data.') }}</p>
+    <p class="fg-3">{{ __('Select components to restore. This operation will overwrite current data.') }}</p>
     <x-form::form wire:submit.prevent="store">
         @foreach ($this->fields as $field)
             <x-form-components::field
@@ -9,7 +9,7 @@
                 :type="$this->types[$field] ?? null"
             />
         @endforeach
-        <x-form::button class="btn-warning" type="submit">
+        <x-form::button class="btn-solid theme-warning" type="submit">
             <i class="fa-solid fa-undo me-1"></i>{{ __('Restore') }}
         </x-form::button>
     </x-form::form>

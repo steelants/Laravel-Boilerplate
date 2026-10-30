@@ -10,22 +10,22 @@
 		</div>
 		<div class="">
 			@foreach ($jobs_classes as $job)
-				<x-form::button class="btn-primary" group-class="mb-3"
+				<x-form::button class="btn-solid theme-primary" group-class="mb-3"
 					onclick="Livewire.dispatch('openModal', {livewireComponents: 'job.form', title:  '{{ $job }}', parameters: {job: '{{ $job }}'}})">{{ $job }}</x-form::button>
 			@endforeach
 		</div>
 
 		<div class="page-header mb-2 mt-4">
 			<h5>
-				{{ __("Waiting") }} <span class="badge text-bg-secondary">{{ $waiting_count }}</span>
-				<span class="badge text-bg-primary">{{ __('Processing') }} {{ $processing_count }}</span>
+				{{ __("Waiting") }} <span class="badge bg-secondary fg-contrast-secondary">{{ $waiting_count }}</span>
+				<span class="badge bg-primary fg-contrast-primary">{{ __('Processing') }} {{ $processing_count }}</span>
 			</h5>
 			<x-boilerplate::form-button :action="route('system.jobs.stop')" :confirm="__('Do you really want to stop all waiting jobs?')" :label="__('Stop jobs')" variant="warning" icon="fa-solid fa-stop" class="btn-sm" />
 		</div>
         @livewire('job.data-table', [], key('waiting-jobs'))
 
 		<div class="page-header mb-2 mt-4">
-			<h5>{{ __("Failed") }} <span class="badge text-bg-secondary">{{ $failed_count }}</span></h5>
+			<h5>{{ __("Failed") }} <span class="badge bg-secondary fg-contrast-secondary">{{ $failed_count }}</span></h5>
 			<x-boilerplate::form-button :action="route('system.jobs.rerun')" :confirm="__('Do you really want to rerun all failed jobs?')" :label="__('Rerun jobs')" variant="success" icon="fa-solid fa-redo" class="btn-sm" />
 		</div>
         {{-- Both tables are the same component and DataTableComponent::queryString() has no
