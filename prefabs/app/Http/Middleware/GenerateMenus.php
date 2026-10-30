@@ -26,6 +26,10 @@ class GenerateMenus
         }
 
         $menuRoutes = [
+			'Public Web' => [
+                'fas fa-external-link-alt',
+                'web.home',
+            ],
             'Home' => [
                 ' fa-solid fa-home',
                 'home',
