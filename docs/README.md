@@ -24,6 +24,7 @@ SteelAnts Laravel-Boilerplate is a Laravel package providing an application temp
 
 ## Upgrade Guides
 
+- [v3.1 to v3.2](updates/upgrade-3_2.md)
 - [v2.6 to v3.0](updates/upgrade-3_0.md)
 - [v2.3 to v2.4](updates/upgrade-2_4.md)
 - [v2.2 to v2.3](updates/upgrade-2_3.md)

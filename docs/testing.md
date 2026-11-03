@@ -67,6 +67,25 @@ php artisan make:basic-tests
 ```
 
 
+## Tests for Applications
+
+Tests in `tests/App/` run in the package and are also meant to be copied into applications as
+`tests/Feature/Boilerplate/`. The upgrade guide ([v3.1 to v3.2](updates/upgrade-3_2.md)) tells the
+AI agent performing the upgrade to copy them. Write them so they work in both places:
+
+- declare `uses(\Tests\TestCase::class)` - in the package it is an alias of the testbench test
+  case (`tests/Pest.php`),
+- keep helper classes in the test file under the `SteelAnts\LaravelBoilerplate\Tests\App`
+  namespace, `tests/Fixtures` is not autoloaded in applications,
+- do not depend on testbench-only setup (package migrations, routes from `TestCase`).
+
+Run only these tests:
+
+```bash
+./vendor/bin/pest --testsuite=App
+```
+
+
 ## Before Creating a Pull Request
 
 Before submitting changes:
