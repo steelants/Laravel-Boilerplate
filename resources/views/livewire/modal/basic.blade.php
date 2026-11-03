@@ -34,8 +34,10 @@
                 (bootstrap.Modal.getInstance(myModalEl)).hide();
             })
             Livewire.on('set-modal-title', event => {
-                $wire.title = event[0];
-                document.getElementById('{{ $modalId }}-label').innerHTML = $wire.title;
+                // Jen v prohlizeci, na server se titulek dostane s dalsim requestem (bez requestu navic).
+                const title = event.title ?? event[0] ?? '';
+                $wire.title = title;
+                document.getElementById('{{ $modalId }}-label').textContent = title;
             })
             window.addEventListener('close-modal', function() {
                 (bootstrap.Modal.getInstance(myModalEl)).hide();

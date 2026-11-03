@@ -4,6 +4,7 @@ namespace SteelAnts\LaravelBoilerplate\Livewire\Modal;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Livewire\Exceptions\ComponentNotFoundException;
@@ -13,6 +14,8 @@ use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
 
 class Basic extends Component
 {
+    private const SIZES = ['sm', 'md', 'lg', 'xl'];
+
     protected $listeners = [
         'openModal',
         'closeModal',
@@ -30,22 +33,54 @@ class Basic extends Component
 
     public $modalId;
 
+    /*
+     * Zamerne bez PHP typu: Livewire TypeError pri updatu meni na abort(419) bez reportu chyby.
+     * Neplatne hodnoty proto vyhazuji InvalidArgumentException, ktera se reportuje normalne.
+     *
+     * title neni Locked: event set-modal-title ho meni jen v prohlizeci ($wire.title, bez requestu
+     * navic) a na server dorazi s dalsim requestem. Jde o zobrazovany text, Blade ho escapuje,
+     * a updatedTitle() kontroluje typ.
+     */
+
+    /** @var string */
     public $title;
 
+    /** @var string */
+    #[Locked]
     public $size;
 
+    /** @var bool */
+    #[Locked]
     public $static;
 
     /**
      * Open modal
      *
+     * Parametry nemaji PHP typy schvalne - TypeError by Livewire v produkci prevedl na 419 Page
+     * expired a chyba by se nereportovala. Kontrola je proto rucni a vyhazuje InvalidArgumentException.
+     *
      * @param string|array $livewireComponents Component name, can be array
-     * @param string $title Modal title
+     * @param string|null $title Modal title
      * @param array $parameters Component parameters
+     * @param 'sm'|'md'|'lg'|'xl' $size Modal size
+     * @param bool $static Static backdrop, modal does not close on click outside or Esc
      * @return void
+     * @throws InvalidArgumentException
      */
     public function openModal($livewireComponents, $title = "", $parameters = [], $size = 'md', $static = true)
     {
+        if ($title !== null && !is_string($title)) {
+            throw new InvalidArgumentException(sprintf('Modal title must be a string, %s given (components: %s).', get_debug_type($title), json_encode($livewireComponents)));
+        }
+
+        if (!in_array($size, self::SIZES, true)) {
+            throw new InvalidArgumentException(sprintf('Modal size must be one of %s, %s given (components: %s).', implode(', ', self::SIZES), is_string($size) ? "'{$size}'" : get_debug_type($size), json_encode($livewireComponents)));
+        }
+
+        if (!is_bool($static)) {
+            throw new InvalidArgumentException(sprintf('Modal static must be a bool, %s given (components: %s).', get_debug_type($static), json_encode($livewireComponents)));
+        }
+
         foreach ((array) $livewireComponents as $component) {
             if (!$this->canOpenComponent($component)) {
                 return;
@@ -54,9 +89,16 @@ class Basic extends Component
 
         $this->_livewireComponents = $livewireComponents;
         $this->_livewireComponentParameters = $parameters;
-        $this->title = $title;
+        $this->title = $title ?? '';
         $this->size = $size;
         $this->static = $static;
+    }
+
+    public function updatedTitle()
+    {
+        if ($this->title !== null && !is_string($this->title)) {
+            throw new InvalidArgumentException(sprintf('Modal title must be a string, %s given (components: %s).', get_debug_type($this->title), json_encode($this->_livewireComponents)));
+        }
     }
 
     public function closeModal()
