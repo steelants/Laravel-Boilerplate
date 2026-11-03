@@ -1,18 +1,51 @@
 <?php
 
+/*
+ * Kopiruje se do aplikace (tests/Feature/Boilerplate) pri upgradu podle docs/updates/upgrade-3_2.md,
+ * proto pouziva Tests\TestCase jako testy z make:crud.
+ * V package je Tests\TestCase alias na testbench TestCase (tests/Pest.php).
+ */
+
+namespace SteelAnts\LaravelBoilerplate\Tests\App;
+
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Gate;
+use InvalidArgumentException;
+use Livewire\Component;
 use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
 use Livewire\LivewireServiceProvider;
+use SteelAnts\LaravelBoilerplate\Attributes\AllowInModal;
 use SteelAnts\LaravelBoilerplate\BoilerplateServiceProvider;
 use SteelAnts\LaravelBoilerplate\Livewire\Modal\Basic;
-use SteelAnts\LaravelBoilerplate\Tests\Fixtures\ModalGuestContent;
-use SteelAnts\LaravelBoilerplate\Tests\Fixtures\ModalPositionalAbilityContent;
+
+uses(\Tests\TestCase::class);
+
+#[AllowInModal(asGuest: true)]
+class ModalGuestContent extends Component
+{
+    public function render()
+    {
+        return '<div>guest content</div>';
+    }
+}
+
+// Pozicni zapis zamerne - modal ho musi vylozit jako ability.
+#[AllowInModal('is-modal-admin')]
+class ModalPositionalAbilityContent extends Component
+{
+    public function render()
+    {
+        return '<div>admin content</div>';
+    }
+}
 
 beforeEach(function () {
     // Livewire sifruje snapshot komponenty, testbench app key nema.
-    config()->set('app.key', 'base64:' . base64_encode(str_repeat('a', 32)));
+    if (!config('app.key')) {
+        config()->set('app.key', 'base64:' . base64_encode(str_repeat('a', 32)));
+    }
+
     $this->app->register(LivewireServiceProvider::class);
     $this->app->register(BoilerplateServiceProvider::class);
 

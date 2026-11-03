@@ -43,3 +43,24 @@ $this->dispatch('set-modal-title', title: __('New title'));
 The named `title:` form now works too; it used to be ignored because the listener read only the
 first positional argument. The title is written as text (`textContent`, previously `innerHTML`), so
 HTML in it is shown as text.
+
+### Package tests in your application
+
+The package now ships tests meant to run inside your application in
+`vendor/steelants/laravel-boilerplate/tests/App/`. Currently they cover the modal
+(`ModalBasicTest.php`): `openModal` validation, locked properties and `AllowInModal` abilities.
+
+**Instructions for the AI agent performing the upgrade** (repeat on every later upgrade):
+
+1. Copy every file from `vendor/steelants/laravel-boilerplate/tests/App/` to `tests/Feature/Boilerplate/`,
+   overwriting older copies. Delete files in `tests/Feature/Boilerplate/` that no longer exist in the
+   package. Do not put project-specific tests into that folder.
+2. Keep the files unchanged, except for adapting them to the project's Pest setup. Each file declares
+   `uses(\Tests\TestCase::class)`. If `tests/Pest.php` already applies a test case to `tests/Feature`
+   (e.g. `pest()->extend(Tests\TestCase::class)->in('Feature')`), remove that `uses()` line from the
+   copied file, otherwise Pest fails with `TestCaseAlreadyInUse`.
+3. Run them: `php artisan test tests/Feature/Boilerplate`. A failure means the project does not work
+   with the new package version (e.g. an `openModal` call with invalid arguments) - fix the project
+   code, not the copied test. If the failure is caused by the package itself, report it instead of
+   editing the test.
+4. Commit the copied tests together with the upgrade.
