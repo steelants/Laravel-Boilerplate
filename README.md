@@ -56,6 +56,7 @@ SteelAnts Laravel-Boilerplate provides:
 - [Configuration](docs/configuration.md)
 - [Menu Builder](docs/menu.md)
 - [Alerts](docs/alerts.md)
+- [Actions](docs/actions.md)
 - [CRUD Generation](docs/crud.md)
 - [Model Traits](docs/traits.md)
 - [Commands](docs/commands.md)

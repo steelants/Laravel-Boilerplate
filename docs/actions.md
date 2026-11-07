@@ -1,0 +1,156 @@
+# Actions
+
+Actions define, in one place, everything a user can do with an object: links (Edit, Show) and operations
+(Mark as paid, Unlock, Remove). The same definition feeds the DataTable row menu, the actions menu on a detail
+page and bulk actions over a DataTable selection, so labels, confirmations and permissions cannot drift apart.
+
+The subject does not have to be an Eloquent model - logs, events or DTOs work too.
+
+## Action sets
+
+An action set lists the actions of one subject type. For Eloquent models extend `ModelActionSet`:
+
+```php
+use SteelAnts\LaravelBoilerplate\Support\Actions\Action;
+use SteelAnts\LaravelBoilerplate\Support\Actions\ModelActionSet;
+
+class InvoiceActions extends ModelActionSet
+{
+    protected string $model = Invoice::class;
+
+    protected function define(): array
+    {
+        return [
+            Action::make('edit')
+                ->label(__('Edit'))
+                ->icon('fas fa-pen')
+                ->url(fn (Invoice $invoice) => route('invoice.edit', $invoice))
+                ->can('update'),
+
+            Action::make('unlock')
+                ->label(__('Unlock'))
+                ->icon('fas fa-unlock')
+                ->confirm(__('Are you sure you want to unlock this invoice?'))
+                ->visible(fn (Invoice $invoice) => $invoice->is_locked)
+                ->can('has-manager')
+                ->handle(fn (Invoice $invoice, InvoiceService $service) => $service->unlock($invoice)),
+
+            Action::delete()->confirm(__('Are you sure you want to remove this invoice?')),
+        ];
+    }
+
+    public function indexUrl(object $subject): string
+    {
+        return route('invoice.index');
+    }
+}
+```
+
+- An action is either a link (`url()`) or an operation (`handle()`), never both.
+- Any value can be a closure. The container calls it with the subject (matched by its class or by the parameter
+  name `$subject`) and injects services, e.g. `fn (Invoice $invoice, InvoiceService $service) => ...`.
+- `visible()` checks the subject state, `can()` checks a policy ability or gate. Both are evaluated when the menu
+  is rendered **and** again when the action runs, so a hidden action cannot be called from the browser.
+- `handle()` may return an `ActionResult`: `refresh()` (default), `redirect($url)` or `removed()`.
+- `Action::delete()` removes a model through its `delete` policy and returns `ActionResult::removed()`.
+
+For other subjects extend `ActionSet` and implement `resolve(string $key): object` and `key(object $subject): string`.
+`resolve()` loads the subject from a key coming from the browser, so it must restrict it to what the user may access.
+
+## DataTable row actions
+
+```php
+use SteelAnts\LaravelBoilerplate\Attributes\UseActions;
+use SteelAnts\LaravelBoilerplate\Traits\WithActions;
+
+#[UseActions(InvoiceActions::class)]
+class DataTable extends DataTableComponent
+{
+    use UseDatabase, WithActions;
+}
+```
+
+`WithActions` implements `actions($row)` and `runAction()`. Actions are evaluated against the model, not against
+the row array: the models of the whole page are loaded with a single query (`resolveMany()`).
+
+## Detail page menu
+
+Put `#[UseActions]` on the subject class and render the Livewire menu:
+
+```php
+#[UseActions(InvoiceActions::class)]
+class Invoice extends Model
+```
+
+```blade
+<livewire:boilerplate.actions.menu :subject="$invoice" />
+```
+
+A subject without the attribute can pass the set explicitly: `:set="LogEntryActions::class"`.
+After an action the menu reloads the page; after `ActionResult::removed()` it goes to `indexUrl()`.
+
+## Bulk actions
+
+Bulk actions live in a separate set. Their input is the list of selected keys:
+
+```php
+use SteelAnts\LaravelBoilerplate\Support\Actions\BulkAction;
+use SteelAnts\LaravelBoilerplate\Support\Actions\ModelBulkActionSet;
+
+class InvoiceBulkActions extends ModelBulkActionSet
+{
+    protected string $model = Invoice::class;
+
+    protected function define(): array
+    {
+        return [
+            BulkAction::make('markPaid')
+                ->label(__('Mark as paid'))
+                ->icon('fas fa-check')
+                ->authorize('has-manager')
+                ->can('update')
+                ->applicable(fn (Invoice $invoice) => !$invoice->is_paid, __('Already paid'))
+                ->each(fn (Invoice $invoice, InvoiceService $service) => $service->setPaid($invoice, true)),
+
+            BulkAction::delete()->authorize('has-manager'),
+        ];
+    }
+}
+```
+
+```php
+#[UseActions(InvoiceActions::class)]
+#[UseBulkActions(InvoiceBulkActions::class)]
+class DataTable extends DataTableComponent
+{
+    use UseDatabase, WithActions, WithBulkActions;
+}
+```
+
+- `authorize()` is a gate without a subject and decides whether the action is offered at all. Selection is enabled
+  only when at least one bulk action is offered.
+- `can()` and `applicable()` are checked for every selected object; objects that fail are skipped with a reason.
+- `each()` handles objects one by one: an `AuthorizationException` or `ActionException` skips the object with a
+  reason, any other exception marks it as failed (reported) and processing continues.
+- `handle(fn (Collection $subjects, ...) => ...)` receives all objects that passed at once (one UPDATE, export, ...).
+  It may return a `BulkResult`, otherwise all passed objects count as processed.
+- The selection is always restricted to the DataTable `query()` (`selectedQuery()`), forged keys are ignored.
+- The result is shown as an alert, e.g. "Processed 0 of 2 items. 2 skipped. Already paid (2)".
+
+The DataTable view must render the bulk bar and the selection column
+(`<x-datatable-bulk-bar ...>`, `:$selectable` on the head and body components).
+
+## Errors
+
+Throw `SteelAnts\LaravelBoilerplate\Exceptions\ActionException` from a service to refuse an operation with a
+message for the user (for example "The default supplier cannot be removed"). The `HandlesActionErrors` trait used by
+`WithActions`, `WithBulkActions` and the menu turns it, as well as `AuthorizationException`, into an alert instead of
+an error page. It can be used on its own:
+
+```php
+use SteelAnts\LaravelBoilerplate\Traits\HandlesActionErrors;
+
+if ($this->attempt(fn () => $service->archive($project))) {
+    // success
+}
+```
