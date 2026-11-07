@@ -5,6 +5,7 @@ namespace SteelAnts\LaravelBoilerplate\Traits;
 use LogicException;
 use SteelAnts\LaravelBoilerplate\Attributes\UseActions;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionItem;
+use SteelAnts\LaravelBoilerplate\Support\Actions\ActionResult;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionRunner;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionSet;
 use SteelAnts\LaravelBoilerplate\Traits\HandlesActionErrors;
@@ -60,7 +61,14 @@ trait WithActions
             if ($result->redirect !== null) {
                 $this->redirect($result->redirect, navigate: true);
             }
+
+            $this->afterAction($name, $result);
         });
+    }
+
+    /** Hook po úspěšné akci (alert, event pro okolní komponenty, ...). */
+    protected function afterAction(string $name, ActionResult $result): void
+    {
     }
 
     protected function actionSet(): ActionSet
@@ -70,7 +78,12 @@ trait WithActions
 
     private function toDataTableAction(ActionItem $item, string $key): array
     {
-        $action = $item->isLink() ? ['type' => 'url', 'url' => $item->url] : ['type' => 'livewire', 'action' => 'runAction', 'parameters' => [$item->name, $key], 'confirm' => $item->confirm];
+        $action = match (true) {
+            $item->isLink()     => ['type' => 'url', 'url' => $item->url],
+            $item->isLivewire() => ['type' => 'livewire', 'action' => $item->method, 'parameters' => $item->parameters],
+            default             => ['type' => 'livewire', 'action' => 'runAction', 'parameters' => [$item->name, $key]],
+        };
+        $action['confirm'] = $item->confirm;
 
         return array_filter($action + [
             'text'        => $item->text,

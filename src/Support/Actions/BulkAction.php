@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use SteelAnts\LaravelBoilerplate\Support\Actions\Concerns\DescribesAction;
 
 /**
- * Hromadná akce nad výběrem objektů. Obsluha buď po jednom (each - každý objekt projde can()/applicable()
+ * Hromadná akce nad výběrem objektů. Obsluha po jednom (each - každý objekt projde can()/applicable()
  * zvlášť, chyba jednoho nezastaví ostatní), nebo najednou (handle - dostane kolekci objektů, které prošly):
  *
  *     BulkAction::make('markPaid')->authorize('has-manager')->can('update')
@@ -30,6 +30,8 @@ final class BulkAction
     private ?Closure $each = null;
 
     private ?Closure $handler = null;
+
+    private ?Closure $keys = null;
 
     private function __construct(public readonly string $name)
     {
@@ -88,6 +90,29 @@ final class BulkAction
         $this->handler = $handler;
 
         return $this;
+    }
+
+    /**
+     * Obsluha bez načítání objektů: dostane jen pole klíčů výběru (parametr $keys) a předá ho službě,
+     * která se postará o zbytek - fn (array $keys, InvoiceService $service) => $service->markPaid($keys).
+     * Klíče přicházejí z prohlížeče, službu proto musí sama omezit na to, k čemu má uživatel přístup.
+     * Neprochází can()/applicable() po objektech. Vrácené číslo se počítá jako zpracované, BulkResult se předá dál.
+     */
+    public function keys(Closure $handler): self
+    {
+        $this->keys = $handler;
+
+        return $this;
+    }
+
+    public function keysHandler(): ?Closure
+    {
+        return $this->keys;
+    }
+
+    public function hasSubjectChecks(): bool
+    {
+        return $this->ability() !== null || $this->applicable !== null;
     }
 
     public function gate(): ?string

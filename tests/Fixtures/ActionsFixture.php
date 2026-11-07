@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 use SteelAnts\LaravelBoilerplate\Attributes\UseActions;
 use SteelAnts\LaravelBoilerplate\Exceptions\ActionException;
 use SteelAnts\LaravelBoilerplate\Support\Actions\Action;
-use SteelAnts\LaravelBoilerplate\Support\Actions\ActionResult;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionSet;
 use SteelAnts\LaravelBoilerplate\Support\Actions\BulkAction;
 use SteelAnts\LaravelBoilerplate\Support\Actions\BulkActionSet;
@@ -69,15 +68,20 @@ class LogEntryActions extends ActionSet
                 ->can('resolve-log')
                 ->handle(fn (LogEntryFixture $entry, LogEntryServiceFixture $service) => $service->resolve($entry)),
 
-            Action::make('forget')
-                ->label('Forget')
-                ->icon('fas fa-trash')
-                ->destructive()
-                ->handle(function (LogEntryFixture $entry): ActionResult {
-                    unset(LogEntryFixture::$store[$entry->id]);
+            Action::remove(function (LogEntryFixture $entry): void {
+                unset(LogEntryFixture::$store[$entry->id]);
+            })->confirm('Forget?'),
 
-                    return ActionResult::removed();
-                }),
+            // Metoda komponenty (modal) - jen DataTable, menu v detailu ji vynechá.
+            Action::make('inspect')
+                ->label('Inspect')
+                ->icon('fas fa-bug')
+                ->livewire('inspect'),
+
+            // Přepínač ve sloupci (RenderCasts\ToggleAction) - spustitelný, ale v menu se nenabízí.
+            Action::make('toggleResolved')
+                ->unlisted()
+                ->handle(fn (LogEntryFixture $entry) => $entry->resolved = !$entry->resolved),
         ];
     }
 

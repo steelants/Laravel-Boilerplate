@@ -23,12 +23,12 @@ final class ActionRunner
     ) {
     }
 
-    /** @return list<ActionItem> akce, které uživatel nad objektem vidí */
+    /** @return list<ActionItem> akce, které uživatel nad objektem vidí (bez unlisted) */
     public function items(ActionSet $set, object $subject): array
     {
         $items = [];
         foreach ($set->actions() as $action) {
-            if ($this->allows($action, $subject)) {
+            if ($action->isListed() && $this->allows($action, $subject)) {
                 $items[] = new ActionItem(
                     name: $action->name,
                     text: $action->labelFor($subject),
@@ -36,6 +36,8 @@ final class ActionRunner
                     url: $action->urlFor($subject),
                     confirm: $action->confirmFor($subject),
                     destructive: $action->isDestructive(),
+                    method: $action->method(),
+                    parameters: $action->isLivewire() ? ($action->parametersFor($subject) ?? $set->key($subject)) : null,
                 );
             }
         }
@@ -50,14 +52,14 @@ final class ActionRunner
     }
 
     /**
-     * @throws NotFoundHttpException neznámá akce nebo odkaz (nemá co spustit)
+     * @throws NotFoundHttpException neznámá akce, odkaz nebo Livewire akce (nemá obsluhu)
      * @throws AuthorizationException akce není pro uživatele / stav objektu dostupná
      */
     public function run(ActionSet $set, object $subject, string $name): ActionResult
     {
         $action = $set->find($name);
 
-        if ($action === null || $action->isLink()) {
+        if ($action === null || $action->handler() === null) {
             throw new NotFoundHttpException();
         }
 
@@ -109,6 +111,12 @@ final class ActionRunner
 
         if (!$this->allowsBulk($action)) {
             throw new AuthorizationException();
+        }
+
+        if ($action->keysHandler() !== null) {
+            $result = $this->container->call($action->keysHandler(), ['keys' => $keys]);
+
+            return $result instanceof BulkResult ? $result : new BulkResult(is_int($result) ? $result : count($keys));
         }
 
         $ok = $failed = 0;

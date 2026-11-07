@@ -8,6 +8,7 @@ use Livewire\Attributes\Locked;
 use Livewire\Component;
 use LogicException;
 use SteelAnts\LaravelBoilerplate\Attributes\UseActions;
+use SteelAnts\LaravelBoilerplate\Support\Actions\ActionItem;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionRunner;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionSet;
 use SteelAnts\LaravelBoilerplate\Traits\HandlesActionErrors;
@@ -32,9 +33,14 @@ class Menu extends Component
     #[Locked]
     public string $pageUrl;
 
+    /** Tlačítka vedle sebe místo dropdown menu (např. hlavička stránky v nastavení). */
+    #[Locked]
+    public bool $asButton = false;
+
     /** @param  class-string<ActionSet>|null  $set  sada pro objekty bez atributu #[UseActions] */
-    public function mount(object $subject, ?string $set = null): void
+    public function mount(object $subject, ?string $set = null, bool $asButton = false): void
     {
+        $this->asButton = $asButton;
         $this->set = $set ?? UseActions::on($subject) ?? throw new LogicException($subject::class . ' needs the #[UseActions(...)] attribute.');
         $this->key = $this->actionSet()->key($subject);
         $this->pageUrl = url()->current();
@@ -46,11 +52,14 @@ class Menu extends Component
         return $this->actionSet()->resolve($this->key);
     }
 
-    /** @return list<ActionItem> */
+    /** @return list<ActionItem> akce kromě Livewire akcí - ty volají metodu DataTable, kterou detail nemá */
     #[Computed]
     public function items(): array
     {
-        return app(ActionRunner::class)->items($this->actionSet(), $this->subject);
+        return array_values(array_filter(
+            app(ActionRunner::class)->items($this->actionSet(), $this->subject),
+            fn (ActionItem $item) => !$item->isLivewire(),
+        ));
     }
 
     public function run(string $name): void

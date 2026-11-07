@@ -49,8 +49,12 @@ abstract class ActionSet
 
     protected function validateAction(object $action): void
     {
-        if (!$action instanceof Action || $action->isLink() === ($action->handler() !== null)) {
-            throw new LogicException(static::class . " action '{$action->name}' must be an Action with either url() or handle().");
+        $kinds = $action instanceof Action ? (int) $action->isLink() + (int) $action->isLivewire() + (int) ($action->handler() !== null) : 0;
+
+        if ($kinds !== 1) {
+            throw new LogicException(
+                static::class . " action '{$action->name}' must be an Action with exactly one of url(), livewire() or handle()."
+            );
         }
     }
 }

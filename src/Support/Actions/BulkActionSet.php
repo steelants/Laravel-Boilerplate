@@ -29,8 +29,14 @@ abstract class BulkActionSet
 
     protected function validateAction(object $action): void
     {
-        if (!$action instanceof BulkAction || ($action->eachHandler() === null) === ($action->handler() === null)) {
-            throw new LogicException(static::class . " bulk action '{$action->name}' must be a BulkAction with either each() or handle().");
+        $handlers = $action instanceof BulkAction ? (int) ($action->eachHandler() !== null) + (int) ($action->handler() !== null) + (int) ($action->keysHandler() !== null) : 0;
+
+        if ($handlers !== 1) {
+            throw new LogicException(static::class . " bulk action '{$action->name}' must be a BulkAction with exactly one of each(), handle() or keys().");
+        }
+
+        if ($action->keysHandler() !== null && $action->hasSubjectChecks()) {
+            throw new LogicException(static::class . " bulk action '{$action->name}' uses keys(), which cannot check can() or applicable() per object.");
         }
     }
 }

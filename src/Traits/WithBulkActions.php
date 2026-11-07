@@ -13,7 +13,8 @@ use SteelAnts\LaravelBoilerplate\Traits\HandlesActionErrors;
 /**
  * Hromadné akce DataTable ze sady #[UseBulkActions(InvoiceBulkActions::class)] nad komponentou.
  * Výběr a lištu řeší balíčkový HasBulkActions; zaškrtávat jde jen tehdy, když se uživateli nabízí
- * aspoň jedna akce. Výběr se vždy omezí na query() tabulky (selectedQuery), podvržené klíče neprojdou.
+ * aspoň jedna akce. Pro each()/handle() se výběr omezí na query() tabulky (selectedQuery), podvržené klíče neprojdou;
+ * keys() akce dostane výběr tak, jak je, a rozsah hlídá její služba.
  */
 trait WithBulkActions
 {
@@ -50,11 +51,18 @@ trait WithBulkActions
             return null;
         }
 
-        $query = $this->selectedQuery();
-        $keys = array_map('strval', $query->pluck($query->getModel()->getQualifiedKeyName())->all());
+        $set = $this->bulkActionSet();
 
-        $this->attempt(function () use ($keys, $action) {
-            $result = app(ActionRunner::class)->runBulk($this->bulkActionSet(), $keys, $action);
+        // keys() akce předá výběr rovnou službě (bez dotazu), ostatní klíče ověří proti query() tabulky.
+        if ($set->find($action)?->keysHandler() !== null) {
+            $keys = $this->selected;
+        } else {
+            $query = $this->selectedQuery();
+            $keys = array_map('strval', $query->pluck($query->getModel()->getQualifiedKeyName())->all());
+        }
+
+        $this->attempt(function () use ($set, $keys, $action) {
+            $result = app(ActionRunner::class)->runBulk($set, $keys, $action);
             $message = $this->bulkResultMessage($result);
 
             $result->hasProblems() ? alert()->warning($message)->now() : alert()->success($message)->now();

@@ -15,12 +15,20 @@ final readonly class ActionItem
         public ?string $url = null,
         public ?string $confirm = null,
         public bool $destructive = false,
+        public ?string $method = null,
+        public mixed $parameters = null,
     ) {
     }
 
     public function isLink(): bool
     {
         return $this->url !== null;
+    }
+
+    /** Akce volá metodu Livewire komponenty (jen DataTable). */
+    public function isLivewire(): bool
+    {
+        return $this->method !== null;
     }
 
     public function iconClass(): string

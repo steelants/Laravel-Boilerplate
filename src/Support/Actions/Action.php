@@ -4,11 +4,13 @@ namespace SteelAnts\LaravelBoilerplate\Support\Actions;
 
 use Closure;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use SteelAnts\LaravelBoilerplate\Support\Actions\Concerns\DescribesAction;
 
 /**
- * Definice jedné akce nad objektem: odkaz (url) nebo operace (handle). Hodnoty mohou být closure,
+ * Definice jedné akce nad objektem: odkaz (url), operace (handle), nebo volání metody Livewire komponenty
+ * (livewire - jen DataTable). Hodnoty mohou být closure,
  * které container zavolá s objektem (podle typu nebo názvu parametru $subject) a službami z DI:
  *
  *     Action::make('unlock')->visible(fn (Invoice $invoice) => $invoice->is_locked)
@@ -26,6 +28,12 @@ final class Action
 
     private ?Closure $handler = null;
 
+    private ?string $method = null;
+
+    private mixed $parameters = null;
+
+    private bool $listed = true;
+
     private function __construct(public readonly string $name)
     {
     }
@@ -35,17 +43,27 @@ final class Action
         return new self($name);
     }
 
-    /** Smazání přes policy 'delete', detail po něm přejde na ActionSet::indexUrl(). */
+    /** Smazání modelu přes policy 'delete' (ověří se při zobrazení i spuštění). */
     public static function delete(): self
+    {
+        return self::remove(function (Gate $gate, Model $subject): void {
+            $gate->authorize('delete', $subject);
+            $subject->delete();
+        })->can('delete');
+    }
+
+    /**
+     * Odstranění obsloužené vlastní službou, která si oprávnění ověřuje sama (např. kontroly navázaných dokladů).
+     * Po akci vrací ActionResult::removed() - detail přejde na ActionSet::indexUrl(), DataTable obnoví řádky.
+     */
+    public static function remove(Closure $handler): self
     {
         return self::make('remove')
             ->label(__('Remove'))
             ->icon('fas fa-trash')
-            ->can('delete')
             ->destructive()
-            ->handle(function (Gate $gate, Model $subject): ActionResult {
-                $gate->authorize('delete', $subject);
-                $subject->delete();
+            ->handle(function (Container $container, object $subject) use ($handler): ActionResult {
+                $container->call($handler, self::parameters($subject));
 
                 return ActionResult::removed();
             });
@@ -75,9 +93,50 @@ final class Action
         return $this;
     }
 
+    /**
+     * Akce obsloužená metodou Livewire komponenty (otevření modalu, stažení, ...) - nabízí se jen v DataTable,
+     * která metodu má; menu v detailu ji vynechá. Parametry jsou výchozí klíč objektu, nebo hodnota/closure.
+     */
+    public function livewire(string $method, mixed $parameters = null): self
+    {
+        $this->method = $method;
+        $this->parameters = $parameters;
+
+        return $this;
+    }
+
+    /** Akci jde spustit (např. přepínač ve sloupci, RenderCasts\ToggleAction), ale v menu se nenabízí. */
+    public function unlisted(): self
+    {
+        $this->listed = false;
+
+        return $this;
+    }
+
     public function isLink(): bool
     {
         return $this->url !== null;
+    }
+
+    public function isLivewire(): bool
+    {
+        return $this->method !== null;
+    }
+
+    public function isListed(): bool
+    {
+        return $this->listed;
+    }
+
+    public function method(): ?string
+    {
+        return $this->method;
+    }
+
+    /** Parametry volání Livewire metody; null = klíč objektu (doplní ActionRunner). */
+    public function parametersFor(object $subject): mixed
+    {
+        return self::evaluate($this->parameters, self::parameters($subject));
     }
 
     public function handler(): ?Closure

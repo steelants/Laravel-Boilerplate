@@ -46,13 +46,19 @@ class InvoiceActions extends ModelActionSet
 }
 ```
 
-- An action is either a link (`url()`) or an operation (`handle()`), never both.
+- An action is exactly one of: a link (`url()`), an operation (`handle()`) or a Livewire component method
+  (`livewire('edit')`, e.g. opening a modal - offered in the DataTable only, the detail menu skips it).
+  The method receives the subject key, or the value of the second argument: `livewire('trace', fn (FailedJob $job) => $job->uuid)`.
 - Any value can be a closure. The container calls it with the subject (matched by its class or by the parameter
   name `$subject`) and injects services, e.g. `fn (Invoice $invoice, InvoiceService $service) => ...`.
 - `visible()` checks the subject state, `can()` checks a policy ability or gate. Both are evaluated when the menu
   is rendered **and** again when the action runs, so a hidden action cannot be called from the browser.
 - `handle()` may return an `ActionResult`: `refresh()` (default), `redirect($url)` or `removed()`.
 - `Action::delete()` removes a model through its `delete` policy and returns `ActionResult::removed()`.
+- `Action::remove(fn (Supplier $supplier, SupplierService $service) => $service->delete($supplier))` is the same
+  "Remove" action handled by your own service (which authorizes itself); it also returns `ActionResult::removed()`.
+- `unlisted()` keeps an action runnable but hides it from menus - typically a boolean column toggled by
+  `RenderCasts\ToggleAction` (`is_active` calls the action `toggleIsActive`).
 
 For other subjects extend `ActionSet` and implement `resolve(string $key): object` and `key(object $subject): string`.
 `resolve()` loads the subject from a key coming from the browser, so it must restrict it to what the user may access.
@@ -73,6 +79,30 @@ class DataTable extends DataTableComponent
 `WithActions` implements `actions($row)` and `runAction()`. Actions are evaluated against the model, not against
 the row array: the models of the whole page are loaded with a single query (`resolveMany()`).
 
+React to a finished action (alert, event for other components) in the `afterAction()` hook. A table showing different
+subjects can pick the set at runtime by overriding `actionSet()`:
+
+```php
+protected function afterAction(string $name, ActionResult $result): void
+{
+    $this->dispatch('milestoneUpdated');
+}
+
+protected function actionSet(): ActionSet
+{
+    return app($this->failed ? FailedJobActions::class : JobActions::class);
+}
+```
+
+A boolean column can toggle an unlisted action:
+
+```php
+public function renderCasts(): array
+{
+    return ['is_active' => ToggleAction::class]; // runs the action "toggleIsActive"
+}
+```
+
 ## Detail page menu
 
 Put `#[UseActions]` on the subject class and render the Livewire menu:
@@ -87,6 +117,7 @@ class Invoice extends Model
 ```
 
 A subject without the attribute can pass the set explicitly: `:set="LogEntryActions::class"`.
+`:as-button="true"` renders the actions as buttons instead of a dropdown.
 After an action the menu reloads the page; after `ActionResult::removed()` it goes to `indexUrl()`.
 
 ## Bulk actions
@@ -132,9 +163,15 @@ class DataTable extends DataTableComponent
 - `can()` and `applicable()` are checked for every selected object; objects that fail are skipped with a reason.
 - `each()` handles objects one by one: an `AuthorizationException` or `ActionException` skips the object with a
   reason, any other exception marks it as failed (reported) and processing continues.
-- `handle(fn (Collection $subjects, ...) => ...)` receives all objects that passed at once (one UPDATE, export, ...).
+- `handle(fn (Collection $subjects, ...) => ...)` receives all objects that passed at once (export, ...).
   It may return a `BulkResult`, otherwise all passed objects count as processed.
-- The selection is always restricted to the DataTable `query()` (`selectedQuery()`), forged keys are ignored.
+- `keys(fn (array $keys, InvoiceService $service) => $service->markPaid($keys))` loads nothing: it passes the list of
+  selected keys (the parameter must be named `$keys`) straight to your service, which does the work - for example
+  one mass update. The returned number is reported as processed (default: the number of keys), a returned
+  `BulkResult` is passed through. It cannot be combined with `can()` or `applicable()`.
+- For `each()` and `handle()` the selection is restricted to the DataTable `query()` (`selectedQuery()`), forged keys
+  are ignored. `keys()` receives the selection as sent by the browser, so **the service must restrict the keys** to
+  records the user may change (tenant, ownership, state).
 - The result is shown as an alert, e.g. "Processed 0 of 2 items. 2 skipped. Already paid (2)".
 
 The DataTable view must render the bulk bar and the selection column

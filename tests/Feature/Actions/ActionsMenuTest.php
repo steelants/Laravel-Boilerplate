@@ -20,7 +20,7 @@ test('the menu is registered under the boilerplate prefix and lists the actions 
     $component = Livewire::test('boilerplate.actions.menu', ['subject' => new LogEntryFixture('a1')]);
 
     expect($component->get('set'))->toBe(LogEntryActions::class)
-        ->and(array_map(fn ($item) => $item->name, $component->instance()->items()))->toBe(['show', 'resolve', 'forget']);
+        ->and(array_map(fn ($item) => $item->name, $component->instance()->items()))->toBe(['show', 'resolve', 'remove']);
 
     $component->assertSee('Resolve a1')->assertSee('/logs/a1');
 });
@@ -37,8 +37,16 @@ test('running an action reloads the detail page', function () {
 
 test('a removed subject redirects to the index url of the set', function () {
     Livewire::test(Menu::class, ['subject' => new LogEntryFixture('a1')])
-        ->call('run', 'forget')
+        ->call('run', 'remove')
         ->assertRedirect('/logs');
+});
+
+test('the button variant renders actions as buttons instead of a dropdown', function () {
+    Livewire::test(Menu::class, ['subject' => new LogEntryFixture('a1'), 'asButton' => true])
+        ->assertSee('btn btn-danger', false)
+        ->assertSee('btn btn-secondary', false)
+        ->assertDontSee('bi-three-dots', false)
+        ->assertDontSee('Inspect');
 });
 
 test('a denied action shows an alert instead of an error page', function () {

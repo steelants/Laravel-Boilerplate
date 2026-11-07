@@ -25,13 +25,26 @@ beforeEach(function () {
 test('items carry the presentation evaluated for the subject', function () {
     $items = $this->runner->items($this->set, new LogEntryFixture('a1'));
 
-    expect(array_map(fn ($item) => $item->name, $items))->toBe(['show', 'resolve', 'forget'])
+    expect(array_map(fn ($item) => $item->name, $items))->toBe(['show', 'resolve', 'remove', 'inspect'])
         ->and($items[0]->url)->toBe('/logs/a1')
         ->and($items[0]->isLink())->toBeTrue()
         ->and($items[1]->text)->toBe('Resolve a1')
         ->and($items[1]->confirm)->toBe('Sure?')
         ->and($items[2]->iconClass())->toBe('fas fa-trash text-danger')
-        ->and($items[2]->actionClass())->toBe('text-danger');
+        ->and($items[2]->actionClass())->toBe('text-danger')
+        ->and($items[3]->isLivewire())->toBeTrue()
+        ->and($items[3]->method)->toBe('inspect')
+        ->and($items[3]->parameters)->toBe('a1');
+});
+
+test('an unlisted action is not offered but can be run', function () {
+    $entry = new LogEntryFixture('a1');
+
+    expect(array_map(fn ($item) => $item->name, $this->runner->items($this->set, $entry)))->not->toContain('toggleResolved');
+
+    $this->runner->run($this->set, $entry, 'toggleResolved');
+
+    expect($entry->resolved)->toBeTrue();
 });
 
 test('run calls the handler with the subject and services from the container', function () {
@@ -47,7 +60,7 @@ test('run calls the handler with the subject and services from the container', f
 test('an action hidden by state is neither offered nor runnable', function () {
     $entry = new LogEntryFixture('a1', resolved: true);
 
-    expect(array_map(fn ($item) => $item->name, $this->runner->items($this->set, $entry)))->toBe(['show', 'forget'])
+    expect(array_map(fn ($item) => $item->name, $this->runner->items($this->set, $entry)))->toBe(['show', 'remove', 'inspect'])
         ->and(fn () => $this->runner->run($this->set, $entry, 'resolve'))->toThrow(AuthorizationException::class);
 });
 
@@ -60,21 +73,22 @@ test('an action denied by its ability is neither offered nor runnable', function
         ->and($entry->resolved)->toBeFalse();
 });
 
-test('a handler result is passed back', function () {
+test('remove() runs its handler and reports the subject as removed', function () {
     $entry = new LogEntryFixture('a1');
 
-    expect($this->runner->run($this->set, $entry, 'forget')->removed)->toBeTrue()
+    expect($this->runner->run($this->set, $entry, 'remove')->removed)->toBeTrue()
         ->and(LogEntryFixture::$store)->toBe([]);
 });
 
-test('a link or an unknown action cannot be run', function () {
+test('a link, a livewire action or an unknown action cannot be run', function () {
     $entry = new LogEntryFixture('a1');
 
     expect(fn () => $this->runner->run($this->set, $entry, 'show'))->toThrow(NotFoundHttpException::class)
+        ->and(fn () => $this->runner->run($this->set, $entry, 'inspect'))->toThrow(NotFoundHttpException::class)
         ->and(fn () => $this->runner->run($this->set, $entry, 'nope'))->toThrow(NotFoundHttpException::class);
 });
 
-test('a set rejects duplicate names and actions without exactly one of url or handler', function (array $actions) {
+test('a set rejects duplicate names and actions without exactly one of url, livewire or handler', function (array $actions) {
     $set = new class ($actions) extends ActionSet
     {
         public function __construct(private array $definitions)
@@ -102,4 +116,5 @@ test('a set rejects duplicate names and actions without exactly one of url or ha
     'duplicate'  => fn () => [Action::make('a')->url('/'), Action::make('a')->url('/')],
     'no handler' => fn () => [Action::make('a')],
     'both'       => fn () => [Action::make('a')->url('/')->handle(fn () => null)],
+    'livewire'   => fn () => [Action::make('a')->livewire('edit')->handle(fn () => null)],
 ])->throws(LogicException::class);
