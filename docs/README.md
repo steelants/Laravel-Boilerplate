@@ -12,6 +12,7 @@ SteelAnts Laravel-Boilerplate is a Laravel package providing an application temp
 - [Configuration](configuration.md)
 - [Menu Builder](menu.md)
 - [Alerts](alerts.md)
+- [Actions](actions.md)
 - [CRUD Generation](crud.md)
 - [Model Traits](traits.md)
 - [Commands](commands.md)
