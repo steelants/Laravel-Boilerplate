@@ -4,9 +4,9 @@ namespace SteelAnts\LaravelBoilerplate\Traits;
 
 use LogicException;
 use SteelAnts\LaravelBoilerplate\Attributes\UseActions;
+use SteelAnts\LaravelBoilerplate\Facades\Actions;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionItem;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionResult;
-use SteelAnts\LaravelBoilerplate\Support\Actions\ActionRunner;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionSet;
 use SteelAnts\LaravelBoilerplate\Traits\HandlesActionErrors;
 
@@ -42,7 +42,7 @@ trait WithActions
 
         return array_map(
             fn (ActionItem $item) => $this->toDataTableAction($item, $key),
-            app(ActionRunner::class)->items($this->actionSet(), $subject),
+            Actions::items($this->actionSet(), $subject),
         );
     }
 
@@ -56,7 +56,7 @@ trait WithActions
         $subject = $set->resolve((string) $key);
 
         $this->attempt(function () use ($set, $subject, $name) {
-            $result = app(ActionRunner::class)->run($set, $subject, $name);
+            $result = Actions::run($set, $subject, $name);
 
             if ($result->redirect !== null) {
                 $this->redirect($result->redirect, navigate: true);

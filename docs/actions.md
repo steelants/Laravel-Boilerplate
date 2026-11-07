@@ -177,6 +177,22 @@ class DataTable extends DataTableComponent
 The DataTable view must render the bulk bar and the selection column
 (`<x-datatable-bulk-bar ...>`, `:$selectable` on the head and body components).
 
+## Running actions from code
+
+The `Actions` facade gives access to the `ActionRunner` that the DataTable and the menu use. Use it to run an
+action from a controller, service or command. Visibility and abilities are checked the same way as in the menu:
+
+```php
+use SteelAnts\LaravelBoilerplate\Facades\Actions;
+
+Actions::run(app(ProjectActions::class), $project, 'archive');          // ActionResult
+Actions::items(app(OrderActions::class), $order);                       // list<ActionItem> offered to the user
+Actions::runBulk(app(InvoiceBulkActions::class), $keys, 'markPaid');    // BulkResult
+```
+
+In tests the facade can be mocked: `Actions::shouldReceive('run')->once()`. Classes that already use dependency
+injection can type-hint `ActionRunner` instead.
+
 ## Errors
 
 Throw `SteelAnts\LaravelBoilerplate\Exceptions\ActionException` from a service to refuse an operation with a

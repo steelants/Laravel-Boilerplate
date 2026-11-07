@@ -4,22 +4,11 @@ use SteelAnts\DataTable\Support\BulkResult;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionRunner;
 use SteelAnts\LaravelBoilerplate\Support\Actions\BulkAction;
 use SteelAnts\LaravelBoilerplate\Support\Actions\BulkActionSet;
+use SteelAnts\LaravelBoilerplate\Tests\Fixtures\BulkKeysServiceFixture;
+
+require_once __DIR__ . '/../../Fixtures/ActionsFixture.php';
 
 // Hromadná akce keys() - obsluha dostane jen pole klíčů výběru a předá ho službě, nic se nenačítá.
-
-/** Služba, kterou keys() akce dostane z DI containeru. */
-class BulkKeysServiceFixture
-{
-    /** @var list<string> */
-    public array $received = [];
-
-    public function archive(array $keys): int
-    {
-        $this->received = $keys;
-
-        return count($keys) - 1;
-    }
-}
 
 function keysBulkSet(BulkAction $action): BulkActionSet
 {

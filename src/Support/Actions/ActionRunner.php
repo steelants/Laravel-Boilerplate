@@ -15,7 +15,7 @@ use Throwable;
  * Vyhodnocuje a spouští akce ze sady. Viditelnost (stav objektu + ability) se kontroluje stejnou metodou
  * při vykreslení i při spuštění, takže akci, kterou uživatel nevidí, nejde ani zavolat z prohlížeče.
  */
-final class ActionRunner
+class ActionRunner
 {
     public function __construct(
         private readonly Container $container,

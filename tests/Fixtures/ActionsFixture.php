@@ -127,3 +127,17 @@ class LogEntryBulkActions extends BulkActionSet
         return array_values(array_intersect_key(LogEntryFixture::$store, array_flip($keys)));
     }
 }
+
+/** Služba, kterou keys() akce dostane z DI containeru. */
+class BulkKeysServiceFixture
+{
+    /** @var list<string> */
+    public array $received = [];
+
+    public function archive(array $keys): int
+    {
+        $this->received = $keys;
+
+        return count($keys) - 1;
+    }
+}

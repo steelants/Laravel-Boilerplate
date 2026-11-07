@@ -8,8 +8,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Component;
 use LogicException;
 use SteelAnts\LaravelBoilerplate\Attributes\UseActions;
+use SteelAnts\LaravelBoilerplate\Facades\Actions;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionItem;
-use SteelAnts\LaravelBoilerplate\Support\Actions\ActionRunner;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionSet;
 use SteelAnts\LaravelBoilerplate\Traits\HandlesActionErrors;
 
@@ -57,7 +57,7 @@ class Menu extends Component
     public function items(): array
     {
         return array_values(array_filter(
-            app(ActionRunner::class)->items($this->actionSet(), $this->subject),
+            Actions::items($this->actionSet(), $this->subject),
             fn (ActionItem $item) => !$item->isLivewire(),
         ));
     }
@@ -68,7 +68,7 @@ class Menu extends Component
         $subject = $this->subject;
 
         $this->attempt(function () use ($set, $subject, $name) {
-            $result = app(ActionRunner::class)->run($set, $subject, $name);
+            $result = Actions::run($set, $subject, $name);
 
             $url = match (true) {
                 $result->redirect !== null => $result->redirect,

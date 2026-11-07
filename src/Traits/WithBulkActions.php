@@ -5,8 +5,8 @@ namespace SteelAnts\LaravelBoilerplate\Traits;
 use LogicException;
 use SteelAnts\DataTable\Traits\HasBulkActions;
 use SteelAnts\LaravelBoilerplate\Attributes\UseBulkActions;
+use SteelAnts\LaravelBoilerplate\Facades\Actions;
 use SteelAnts\LaravelBoilerplate\Support\Actions\ActionItem;
-use SteelAnts\LaravelBoilerplate\Support\Actions\ActionRunner;
 use SteelAnts\LaravelBoilerplate\Support\Actions\BulkActionSet;
 use SteelAnts\LaravelBoilerplate\Traits\HandlesActionErrors;
 
@@ -62,7 +62,7 @@ trait WithBulkActions
         }
 
         $this->attempt(function () use ($set, $keys, $action) {
-            $result = app(ActionRunner::class)->runBulk($set, $keys, $action);
+            $result = Actions::runBulk($set, $keys, $action);
             $message = $this->bulkResultMessage($result);
 
             $result->hasProblems() ? alert()->warning($message)->now() : alert()->success($message)->now();
@@ -75,7 +75,7 @@ trait WithBulkActions
     /** @return list<ActionItem> */
     private function bulkItems(): array
     {
-        return $this->bulkItems ??= app(ActionRunner::class)->bulkItems($this->bulkActionSet());
+        return $this->bulkItems ??= Actions::bulkItems($this->bulkActionSet());
     }
 
     protected function bulkActionSet(): BulkActionSet
