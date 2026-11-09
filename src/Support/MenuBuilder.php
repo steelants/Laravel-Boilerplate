@@ -2,6 +2,7 @@
 
 namespace SteelAnts\LaravelBoilerplate\Support;
 
+use Closure;
 use Illuminate\Support\Collection;
 
 class MenuBuilder
@@ -21,6 +22,16 @@ class MenuBuilder
         $item->setSiblings($this->menuItems);
 
         return $item;
+    }
+
+    /** Přidá položky z definic (pole PendingMenuItem, MenuSet nebo closure), viz MenuItem::make(). */
+    public function define(array|MenuSet|Closure $items): static
+    {
+        foreach (PendingMenuItem::resolve($items) as $item) {
+            $item->attachTo($this);
+        }
+
+        return $this;
     }
 
     public function find($index)

@@ -2,6 +2,7 @@
 
 namespace SteelAnts\LaravelBoilerplate\Support;
 
+use Closure;
 use Illuminate\Support\Collection;
 
 class MenuItem
@@ -22,6 +23,32 @@ class MenuItem
     protected string $type = 'item';
 
     public function __construct(public string $title, public string $id, public string $icon = '', public array $parameters = [], public array $options = []) {}
+
+    /** Fluent definice položky (viz PendingMenuItem), do menu ji přidá define() builderu nebo položky. */
+    public static function make(string $id): PendingMenuItem
+    {
+        return new PendingMenuItem($id);
+    }
+
+    /** Přidá podpoložky z definic (pole PendingMenuItem, MenuSet nebo closure). */
+    public function define(array|MenuSet|Closure $items): static
+    {
+        foreach (PendingMenuItem::resolve($items) as $item) {
+            $item->attachTo($this);
+        }
+
+        return $this;
+    }
+
+    /** Přidá položky dropdownu z definic (pole PendingMenuItem, MenuSet nebo closure). */
+    public function defineDropdown(array|MenuSet|Closure $items): static
+    {
+        foreach (PendingMenuItem::resolve($items) as $item) {
+            $item->attachTo($this, asDropdown: true);
+        }
+
+        return $this;
+    }
 
     public function setBuilder(MenuBuilder $builder)
     {

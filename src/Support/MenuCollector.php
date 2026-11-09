@@ -13,12 +13,30 @@ class MenuCollector
         $this->menus = new Collection;
     }
 
-    public function make(string $menuKey = '', ?callable $callback = null)
+    /**
+     * Vytvoří (a pod klíčem zaregistruje) menu. Definice může být:
+     *  - MenuSet nebo název jeho třídy (resolvuje se z containeru),
+     *  - pole definic MenuItem::make(...),
+     *  - callback, který dostane MenuBuilder - může ho plnit imperativně, nebo vrátit pole definic.
+     *
+     * @param  MenuSet|class-string<MenuSet>|array|callable|null  $definition
+     */
+    public function make(string $menuKey = '', MenuSet|string|array|callable|null $definition = null)
     {
-        $menu = new MenuBuilder;
+        $menu = app(MenuBuilder::class);
 
-        if (is_callable($callback)) {
-            call_user_func($callback, $menu);
+        if (is_string($definition) && is_subclass_of($definition, MenuSet::class)) {
+            $definition = app($definition);
+        }
+
+        if ($definition instanceof MenuSet || (is_array($definition) && !is_callable($definition))) {
+            $menu->define($definition);
+        } elseif (is_callable($definition)) {
+            $result = call_user_func($definition, $menu);
+
+            if (is_array($result) || $result instanceof MenuSet) {
+                $menu->define($result);
+            }
         }
 
         if (!empty($menuKey)) {
