@@ -251,6 +251,26 @@ describe('archive layout', function () {
         expect($entries)->toContain('backup-test-top/readme.txt');
     });
 
+    it('only stores already compressed files whatever the case of their suffix', function () {
+        $root = seedLiveStorage();
+        File::put($root . '/PHOTO.JPG', random_bytes(4096));
+        File::put($root . '/notes.txt', str_repeat('compress me ', 1000));
+
+        (new Backup())->handle();
+
+        exec('unzip -v ' . escapeshellarg(storageArchivePath()), $listing);
+        $methods = [];
+        foreach ($listing as $line) {
+            if (preg_match('/^\s*\d+\s+(\S+)\s+.*\s(\S+)$/', $line, $match)) {
+                $methods[$match[2]] = $match[1];
+            }
+        }
+
+        expect($methods['app/backup-test/projects/1/files/photo.jpg'])->toBe('Stored');
+        expect($methods['app/backup-test/PHOTO.JPG'])->toBe('Stored');
+        expect($methods['app/backup-test/notes.txt'])->toStartWith('Defl');
+    });
+
     it('cleans up the temporary copies and leaves no part file', function () {
         seedLiveStorage();
         config()->set('boilerplate.backup.enviroment', true);

@@ -27,10 +27,9 @@ class Backup implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Fast compression - the default level costs a lot of CPU for a few percent. Files that
-     * are compressed already are only stored.
+     * Files that are compressed already - zip only stores them instead of compressing them again.
      */
-    private const ZIP_COMPRESSION = '-1 -n .zip:.gz:.tgz:.bz2:.xz:.7z:.rar:.jpg:.jpeg:.png:.gif:.webp:.heic:.mp3:.mp4:.mov:.avi:.mkv:.webm:.docx:.xlsx:.pptx:.odt:.ods';
+    private const STORED_SUFFIXES = ['zip', 'gz', 'tgz', 'bz2', 'xz', '7z', 'rar', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'heic', 'mp3', 'mp4', 'mov', 'avi', 'mkv', 'webm', 'docx', 'xlsx', 'pptx', 'odt', 'ods'];
 
     public function __construct() {}
 
@@ -316,7 +315,7 @@ class Backup implements ShouldQueue
     protected function zipDirectory(string $backupPath, string $partFilePath): void
     {
         $this->execShellCommand(
-            'cd ' . escapeshellarg($backupPath) . ' && ' . $this->lowPriority() . 'zip -r -m -q ' . self::ZIP_COMPRESSION . ' ' . escapeshellarg($partFilePath) . ' ./* 2>&1',
+            'cd ' . escapeshellarg($backupPath) . ' && ' . $this->lowPriority() . 'zip -r -m -q ' . $this->zipCompression() . ' ' . escapeshellarg($partFilePath) . ' ./* 2>&1',
             'Zipping of ' . $backupPath
         );
     }
@@ -336,10 +335,25 @@ class Backup implements ShouldQueue
         // Exit code 18: a file disappeared or could not be read while zipping (the storage is
         // live). Everything else is in the archive, so this is a warning, not a failed backup.
         $this->execShellCommand(
-            'cd ' . escapeshellarg(storage_path()) . ' && ' . $this->lowPriority() . 'zip -r -q ' . self::ZIP_COMPRESSION . ' ' . escapeshellarg($partFilePath) . ' ' . $paths . ' 2>&1',
+            'cd ' . escapeshellarg(storage_path()) . ' && ' . $this->lowPriority() . 'zip -r -q ' . $this->zipCompression() . ' ' . escapeshellarg($partFilePath) . ' ' . $paths . ' 2>&1',
             'Zipping of storage',
             [0, 18]
         );
+    }
+
+    /**
+     * Fast compression (-1) - the default level costs a lot of CPU for a few percent.
+     * zip matches -n suffixes case sensitively, so photo.JPG needs its own entry.
+     */
+    protected function zipCompression(): string
+    {
+        $suffixes = [];
+        foreach (self::STORED_SUFFIXES as $suffix) {
+            $suffixes[] = '.' . $suffix;
+            $suffixes[] = '.' . strtoupper($suffix);
+        }
+
+        return '-1 -n ' . implode(':', $suffixes);
     }
 
     protected function verifyArchive(string $partFilePath): void
