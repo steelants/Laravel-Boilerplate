@@ -7,6 +7,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
@@ -21,18 +22,18 @@ use SteelAnts\LaravelBoilerplate\Console\Commands\MakeCrudCommand;
 use SteelAnts\LaravelBoilerplate\Facades\Alert;
 use SteelAnts\LaravelBoilerplate\Facades\FileStorage;
 use SteelAnts\LaravelBoilerplate\Facades\Menu;
+use SteelAnts\LaravelBoilerplate\Helpers\LivewireHelper;
 use SteelAnts\LaravelBoilerplate\Jobs\Backup;
 use SteelAnts\LaravelBoilerplate\Listeners\UserEventSubscriber;
-use SteelAnts\LaravelBoilerplate\Helpers\LivewireHelper;
 use SteelAnts\LaravelBoilerplate\Livewire\Hooks\AlertDispatcherHook;
 use SteelAnts\LaravelBoilerplate\Livewire\Modal\Basic as ModalBasic;
+use SteelAnts\LaravelBoilerplate\Support\Actions\ActionRunner;
 use SteelAnts\LaravelBoilerplate\Support\AlertCollector;
 use SteelAnts\LaravelBoilerplate\Support\FileCollector;
 use SteelAnts\LaravelBoilerplate\Traits\Auditable;
 use SteelAnts\LaravelBoilerplate\Traits\AuditableDetailed;
 use SteelAnts\LaravelBoilerplate\Traits\SupportSystemAdmins;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Illuminate\Routing\Router;
 
 class BoilerplateServiceProvider extends ServiceProvider
 {
@@ -111,7 +112,7 @@ class BoilerplateServiceProvider extends ServiceProvider
     {
         $this->app->booted(function () {
             $schedule = app(Schedule::class);
-            $schedule->job(new Backup)->dailyAT('00:00')->withoutOverlapping();
+            $schedule->job(new Backup())->dailyAT('00:00')->withoutOverlapping();
         });
 
         $this->commands([InstallCommand::class]);
@@ -153,6 +154,9 @@ class BoilerplateServiceProvider extends ServiceProvider
 
         $this->app->singleton(FileCollector::class);
         $this->app->alias('FileStorage', FileStorage::class);
+
+        // Bezstavový; scoped kvůli Octane (Gate drží resolver uživatele).
+        $this->app->scoped(ActionRunner::class);
 
         Livewire::componentHook(AlertDispatcherHook::class);
 
