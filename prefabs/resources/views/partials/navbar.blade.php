@@ -15,7 +15,7 @@
             class="nav-toggler btn btn-light ml-2 d-xl-none" onclick="$('.layout-nav').toggleClass('layout-nav-open');"
             type="button"
         >
-            <i class="fas fa-bars"></i>
+            <i class="fa-solid fa-bars"></i>
         </button>
     </div>
 </nav>

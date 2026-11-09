@@ -70,7 +70,7 @@ Alerts can now be dispatched using the `alert()` helper instead of calling `$thi
 
 **Before:**
 ```php
-$this->dispatch('snackbar', ['message' => __('Saved'), 'type' => 'success', 'icon' => 'fas fa-check']);
+$this->dispatch('snackbar', ['message' => __('Saved'), 'type' => 'success', 'icon' => 'fa-solid fa-check']);
 ```
 
 **After:**

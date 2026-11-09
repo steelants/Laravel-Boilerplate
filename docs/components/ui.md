@@ -19,7 +19,7 @@ Tile with a number, built on `.stat` / `.stat-ico`.
 Slot `description` renders a small line below the value.
 
 ```blade
-<x-boilerplate::stat :label="__('Orders')" :value="$ordersCount" icon="fas fa-shopping-cart" color="green">
+<x-boilerplate::stat :label="__('Orders')" :value="$ordersCount" icon="fa-solid fa-shopping-cart" color="green">
     <x-slot:description>+12 % {{ __('this month') }}</x-slot:description>
 </x-boilerplate::stat>
 ```
@@ -49,7 +49,7 @@ Slot `description` renders a small line below the value.
 
 | `dropdown` prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `icon` | string | `fas fa-ellipsis-v` | Trigger icon |
+| `icon` | string | `fa-solid fa-ellipsis-v` | Trigger icon |
 | `label` | string | `null` | Trigger text |
 | `variant` | string | `light` | Trigger button variant |
 | `size` | string | `sm` | Trigger button size |
@@ -67,9 +67,9 @@ Slot `trigger` replaces the default button.
 
 ```blade
 <x-boilerplate::dropdown>
-    <x-boilerplate::dropdown-item :href="route('post.edit', $post)" icon="fas fa-pen">{{ __('Edit') }}</x-boilerplate::dropdown-item>
+    <x-boilerplate::dropdown-item :href="route('post.edit', $post)" icon="fa-solid fa-pen">{{ __('Edit') }}</x-boilerplate::dropdown-item>
     <x-boilerplate::dropdown-divider />
-    <x-boilerplate::dropdown-item wire:click="remove({{ $post->id }})" wire:confirm="{{ __('Are you sure?') }}" icon="fas fa-trash" danger>
+    <x-boilerplate::dropdown-item wire:click="remove({{ $post->id }})" wire:confirm="{{ __('Are you sure?') }}" icon="fa-solid fa-trash" danger>
         {{ __('Delete') }}
     </x-boilerplate::dropdown-item>
 </x-boilerplate::dropdown>
@@ -123,7 +123,7 @@ Copy-to-clipboard button. The slot, if given, is shown before the button.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `icon` | string | `fas fa-inbox` | Icon in an [Icon Tile](icon-tile.md) |
+| `icon` | string | `fa-solid fa-inbox` | Icon in an [Icon Tile](icon-tile.md) |
 | `color` | string | `secondary` | Tile color |
 | `title` | string | `null` | Title |
 | `description` | string | `null` | Text below the title |
@@ -151,7 +151,7 @@ Segmented switch. With `wire:model` (or `name`) it renders radio buttons; option
 
 ```blade
 <x-boilerplate::nav-switch wire:model.live="view" :options="[
-    'list' => ['label' => __('List'), 'icon' => 'fas fa-list'],
-    'grid' => ['label' => __('Grid'), 'icon' => 'fas fa-th'],
+    'list' => ['label' => __('List'), 'icon' => 'fa-solid fa-list'],
+    'grid' => ['label' => __('Grid'), 'icon' => 'fa-solid fa-th'],
 ]" />
 ```

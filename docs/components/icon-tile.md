@@ -19,6 +19,6 @@ Any Bootstrap theme color (`primary`, `secondary`, `success`, `danger`, `warning
 ## Usage
 
 ```blade
-<x-boilerplate::icon-tile icon="fas fa-file-invoice" color="success" />
+<x-boilerplate::icon-tile icon="fa-solid fa-file-invoice" color="success" />
 <x-boilerplate::icon-tile color="info" size="sm">JD</x-boilerplate::icon-tile>
 ```

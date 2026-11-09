@@ -3,10 +3,10 @@
 @php
     $color = $type === 'error' ? 'danger' : $type;
     $icon ??= match ($color) {
-        'success' => 'fas fa-check-circle',
-        'danger' => 'fas fa-times-circle',
-        'warning' => 'fas fa-exclamation-triangle',
-        default => 'fas fa-info-circle',
+        'success' => 'fa-solid fa-check-circle',
+        'danger' => 'fa-solid fa-times-circle',
+        'warning' => 'fa-solid fa-exclamation-triangle',
+        default => 'fa-solid fa-info-circle',
     };
 @endphp
 

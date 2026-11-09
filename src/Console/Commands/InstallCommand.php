@@ -79,6 +79,8 @@ class InstallCommand extends Command
 
             self::updatePackagesJson();
             self::updateVite();
+            self::appendSASS();
+            self::appendJS();
             self::removeNodeModules();
 
             $this->components->info('Adding Routes');
@@ -180,7 +182,7 @@ class InstallCommand extends Command
         $packages['dependencies']['jquery'] = '^3.6.1';
         $packages['dependencies']['sass'] = '1.77.6';
         $packages['dependencies']['bootstrap'] = '^5.3';
-        $packages['dependencies']['@fortawesome/fontawesome-free'] = '^5.15.4';
+        $packages['dependencies']['@fortawesome/fontawesome-free'] = '^7.0';
         $packages['dependencies']['@popperjs/core'] = '^2.11.6';
         $packages['dependencies']['vite'] = '^6.2.0';
         $packages['dependencies']['laravel-vite-plugin'] = '^1.0.0';
@@ -287,7 +289,7 @@ class InstallCommand extends Command
 
         $ClassFileContent = file_get_contents($path);
         if (!str_contains($ClassFileContent, $importFileString)) {
-            self::appendFile('resources/sass/app.scss', 'scss.stub', $importFileString);
+            File::append($path, PHP_EOL . self::boilerplateString($importFileString, 'scss') . PHP_EOL);
         }
     }
 
@@ -303,7 +305,7 @@ class InstallCommand extends Command
 
         $ClassFileContent = file_get_contents($path);
         if (!str_contains($ClassFileContent, $importFileString)) {
-            self::appendFile('resources/js/app.js', 'js.stub', $importFileString);
+            File::append($path, PHP_EOL . self::boilerplateString($importFileString, 'js') . PHP_EOL);
         }
     }
 

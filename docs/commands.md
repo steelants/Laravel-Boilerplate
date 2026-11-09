@@ -8,6 +8,7 @@ SteelAnts Laravel-Boilerplate provides the following Artisan commands.
 | [make:crud](commands/make-crud.md) | Scaffold a full CRUD resource (DataTable, Form, controller, routes, tests) |
 | [make:basic-tests](commands/make-basic-tests.md) | Generate basic route coverage tests |
 | [job:dispatch](commands/job-dispatch.md) | Dispatch a job by class name |
+| [db:import-sqlite](commands/db-import-sqlite.md) | Replace a PostgreSQL/MySQL database with the data of a SQLite file |
 
 Each command has its own detailed documentation page.
 

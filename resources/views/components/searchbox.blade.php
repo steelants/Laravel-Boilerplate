@@ -33,7 +33,7 @@
             <button class="btn border" type="button">
                 <span>{{ $label }}</span>
                 <span class="badge text-bg-light" x-text="selectedOption"></span>
-                <i class="fa fa-chevron-down ms-2"></i>
+                <i class="fa-solid fa-chevron-down ms-2"></i>
             </button>
         @endif
     </div>

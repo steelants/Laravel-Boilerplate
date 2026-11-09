@@ -3,13 +3,21 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+use Closure;
+use Illuminate\Foundation\Http\FormRequest;
+use SteelAnts\LaravelBoilerplate\Support\ApiExport;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 use ReflectionClass;
+use ReflectionFunction;
+use ReflectionFunctionAbstract;
 use ReflectionIntersectionType;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionUnionType;
+use Stringable;
+use Throwable;
 
 class ApiController extends Controller
 {
@@ -20,6 +28,34 @@ class ApiController extends Controller
      */
     public function index(Request $request)
     {
+        return view('system.api.index', [
+            'layout' => config('boilerplate.layouts.system'),
+            'routes' => $this->apiRoutes(),
+        ]);
+    }
+
+    /**
+     * Collection for API clients: openapi | insomnia | restfox. Never contains a token, only a variable for it.
+     */
+    public function export(string $format): Response
+    {
+        $routes = $this->apiRoutes();
+        $name = config('app.name') . ' API';
+
+        [$data, $filename] = match ($format) {
+            'openapi'  => [ApiExport::openApi($routes, $name, url('/')), 'openapi.json'],
+            'insomnia' => [ApiExport::insomnia($routes, $name, url('/')), 'insomnia.json'],
+            'restfox'  => [ApiExport::restfox($routes, $name, url('/')), 'restfox.json'],
+        };
+
+        return response(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), 200, [
+            'Content-Type'        => 'application/json',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
+    }
+
+    private function apiRoutes(): array
+    {
         $routes = [];
         $routesCollection = Route::getRoutes();
 
@@ -29,7 +65,9 @@ class ApiController extends Controller
             }
 
             $reflectionMethod = null;
-            if (str_contains($route->getActionName(), '@')) {
+            if ($route->getAction('uses') instanceof Closure) {
+                $reflectionMethod = new ReflectionFunction($route->getAction('uses'));
+            } elseif (str_contains($route->getActionName(), '@')) {
                 [
                     $class,
                     $method,
@@ -38,26 +76,112 @@ class ApiController extends Controller
                 $reflectionMethod = $reflectionClass->getMethod($method);
             }
 
+            $fields = $reflectionMethod != null ? $this->formRequestFields($reflectionMethod) : [];
+            $phpDocParameters = $reflectionMethod != null ? $this->phpDocsParameters($reflectionMethod) : [];
+
             $routes[] = [
-                'Method'      => $route->methods()[0],
-                'Uri'         => $route->uri(),
-                'Description' => ($reflectionMethod != null ? $this->phpDocsDescription($reflectionMethod) : ''),
-                'Parameters'  => ($reflectionMethod != null ? $this->phpDocsParameters($reflectionMethod) : []),
-                'Returns'     => ($reflectionMethod != null ? $this->returnTypeName($reflectionMethod) : 'NULL'),
+                'Method'        => $route->methods()[0],
+                'Uri'           => $route->uri(),
+                'RouteParams'   => $route->parameterNames(),
+                'Description'   => ($reflectionMethod != null ? $this->phpDocsDescription($reflectionMethod) : ''),
+                'Parameters'    => $this->mergeParameters($fields, $phpDocParameters),
+                'Returns'       => ($reflectionMethod != null ? $this->returnTypeName($reflectionMethod) : 'NULL'),
+                'Fields'        => $fields,
+                'RequiresToken' => collect($route->gatherMiddleware())->contains(fn ($middleware) => is_string($middleware) && str_starts_with($middleware, 'auth')),
             ];
         }
 
-        return view('system.api.index', [
-            'layout' => config('boilerplate.layouts.system'),
-            'routes' => $routes,
-        ]);
+        return $routes;
+    }
+
+    /**
+     * Top-level fields of the FormRequest the action expects: [name => ['rules' => string, 'input' => string, 'options' => array]].
+     * Validation done inline with $request->validate() cannot be detected without running the action.
+     */
+    private function formRequestFields(ReflectionFunctionAbstract $method): array
+    {
+        foreach ($method->getParameters() as $parameter) {
+            $type = $parameter->getType();
+            if (!$type instanceof ReflectionNamedType || $type->isBuiltin() || !is_subclass_of($type->getName(), FormRequest::class)) {
+                continue;
+            }
+
+            try {
+                $class = $type->getName();
+                $request = new $class;
+                $rules = method_exists($request, 'rules') ? app()->call([$request, 'rules']) : [];
+            } catch (Throwable) {
+                return [];
+            }
+
+            $fields = [];
+            foreach ($rules as $name => $fieldRules) {
+                if (str_contains($name, '.')) {
+                    continue;
+                }
+
+                $ruleList = array_map(
+                    fn ($rule) => is_string($rule) || $rule instanceof Stringable || method_exists($rule, '__toString') ? (string) $rule : class_basename($rule),
+                    is_string($fieldRules) ? explode('|', $fieldRules) : (array) $fieldRules
+                );
+                $fields[$name] = ['rules' => implode('|', $ruleList)] + $this->inputType($ruleList);
+            }
+
+            return $fields;
+        }
+
+        return [];
+    }
+
+    /**
+     * One row per name: FormRequest rules are more precise than the PHPDoc type,
+     * PHPDoc adds the comment; names only in PHPDoc are kept with their PHPDoc type.
+     *
+     * @return array<int, array{name: string, rules: string, comment: string}>
+     */
+    private function mergeParameters(array $fields, array $phpDocParameters): array
+    {
+        $comments = collect($phpDocParameters)->pluck('comment', 'name');
+        $parameters = [];
+
+        foreach ($fields as $name => $field) {
+            $parameters[$name] = ['name' => $name, 'rules' => $field['rules'], 'comment' => (string) ($comments[$name] ?? '')];
+        }
+        foreach ($phpDocParameters as $parameter) {
+            $parameters[$parameter['name']] ??= ['name' => $parameter['name'], 'rules' => $parameter['type'], 'comment' => (string) $parameter['comment']];
+        }
+
+        return array_values($parameters);
+    }
+
+    /**
+     * Input type of a field, by its validation rules: ['input' => text|number|checkbox|date|email|select|array, 'options' => [...]].
+     */
+    private function inputType(array $rules): array
+    {
+        foreach ($rules as $rule) {
+            if (str_starts_with($rule, 'in:')) {
+                return ['input' => 'select', 'options' => array_map(fn ($option) => trim($option, '"\''), explode(',', substr($rule, 3)))];
+            }
+        }
+
+        $input = match (true) {
+            (bool) array_intersect($rules, ['integer', 'numeric']) => 'number',
+            in_array('boolean', $rules, true)                      => 'checkbox',
+            (bool) array_intersect($rules, ['date', 'date_format:Y-m-d']) => 'date',
+            in_array('email', $rules, true)                        => 'email',
+            in_array('array', $rules, true)                        => 'array',
+            default                                                => 'text',
+        };
+
+        return ['input' => $input, 'options' => []];
     }
 
     /**
      * Vrati nazev navratoveho typu metody jako citelny string.
      * Union a intersection typy nemaji getName(), proto je skladame z dilcich typu.
      */
-    private function returnTypeName(ReflectionMethod $method): string
+    private function returnTypeName(ReflectionFunctionAbstract $method): string
     {
         $type = $method->getReturnType();
 
@@ -85,7 +209,7 @@ class ApiController extends Controller
         return implode($separator, $names);
     }
 
-    private function phpDocsParameters(ReflectionMethod $method): array
+    private function phpDocsParameters(ReflectionFunctionAbstract $method): array
     {
         // Retrieve the full PhpDoc comment block
         $doc = $method->getDocComment();
@@ -126,7 +250,7 @@ class ApiController extends Controller
         return $args;
     }
 
-    private function phpDocsDescription(ReflectionMethod $method): string
+    private function phpDocsDescription(ReflectionFunctionAbstract $method): string
     {
         $doc = $method->getDocComment();
 

@@ -143,7 +143,7 @@ class DataTable extends DataTableComponent
                     'parameters'  => $item['uuid'],
                     'text'        => __('Trace'),
                     'actionClass' => '',
-                    'iconClass'   => 'fas fa-bug',
+                    'iconClass'   => 'fa-solid fa-bug',
                 ],
                 [
                     'type'        => 'livewire',
@@ -151,7 +151,7 @@ class DataTable extends DataTableComponent
                     'parameters'  => $item['uuid'],
                     'text'        => __('Retry'),
                     'actionClass' => '',
-                    'iconClass'   => 'fas fa-sync',
+                    'iconClass'   => 'fa-solid fa-sync',
                 ],
             ];
         }
@@ -163,7 +163,7 @@ class DataTable extends DataTableComponent
                 'parameters'  => $item['id'],
                 'text'        => __('Run now'),
                 'actionClass' => '',
-                'iconClass'   => 'fas fa-play',
+                'iconClass'   => 'fa-solid fa-play',
             ],
             [
                 'type'        => 'livewire',
@@ -171,7 +171,7 @@ class DataTable extends DataTableComponent
                 'parameters'  => $item['id'],
                 'text'        => __('Delete'),
                 'actionClass' => '',
-                'iconClass'   => 'fas fa-trash',
+                'iconClass'   => 'fa-solid fa-trash',
             ],
         ];
     }

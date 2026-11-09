@@ -104,6 +104,7 @@ produces:
 ```php
 Menu::make('main-menu', function ($menu) {
     $mainItem = $menu->add('Home', [
+<<<<<<< HEAD
         'id'    => 'home',
         'icon'  => 'fas fa-eye',
         'route' => 'general.index',
@@ -111,6 +112,18 @@ Menu::make('main-menu', function ($menu) {
 
     $mainItem->addRoute('Dashboard', 'home-dashboard', 'general.sub-index', 'fas fa-eye');
     $mainItem->addDropdownAction('Delete', 'home-delete', 'wire:click="delete"', 'fas fa-trash', options: ['confirm' => 'Sure?']);
+=======
+        'id' => strtolower('Home'),
+        'icon' => 'fa-solid fa-eye',
+        'route' => 'general.index',
+    ]);
+
+    $mainItem->add('Dashboard', [
+        'id' => strtolower('Home-Dashboard'),
+        'icon' => 'fa-solid fa-eye',
+        'route' => 'general.sub-index',
+    ]);
+>>>>>>> 23c0ebe62352569d03bf5b9f506ec2f997c20dce
 });
 ```
 

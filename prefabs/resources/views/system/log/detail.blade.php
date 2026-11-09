@@ -8,7 +8,7 @@
                     <label class="form-check-label" for="autoload-toggle">{{ __('Auto-load') }}</label>
                 </div>
                 <a href='{{ route('system.log.download', ['file' => $filename]) }}' class="btn btn-primary">
-                    <i class="fa fa-download"></i>
+                    <i class="fa-solid fa-download"></i>
                 </a>
                 <x-boilerplate::form-button :action="route('system.log.delete', ['file' => $filename])" :confirm="__('Are you sure?')" :title="__('Remove')" />
             </div>

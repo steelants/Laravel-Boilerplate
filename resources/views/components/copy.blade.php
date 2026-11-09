@@ -1,6 +1,6 @@
 @props(['value'])
 
-<span {{ $attributes->class(['d-inline-flex', 'align-items-center', 'gap-1', 'mw-100']) }} x-data="copyToClipboard(@js((string) $value))">
+<span {{ $attributes->class(['d-inline-flex', 'align-items-center', 'gap-1', 'mw-100']) }} x-data="copyToClipboardData(@js((string) $value))">
     @if ($slot->isNotEmpty())
         <span class="text-truncate">{{ $slot }}</span>
     @endif
@@ -11,6 +11,6 @@
         :title="copied ? @js(__('Copied')) : @js(__('Copy'))"
         aria-label="{{ __('Copy') }}"
     >
-        <i class="fa-fw" :class="copied ? 'fas fa-check text-success' : 'far fa-copy'"></i>
+        <i class="fa-fw" :class="copied ? 'fa-solid fa-check text-success' : 'fa-regular fa-copy'"></i>
     </button>
 </span>

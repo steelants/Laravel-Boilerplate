@@ -10,7 +10,7 @@ window.bsTooltip = function () {
     }
 }
 
-window.copyToClipboard = function (value) {
+window.copyToClipboardData = function (value) {
     return {
         copied: false,
         timeout: null,

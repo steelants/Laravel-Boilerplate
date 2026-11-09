@@ -1,4 +1,4 @@
-@props(['icon' => 'fas fa-inbox', 'title' => null, 'description' => null, 'color' => 'secondary'])
+@props(['icon' => 'fa-solid fa-inbox', 'title' => null, 'description' => null, 'color' => 'secondary'])
 
 <div {{ $attributes->class(['d-flex', 'flex-column', 'align-items-center', 'text-center', 'py-5', 'px-3']) }}>
     @if ($icon)

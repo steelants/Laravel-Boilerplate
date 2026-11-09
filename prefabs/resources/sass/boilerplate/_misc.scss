@@ -198,7 +198,7 @@ a{
     border-radius: $pagination-border-radius;
 }
 
-.fa, .fas, .far, .fal, .fad, .fab{
+.fa, .fa-solid, .fa-regular, .fa-brands{
     &:not(.fa-2x):not(.fa-3x){
         width: 1.25rem;
         height: 1.25rem;

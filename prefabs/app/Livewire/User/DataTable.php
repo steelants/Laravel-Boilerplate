@@ -60,7 +60,7 @@ class DataTable extends DataTableComponent
                 'parameters'  => $item['id'],
                 'text'        => __('Edit'),
                 'actionClass' => '',
-                'iconClass'   => 'fas fa-pen',
+                'iconClass'   => 'fa-solid fa-pen',
             ],
             [
                 'type'        => 'livewire',
@@ -68,7 +68,7 @@ class DataTable extends DataTableComponent
                 'parameters'  => $item['id'],
                 'text'        => __('Remove'),
                 'actionClass' => 'text-danger',
-                'iconClass'   => 'fas fa-trash',
+                'iconClass'   => 'fa-solid fa-trash',
                 'confirm'     => __('Are you sure?'),
             ],
         ];
@@ -86,8 +86,8 @@ class DataTable extends DataTableComponent
     public function renderColumnTotpForce($value, $row): string
     {
         $button = !empty($value)
-            ? '<i class="fa fa-check-circle text-success"></i>'
-            : '<i class="fa fa-times-circle text-danger"></i>';
+            ? '<i class="fa-solid fa-check-circle text-success"></i>'
+            : '<i class="fa-solid fa-times-circle text-danger"></i>';
 
         return '<button class="btn btn-link" wire:click="change(' . $row['id'] . ',\'totp_force\')">' . $button . '</button>';
     }

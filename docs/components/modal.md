@@ -94,6 +94,11 @@ $this->dispatch(
 | `size` | `md` | Modal size (`sm`, `md`, `lg`, `xl`) |
 | `static` | `true` | Static backdrop; the modal cannot be closed by clicking outside or pressing escape |
 
+`size` and `static` are `#[Locked]` - only `openModal` sets them, never `$wire` from JavaScript.
+`openModal` checks the values first and throws `InvalidArgumentException` for anything else than
+a string (or `null`) `title`, one of `sm`, `md`, `lg`, `xl` as `size` and a bool `static`. The
+modal then stays closed and the error is reported.
+
 
 ## Multiple Components
 
@@ -129,6 +134,15 @@ Update the title of an open modal:
 ```php
 $this->dispatch('set-modal-title', title: __('New title'));
 ```
+
+From JavaScript:
+
+```js
+Livewire.dispatch('set-modal-title', { title: 'New title' });
+```
+
+The title changes in the browser only, without an extra request; the server receives it with the
+next request. It is set as text, HTML in it is shown as text.
 
 
 ## Next Steps

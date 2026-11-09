@@ -64,7 +64,7 @@
                 {{-- MAIN NAVIGATION ALL --}}
                 <div>
                     <div class="text-body-tertiary nav-collapsed-hide d-flex align-items-center small nav-title-toggle py-2 {{ getToggleState('nav-system') == 'open' ? '' : 'collapsed' }}" data-bs-toggle="collapse" data-bs-target="#nav-system">
-                        <i class="fas fa-angle-down collapse-icon"></i>
+                        <i class="fa-solid fa-angle-down collapse-icon"></i>
                         <span class="fw-medium">{{ __('System') }}</span>
                     </div>
                     <div class="remember collapse {{ getToggleState('nav-system') == 'open' ? 'show' : '' }}" id="nav-system">
@@ -88,8 +88,8 @@
             <ul class="app-nav nav flex-column mb-1 hide-mobile">
                 <li class="nav-item">
                     <div type="button" class="nav-link" onclick="toggleLayoutNav()">
-                        <i class="nav-link-ico fas fa-chevron-left nav-collapsed-hide"></i>
-                        <i class="nav-link-ico fas fa-chevron-right nav-collapsed-show"></i>
+                        <i class="nav-link-ico fa-solid fa-chevron-left nav-collapsed-hide"></i>
+                        <i class="nav-link-ico fa-solid fa-chevron-right nav-collapsed-show"></i>
                         <div class="nav-link-title">{{ __('Toggle menu') }}</div>
                     </div>
                 </li>
@@ -117,12 +117,12 @@
                     </div>
 
                     <a class="dropdown-item" href="{{ route('profile.index') }}">
-                        <i class="dropdown-ico  fas fa-user"></i>
+                        <i class="dropdown-ico  fa-solid fa-user"></i>
                         {{ __('Profile') }}
                     </a>
 
                     <label class="dropdown-item">
-                        <i class="dropdown-ico fas fa-moon"></i>
+                        <i class="dropdown-ico fa-solid fa-moon"></i>
                         <div class="me-auto">{{ __('Dark Mode') }}</div>
                         <div class="form-switch lh-1">
                             <input {{ Cookie::get('theme') == 'dark' ? 'checked' : '' }} class="form-check-input me-0" id="datk-theme" onchange="toggleDatkTheme()" type="checkbox">
@@ -130,14 +130,14 @@
                     </label>
 
                     <a class="dropdown-item" href="{{ route('profile.api') }}">
-                        <i class="dropdown-ico  fas fa-server"></i>
+                        <i class="dropdown-ico  fa-solid fa-server"></i>
                         {{ __('Api Tokens') }}
                     </a>
 
                     <hr class="dropdown-divider">
 
                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                        <i class="dropdown-ico  fas fa-sign-out-alt text-danger"></i>
+                        <i class="dropdown-ico  fa-solid fa-sign-out-alt text-danger"></i>
                         {{ __('Logout') }}
                     </a>
 

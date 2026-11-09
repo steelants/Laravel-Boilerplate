@@ -38,11 +38,11 @@ return redirect()->route('users.index');
 
 ## Custom icon
 
-Default icons are set per type (`fas fa-check`, `fas fa-times`, etc.). Override with `->icon()` or pass as second argument:
+Default icons are set per type (`fa-solid fa-check`, `fa-solid fa-times`, etc.). Override with `->icon()` or pass as second argument:
 
 ```php
-alert()->success('Deployed!', 'fas fa-rocket')->now();
-alert()->success('Deployed!')->icon('fas fa-rocket')->now();
+alert()->success('Deployed!', 'fa-solid fa-rocket')->now();
+alert()->success('Deployed!')->icon('fa-solid fa-rocket')->now();
 ```
 
 ## Display style — snackbar vs inline
@@ -90,5 +90,5 @@ No extra setup is needed — the hook is registered automatically by `Boilerplat
 use SteelAnts\LaravelBoilerplate\Support\AlertCollector;
 use SteelAnts\LaravelBoilerplate\Types\AlertModeType;
 
-app(AlertCollector::class)->add('success', 'Saved!', 'fas fa-check', AlertModeType::INSTANT);
+app(AlertCollector::class)->add('success', 'Saved!', 'fa-solid fa-check', AlertModeType::INSTANT);
 ```

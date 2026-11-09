@@ -44,7 +44,7 @@
                         <span class="badge text-bg-light">
                             <span x-text="option.name"></span>
                             <div class="badge-addon" @click.stop="removeOption(option.id)" data-bs-toggle="collapse">
-                                <i class="fas fa-times"></i>
+                                <i class="fa-solid fa-times"></i>
                             </div>
                         </span>
                     </template>
