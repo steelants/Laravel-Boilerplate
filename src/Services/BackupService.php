@@ -22,6 +22,9 @@ class BackupService
     // a RUNNING status is considered dead, so a killed worker blocks new backups for this long at most.
     private const BACKUP_MAX_SECONDS = 900;
 
+    // How many trailing lines of a shell command's output are kept for the log and error messages.
+    private const COMMAND_OUTPUT_LINES = 50;
+
     /**
      * Queues a backup unless one is already queued or running. Returns false when it was not queued.
      */
@@ -237,7 +240,7 @@ class BackupService
             if ($database) {
                 $dbZip = storage_path('backups/' . $dateSlug . '_database.zip');
                 if (File::exists($dbZip)) {
-                    $command = 'unzip -o ' . $dbZip . ' -d ' . $db_restore_path . ' 2>&1';
+                    $command = 'unzip -q -o ' . $dbZip . ' -d ' . $db_restore_path . ' 2>&1';
                     self::execShellCommand($command, 'Unzip of database backup ' . $dbZip);
                     Log::info('Unzipped database backup ' . $dbZip);
 
@@ -300,7 +303,7 @@ class BackupService
             if ($needsStorageZip) {
                 $fsZip = storage_path('backups/' . $dateSlug . '_storage.zip');
                 if (File::exists($fsZip)) {
-                    $command = 'unzip -o ' . $fsZip . ' -d ' . $fs_restore_path . ' 2>&1';
+                    $command = 'unzip -q -o ' . $fsZip . ' -d ' . $fs_restore_path . ' 2>&1';
                     self::execShellCommand($command, 'Unzip of storage backup ' . $fsZip);
                     Log::info('Unzipped storage backup ' . $fsZip);
 
@@ -369,17 +372,36 @@ class BackupService
     }
 
     /**
+     * @param  array<int, int>    $allowedExitCodes exit codes that are logged as a warning instead of failing
      * @return array<int, string> lines the command wrote to stdout/stderr
      */
-    public static function execShellCommand(string $command, string $description): array
+    public static function execShellCommand(string $command, string $description, array $allowedExitCodes = [0]): array
     {
-        $output = [];
-        $resultCode = 0;
+        // exec() would keep every line in memory - zip/unzip/cp print one line per file, which for
+        // a large storage is hundreds of thousands of lines held by the worker and logged at once.
+        // The output is streamed instead and only its tail is kept for the log and the error message.
+        $process = proc_open(['/bin/sh', '-c', $command], [1 => ['pipe', 'w'], 2 => ['redirect', 1]], $pipes);
+        if (!is_resource($process)) {
+            throw new RuntimeException($description . ' failed: the command could not be started');
+        }
 
-        exec($command, $output, $resultCode);
+        $output = [];
+        while (($line = fgets($pipes[1])) !== false) {
+            $output[] = rtrim($line, "\r\n");
+            if (count($output) > self::COMMAND_OUTPUT_LINES) {
+                array_shift($output);
+            }
+        }
+        fclose($pipes[1]);
+        $resultCode = proc_close($process);
+
         Log::debug($output);
 
-        if ($resultCode !== 0) {
+        if ($resultCode !== 0 && in_array($resultCode, $allowedExitCodes, true)) {
+            Log::warning($description . ' finished with warnings (exit code ' . $resultCode . '): ' . implode(' ', $output));
+        }
+
+        if (!in_array($resultCode, $allowedExitCodes, true)) {
             // The command itself is never part of the message, it can carry database credentials.
             throw new RuntimeException($description . ' failed (exit code ' . $resultCode . '): ' . implode(' ', $output));
         }

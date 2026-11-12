@@ -26,6 +26,11 @@ class Backup implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * Files that are compressed already - zip only stores them instead of compressing them again.
+     */
+    private const STORED_SUFFIXES = ['zip', 'gz', 'tgz', 'bz2', 'xz', '7z', 'rar', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'heic', 'mp3', 'mp4', 'mov', 'avi', 'mkv', 'webm', 'docx', 'xlsx', 'pptx', 'odt', 'ods'];
+
     public function __construct() {}
 
     public function handle()
@@ -84,6 +89,7 @@ class Backup implements ShouldQueue
 
         $partFiles = [];
         $storedFiles = [];
+        $storageSources = [];
         $startedAt = now()->timestamp;
 
         BackupService::setStatus(BackupStatusType::RUNNING, null, ['started_at' => $startedAt]);
@@ -98,7 +104,8 @@ class Backup implements ShouldQueue
             }
 
             if ($backupStorage) {
-                $this->backupStorage($fs_backup_path);
+                // Storage is zipped straight from its place, see createArchive().
+                $storageSources = $this->storageSources();
             }
 
             if ($backupEnvironment) {
@@ -108,7 +115,7 @@ class Backup implements ShouldQueue
             // Build every archive under a temporary name first, ...
             foreach ($archives as $name => $backupPath) {
                 $zippedFilePath = storage_path('backups/' . $date . '_' . $name . '.zip');
-                $partFiles[$zippedFilePath] = $this->createArchive($backupPath, $zippedFilePath);
+                $partFiles[$zippedFilePath] = $this->createArchive($backupPath, $zippedFilePath, $name === 'storage' ? $storageSources : []);
             }
 
             // ... and replace the previous backup only once all of them are complete.
@@ -165,7 +172,7 @@ class Backup implements ShouldQueue
             $dbName = basename($dbFile, '.php');
             $backupFile = $db_backup_path . '/' . $dbName . '_' . $date . '.sqlite';
 
-            $this->execShellCommand("cp $dbFile $backupFile 2>&1", 'Backup of ' . $dbName);
+            $this->execShellCommand($this->lowPriority() . "cp $dbFile $backupFile 2>&1", 'Backup of ' . $dbName);
             Log::info('Backup ' . $dbName . ' db ');
 
             return;
@@ -186,7 +193,7 @@ class Backup implements ShouldQueue
                 putenv('PGPASSWORD=' . $dbPassword);
 
                 $backupFile = $db_backup_path . '/' . $dbName . '_' . $type . '_' . $date . '.sql';
-                $command = "pg_dump --no-comments $parameters -h $dbHost -U $dbUserName -d $dbName -f \"$backupFile\" 2>&1";
+                $command = $this->lowPriority() . "pg_dump --no-comments $parameters -h $dbHost -U $dbUserName -d $dbName -f \"$backupFile\" 2>&1";
 
                 $this->execShellCommand($command, 'Backup of ' . $dbName . ' ' . $type);
                 Log::info('Backup ' . $dbName . ' db ' . $type);
@@ -209,19 +216,43 @@ class Backup implements ShouldQueue
             $backupFile = $db_backup_path . '/' . $dbName . '_' . $type . '_' . $date . '.sql';
             // MySQL 8 dumps tablespaces by default, which needs the PROCESS privilege the
             // application user usually does not have - without this the dump aborts.
-            $command = 'mysqldump --skip-ssl --skip-comments --no-tablespaces ' . $parameters . ' -h ' . $dbHost . ' -u ' . $dbUserName . ' -p' . $dbPassword . ' ' . $dbName . " -r $backupFile 2>&1";
+            // --single-transaction dumps InnoDB from a snapshot instead of locking every table
+            // (it turns --lock-tables off), so the application keeps working during the dump;
+            // --quick streams rows instead of buffering whole tables in memory.
+            $command = $this->lowPriority() . 'mysqldump --skip-ssl --skip-comments --no-tablespaces --single-transaction --quick ' . $parameters . ' -h ' . $dbHost . ' -u ' . $dbUserName . ' -p' . $dbPassword . ' ' . $dbName . " -r $backupFile 2>&1";
 
             $this->execShellCommand($command, 'Backup of ' . $dbName . ' ' . $type);
             Log::info('Backup ' . $dbName . ' db ' . $type);
         }
     }
 
-    protected function backupStorage(string $fs_backup_path): void
+    /**
+     * Configured storage paths relative to storage_path(). They are zipped in place instead of
+     * being copied to backups/tmp first - the copy read and wrote the whole storage once more
+     * and needed the same amount of free disk space again.
+     *
+     * @return array<int, string>
+     */
+    protected function storageSources(): array
     {
-        foreach (config('boilerplate.backup.storage_paths') ?? [] as $storage_path) {
-            $this->execShellCommand('cp -R ' . storage_path($storage_path) . ' ' . $fs_backup_path, 'Backup of storage/' . $storage_path);
-            Log::info('storage backup done');
+        $sources = [];
+
+        foreach (config('boilerplate.backup.storage_paths') ?? [] as $storagePath) {
+            $relativePath = trim((string) $storagePath, " \t\n\r\0\x0B/");
+
+            // The archive is written to storage/backups - zipping it into itself would never end.
+            if ($relativePath === '' || $relativePath === '.' || $relativePath === 'backups' || str_starts_with($relativePath, 'backups/') || str_contains($relativePath, '..')) {
+                throw new RuntimeException('Invalid backup storage path: ' . $storagePath);
+            }
+
+            if (!File::exists(storage_path($relativePath))) {
+                throw new RuntimeException('Backup of storage/' . $relativePath . ' failed: path does not exist');
+            }
+
+            $sources[] = $relativePath;
         }
+
+        return $sources;
     }
 
     protected function backupEnvironment(string $fs_backup_path): void
@@ -237,7 +268,7 @@ class Backup implements ShouldQueue
      * Zips $backupPath next to its final destination and verifies the result.
      * Returns the path of the finished, still temporary archive.
      */
-    protected function createArchive(string $backupPath, string $zippedFilePath): string
+    protected function createArchive(string $backupPath, string $zippedFilePath, array $storageSources = []): string
     {
         $partFilePath = $zippedFilePath . '.part';
         File::delete($partFilePath);
@@ -245,15 +276,31 @@ class Backup implements ShouldQueue
         // An empty source directory means an earlier step produced nothing - zip would
         // just report "Nothing to do" and leave us without any archive at all.
         $collectedSize = array_sum(array_map(fn ($file) => $file->getSize(), File::allFiles($backupPath)));
-        if ($collectedSize === 0) {
+        if ($collectedSize === 0 && empty($storageSources)) {
             throw new RuntimeException('Nothing to archive in ' . $backupPath);
         }
 
-        $this->zipDirectory($backupPath, $partFilePath);
+        try {
+            if (!empty($storageSources)) {
+                $this->zipStoragePaths($storageSources, $partFilePath);
+            }
 
-        // zip can report success and still leave nothing behind, e.g. when the disk fills up.
-        if (!File::exists($partFilePath) || File::size($partFilePath) === 0) {
-            throw new RuntimeException('Archive was not created: ' . $partFilePath);
+            if ($collectedSize > 0) {
+                $this->zipDirectory($backupPath, $partFilePath);
+            }
+
+            $this->verifyArchive($partFilePath);
+
+            // zip can report success and still leave nothing behind, e.g. when the disk fills up.
+            if (!File::exists($partFilePath) || File::size($partFilePath) === 0) {
+                throw new RuntimeException('Archive was not created: ' . $partFilePath);
+            }
+        } catch (Throwable $e) {
+            // The caller only knows about part files that were finished - a half written one
+            // (possibly as big as the whole storage) would otherwise stay on the disk.
+            File::delete($partFilePath);
+
+            throw $e;
         }
 
         Log::info($backupPath . '=>' . $zippedFilePath . '=>' . md5_file($partFilePath));
@@ -261,10 +308,79 @@ class Backup implements ShouldQueue
         return $partFilePath;
     }
 
+    /**
+     * Zips the temporary files (dumps, env.backup) into the archive root. They are only
+     * copies, so -m removes them once they are in the archive.
+     */
     protected function zipDirectory(string $backupPath, string $partFilePath): void
     {
-        $this->execShellCommand('cd ' . $backupPath . ' && zip -rm ' . $partFilePath . ' ./*', 'Zipping of ' . $backupPath);
-        $this->execShellCommand('zip -T ' . $partFilePath, 'Integrity check of ' . $partFilePath);
+        $this->execShellCommand(
+            'cd ' . escapeshellarg($backupPath) . ' && ' . $this->lowPriority() . 'zip -r -m -q ' . $this->zipCompression() . ' ' . escapeshellarg($partFilePath) . ' ./* 2>&1',
+            'Zipping of ' . $backupPath
+        );
+    }
+
+    /**
+     * Adds live storage paths to the archive. zip runs from storage_path() with relative
+     * paths, so the archive holds "app/..." exactly where Restore looks for it - an absolute
+     * path would end up as "home/.../storage/app/..." inside the archive.
+     * Never pass -m here, it would delete the application's files.
+     *
+     * @param array<int, string> $storageSources
+     */
+    protected function zipStoragePaths(array $storageSources, string $partFilePath): void
+    {
+        $paths = implode(' ', array_map('escapeshellarg', $storageSources));
+
+        // Exit code 18: a file disappeared or could not be read while zipping (the storage is
+        // live). Everything else is in the archive, so this is a warning, not a failed backup.
+        $this->execShellCommand(
+            'cd ' . escapeshellarg(storage_path()) . ' && ' . $this->lowPriority() . 'zip -r -q ' . $this->zipCompression() . ' ' . escapeshellarg($partFilePath) . ' ' . $paths . ' 2>&1',
+            'Zipping of storage',
+            [0, 18]
+        );
+    }
+
+    /**
+     * Fast compression (-1) - the default level costs a lot of CPU for a few percent.
+     * zip matches -n suffixes case sensitively, so photo.JPG needs its own entry.
+     */
+    protected function zipCompression(): string
+    {
+        $suffixes = [];
+        foreach (self::STORED_SUFFIXES as $suffix) {
+            $suffixes[] = '.' . $suffix;
+            $suffixes[] = '.' . strtoupper($suffix);
+        }
+
+        return '-1 -n ' . implode(':', $suffixes);
+    }
+
+    protected function verifyArchive(string $partFilePath): void
+    {
+        $this->execShellCommand($this->lowPriority() . 'zip -T -q ' . escapeshellarg($partFilePath) . ' 2>&1', 'Integrity check of ' . $partFilePath);
+    }
+
+    /**
+     * Prefix that runs a command with the lowest CPU and IO priority, so a backup does not
+     * starve the web server and the database. Best-effort IO class (not idle), so a busy
+     * disk still lets the backup finish within the job timeout.
+     */
+    protected function lowPriority(): string
+    {
+        static $prefix = null;
+
+        if ($prefix === null) {
+            $prefix = '';
+            foreach (['nice' => 'nice -n 19 ', 'ionice' => 'ionice -c2 -n7 '] as $binary => $command) {
+                exec('command -v ' . $binary . ' 2>/dev/null', $output, $resultCode);
+                if ($resultCode === 0) {
+                    $prefix .= $command;
+                }
+            }
+        }
+
+        return $prefix;
     }
 
     /**
@@ -286,10 +402,11 @@ class Backup implements ShouldQueue
     }
 
     /**
+     * @param  array<int, int>    $allowedExitCodes exit codes that do not fail the backup
      * @return array<int, string> lines the command wrote to stdout/stderr
      */
-    protected function execShellCommand(string $command, string $description): array
+    protected function execShellCommand(string $command, string $description, array $allowedExitCodes = [0]): array
     {
-        return BackupService::execShellCommand($command, $description);
+        return BackupService::execShellCommand($command, $description, $allowedExitCodes);
     }
 }

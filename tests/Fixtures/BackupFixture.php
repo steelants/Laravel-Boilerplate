@@ -26,7 +26,7 @@ class BackupFixture extends Backup
         $this->replaceArchive($partFilePath, $zippedFilePath);
     }
 
-    protected function execShellCommand(string $command, string $description): array
+    protected function execShellCommand(string $command, string $description, array $allowedExitCodes = [0]): array
     {
         return [];
     }
@@ -43,10 +43,18 @@ class BackupFixture extends Backup
         File::put($db_backup_path . '/database_' . $date . '.sql', 'dump');
     }
 
-    protected function backupStorage(string $fs_backup_path): void
+    protected function storageSources(): array
     {
         $this->failWhenRequested('storage');
-        File::put($fs_backup_path . '/app.txt', 'storage');
+
+        return ['app'];
+    }
+
+    protected function zipStoragePaths(array $storageSources, string $partFilePath): void
+    {
+        $this->failWhenRequested('zip:' . basename($partFilePath));
+
+        File::put($partFilePath, 'fresh archive');
     }
 
     protected function backupEnvironment(string $fs_backup_path): void
